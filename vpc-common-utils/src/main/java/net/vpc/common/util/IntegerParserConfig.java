@@ -16,8 +16,8 @@ public class IntegerParserConfig {
     public static final IntegerParserConfig LENIENT_F = new IntegerParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(-1).setInvalidValue(-1);
     private boolean errorIfNull = true;
     private boolean errorIfInvalid = true;
-    private int nullValue = 0;
-    private int invalidValue = 0;
+    private Integer nullValue = 0;
+    private Integer invalidValue = 0;
 
     private IntegerParserConfig() {
     }
@@ -31,11 +31,11 @@ public class IntegerParserConfig {
         return errorIfInvalid;
     }
 
-    public int getNullValue() {
+    public Integer getNullValue() {
         return nullValue;
     }
 
-    public int getInvalidValue() {
+    public Integer getInvalidValue() {
         return invalidValue;
     }
 
@@ -51,13 +51,13 @@ public class IntegerParserConfig {
         return x;
     }
 
-    public IntegerParserConfig setNullValue(int defaultNullValue) {
+    public IntegerParserConfig setNullValue(Integer defaultNullValue) {
         IntegerParserConfig x = copy();
         x.nullValue = defaultNullValue;
         return x;
     }
 
-    public IntegerParserConfig setInvalidValue(int defaultInvalidValue) {
+    public IntegerParserConfig setInvalidValue(Integer defaultInvalidValue) {
         IntegerParserConfig x = copy();
         x.invalidValue = defaultInvalidValue;
         return x;

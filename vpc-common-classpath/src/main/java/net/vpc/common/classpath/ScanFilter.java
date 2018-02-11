@@ -39,38 +39,12 @@ package net.vpc.common.classpath;
  */
 public class ScanFilter {
 
-    private int configOrder;
     private String libs;
     private String types;
-    /**
-     * When true, filter is inherited in children items. Inheritance mean that
-     * filter defined in context will be appended (as OR operator) to filters of
-     * persistenceGroup and persistenceUnits; and persistenceGroup filter will
-     * be appended to persistenceUnitFilter
-     */
-    private boolean propagate;
 
-    public ScanFilter(String libs, String types, boolean propagate, int configOrder) {
+    public ScanFilter(String libs, String types) {
         this.libs = libs == null ? "" : libs.trim();
         this.types = types == null ? "" : types.trim();
-        this.propagate = propagate;
-        this.configOrder = configOrder;
-    }
-
-    public int getConfigOrder() {
-        return configOrder;
-    }
-
-    public void setConfigOrder(int configOrder) {
-        this.configOrder = configOrder;
-    }
-
-    public boolean isPropagate() {
-        return propagate;
-    }
-
-    public void setPropagate(boolean propagate) {
-        this.propagate = propagate;
     }
 
     public String getLibs() {
@@ -86,7 +60,6 @@ public class ScanFilter {
         int hash = 5;
         hash = 59 * hash + (this.libs != null ? this.libs.hashCode() : 0);
         hash = 59 * hash + (this.types != null ? this.types.hashCode() : 0);
-        hash = 59 * hash + (this.propagate ? 1 : 0);
         return hash;
     }
 
@@ -105,15 +78,12 @@ public class ScanFilter {
         if ((this.types == null) ? (other.types != null) : !this.types.equals(other.types)) {
             return false;
         }
-        if (this.propagate != other.propagate) {
-            return false;
-        }
         return true;
     }
 
     @Override
     public String toString() {
-        return "ContextAnnotationStrategyFilter{" + "libs=" + libs + ", types=" + types + ", propagate=" + propagate + '}';
+        return "ContextAnnotationStrategyFilter{" + "libs=" + libs + ", types=" + types + '}';
     }
 
 }

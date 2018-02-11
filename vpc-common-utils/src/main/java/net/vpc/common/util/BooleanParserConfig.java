@@ -15,8 +15,8 @@ public class BooleanParserConfig {
     public static final BooleanParserConfig LENIENT = new BooleanParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(false).setInvalidValue(false);
     private boolean errorIfNull = true;
     private boolean errorIfInvalid = true;
-    private boolean nullValue = false;
-    private boolean invalidValue = false;
+    private Boolean nullValue = false;
+    private Boolean invalidValue = false;
     private String trueStringRegexp = null;
     private String falseStringRegexp = null;
     private boolean acceptInt = true;
@@ -53,13 +53,13 @@ public class BooleanParserConfig {
         return x;
     }
 
-    public BooleanParserConfig setNullValue(boolean defaultNullValue) {
+    public BooleanParserConfig setNullValue(Boolean defaultNullValue) {
         BooleanParserConfig x = copy();
         x.nullValue = defaultNullValue;
         return x;
     }
 
-    public BooleanParserConfig setInvalidValue(boolean defaultInvalidValue) {
+    public BooleanParserConfig setInvalidValue(Boolean defaultInvalidValue) {
         BooleanParserConfig x = copy();
         x.invalidValue = defaultInvalidValue;
         return x;

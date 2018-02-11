@@ -1,7 +1,6 @@
 package net.vpc.common.util;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Created by vpc on 6/1/16.
@@ -9,13 +8,22 @@ import java.util.function.Consumer;
 public class DefaultMapList<K,V> implements MapList<K,V>{
     private Map<K,Integer> map=new LinkedHashMap<>();
     private List<V> list=new LinkedList<>();
-    private Converter<K,V> converter;
+    private Converter<V,K> converter;
 
-    public DefaultMapList(Converter<K, V> converter) {
+//    public DefaultMapList(Function<V, K> converter) {
+//        this.converter = new Converter<K, V>() {
+//            @Override
+//            public K convert(V value) {
+//                return converter.apply(value);
+//            }
+//        };
+//    }
+
+    public DefaultMapList(Converter<V,K> converter) {
         this.converter = converter;
     }
 
-    public DefaultMapList(List<V> list, Converter<K, V> converter) {
+    public DefaultMapList(List<V> list, Converter<V,K> converter) {
         this.converter = converter;
         addAll(list);
     }
@@ -236,11 +244,6 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         @Override
         public void remove() {
             throw new IllegalArgumentException("Unsupported");
-        }
-
-        @Override
-        public void forEachRemaining(Consumer<? super X> action) {
-            x.forEachRemaining(action);
         }
     }
 

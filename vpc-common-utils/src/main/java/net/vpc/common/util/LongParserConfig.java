@@ -12,11 +12,11 @@ package net.vpc.common.util;
 public class LongParserConfig {
 
     public static final LongParserConfig STRICT = new LongParserConfig().setErrorIfInvalid(true).setErrorIfNull(true);
-    public static final LongParserConfig LENIENT = new LongParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0).setInvalidValue(0);
+    public static final LongParserConfig LENIENT = new LongParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0L).setInvalidValue(0L);
     private boolean errorIfNull = true;
     private boolean errorIfInvalid = true;
-    private long nullValue = 0;
-    private long invalidValue = 0;
+    private Long nullValue = 0L;
+    private Long invalidValue = 0L;
 
     private LongParserConfig() {
     }
@@ -50,13 +50,13 @@ public class LongParserConfig {
         return x;
     }
 
-    public LongParserConfig setNullValue(long defaultNullValue) {
+    public LongParserConfig setNullValue(Long defaultNullValue) {
         LongParserConfig x = copy();
         x.nullValue = defaultNullValue;
         return x;
     }
 
-    public LongParserConfig setInvalidValue(long defaultInvalidValue) {
+    public LongParserConfig setInvalidValue(Long defaultInvalidValue) {
         LongParserConfig x = copy();
         x.invalidValue = defaultInvalidValue;
         return x;

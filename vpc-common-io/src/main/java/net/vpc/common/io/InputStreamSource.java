@@ -9,10 +9,10 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- *
  * @author taha.bensalah@gmail.com
  */
 public interface InputStreamSource {
-    public InputStream open() throws  IOException;
-    public Object getSource() throws  IOException;
+    InputStream open() throws IOException;
+
+    Object getSource() throws IOException;
 }

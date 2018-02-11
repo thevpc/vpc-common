@@ -117,7 +117,7 @@ public class UnmodifiableList<E> extends UnmodifiableCollection<E>
     }
 
     public List<E> subList(int fromIndex, int toIndex) {
-        return new UnmodifiableList<>(list.subList(fromIndex, toIndex));
+        return new UnmodifiableList<E>(list.subList(fromIndex, toIndex));
     }
 
 

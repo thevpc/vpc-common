@@ -18,6 +18,15 @@ import java.util.zip.ZipEntry;
 
 /**
  *
+ * <pre>
+ *       for (Class aClass : ClassPathUtils.resolveClasses(new URL[]{new File("/home/vpc/my-jar.jar").toURI().toURL()})) {
+ *           System.out.println(aClass);
+ *       }
+ *       for (String aClass : ClassPathUtils.resolveContextClassNames()) {
+ *           System.out.println(aClass);
+ *       }
+ * </pre>
+ *
  * @author taha.bensalah@gmail.com
  */
 public class ClassPathRoot implements Iterable<ClassPathResource> {

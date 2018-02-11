@@ -43,6 +43,10 @@ public class FacesUtils {
         return verbatim;
     }
 
+    public static SelectItem createSelectItem(String value, String label) {
+        return createSelectItem(value, label, null, null, null, false);
+    }
+
     public static SelectItem createSelectItem(String value, String label, String styleClass) {
         return createSelectItem(value, label, styleClass, null, null, false);
     }
@@ -148,11 +152,11 @@ public class FacesUtils {
     /**
      * Store the managed bean inside the session scope.
      *
-     * @param beanName    the name of the managed bean to be stored
+     * @param beanName the name of the managed bean to be stored
      * @param managedBean the managed bean to be stored
      */
     public static void setManagedBeanInSession(String beanName,
-                                               Object managedBean) {
+            Object managedBean) {
         FacesContext currentInstance = FacesContext.getCurrentInstance();
         if (currentInstance == null) {
             return;
@@ -203,70 +207,95 @@ public class FacesUtils {
         return itr != null && itr.hasNext();
     }
 
-    /**
-     * Add information message.
-     *
-     * @param msg the information message
-     */
+    public static void addInfoMessage(String msg) {
+        addMessage(FacesMessage.SEVERITY_INFO, msg);
+    }
+
+    public static void addInfoMessage(String msg, String title) {
+        addMessage(FacesMessage.SEVERITY_INFO, msg, title);
+    }
+
     /**
      * Add information message to a specific client.
      *
+     * @param title summary message
      * @param clientId the client id
-     * @param msg      the information message
+     * @param msg the information message
      */
-    public static void addInfoMessage(String clientId, String msg) {
-        FacesContext currentInstance = FacesContext.getCurrentInstance();
-        if (currentInstance == null) {
-            return;
+    public static void addInfoMessage(String msg, String title, String clientId) {
+        addMessage(FacesMessage.SEVERITY_INFO, msg, title, clientId);
+
+    }
+
+    public static void addWarnMessage(String msg) {
+        addMessage(FacesMessage.SEVERITY_WARN, msg);
+    }
+
+    public static void addWarnMessage(String msg, String title) {
+        addMessage(FacesMessage.SEVERITY_WARN, msg, title);
+    }
+
+    public static void addWarnMessage(String msg, String title, String clientId) {
+        addMessage(FacesMessage.SEVERITY_WARN, msg, clientId);
+    }
+
+    public static void addErrorMessage(String msg) {
+        addMessage(FacesMessage.SEVERITY_ERROR, msg);
+    }
+
+    public static void addErrorMessage(String msg, String title) {
+        addMessage(FacesMessage.SEVERITY_ERROR, msg, title);
+    }
+
+    public static void addErrorMessage(String msg, String title, String clientId) {
+        addMessage(FacesMessage.SEVERITY_ERROR, msg, clientId);
+    }
+
+    private static String messageFromThrowable(Throwable th) {
+        if (th == null) {
+            return "Unknown Error";
         }
-
-        currentInstance.addMessage(clientId,
-                new FacesMessage(FacesMessage.SEVERITY_INFO, msg, msg));
-
-    }
-
-    public static void addInfoMessage(String msg) {
-        addInfoMessage(null, msg);
-    }
-
-    public static void addWarnMessage(String clientId, String msg) {
-        FacesContext currentInstance = FacesContext.getCurrentInstance();
-        if (currentInstance == null) {
-            return;
+        String m = th.getMessage();
+        if (m == null || m.trim().isEmpty()) {
+            m = th.toString();
         }
-        currentInstance.addMessage(clientId,
-                new FacesMessage(FacesMessage.SEVERITY_WARN, msg, msg));
+        return m;
     }
 
-    /**
-     * Add error message.
-     *
-     * @param msg the error message
-     */
-    /**
-     * Add error message to a specific client.
-     *
-     * @param clientId the client id
-     * @param msg      the error message
-     */
-    public static FacesMessage buildErrorMessage(String clientId, String msg) {
-
-        FacesMessage message = null;
-
-        message = new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg);
-
-        return message;
+    public static void addErrorMessage(Throwable msg) {
+        addMessage(FacesMessage.SEVERITY_ERROR, messageFromThrowable(msg));
     }
 
-    public static void addErrorMessage(String clientId, String msg) {
-        FacesContext currentInstance = FacesContext.getCurrentInstance();
-        if (currentInstance == null) {
-            return;
-        }
+    public static void addErrorMessage(Throwable msg, String title) {
+        addMessage(FacesMessage.SEVERITY_ERROR, messageFromThrowable(msg), title);
+    }
 
-        currentInstance.addMessage(clientId,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
+    public static void addErrorMessage(Throwable msg, String title, String clientId) {
+        addMessage(FacesMessage.SEVERITY_ERROR, messageFromThrowable(msg), clientId);
+    }
 
+    public static void addFatalMessage(String msg) {
+        addMessage(FacesMessage.SEVERITY_FATAL, msg);
+    }
+
+    public static void addFatalMessage(String msg, String title) {
+        addMessage(FacesMessage.SEVERITY_FATAL, msg, title);
+    }
+
+    public static void addFatalMessage(String msg, String title, String clientId) {
+        addMessage(FacesMessage.SEVERITY_FATAL, msg, clientId);
+    }
+
+    public static void addFatalMessage(Throwable msg) {
+        addMessage(FacesMessage.SEVERITY_FATAL, messageFromThrowable(msg));
+    }
+
+    public static void addFatalMessage(Throwable msg, String title) {
+        addMessage(FacesMessage.SEVERITY_FATAL, messageFromThrowable(msg), title);
+    }
+
+    public static void addFatalMessage(Throwable msg, String title, String clientId) {
+        addMessage(FacesMessage.SEVERITY_FATAL, messageFromThrowable(msg), clientId);
     }
 
     public static void clearMessages() {
@@ -274,24 +303,13 @@ public class FacesUtils {
         if (currentInstance == null) {
             return;
         }
-        if(currentInstance!=null) {
+        if (currentInstance != null) {
             Iterator<FacesMessage> msgIterator = currentInstance.getMessages();
             while (msgIterator.hasNext()) {
                 msgIterator.next();
                 msgIterator.remove();
             }
         }
-    }
-
-    public static void addErrorMessage(String msg) {
-
-        FacesContext currentInstance = FacesContext.getCurrentInstance();
-        if (currentInstance == null) {
-            return;
-        }
-        currentInstance.addMessage(null,
-                new FacesMessage(FacesMessage.SEVERITY_ERROR, msg, msg));
-
     }
 
     private static Application getApplication() {
@@ -360,4 +378,43 @@ public class FacesUtils {
     public static void invalidateSession() {
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
     }
+
+    public static void addMessage(FacesMessage.Severity severity, String msg, String title) {
+        addMessage(severity, msg, title, null);
+    }
+
+    public static void addMessage(FacesMessage.Severity severity, String msg) {
+        addMessage(severity, msg, null, null);
+    }
+
+    public static void addMessage(FacesMessage.Severity severity, String msg, String title, String clientId) {
+        FacesContext currentInstance = FacesContext.getCurrentInstance();
+        if (currentInstance == null) {
+            return;
+        }
+        if (severity == null) {
+            severity = FacesMessage.SEVERITY_INFO;
+        }
+
+        if (title == null || title.trim().isEmpty()) {
+            if (severity == FacesMessage.SEVERITY_INFO) {
+                title = "Information";
+            } else if (severity == FacesMessage.SEVERITY_ERROR) {
+                title = "Error";
+            } else if (severity == FacesMessage.SEVERITY_FATAL) {
+                title = "Fatal";
+            } else if (severity == FacesMessage.SEVERITY_WARN) {
+                title = "Attention";
+            } else {
+                title = "Information";
+            }
+        }
+        if (msg == null || msg.trim().isEmpty()) {
+            msg = "Sorry, i've forgotten what to say ...";
+        }
+        currentInstance.addMessage(clientId,
+                new FacesMessage(severity, title, msg));
+
+    }
+
 }

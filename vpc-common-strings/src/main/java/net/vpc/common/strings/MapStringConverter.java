@@ -8,11 +8,10 @@ package net.vpc.common.strings;
 import java.util.Map;
 
 /**
- *
  * @author taha.bensalah@gmail.com
  */
-public class MapStringConverter implements StringConverter{
-    private Map<String,String> values;
+public class MapStringConverter implements StringConverter {
+    private Map<String, String> values;
 
     public MapStringConverter(Map<String, String> values) {
         this.values = values;
@@ -22,5 +21,5 @@ public class MapStringConverter implements StringConverter{
     public String convert(String str) {
         return values.get(str);
     }
-    
+
 }

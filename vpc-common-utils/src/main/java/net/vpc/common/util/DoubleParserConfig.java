@@ -12,11 +12,11 @@ package net.vpc.common.util;
 public class DoubleParserConfig {
 
     public static final DoubleParserConfig STRICT = new DoubleParserConfig().setErrorIfInvalid(true).setErrorIfNull(true);
-    public static final DoubleParserConfig LENIENT = new DoubleParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0).setInvalidValue(Double.NaN);
+    public static final DoubleParserConfig LENIENT = new DoubleParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0.0).setInvalidValue(Double.NaN);
     private boolean errorIfNull = true;
     private boolean errorIfInvalid = true;
-    private double nullValue = Double.NaN;
-    private double invalidValue = Double.NaN;
+    private Double nullValue = Double.NaN;
+    private Double invalidValue = Double.NaN;
 
     private DoubleParserConfig() {
     }
@@ -30,11 +30,11 @@ public class DoubleParserConfig {
         return errorIfInvalid;
     }
 
-    public double getNullValue() {
+    public Double getNullValue() {
         return nullValue;
     }
 
-    public double getInvalidValue() {
+    public Double getInvalidValue() {
         return invalidValue;
     }
 
@@ -50,13 +50,13 @@ public class DoubleParserConfig {
         return x;
     }
 
-    public DoubleParserConfig setNullValue(double defaultNullValue) {
+    public DoubleParserConfig setNullValue(Double defaultNullValue) {
         DoubleParserConfig x = copy();
         x.nullValue = defaultNullValue;
         return x;
     }
 
-    public DoubleParserConfig setInvalidValue(double defaultInvalidValue) {
+    public DoubleParserConfig setInvalidValue(Double defaultInvalidValue) {
         DoubleParserConfig x = copy();
         x.invalidValue = defaultInvalidValue;
         return x;

@@ -1,7 +1,6 @@
 package net.vpc.common.util;
 
 import java.util.*;
-import java.util.function.Consumer;
 
 /**
  * Created by vpc on 6/1/16.

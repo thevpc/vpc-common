@@ -15,7 +15,7 @@ import java.lang.reflect.Method;
  */
 public interface AnnotationVisitor {
 
-    void visitTypeAnnotation(Annotation annotation, Class clazz);
+    void visitClassAnnotation(Annotation annotation, Class clazz);
 
     void visitMethodAnnotation(Annotation annotation, Method method);
 

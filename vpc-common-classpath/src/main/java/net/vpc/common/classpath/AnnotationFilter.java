@@ -15,20 +15,20 @@ import java.lang.reflect.Method;
 public interface AnnotationFilter {
 
     /**
-     * when true acceptMethodDecoration and acceptFieldDecoration will not be
-     * invoked if acceptTypeDecoration returns false
+     * when true acceptMethodAnnotation and acceptFieldAnnotation will not be
+     * invoked if acceptTypeAnnotation returns false
      *
      * @return
      */
-    boolean isSupportedTypeDecoration();
+    boolean isSupportedTypeAnnotation();
 
-    boolean isSupportedMethodDecoration();
+    boolean isSupportedMethodAnnotation();
 
-    boolean isSupportedFieldDecoration();
+    boolean isSupportedFieldAnnotation();
 
-    boolean acceptTypeDecoration(String name, String targetType, Class value);
+    boolean acceptTypeAnnotation(String name, String targetType, Class value);
 
-    boolean acceptMethodDecoration(String name, String targetMethod, String targetType, Method value);
+    boolean acceptMethodAnnotation(String name, String targetMethod, String targetType, Method value);
 
-    boolean acceptFieldDecoration(String name, String targetField, String targetType, Field value);
+    boolean acceptFieldAnnotation(String name, String targetField, String targetType, Field value);
 }

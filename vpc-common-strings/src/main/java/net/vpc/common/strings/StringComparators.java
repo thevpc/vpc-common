@@ -38,6 +38,9 @@ public class StringComparators {
         return new NotStringComparator(other);
     }
 
+    public static StringComparator any() {
+        return new AnyStringComparator();
+    }
     public static StringComparator like(final String pattern) {
         return new LikeStringComparator(pattern);
     }
@@ -181,6 +184,28 @@ public class StringComparators {
         @Override
         public String toString() {
             return "like(" + pattern + (getTransform() == null ? "" : ("," + getTransform().toString())) + ")";
+        }
+    }
+
+    private static class AnyStringComparator extends AbstractStringComparator {
+
+        public AnyStringComparator() {
+        }
+
+        @Override
+        AbstractStringComparator copy() {
+            return new AnyStringComparator();
+        }
+
+
+        @Override
+        public boolean matches(String value) {
+            return true;
+        }
+
+        @Override
+        public String toString() {
+            return "any";
         }
     }
 

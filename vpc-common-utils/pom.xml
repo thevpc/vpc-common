@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.vpc.common</groupId>
     <artifactId>vpc-common-utils</artifactId>
-    <version>1.5</version>
+    <version>1.10</version>
     <packaging>jar</packaging>
+    <name>net.vpc.common.vpc-common-utils</name>
     <url>https://github.com/thevpc/upa/wiki</url>
 
     <organization>
@@ -44,7 +46,14 @@
         <maven.compiler.target>1.7</maven.compiler.target>
         <github.global.server>github</github.global.server>
     </properties>
-
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
     <distributionManagement>
         <site>
             <id>github</id>
@@ -56,13 +65,13 @@
             <name>Temporary Staging Repository</name>
             <url>file://${project.build.directory}/vpc-public-maven</url>
         </repository>
-    </distributionManagement>  
+    </distributionManagement>
     <build>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
-                <version>3.0.0</version>
+                <version>3.0.1</version>
                 <executions>
                     <execution>
                         <id>attach-sources</id>
@@ -75,6 +84,7 @@
 
             <plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.0.2</version>
                 <executions>
                     <execution>
                         <phase>process-sources</phase>
@@ -101,7 +111,9 @@
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.8.1</version>
                 <configuration>
-                    <altDeploymentRepository>internal.repo::default::file://${project.build.directory}/vpc-public-maven</altDeploymentRepository>
+                    <altDeploymentRepository>
+                        internal.repo::default::file://${project.build.directory}/vpc-public-maven
+                    </altDeploymentRepository>
                 </configuration>
             </plugin>
             <plugin>
@@ -112,7 +124,8 @@
                 <configuration>
                     <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
                     <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
-                    <outputDirectory>${project.build.directory}/vpc-public-maven</outputDirectory> <!-- matches distribution management repository url above -->
+                    <outputDirectory>${project.build.directory}/vpc-public-maven
+                    </outputDirectory> <!-- matches distribution management repository url above -->
                     <branch>refs/heads/master</branch>                       <!-- remote branch name -->
                     <includes>
                         <include>**/*</include>
@@ -132,5 +145,5 @@
                 </executions>
             </plugin>
         </plugins>
-    </build>       
+    </build>
 </project>

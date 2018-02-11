@@ -19,6 +19,7 @@ public abstract class AbstractStringTransform implements StringTransform {
 
             @Override
             public String transform(String s) {
+                s = base.transform(s);
                 s = AbstractStringTransform.this.transform(s);
                 return s;
             }

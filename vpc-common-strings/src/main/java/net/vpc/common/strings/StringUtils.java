@@ -7,9 +7,9 @@ package net.vpc.common.strings;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.lang.reflect.Array;
 import java.text.Normalizer;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +17,43 @@ import java.util.regex.Pattern;
  * @author taha.bensalah@gmail.com
  */
 public class StringUtils {
+
+    public static final StringConverter UPPER = new StringConverter() {
+        @Override
+        public String convert(String str) {
+            return str == null ? null : str.toUpperCase();
+        }
+    };
+
+    public static final StringConverter LOWER = new StringConverter() {
+        @Override
+        public String convert(String str) {
+            return str == null ? null : str.toLowerCase();
+        }
+    };
+
+    public static final StringConverter NORMALIZED = new StringConverter() {
+        @Override
+        public String convert(String str) {
+            return normalize(str);
+        }
+    };
+
+    public static StringConverter combineConverters(final StringConverter... converters) {
+        return new StringConverter() {
+            @Override
+            public String convert(String str) {
+                if (converters != null) {
+                    for (StringConverter converter : converters) {
+                        if (converter != null) {
+                            str = converter.convert(str);
+                        }
+                    }
+                }
+                return str;
+            }
+        };
+    }
 
     public static String normalize(String expression) {
         if (expression == null) {
@@ -63,6 +100,13 @@ public class StringUtils {
         return value;
     }
 
+    public static String trim(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value.trim();
+    }
+
     public static boolean isEmpty(String string) {
         return string == null || string.trim().isEmpty();
     }
@@ -99,13 +143,13 @@ public class StringUtils {
         if (ponctuations == null) {
             ponctuations = ".,:;";
         }
-        if(string==null){
-            string="";
+        if (string == null) {
+            string = "";
         }
-        if(word==null){
-            word="";
+        if (word == null) {
+            word = "";
         }
-        if(word.length()==0){
+        if (word.length() == 0) {
             return -1;
         }
         int slength = string.length();
@@ -139,7 +183,6 @@ public class StringUtils {
             char c = cc[i];
             switch (c) {
                 case '.':
-                case '!':
                 case '$':
                 case '{':
                 case '}':
@@ -186,7 +229,6 @@ public class StringUtils {
             char c = cc[i];
             switch (c) {
                 case '.':
-                case '!':
                 case '$':
                 case '{':
                 case '}':
@@ -257,6 +299,15 @@ public class StringUtils {
             }
         }
         return true;
+    }
+
+    public static StringLocation locationOfRegexp(String value, String regexp) {
+        Pattern t = Pattern.compile(regexp);
+        Matcher matcher = t.matcher(value);
+        if (matcher.find()) {
+            return new StringLocation(matcher.start(), matcher.end());
+        }
+        return null;
     }
 
     public static int indexOfRegexpEnd(String value, String regexp) {
@@ -364,7 +415,7 @@ public class StringUtils {
         }
         StringBuilder sb = new StringBuilder();
         for (Object v : objects) {
-            String s = transform == null ? String.valueOf(v) : transform.transform(v == null ? null : v.toString());
+            String s = transform.transform(v == null ? null : v.toString());
             if (!s.isEmpty() || !noEmpty) {
                 if (sb.length() > 0) {
                     sb.append(separator);
@@ -427,4 +478,129 @@ public class StringUtils {
 
         return sb.toString();
     }
+
+    public static StringCollection createStringList(String separators, StringConverter keyConverter) {
+        return createStringCollection(separators,false,true,keyConverter,keyConverter);
+    }
+
+    public static StringCollection createStringSet(String separators, StringConverter keyConverter) {
+        return createStringCollection(separators,false,false,keyConverter,keyConverter);
+    }
+
+    public static StringCollection createStringMap(String separators, StringConverter keyConverter, StringConverter valueConverter) {
+        return createStringCollection(separators,false,false,keyConverter,valueConverter);
+    }
+
+    public static StringCollection createStringCollection(String separators, boolean preserveOrder, boolean duplicates, StringConverter keyConverter, StringConverter valueConverter) {
+        if (!Objects.equals(keyConverter, valueConverter)) {
+            if (duplicates) {
+                throw new IllegalArgumentException("Not sopported Mapping withdistinct key/value converters");
+            } else {
+                if (preserveOrder) {
+                    return new StringTokStringMap(new LinkedHashMap<String, String>(), separators, keyConverter, valueConverter);
+                } else {
+                    return new StringTokStringMap(new TreeMap<String, String>(), separators, keyConverter, valueConverter);
+                }
+            }
+        }
+        if (duplicates) {
+            return new StringTokStringCollection(new ArrayList<String>(), separators, keyConverter);
+        } else {
+            if (preserveOrder) {
+                return new StringTokStringCollection(new LinkedHashSet<String>(), separators, keyConverter);
+            } else {
+                return new StringTokStringCollection(new TreeSet<String>(), separators, keyConverter);
+            }
+        }
+    }
+
+    public static String[] removeDuplicates(String[] values) {
+        LinkedHashSet<String> all=new LinkedHashSet<>();
+        if(values!=null){
+            Collections.addAll(all, values);
+        }
+        return all.toArray(new String[all.size()]);
+    }
+
+    public static String[] split(String value, String chars) {
+        return split(value,chars,true,true);
+    }
+
+    public static String[] split(String value, String chars,boolean trim,boolean ignoreEmpty) {
+        if (value == null) {
+            value = "";
+        }
+        StringTokenizer st = new StringTokenizer(value, chars);
+        List<String> all = new ArrayList<>();
+        while (st.hasMoreElements()) {
+            String s = st.nextToken();
+            if(trim){
+                s=s.trim();
+            }
+            if(!ignoreEmpty || !s.isEmpty()){
+                all.add(s);
+            }
+        }
+        return all.toArray(new String[all.size()]);
+    }
+
+    public static String cut(String value, int max) {
+        return cut(value,max,null);
+    }
+
+    public static String cut(String value, int max,String etc) {
+        if (value == null) {
+            value = "";
+        }
+        if (value.length() > max) {
+            if (etc == null) {
+                etc = "...";
+            }
+            value = value.substring(0, max - 3) + etc;
+        }
+        return value;
+    }
+
+    public static String expand(String value, String chars, int min) {
+        if (chars == null || chars.length() == 0) {
+            chars = " ";
+        }
+        if (value == null) {
+            value = "";
+        }
+        while (value.length() < min) {
+            if (value.length() + chars.length() <= min) {
+                value = value + chars;
+            } else {
+                int x = min - value.length();
+                if (x > chars.length()) {
+                    x = chars.length();
+                }
+                value = value + chars.substring(0, x);
+            }
+        }
+        return value;
+    }
+
+    public static <T> String listToStringDeep(String separator, boolean noEmpty, StringTransform transform,Object... items) {
+        List<Object> any=new ArrayList<>();
+        for (Object item : items) {
+            if (item != null) {
+                if (item.getClass().isArray()) {
+                    int max = Array.getLength(item);
+                    for (int i = 0; i < max; i++) {
+                        any.add(Array.get(item, i));
+                    }
+                } else if (item instanceof Collection) {
+                    any.addAll(((Collection) item));
+                } else {
+                    any.add(item);
+                }
+            } else {
+                any.add(null);
+            }
+        }
+        return listToString(any,separator,noEmpty,transform);
+    }
+
 }

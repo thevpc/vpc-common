@@ -12,11 +12,11 @@ package net.vpc.common.util;
 public class FloatParserConfig {
 
     public static final FloatParserConfig STRICT = new FloatParserConfig().setErrorIfInvalid(true).setErrorIfNull(true);
-    public static final FloatParserConfig LENIENT = new FloatParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0).setInvalidValue(Float.NaN);
+    public static final FloatParserConfig LENIENT = new FloatParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0F).setInvalidValue(Float.NaN);
     private boolean errorIfNull = true;
     private boolean errorIfInvalid = true;
-    private float nullValue = Float.NaN;
-    private float invalidValue = Float.NaN;
+    private Float nullValue = Float.NaN;
+    private Float invalidValue = Float.NaN;
 
     private FloatParserConfig() {
     }
@@ -50,13 +50,13 @@ public class FloatParserConfig {
         return x;
     }
 
-    public FloatParserConfig setNullValue(float defaultNullValue) {
+    public FloatParserConfig setNullValue(Float defaultNullValue) {
         FloatParserConfig x = copy();
         x.nullValue = defaultNullValue;
         return x;
     }
 
-    public FloatParserConfig setInvalidValue(float defaultInvalidValue) {
+    public FloatParserConfig setInvalidValue(Float defaultInvalidValue) {
         FloatParserConfig x = copy();
         x.invalidValue = defaultInvalidValue;
         return x;

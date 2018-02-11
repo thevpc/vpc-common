@@ -1,6 +1,7 @@
 package net.vpc.common.classpath;
 
 import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -14,63 +15,15 @@ public class URLClassIterable implements Iterable<Class> {
     protected static final Logger log = Logger.getLogger(URLClassIterable.class.getName());
     public URL[] urls;
     public ClassPathFilter configFilter;
-    public ClassFilter classFilter;
-//    private Map<Class, Set<Class>> entityClasses = new LinkedHashMap<Class, Set<Class>>();
-//        Map<Class, Class> entityToPrimary = new LinkedHashMap<Class, Class>();
-//    public Map<String, List<AnnotatedClass>> annotatedClassMap = new HashMap<String, List<AnnotatedClass>>();
+    public ClassLoader classLoader;
 
-//    public Set<Class> classAnnotations = new HashSet<Class>();
-//    PersistenceNameStrategyConfig nameStrategyModel = null;
-    public int nameStrategyModelConfigOrder = Integer.MIN_VALUE;
-    public ClassLoader contextClassLoader;
-
-    public URLClassIterable(URL[] urls, ClassPathFilter configFilter, ClassFilter classFilter) {
+    public URLClassIterable(URL[] urls, ClassPathFilter configFilter, ClassLoader classLoader) {
         this.urls = urls;
         this.configFilter = configFilter;
-        this.classFilter = classFilter;
-        /**
-         * @PortabilityHint(target="C#",name="suppress")
-         */
-        this.contextClassLoader = Thread.currentThread().getContextClassLoader();
+        this.classLoader = classLoader == null ? new URLClassLoader(urls) : classLoader;
     }
 
-//    private void configureFolder(File rootFolder, File folder, ClassPathFilter typeFilter) throws MalformedURLException, ClassNotFoundException {
-//        File[] files = folder.listFiles();
-//        URL src = rootFolder.toURI().toURL();
-//        if (files != null) {
-//            for (File file : files) {
-//                if (file.isDirectory()) {
-//                    configureFolder(rootFolder, file, typeFilter);
-//                } else if (file.isFile()) {
-//                    String path = file.getPath().substring(rootFolder.getPath().length());
-//                    configureClassURL(src, path);
-//                }
-//            }
-//        }
-//    }
-//    protected String getMethodSig(Method method) {
-//        StringBuilder types = new StringBuilder();
-//        for (Class<?> parameterType : method.getParameterTypes()) {
-//            if (types.length() > 0) {
-//                types.append(",");
-//            }
-//            types.append(parameterType.getName());
-//        }
-//        return method.getName() + "(" + types + ")";
-//    }
-//    public void parse() throws IOException, ClassNotFoundException, URISyntaxException {
-//        for (URL jarURL : urls) {
-//            if (configFilter.acceptLibrary(jarURL)) {
-//                log.log(Level.FINE, "configuration from  url : {0}", jarURL);
-//                ClassPathRoot r = new ClassPathRoot(jarURL);
-//                for (ClassPathResource cr : r) {
-//                    configureClassURL(jarURL, cr.getPath());
-//                }
-//            } else {
-//                log.log(Level.FINE, "ignoring  configuration from url : {0}", jarURL);
-//            }
-//        }
-//    }
+
     public Iterator<Class> iterator() {
         return new URLClassIterableIterator(this);
     }
@@ -79,7 +32,6 @@ public class URLClassIterable implements Iterable<Class> {
         if (path.startsWith("/")) {
             path = path.substring(1);
         }
-//        URL url = contextClassLoader.getResource(path);
         if (path.endsWith(".class")) {
             String cls = path.substring(0, path.length() - ".class".length()).replace('/', '.');
             String pck = null;
@@ -95,33 +47,22 @@ public class URLClassIterable implements Iterable<Class> {
                 //special class
                 if (dollar + 1 < cls.length()) {
                     String subName = cls.substring(dollar + 1);
-                    if (subName != null && subName.length() > 0 && Character.isDigit(subName.charAt(0))) {
+                    if (subName.length() > 0 && Character.isDigit(subName.charAt(0))) {
                         anonymousClass = true;
                     }
                 }
             }
-            if (!anonymousClass) {
-                if (configFilter==null || configFilter.acceptClassName(src, cls)) {
-                    Class<?> aClass = null;
-                    try {
-                        aClass = Class.forName(cls, false, contextClassLoader);
-                    } catch (Throwable e) {
-                        log.log(Level.FINE, "Unable to load class {0} for UPA configuration. Ignored", cls);
+            if (configFilter == null || configFilter.acceptClassName(src, cls, anonymousClass)) {
+                Class<?> aClass = null;
+                try {
+                    aClass = Class.forName(cls, false, classLoader);
+                } catch (Throwable e) {
+                    log.log(Level.FINE, "Unable to load class {0} for Classpath configuration. Ignored", cls);
+                }
+                if (aClass != null) {
+                    if (configFilter == null || configFilter.acceptClass(src, cls, anonymousClass, aClass)) {
+                        return (aClass);
                     }
-                    if (aClass != null) {
-                        if (configFilter==null || configFilter.acceptClass(src, cls, aClass)) {
-                            if (classFilter == null || classFilter.accept(aClass)) {
-                                return (aClass);
-                            }
-                        }
-                    }
-                } else {
-//                      System.out.println(path);
-//                      System.out.println("\tSOURCE  " + src);
-//                      System.out.println("\tSYS URL " + sysURL);
-//                      System.out.println("\tAPP URL " + url);
-//                      System.out.println("\tPKG   " + (pck==null?"":Package.getPackage(pck)));
-//                      System.out.println("\tCLASS " + Class.forName(cls,false,contextClassLoader));
                 }
             }
         }

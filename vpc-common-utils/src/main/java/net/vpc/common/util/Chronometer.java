@@ -10,12 +10,6 @@ package net.vpc.common.util;
  * @author taha.bensalah@gmail.com
  */
 public class Chronometer {
-    public static enum DatePart {
-        h,
-        m,
-        s,
-        ms
-    }
 
     private long startDate;
     private long endDate;
@@ -131,58 +125,11 @@ public class Chronometer {
 
 
     public static String formatPeriod(long period) {
-        StringBuffer sb = new StringBuffer();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-
-        if (h > 0) {
-            sb.append(h).append(" h ");
-            started = true;
-        }
-        if (mn > 0 || started) {
-            sb.append(mn).append(" mn ");
-            started = true;
-        }
-        if (s > 0 || started) {
-            sb.append(s).append(" s ");
-            //started=true;
-        }
-        sb.append(ms).append(" ms");
-        return sb.toString();
+        return formatPeriod(period,DatePart.MILLISECOND);
     }
 
     public static String formatPeriod(long period, DatePart precision) {
-        StringBuffer sb = new StringBuffer();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        if (precision.ordinal() >= DatePart.h.ordinal()) {
-            if (h > 0) {
-                sb.append(h).append(" h ");
-                started = true;
-            }
-            if (precision.ordinal() >= DatePart.m.ordinal()) {
-                if (mn > 0 || started) {
-                    sb.append(mn).append(" mn ");
-                    started = true;
-                }
-                if (precision.ordinal() >= DatePart.s.ordinal()) {
-                    if (s > 0 || started) {
-                        sb.append(s).append(" s ");
-                        //started=true;
-                    }
-                    if (precision.ordinal() >= DatePart.ms.ordinal()) {
-                        sb.append(ms).append(" ms");
-                    }
-                }
-            }
-        }
-        return sb.toString();
+        return new TimePeriodFormatter(precision).formatLong(period);
     }
 
     public String toString() {

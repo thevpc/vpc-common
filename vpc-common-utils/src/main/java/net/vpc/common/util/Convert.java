@@ -11,8 +11,9 @@ package net.vpc.common.util;
  */
 public class Convert {
 
-    public static int toInteger(Object o) {
-        return toInteger(o, null);
+
+    public static int toInt(Object o) {
+        return toInt(o, null);
     }
 
     public static long toLong(Object o) {
@@ -31,7 +32,7 @@ public class Convert {
         return toBoolean(o, null);
     }
 
-    public static double toDouble(Object o, DoubleParserConfig config) {
+    public static Double toDouble(Object o, DoubleParserConfig config) {
         if (config == null) {
             config = DoubleParserConfig.STRICT;
         }
@@ -60,7 +61,7 @@ public class Convert {
         return config.getInvalidValue();
     }
 
-    public static float toFloat(Object o, FloatParserConfig config) {
+    public static Float toFloat(Object o, FloatParserConfig config) {
         if (config == null) {
             config = FloatParserConfig.STRICT;
         }
@@ -89,7 +90,7 @@ public class Convert {
         return config.getInvalidValue();
     }
 
-    public static boolean toBoolean(Object o, BooleanParserConfig config) {
+    public static Boolean toBoolean(Object o, BooleanParserConfig config) {
         if (config == null) {
             config = BooleanParserConfig.LENIENT;
         }
@@ -100,7 +101,7 @@ public class Convert {
             return config.getNullValue();
         }
         if (o instanceof Boolean) {
-            return ((Boolean) o).booleanValue();
+            return ((Boolean) o);//.booleanValue();
         }
         if (o instanceof Number) {
             if (config.isAcceptNumber()) {
@@ -113,7 +114,7 @@ public class Convert {
             }
             return config.getInvalidValue();
         }
-        if (o instanceof Character || o instanceof String) {
+        if (o instanceof CharSequence) {
             String s = String.valueOf(o);
             Boolean isTrue = null;
             Boolean isFalse = null;
@@ -143,7 +144,7 @@ public class Convert {
         return config.getInvalidValue();
     }
 
-    public static int toInteger(Object o, IntegerParserConfig config) {
+    public static Integer toInt(Object o, IntegerParserConfig config) {
         if (config == null) {
             config = IntegerParserConfig.STRICT;
         }
@@ -173,7 +174,7 @@ public class Convert {
         return config.getInvalidValue();
     }
 
-    public static long toLong(Object o, LongParserConfig config) {
+    public static Long toLong(Object o, LongParserConfig config) {
         if (config == null) {
             config = LongParserConfig.STRICT;
         }
@@ -236,4 +237,115 @@ public class Convert {
         return null;
     }
 
+    public static Integer[] toIntArray(String[] strings, IntegerParserConfig config) {
+        if (config == null) {
+            config = IntegerParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        Integer[] values=new Integer[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toInt(strings[i],config);
+        }
+        return values;
+    }
+
+    public static int[] toPrimitiveIntArray(String[] strings, IntegerParserConfig config) {
+        if (config == null) {
+            config = IntegerParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        int[] values=new int[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toInt(strings[i],config);
+        }
+        return values;
+    }
+
+    public static Long[] toLongArray(String[] strings, LongParserConfig config) {
+        if (config == null) {
+            config = LongParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        Long[] values=new Long[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toLong(strings[i],config);
+        }
+        return values;
+    }
+
+    public static long[] toPrimitiveLongArray(String[] strings, LongParserConfig config) {
+        if (config == null) {
+            config = LongParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        long[] values=new long[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toLong(strings[i],config);
+        }
+        return values;
+    }
+
+    public static Double[] toDoubleArray(String[] strings, DoubleParserConfig config) {
+        if (config == null) {
+            config = DoubleParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        Double[] values=new Double[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toDouble(strings[i],config);
+        }
+        return values;
+    }
+
+    public static double[] toPrimitiveLongArray(String[] strings, DoubleParserConfig config) {
+        if (config == null) {
+            config = DoubleParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        double[] values=new double[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toDouble(strings[i],config);
+        }
+        return values;
+    }
+
+    public static Boolean[] toBooleanArray(String[] strings, BooleanParserConfig config) {
+        if (config == null) {
+            config = BooleanParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        Boolean[] values=new Boolean[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toBoolean(strings[i],config);
+        }
+        return values;
+    }
+
+    public static boolean[] toPrimitiveBooleanArray(String[] strings, BooleanParserConfig config) {
+        if (config == null) {
+            config = BooleanParserConfig.STRICT;
+        }
+        if (strings == null) {
+            return null;
+        }
+        boolean[] values=new boolean[strings.length];
+        for (int i = 0; i < values.length; i++) {
+            values[i]=toBoolean(strings[i],config);
+        }
+        return values;
+    }
 }

@@ -1,10 +1,8 @@
 package net.vpc.common.classpath;
 
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -16,16 +14,59 @@ public class AnnotationParser {
 
     private static final Logger log = Logger.getLogger(AnnotationParser.class.getName());
     public Iterable<Class> urls;
-    public int nameStrategyModelConfigOrder = Integer.MIN_VALUE;
-    public ClassLoader contextClassLoader;
     private AnnotationVisitor annotationVisitor;
     private AnnotationFilter annotationFilter;
 
     public AnnotationParser(Iterable<Class> urls, AnnotationFilter annotationFilter, AnnotationVisitor annotationVisitor) {
         this.urls = urls;
-        this.annotationFilter = annotationFilter;
-        this.annotationVisitor = annotationVisitor;
-        this.contextClassLoader = Thread.currentThread().getContextClassLoader();
+        this.annotationFilter = annotationFilter == null ? new AnnotationFilter() {
+            @Override
+            public boolean isSupportedTypeAnnotation() {
+                return true;
+            }
+
+            @Override
+            public boolean isSupportedMethodAnnotation() {
+                return true;
+            }
+
+            @Override
+            public boolean isSupportedFieldAnnotation() {
+                return true;
+            }
+
+            @Override
+            public boolean acceptTypeAnnotation(String name, String targetType, Class value) {
+                return true;
+            }
+
+            @Override
+            public boolean acceptMethodAnnotation(String name, String targetMethod, String targetType, Method value) {
+                return true;
+            }
+
+            @Override
+            public boolean acceptFieldAnnotation(String name, String targetField, String targetType, Field value) {
+                return true;
+            }
+        } : annotationFilter;
+
+        this.annotationVisitor = annotationVisitor == null ? new AnnotationVisitor() {
+            @Override
+            public void visitClassAnnotation(Annotation annotation, Class clazz) {
+
+            }
+
+            @Override
+            public void visitMethodAnnotation(Annotation annotation, Method method) {
+
+            }
+
+            @Override
+            public void visitFieldAnnotation(Annotation annotation, Field method) {
+
+            }
+        } : annotationVisitor;
     }
 
 //    private void configureFolder(File rootFolder, File folder, ClassPathFilter typeFilter) throws MalformedURLException, ClassNotFoundException {
@@ -44,9 +85,9 @@ public class AnnotationParser {
 //    }
 
     public void visit(Class type, AnnotationFilter decorationFilter) {
-        boolean types = decorationFilter.isSupportedTypeDecoration();
-        boolean methods = decorationFilter.isSupportedMethodDecoration();
-        boolean fields = decorationFilter.isSupportedFieldDecoration();
+        boolean types = decorationFilter.isSupportedTypeAnnotation();
+        boolean methods = decorationFilter.isSupportedMethodAnnotation();
+        boolean fields = decorationFilter.isSupportedFieldAnnotation();
 //        boolean tree = (kind & DecorationFilter.HIERARCHICAL) != 0;
 //        boolean someType = false;
         if (types) {
@@ -60,8 +101,8 @@ public class AnnotationParser {
             if (annotations != null) {
                 int pos = 0;
                 for (Annotation a : annotations) {
-                    if (decorationFilter.acceptTypeDecoration(a.annotationType().getName(), type.getName(), type)) {
-                        annotationVisitor.visitTypeAnnotation(a, type);
+                    if (decorationFilter.acceptTypeAnnotation(a.annotationType().getName(), type.getName(), type)) {
+                        annotationVisitor.visitClassAnnotation(a, type);
 //                    someType = true;
                     }
                     pos++;
@@ -81,7 +122,7 @@ public class AnnotationParser {
                     int pos = 0;
                     for (Annotation a : method.getAnnotations()) {
                         String methodSig = getMethodSignature(method);
-                        if (decorationFilter.acceptMethodDecoration(a.annotationType().getName(), methodSig, type.getName(), method)) {
+                        if (decorationFilter.acceptMethodAnnotation(a.annotationType().getName(), methodSig, type.getName(), method)) {
                             annotationVisitor.visitMethodAnnotation(a, method);
                         }
                         pos++;
@@ -101,7 +142,7 @@ public class AnnotationParser {
                 for (Field field : declaredFields) {
                     int pos = 0;
                     for (Annotation a : field.getAnnotations()) {
-                        if (decorationFilter.acceptFieldDecoration(a.annotationType().getName(), field.getName(), type.getName(), field)) {
+                        if (decorationFilter.acceptFieldAnnotation(a.annotationType().getName(), field.getName(), type.getName(), field)) {
                             annotationVisitor.visitFieldAnnotation(a, field);
                         }
                         pos++;
@@ -111,10 +152,10 @@ public class AnnotationParser {
         }
     }
 
-//    public Decoration getDecoration(Class type, Class annotationClass) {
+    //    public Decoration getDecoration(Class type, Class annotationClass) {
 //        return UPAReflector.getDecoration(type, annotationClass, persistenceGroupName, persistenceUnitName, decorationRepository);
 //    }
-    public void parse() throws IOException, ClassNotFoundException, URISyntaxException {
+    public void parse() {
         for (Class type : urls) {
             visit(type, annotationFilter);
         }

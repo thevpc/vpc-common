@@ -70,7 +70,21 @@ public class PortablePatternMatcher {
          */
         {
             StringBuffer sb = new StringBuffer();
-            matcher.appendReplacement(sb, replacement);
+            StringBuilder rep = new StringBuilder();
+            for (char c : replacement.toCharArray()) {
+                switch (c) {
+                    case '$':
+                    case '\\': {
+                        rep.append('\\').append(c);
+                        break;
+                    }
+                    default: {
+                        rep.append(c);
+                        break;
+                    }
+                }
+            }
+            matcher.appendReplacement(sb, rep.toString());
             return sb.toString();
         }
     }
