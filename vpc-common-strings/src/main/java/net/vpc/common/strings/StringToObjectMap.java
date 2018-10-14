@@ -10,16 +10,17 @@ import java.util.Map;
 /**
  * @author taha.bensalah@gmail.com
  */
-public class MapStringConverter implements StringConverter {
-    private Map<String, String> values;
+public class StringToObjectMap implements StringToObject {
 
-    public MapStringConverter(Map<String, String> values) {
+    private final Map<String, Object> values;
+
+    public StringToObjectMap(Map<String, Object> values) {
         this.values = values;
     }
 
     @Override
-    public String convert(String str) {
-        return values.get(str);
+    public Object toObject(String str) {
+        return values == null ? null : values.get(str);
     }
 
 }

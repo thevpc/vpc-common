@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.vpc.common</groupId>
     <artifactId>vpc-common-strings</artifactId>
-    <version>1.2.9</version>
+    <version>1.2.14</version>
     <packaging>jar</packaging>
     <name>net.vpc.common.vpc-common-strings</name>
     <url>https://github.com/thevpc/upa/wiki</url>
@@ -41,8 +41,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <github.global.server>github</github.global.server>
     </properties>
 
@@ -120,7 +120,7 @@
                 <version>0.11</version>
                 <!--<version>0.9</version>-->
                 <configuration>
-                    <message>Maven artifacts for ${project.version}</message>  <!-- git commit message -->
+                    <message>Maven artifacts for ${project.groupId}:${project.artifactId}#${project.version}</message>  <!-- git commit message -->
                     <noJekyll>true</noJekyll>                                  <!-- disable webpage processing -->
                     <outputDirectory>${project.build.directory}/vpc-public-maven</outputDirectory> <!-- matches distribution management repository url above -->
                     <branch>refs/heads/master</branch>                       <!-- remote branch name -->
