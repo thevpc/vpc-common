@@ -14,7 +14,7 @@ import java.io.OutputStream;
  */
 public interface OutputStreamSource {
 
-    public OutputStream open() throws IOException;
+    OutputStream open() throws IOException;
 
-    public Object getSource() throws IOException;
+    Object getSource() throws IOException;
 }

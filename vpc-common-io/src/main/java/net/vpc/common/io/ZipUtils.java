@@ -9,7 +9,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 /**
@@ -58,8 +60,8 @@ public class ZipUtils {
             }
         }
         if (options.isTempFile()) {
-            if(!f.renameTo(targetFile)){
-                FileUtils.copy(f, targetFile,null);
+            if (!f.renameTo(targetFile)) {
+                FileUtils.copy(f, targetFile, null);
             }
         }
     }
@@ -139,5 +141,59 @@ public class ZipUtils {
                 }
             }
         }
+    }
+
+    public static boolean visitZipStream(InputStream zipFile, PathFilter possiblePaths, InputStreamVisitor visitor) throws IOException {
+//        byte[] buffer = new byte[4 * 1024];
+
+        //get the zip file content
+        ZipInputStream zis = null;
+
+        try {
+            zis = new ZipInputStream(zipFile);
+            //get the zipped file list entry
+            ZipEntry ze = zis.getNextEntry();
+            final ZipInputStream finalZis = zis;
+            InputStream entryInputStream = new InputStream() {
+                @Override
+                public int read() throws IOException {
+                    return finalZis.read();
+                }
+
+                @Override
+                public int read(byte[] b) throws IOException {
+                    return finalZis.read(b);
+                }
+
+                @Override
+                public int read(byte[] b, int off, int len) throws IOException {
+                    return finalZis.read(b, off, len);
+                }
+
+                @Override
+                public void close() throws IOException {
+                    finalZis.closeEntry();
+                }
+            };
+
+            while (ze != null) {
+
+                String fileName = ze.getName();
+                if (!fileName.endsWith("/")) {
+                    if (possiblePaths.accept(fileName)) {
+                        if (!visitor.visit(fileName, entryInputStream)) {
+                            break;
+                        }
+                    }
+                }
+                ze = zis.getNextEntry();
+            }
+        } finally {
+            if (zis != null) {
+                zis.close();
+            }
+        }
+
+        return false;
     }
 }
