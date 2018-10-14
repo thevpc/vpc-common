@@ -84,6 +84,23 @@ public class ArtifactUtils {
         return groupId + ":" + artifactId + "#" + ver;
     }
 
+    public static String resolveArtifactVersion(String groupId, String artifactId, String defaultValue) {
+        URL url = Thread.currentThread().getContextClassLoader().getResource("META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties");
+
+        if (url != null) {
+            Properties p = new Properties();
+            try {
+                p.load(url.openStream());
+            } catch (IOException e) {
+                //
+            }
+            String version = p.getProperty("version");
+            if (version != null && version.trim().length() != 0) {
+                return version;
+            }
+        }
+        return defaultValue;
+    }
     public static String resolveArtifactVersion(Class clazz, String groupId, String artifactId, String defaultValue) {
         URL url = clazz.getClassLoader().getResource("META-INF/maven/" + groupId + "/" + artifactId + "/pom.properties");
 
