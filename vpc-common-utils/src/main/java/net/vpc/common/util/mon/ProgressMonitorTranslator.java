@@ -4,7 +4,7 @@ package net.vpc.common.util.mon;
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
  * @creationtime 19 juil. 2007 00:27:15
  */
-public class ProgressMonitorTranslator extends AbstractEnhancedProgressMonitor {
+public class ProgressMonitorTranslator extends AbstractProgressMonitor {
 
     private double start;
     private ProgressMessage message;

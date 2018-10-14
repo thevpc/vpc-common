@@ -1,13 +1,13 @@
 package net.vpc.common.util.mon;
 
-import net.vpc.common.util.MemorySizeFormatter;
+import net.vpc.common.util.BytesSizeFormat;
 import net.vpc.common.util.Utils;
 
 import java.util.Date;
 import java.util.logging.Logger;
 
-public class LogProgressMonitor extends AbstractEnhancedProgressMonitor {
-    private static MemorySizeFormatter MF = new MemorySizeFormatter("0K0TF");
+public class LogProgressMonitor extends AbstractProgressMonitor {
+    private static BytesSizeFormat MF = new BytesSizeFormat("0K0TF");
     private static Logger defaultLog = Logger.getLogger(LogProgressMonitor.class.getName());
 
     static {

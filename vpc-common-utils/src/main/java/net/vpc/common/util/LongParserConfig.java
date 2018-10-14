@@ -13,6 +13,7 @@ public class LongParserConfig {
 
     public static final LongParserConfig STRICT = new LongParserConfig().setErrorIfInvalid(true).setErrorIfNull(true);
     public static final LongParserConfig LENIENT = new LongParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0L).setInvalidValue(0L);
+    public static final LongParserConfig LENIENT_F = new LongParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(-1L).setInvalidValue(-1L);
     private boolean errorIfNull = true;
     private boolean errorIfInvalid = true;
     private Long nullValue = 0L;

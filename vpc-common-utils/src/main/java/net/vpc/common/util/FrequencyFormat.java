@@ -1,12 +1,11 @@
 package net.vpc.common.util;
 
-import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 /**
  * Created by vpc on 3/20/17.
  */
-public class FrequencyFormatter /*implements DoubleFormatter*/{
+public class FrequencyFormat implements DoubleFormat{
 
     boolean leadingZeros = false;
     boolean intermediateZeros = true;
@@ -18,7 +17,9 @@ public class FrequencyFormatter /*implements DoubleFormatter*/{
     private int integerDigits = 3;
     private DecimalFormat decimalFormat = null;
 
-    public FrequencyFormatter(boolean leadingZeros, boolean intermediateZeros, boolean fixedLength, long high, long low, boolean decimal) {
+    public static final FrequencyFormat INSTANCE=new FrequencyFormat();
+
+    public FrequencyFormat(boolean leadingZeros, boolean intermediateZeros, boolean fixedLength, long high, long low, boolean decimal) {
         this.leadingZeros = leadingZeros;
         this.intermediateZeros = intermediateZeros;
         this.fixedLength = fixedLength;
@@ -27,11 +28,11 @@ public class FrequencyFormatter /*implements DoubleFormatter*/{
         this.decimal = decimal;
     }
 
-    public FrequencyFormatter() {
+    public FrequencyFormat() {
         this("HT I2 D3 ");
     }
 
-    public FrequencyFormatter(String format) {
+    public FrequencyFormat(String format) {
         leadingZeros = false;
         intermediateZeros = false;
         char low = '\0';
@@ -121,7 +122,7 @@ public class FrequencyFormatter /*implements DoubleFormatter*/{
         }else{
             decimalFormat = new DecimalFormat("0."+FormatHelper.fillString('#',fractionDigits));
         }
-        decimalFormat.setRoundingMode(RoundingMode.DOWN);
+        //decimalFormat.setRoundingMode(RoundingMode.DOWN);
 //        decimalFormat.setMinimumIntegerDigits(fixedLength ? integerDigits : 0);
 //        decimalFormat.setMaximumIntegerDigits(1);
 //        decimalFormat.setMinimumFractionDigits(fixedLength ? fractionDigits : 0);
@@ -135,7 +136,7 @@ public class FrequencyFormatter /*implements DoubleFormatter*/{
 //    public static void main(String[] args) {
 ////        DecimalFormat decimalFormat = new DecimalFormat("#.00");
 ////        System.out.println(decimalFormat.format(100.3));
-//        FrequencyFormatter frequencyFormatter = new FrequencyFormatter();
+//        FrequencyFormat frequencyFormatter = new FrequencyFormat();
 //        System.out.println(frequencyFormatter.format(0));
 //        long f = 100;
 //        for (int i = 0; i < 10; i++) {

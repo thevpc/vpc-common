@@ -1,15 +1,15 @@
 package net.vpc.common.util;
 
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.function.UnaryOperator;
+//import java.util.function.Consumer;
+//import java.util.function.UnaryOperator;
 
 /**
  * Created by vpc on 8/25/16.
  */
 public class UnmodifiableList<E> extends UnmodifiableCollection<E>
         implements List<E> {
-    private static final long serialVersionUID = -283967356065247728L;
+    private static final long serialVersionUID = 1L;
 
     final List<? extends E> list;
 
@@ -54,15 +54,15 @@ public class UnmodifiableList<E> extends UnmodifiableCollection<E>
         throw new UnsupportedOperationException();
     }
 
-    @Override
-    public void replaceAll(UnaryOperator<E> operator) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void sort(Comparator<? super E> c) {
-        throw new UnsupportedOperationException();
-    }
+//    @Override
+//    public void replaceAll(UnaryOperator<E> operator) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    @Override
+//    public void sort(Comparator<? super E> c) {
+//        throw new UnsupportedOperationException();
+//    }
 
     public ListIterator<E> listIterator() {
         return listIterator(0);
@@ -109,10 +109,9 @@ public class UnmodifiableList<E> extends UnmodifiableCollection<E>
                 throw new UnsupportedOperationException();
             }
 
-            @Override
-            public void forEachRemaining(Consumer<? super E> action) {
-                i.forEachRemaining(action);
-            }
+//            éemaining(Consumer<? super E> action) {
+//                i.forEachRemaining(action);
+//            }
         };
     }
 

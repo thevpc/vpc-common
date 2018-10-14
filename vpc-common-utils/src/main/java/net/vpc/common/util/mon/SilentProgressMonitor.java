@@ -3,7 +3,7 @@ package net.vpc.common.util.mon;
 /**
  * @author taha.bensalah@gmail.com on 7/17/16.
  */
-class SilentEnhancedProgressMonitor extends AbstractEnhancedProgressMonitor {
+public class SilentProgressMonitor extends AbstractProgressMonitor {
     private double progress;
     private ProgressMessage message;
 

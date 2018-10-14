@@ -4,7 +4,8 @@ package net.vpc.common.util;
 /**
  * Created by vpc on 3/20/17.
  */
-public class MemorySizeFormatter {
+public class BytesSizeFormat implements DoubleFormat {
+    public static final BytesSizeFormat INSTANCE=new BytesSizeFormat();
     boolean leadingZeros = false;
     boolean intermediateZeros = true;
     boolean trailingZeros = false;
@@ -14,7 +15,7 @@ public class MemorySizeFormatter {
     private long low = Units.BYTE;
     private int depth = Integer.MAX_VALUE;
 
-    public MemorySizeFormatter(boolean leadingZeros, boolean intermediateZeros, boolean fixedLength, boolean binaryPrefix, long high, long low,int depth) {
+    public BytesSizeFormat(boolean leadingZeros, boolean intermediateZeros, boolean fixedLength, boolean binaryPrefix, long high, long low, int depth) {
         this.leadingZeros = leadingZeros;
         this.intermediateZeros = intermediateZeros;
         this.fixedLength = fixedLength;
@@ -30,15 +31,19 @@ public class MemorySizeFormatter {
 //                "0I0BEF0","00BEF0","B0TD1F","B0TD2F","B0TD3F","B0TD1FI","B0TD2FI","B0TD3FI","0I0BEF0","I0BEF","IBEF","0IBTF"
 //        }) {
 //            System.out.println("");
-//            System.out.println(">System.out.println(new MemorySizeFormatter(\""+s+"\").format("+value+"));");
-//            System.out.println(new MemorySizeFormatter(s).format(value));
+//            System.out.println(">System.out.println(new BytesSizeFormat(\""+s+"\").format("+value+"));");
+//            System.out.println(new BytesSizeFormat(s).format(value));
 //        }
 //    }
 
-    public MemorySizeFormatter() {
+    public BytesSizeFormat() {
         this("B0EF");
     }
 
+    @Override
+    public String formatDouble(double value) {
+        return format((long) value);
+    }
     /**
      * Size format is a sequence of commands :
      * <ul>
@@ -91,7 +96,7 @@ public class MemorySizeFormatter {
      *
      * @param format size format
      */
-    public MemorySizeFormatter(String format) {
+    public BytesSizeFormat(String format) {
         leadingZeros = false;
         intermediateZeros = false;
         trailingZeros = false;

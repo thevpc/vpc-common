@@ -14,6 +14,6 @@ public class IntIterationProgressMonitorInc implements ProgressMonitorInc {
     @Override
     public double inc(double last) {
         index++;
-        return index/max;
+        return index / max;
     }
 }

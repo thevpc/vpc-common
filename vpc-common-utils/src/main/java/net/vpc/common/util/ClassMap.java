@@ -27,16 +27,23 @@ public class ClassMap<V> {
         }
     };
 
-    private static final long serialVersionUID = -1010101010101001057L;
-    private HashMap<Class, V> values = new HashMap<Class, V>();
+    private static final long serialVersionUID = 1L;
     private Class keyType;
     private Class<V> valueType;
-    private HashMap<Class, V[]> cachedValues = new HashMap<Class, V[]>();
-    private HashMap<Class, Class[]> cachedHierarchy = new HashMap<Class, Class[]>();
+    private HashMap<Class, V> values ;
+    private HashMap<Class, V[]> cachedValues;
+    private HashMap<Class, Class[]> cachedHierarchy;
 
     public ClassMap(Class keyType,Class<V> valueType) {
+        this(keyType,valueType,0);
+    }
+
+    public ClassMap(Class keyType,Class<V> valueType,int initialCapacity) {
         this.keyType = keyType;
         this.valueType = valueType;
+        values = new HashMap<Class, V>(initialCapacity);
+        cachedValues = new HashMap<Class, V[]>(initialCapacity * 2);
+        cachedHierarchy = new HashMap<Class, Class[]>(initialCapacity * 2);
     }
 
     public V put(Class classKey, V value) {

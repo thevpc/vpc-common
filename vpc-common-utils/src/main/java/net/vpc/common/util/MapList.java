@@ -3,6 +3,7 @@ package net.vpc.common.util;
 import java.util.*;
 
 /**
+ * a Map that implements List interface
  * Created by vpc on 6/1/16.
  */
 public interface MapList<K,V> extends List<V>{

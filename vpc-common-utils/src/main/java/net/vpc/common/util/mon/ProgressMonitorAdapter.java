@@ -3,10 +3,10 @@ package net.vpc.common.util.mon;
 /**
  * @author taha.bensalah@gmail.com on 7/17/16.
  */
-public class EnhancedProgressMonitorAdapter extends AbstractEnhancedProgressMonitor {
+public class ProgressMonitorAdapter extends AbstractProgressMonitor {
     private ProgressMonitor base;
 
-    public EnhancedProgressMonitorAdapter(ProgressMonitor base) {
+    public ProgressMonitorAdapter(ProgressMonitor base) {
         this.base = base;
     }
 

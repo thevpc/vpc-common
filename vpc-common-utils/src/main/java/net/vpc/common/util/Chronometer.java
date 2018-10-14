@@ -66,6 +66,7 @@ public class Chronometer {
         this.name = desc;
         return this;
     }
+
     public Chronometer updateDescription(String desc) {
         setName(desc);
         return this;
@@ -85,16 +86,16 @@ public class Chronometer {
 
     public Chronometer start() {
         endDate = 0;
-        startDate = System.currentTimeMillis();
+        startDate = System.nanoTime();
         return this;
     }
 
     public Chronometer stop() {
-        endDate = System.currentTimeMillis();
+        endDate = System.nanoTime();
         return this;
     }
 
-    public long getStartDate() {
+    public long getStartTime() {
         return startDate;
     }
 
@@ -103,33 +104,36 @@ public class Chronometer {
     }
 
     public long getTime() {
-        return ((endDate <= 0) ? System.currentTimeMillis() : endDate) - startDate;
+        return startDate == 0 ? 0 : ((endDate <= 0) ? System.nanoTime() : endDate) - startDate;
     }
 
     public int getMilliSeconds() {
+        long period = getTime() / 1000000;
         return (int) (getTime() % 1000L);
     }
 
     public int getSeconds() {
-        return (int) ((getTime() % 60000L) / 1000L);
+        long period = getTime() / 1000000;
+        return (int) ((period % 60000L) / 1000L);
     }
 
     public int getMinutes() {
-        return (int) ((getTime() % (1000L * 60L * 60L)) / 60000L);
+        long period = getTime() / 1000000;
+        return (int) ((period % (1000L * 60L * 60L)) / 60000L);
     }
 
     public int getHours() {
-        //old 0x36ee80L
-        return (int) (getTime() / (1000L * 60L * 60L));
+        long period = getTime() / 1000000;
+        return (int) (period / (1000L * 60L * 60L));
     }
 
 
-    public static String formatPeriod(long period) {
-        return formatPeriod(period,DatePart.MILLISECOND);
+    public static String formatPeriod(long periodNanos) {
+        return formatPeriod(periodNanos,DatePart.MILLISECOND);
     }
 
-    public static String formatPeriod(long period, DatePart precision) {
-        return new TimePeriodFormatter(precision).formatLong(period);
+    public static String formatPeriod(long periodNanos, DatePart precision) {
+        return SimpleTimePeriodFormat.INSTANCE.formatNanos(periodNanos);
     }
 
     public String toString() {
@@ -140,5 +144,120 @@ public class Chronometer {
     public String toString(DatePart precision) {
         String s= name ==null?"": name +"=";
         return s+formatPeriod(getTime(),precision);
+    }
+
+    public static String formatPeriodNano(long periodNano) {
+        StringBuilder sb = new StringBuilder();
+        int nano = (int) (periodNano % 1000000);
+        long period = periodNano / 1000000;
+        boolean started = false;
+        int h = (int) (period / (1000L * 60L * 60L));
+        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
+        int s = (int) ((period % 60000L) / 1000L);
+        int ms = (int) (period % 1000L);
+
+        if (h > 0) {
+            sb.append(h).append(" h ");
+            started = true;
+        }
+        if (mn > 0 || started) {
+            sb.append(mn).append(" mn ");
+            started = true;
+        }
+        if (s > 0 || started) {
+            sb.append(s).append(" s ");
+            //started=true;
+        }
+        sb.append(ms).append(" ms");
+
+        if (ms < 10) {
+            sb.append(" ").append(nano).append(" nanos");
+        }
+        return sb.toString();
+    }
+
+    public static String formatPeriodNano(long period, DatePart precision) {
+        StringBuilder sb = new StringBuilder();
+        period = period / 1000000;
+        boolean started = false;
+        int h = (int) (period / (1000L * 60L * 60L));
+        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
+        int s = (int) ((period % 60000L) / 1000L);
+        int ms = (int) (period % 1000L);
+        if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
+            if (h > 0) {
+                sb.append(h).append(" h ");
+                started = true;
+            }
+            if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
+                if (mn > 0 || started) {
+                    sb.append(mn).append(" mn ");
+                    started = true;
+                }
+                if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
+                    if (s > 0 || started) {
+                        sb.append(s).append(" s ");
+                        //started=true;
+                    }
+                    if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
+                        sb.append(ms).append(" ms");
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+
+    public static String formatPeriodMilli(long period, DatePart precision) {
+        StringBuilder sb = new StringBuilder();
+        boolean started = false;
+        int h = (int) (period / (1000L * 60L * 60L));
+        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
+        int s = (int) ((period % 60000L) / 1000L);
+        int ms = (int) (period % 1000L);
+        if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
+            if (h > 0) {
+                sb.append(h).append(" h ");
+                started = true;
+            }
+            if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
+                if (mn > 0 || started) {
+                    sb.append(mn).append(" mn ");
+                    started = true;
+                }
+                if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
+                    if (s > 0 || started) {
+                        sb.append(s).append(" s ");
+                        //started=true;
+                    }
+                    if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
+                        sb.append(ms).append(" ms");
+                    }
+                }
+            }
+        }
+        return sb.toString();
+    }
+    public static String formatPeriodMilli(long period) {
+        StringBuilder sb = new StringBuilder();
+        boolean started = false;
+        int h = (int) (period / (1000L * 60L * 60L));
+        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
+        int s = (int) ((period % 60000L) / 1000L);
+        int ms = (int) (period % 1000L);
+        if (h > 0) {
+            sb.append(h).append(" h ");
+            started = true;
+        }
+        if (mn > 0 || started) {
+            sb.append(mn).append(" mn ");
+            started = true;
+        }
+        if (s > 0 || started) {
+            sb.append(s).append(" s ");
+            //started=true;
+        }
+        sb.append(ms).append(" ms");
+        return sb.toString();
     }
 }

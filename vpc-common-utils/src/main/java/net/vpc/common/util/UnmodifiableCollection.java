@@ -3,16 +3,16 @@ package net.vpc.common.util;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Spliterator;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-import java.util.stream.Stream;
+//import java.util.Spliterator;
+//import java.util.function.Consumer;
+//import java.util.function.Predicate;
+//import java.util.stream.Stream;
 
 /**
  * Created by vpc on 8/25/16.
  */
 public class UnmodifiableCollection<E> implements Collection<E>, Serializable {
-    private static final long serialVersionUID = 1820017752578914078L;
+    private static final long serialVersionUID = 1L;
 
     final Collection<? extends E> c;
 
@@ -62,11 +62,11 @@ public class UnmodifiableCollection<E> implements Collection<E>, Serializable {
                 throw new UnsupportedOperationException();
             }
 
-            @Override
-            public void forEachRemaining(Consumer<? super E> action) {
-                // Use backing collection version
-                i.forEachRemaining(action);
-            }
+//            @Override
+//            public void forEachRemaining(Consumer<? super E> action) {
+//                // Use backing collection version
+//                i.forEachRemaining(action);
+//            }
         };
     }
 
@@ -99,31 +99,31 @@ public class UnmodifiableCollection<E> implements Collection<E>, Serializable {
     }
 
     // Override default methods in Collection
-    @Override
-    public void forEach(Consumer<? super E> action) {
-        c.forEach(action);
-    }
-
-    @Override
-    public boolean removeIf(Predicate<? super E> filter) {
-        throw new UnsupportedOperationException();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Spliterator<E> spliterator() {
-        return (Spliterator<E>) c.spliterator();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Stream<E> stream() {
-        return (Stream<E>) c.stream();
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public Stream<E> parallelStream() {
-        return (Stream<E>) c.parallelStream();
-    }
+//    @Override
+//    public void forEach(Consumer<? super E> action) {
+//        c.forEach(action);
+//    }
+//
+//    @Override
+//    public boolean removeIf(Predicate<? super E> filter) {
+//        throw new UnsupportedOperationException();
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public Spliterator<E> spliterator() {
+//        return (Spliterator<E>) c.spliterator();
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public Stream<E> stream() {
+//        return (Stream<E>) c.stream();
+//    }
+//
+//    @SuppressWarnings("unchecked")
+//    @Override
+//    public Stream<E> parallelStream() {
+//        return (Stream<E>) c.parallelStream();
+//    }
 }

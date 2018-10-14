@@ -3,10 +3,11 @@ package net.vpc.common.util;
 import java.util.*;
 
 /**
+ * A map that holds a list of values for each key
  * Created by vpc on 6/2/16.
  */
 public class ListValueMap<K, V> {
-    private Map<K, List<V>> data = new HashMap<>();
+    private Map<K, List<V>> data = new HashMap<K, List<V>>();
     private ValueFactory<V> valueFactory;
 
     public ListValueMap() {
@@ -53,7 +54,7 @@ public class ListValueMap<K, V> {
     public void put(K key, V value) {
         List<V> list = data.get(key);
         if (list == null) {
-            list = new ArrayList<>();
+            list = new ArrayList<V>();
             data.put(key, list);
         }
         list.add(value);
@@ -76,7 +77,7 @@ public class ListValueMap<K, V> {
     }
 
     public static class DefaultValueFactory<V> implements ValueFactory<V> {
-        @Override
+        //@Override
         public List<V> create() {
             return new ArrayList<V>();
         }

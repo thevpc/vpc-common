@@ -7,16 +7,23 @@ package net.vpc.common.util;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Objects;
+//import java.util.Objects;
 
 /**
  *
  * @author taha.bensalah@gmail.com
  */
-public class XNumber {
+public class XNumber extends Number{
 
     private Class type;
     private Number number;
+
+    public static XNumber valueOf(Number number) {
+        if(number instanceof XNumber){
+            return (XNumber) number;
+        }
+        return new XNumber(number);
+    }
 
     public XNumber(Number number) {
         this.number = number;
@@ -25,6 +32,10 @@ public class XNumber {
 
     public XNumber add(Number other) {
         return add(new XNumber(other));
+    }
+
+    public XNumber neg() {
+        return negate();
     }
 
     public XNumber negate() {
@@ -44,6 +55,10 @@ public class XNumber {
             return new XNumber(bigDecimalValue().negate());
         }
         throw new IllegalArgumentException("Invalid");
+    }
+
+    public XNumber tilde() {
+        return complement();
     }
 
     public XNumber complement() {
@@ -85,6 +100,9 @@ public class XNumber {
         throw new IllegalArgumentException("Invalid");
     }
 
+    public XNumber sub(XNumber other) {
+        return subtract(other);
+    }
     public XNumber subtract(XNumber other) {
         Class c = bestFit(type, other.type);
         if (c == Byte.class) {
@@ -105,6 +123,10 @@ public class XNumber {
         throw new IllegalArgumentException("Invalid");
     }
 
+    public XNumber mul(XNumber other) {
+        return multiply(other);
+    }
+
     public XNumber multiply(XNumber other) {
         Class c = bestFit(type, other.type);
         if (c == Byte.class) {
@@ -123,6 +145,10 @@ public class XNumber {
             return new XNumber(bigDecimalValue().multiply(other.bigDecimalValue()));
         }
         throw new IllegalArgumentException("Invalid");
+    }
+
+    public XNumber div(XNumber other) {
+        return divide(other);
     }
 
     public XNumber divide(XNumber other) {
@@ -167,8 +193,8 @@ public class XNumber {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 67 * hash + Objects.hashCode(this.type);
-        hash = 67 * hash + Objects.hashCode(this.number);
+        hash = 67 * hash + Utils.hashCode(this.type);
+        hash = 67 * hash + Utils.hashCode(this.number);
         return hash;
     }
 
@@ -194,15 +220,15 @@ public class XNumber {
     public int comparetTo(XNumber other) {
         Class c = bestFit(type, other.type);
         if (c == Byte.class) {
-            return Byte.compare(byteValue(), other.byteValue());
+            return Utils.compare(byteValue(), other.byteValue());
         } else if (c == Short.class) {
-            return Short.compare(shortValue(), other.shortValue());
+            return Utils.compare(shortValue(), other.shortValue());
         } else if (c == Integer.class) {
-            return Integer.compare(intValue(), other.intValue());
+            return Utils.compare(intValue(), other.intValue());
         } else if (c == Float.class) {
-            return Float.compare(floatValue(), other.floatValue());
+            return Utils.compare(floatValue(), other.floatValue());
         } else if (c == Double.class) {
-            return Double.compare(doubleValue(), other.doubleValue());
+            return Utils.compare(doubleValue(), other.doubleValue());
         } else if (c == BigInteger.class) {
             return (bigIntegerValue().compareTo(other.bigIntegerValue()));
         } else if (c == BigDecimal.class) {
@@ -214,17 +240,17 @@ public class XNumber {
     public static Class validateType(Class cls1) {
         if (cls1.equals(Byte.TYPE) || cls1.equals(Byte.TYPE)) {
             return Byte.class;
-        } else if (cls1.equals(Integer.TYPE) || cls1.equals(Integer.TYPE)) {
+        } else if (cls1.equals(Integer.class) || cls1.equals(Integer.TYPE)) {
             return Integer.class;
-        } else if (cls1.equals(Double.TYPE) || cls1.equals(Double.TYPE)) {
+        } else if (cls1.equals(Double.class) || cls1.equals(Double.TYPE)) {
             return Double.class;
-        } else if (cls1.equals(Float.TYPE) || cls1.equals(Float.TYPE)) {
+        } else if (cls1.equals(Float.class) || cls1.equals(Float.TYPE)) {
             return Float.class;
-        } else if (cls1.equals(Double.TYPE) || cls1.equals(Double.TYPE)) {
+        } else if (cls1.equals(Double.class) || cls1.equals(Double.TYPE)) {
             return Double.class;
-        } else if (cls1.equals(Long.TYPE) || cls1.equals(Long.TYPE)) {
+        } else if (cls1.equals(Long.class) || cls1.equals(Long.TYPE)) {
             return Long.class;
-        } else if (cls1.equals(Short.TYPE) || cls1.equals(Short.TYPE)) {
+        } else if (cls1.equals(Short.class) || cls1.equals(Short.TYPE)) {
             return Short.class;
         } else if (cls1.equals(BigDecimal.class)) {
             return BigDecimal.class;
@@ -300,7 +326,7 @@ public class XNumber {
             if (number instanceof BigInteger) {
                 return ((BigInteger) number);
             }
-            return new BigInteger("" + number.longValue());
+            return BigInteger.valueOf(number.longValue());
         }
         if (isFloating()) {
             return new BigDecimal(number.doubleValue()).toBigInteger();
@@ -367,6 +393,7 @@ public class XNumber {
         }
     }
 
-
-
+    public Number getNumber() {
+        return number;
+    }
 }

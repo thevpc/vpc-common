@@ -5,10 +5,10 @@ package net.vpc.common.util.mon;
  */
 public abstract class VoidMonitoredAction implements MonitoredAction<Boolean> {
     @Override
-    public final Boolean process(EnhancedProgressMonitor monitor, String messagePrefix) throws Exception {
+    public final Boolean process(ProgressMonitor monitor, String messagePrefix) throws Exception {
         this.invoke(monitor, messagePrefix);
         return true;
     }
 
-    public abstract void invoke(EnhancedProgressMonitor monitor, String messagePrefix) throws Exception;
+    public abstract void invoke(ProgressMonitor monitor, String messagePrefix) throws Exception;
 }

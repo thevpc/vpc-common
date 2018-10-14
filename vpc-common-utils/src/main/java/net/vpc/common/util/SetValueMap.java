@@ -6,7 +6,7 @@ import java.util.*;
  * Created by vpc on 6/2/16.
  */
 public class SetValueMap<K, V> {
-    private Map<K, Set<V>> data = new HashMap<>();
+    private Map<K, Set<V>> data = new HashMap<K, Set<V>>();
     private ValueFactory<V> valueFactory;
 
     public SetValueMap() {
@@ -76,9 +76,9 @@ public class SetValueMap<K, V> {
     }
 
     public static class DefaultValueFactory<V> implements ValueFactory<V> {
-        @Override
+//        @Override
         public Set<V> create() {
-            return new HashSet<>();
+            return new HashSet<V>();
         }
     }
 }

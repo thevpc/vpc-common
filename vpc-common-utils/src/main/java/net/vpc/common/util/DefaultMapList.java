@@ -6,8 +6,8 @@ import java.util.*;
  * Created by vpc on 6/1/16.
  */
 public class DefaultMapList<K,V> implements MapList<K,V>{
-    private Map<K,Integer> map=new LinkedHashMap<>();
-    private List<V> list=new LinkedList<>();
+    private Map<K,Integer> map=new LinkedHashMap<K, Integer>();
+    private List<V> list=new LinkedList<V>();
     private Converter<V,K> converter;
 
 //    public DefaultMapList(Function<V, K> converter) {
@@ -40,37 +40,37 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         return true;
     }
 
-    @Override
+//    @Override
     public int size() {
         return list.size();
     }
 
-    @Override
+//    @Override
     public boolean isEmpty() {
         return list.isEmpty();
     }
 
-    @Override
+//    @Override
     public boolean contains(Object o) {
         return list.contains(o);
     }
 
-    @Override
+//    @Override
     public Iterator<V> iterator() {
         return list.iterator();
     }
 
-    @Override
+//    @Override
     public Object[] toArray() {
         return list.toArray();
     }
 
-    @Override
+//    @Override
     public <T> T[] toArray(T[] a) {
         return list.toArray(a);
     }
 
-    @Override
+//    @Override
     public boolean remove(Object o) {
         K k = converter.convert((V) o);
         Integer pos = map.get(k);
@@ -82,7 +82,7 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         return false;
     }
 
-    @Override
+//    @Override
     public V removeByKey(K k) {
         Integer pos = map.get(k);
         if(pos!=null){
@@ -93,12 +93,12 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         return null;
     }
 
-    @Override
+//    @Override
     public boolean containsAll(Collection<?> c) {
         return list.containsAll(c);
     }
 
-    @Override
+//    @Override
     public boolean addAll(Collection<? extends V> c) {
         boolean a=false;
         for (V v : c) {
@@ -109,7 +109,7 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         return a;
     }
 
-    @Override
+//    @Override
     public boolean addAll(int index, Collection<? extends V> c) {
         if(index==size()){
             return addAll(c);
@@ -118,23 +118,23 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         }
     }
 
-    @Override
+//    @Override
     public boolean removeAll(Collection<?> c) {
         throw new IllegalArgumentException("Not supported");
     }
 
-    @Override
+//    @Override
     public boolean retainAll(Collection<?> c) {
         throw new IllegalArgumentException("Not supported");
     }
 
-    @Override
+//    @Override
     public void clear() {
         map.clear();
         list.clear();
     }
 
-    @Override
+//    @Override
     public V get(int index) {
         return list.get(index);
     }
@@ -149,7 +149,7 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         return b==null?null:list.get(b.intValue());
     }
 
-    @Override
+//    @Override
     public V set(int index, V element) {
         V v = list.get(index);
         K k= converter.convert(v);
@@ -161,7 +161,7 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         return v;
     }
 
-    @Override
+//    @Override
     public void add(int index, V element) {
         if(index==size()){
             add(element);
@@ -170,7 +170,7 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         }
     }
 
-    @Override
+//    @Override
     public V remove(int index) {
         V v = list.get(index);
         K k= converter.convert(v);
@@ -178,28 +178,28 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
         return v;
     }
 
-    @Override
+//    @Override
     public int indexOf(Object o) {
         K k = converter.convert((V) o);
         return map.get(k);
     }
 
-    @Override
+//    @Override
     public int lastIndexOf(Object o) {
         return indexOf(o);
     }
 
-    @Override
+//    @Override
     public ListIterator<V> listIterator() {
         return list.listIterator();
     }
 
-    @Override
+//    @Override
     public ListIterator<V> listIterator(int index) {
         return null;
     }
 
-    @Override
+//    @Override
     public List<V> subList(int fromIndex, int toIndex) {
         return new DefaultMapList<K,V>(list.subList(fromIndex,toIndex), converter);
     }
@@ -231,17 +231,17 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
             this.x = x;
         }
 
-        @Override
+//        @Override
         public boolean hasNext() {
             return x.hasNext();
         }
 
-        @Override
+//        @Override
         public X next() {
             return x.next();
         }
 
-        @Override
+//        @Override
         public void remove() {
             throw new IllegalArgumentException("Unsupported");
         }
@@ -255,32 +255,32 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
             return (ListIterator<X>)x;
         }
 
-        @Override
+//        @Override
         public boolean hasPrevious() {
             return li().hasPrevious();
         }
 
-        @Override
+//        @Override
         public X previous() {
             return li().previous();
         }
 
-        @Override
+//        @Override
         public int nextIndex() {
             return li().nextIndex();
         }
 
-        @Override
+//        @Override
         public int previousIndex() {
             return li().previousIndex();
         }
 
-        @Override
+//        @Override
         public void set(X x) {
             throw new IllegalArgumentException("Unsupported");
         }
 
-        @Override
+//        @Override
         public void add(X x) {
             throw new IllegalArgumentException("Unsupported");
         }

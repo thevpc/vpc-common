@@ -108,7 +108,7 @@ public class Convert {
                 return ((Number) o).doubleValue() != 0;
             }
             if (config.isAcceptInt()) {
-                if (PlatformTypes.isAnyIntegerValue(o)) {
+                if (PlatformUtils.isAnyIntegerValue(o)) {
                     return ((Number) o).longValue() != 0;
                 }
             }
