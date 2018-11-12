@@ -34,7 +34,7 @@ public class StringUtils {
     public static final StringConverter NORMALIZED = new StringConverter() {
         @Override
         public String convert(String str) {
-            return normalize(str);
+            return normalizeString(str);
         }
     };
 
@@ -54,7 +54,7 @@ public class StringUtils {
         };
     }
 
-    public static String normalize(String expression) {
+    public static String normalizeString(String expression) {
         if (expression == null) {
             return null;
         }
@@ -643,6 +643,18 @@ public class StringUtils {
         return new String(cc);
     }
 
+    public static String fillString(String pattern, int width) {
+        if(pattern==null || pattern.length()==0){
+            throw new IllegalArgumentException("Empty Pattern");
+        }
+        char[] cc = new char[width];
+        int len = pattern.length();
+        for (int i = 0; i < cc.length; i++) {
+            cc[i]=pattern.charAt(i% len);
+        }
+        return new String(cc);
+    }
+
     public static String alignLeft(String s, int width) {
         StringBuilder sb = new StringBuilder();
         if (s != null) {
@@ -654,6 +666,19 @@ public class StringUtils {
         }
         return sb.toString();
     }
+
+    public static String alignRight(String s, int width) {
+        StringBuilder sb = new StringBuilder();
+        if (s != null) {
+            sb.append(s);
+            int x = width - sb.length();
+            if (x > 0) {
+                sb.insert(0, fillString(' ', x));
+            }
+        }
+        return sb.toString();
+    }
+
 
     public static String join(String sep, int[] items) {
         StringBuilder sb = new StringBuilder();
@@ -997,7 +1022,7 @@ public class StringUtils {
 
     public static Map<String, String> parseMap(String text, String eqSeparators, String entrySeparators) {
         Map<String, String> m = new HashMap<>();
-        StringReader reader = new StringReader(text);
+        StringReader reader = new StringReader(text==null?"":text);
         while (true) {
             StringBuilder key = new StringBuilder();
             int r = 0;
@@ -1085,4 +1110,93 @@ public class StringUtils {
             }
         }
     }
+    public static StringBuilder clear(StringBuilder c) {
+        return c.delete(0, c.length());
+    }
+
+
+    /**
+     * code from org.apache.tools.ant.types.Commandline copyrights goes to
+     * Apache Ant Authors (Licensed to the Apache Software Foundation (ASF))
+     * Crack a command line.
+     *
+     * @param line the command line to process.
+     * @return the command line broken into strings. An empty or null toProcess
+     * parameter results in a zero sized array.
+     */
+    public static String[] parseCommandline(String line) {
+        if (line == null || line.length() == 0) {
+            //no command? no string
+            return new String[0];
+        }
+        // parse with a simple finite state machine
+
+        final int normal = 0;
+        final int inQuote = 1;
+        final int inDoubleQuote = 2;
+        int state = normal;
+        final StringTokenizer tok = new StringTokenizer(line, "\"\' ", true);
+        final ArrayList<String> result = new ArrayList<String>();
+        final StringBuilder current = new StringBuilder();
+        boolean lastTokenHasBeenQuoted = false;
+
+        while (tok.hasMoreTokens()) {
+            String nextTok = tok.nextToken();
+            switch (state) {
+                case inQuote:
+                    if ("\'".equals(nextTok)) {
+                        lastTokenHasBeenQuoted = true;
+                        state = normal;
+                    } else {
+                        current.append(nextTok);
+                    }
+                    break;
+                case inDoubleQuote:
+                    if ("\"".equals(nextTok)) {
+                        lastTokenHasBeenQuoted = true;
+                        state = normal;
+                    } else {
+                        current.append(nextTok);
+                    }
+                    break;
+                default:
+                    switch (nextTok) {
+                        case "\'":
+                            state = inQuote;
+                            break;
+                        case "\"":
+                            state = inDoubleQuote;
+                            break;
+                        case " ":
+                            if (lastTokenHasBeenQuoted || current.length() != 0) {
+                                result.add(current.toString());
+                                current.setLength(0);
+                            }
+                            break;
+                        default:
+                            current.append(nextTok);
+                            break;
+                    }
+                    lastTokenHasBeenQuoted = false;
+                    break;
+            }
+        }
+        if (lastTokenHasBeenQuoted || current.length() != 0) {
+            result.add(current.toString());
+        }
+        if (state == inQuote || state == inDoubleQuote) {
+            throw new IllegalArgumentException("unbalanced quotes in " + line);
+        }
+        return result.toArray(new String[result.size()]);
+    }
+
+    public static String coalesce(String... cmd) {
+        for (String string : cmd) {
+            if (!isEmpty(string)) {
+                return string;
+            }
+        }
+        return null;
+    }
+
 }

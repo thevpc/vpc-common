@@ -606,7 +606,7 @@ public class MessageNameFormat {
 
     ////////////////////////////////////////////////////////////////////////////
     public static DateFormat resolveDateFormat(String dateFormatString, Locale loc, String defaultDateFormatString) {
-        if (dateFormatString == null || dateFormatString.trim().isEmpty()) {
+        if (StringUtils.isEmpty(dateFormatString)) {
             dateFormatString = defaultDateFormatString;
         }
         if (dateFormatString.equalsIgnoreCase("short")) {

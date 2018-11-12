@@ -52,7 +52,7 @@ public class StringTransforms {
 
         @Override
         public String transform(String s) {
-            s=StringUtils.normalize(s);
+            s=StringUtils.normalizeString(s);
             StringBuilder b = new StringBuilder();
             if (s != null) {
                 boolean wasWhite = false;
