@@ -5,8 +5,8 @@
 
     <groupId>net.vpc.common</groupId>
     <artifactId>vpc-common-swings</artifactId>
+    <version>2.3.9</version>
     <name>net.vpc.common.vpc-common-swings</name>
-    <version>2.3.6</version>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/commons</url>
     <organization>
@@ -51,11 +51,6 @@
         <!-- ##############################
                 PRIVATE COMPILE DEPENDENCIES 
         ############################## -->
-        <dependency>
-            <groupId>net.vpc.common</groupId>
-            <artifactId>vpc-common-prs</artifactId>
-            <version>2.2.0</version>
-        </dependency>
 
 
         <!-- ##############################
@@ -94,8 +89,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.7.0</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>

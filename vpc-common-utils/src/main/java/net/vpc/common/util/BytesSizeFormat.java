@@ -1,16 +1,18 @@
 package net.vpc.common.util;
 
-
 /**
  * Created by vpc on 3/20/17.
  */
 public class BytesSizeFormat implements DoubleFormat {
-    public static final BytesSizeFormat INSTANCE=new BytesSizeFormat();
+
+    public static final BytesSizeFormat INSTANCE = new BytesSizeFormat();
     boolean leadingZeros = false;
     boolean intermediateZeros = true;
     boolean trailingZeros = false;
+    boolean alignRight = false;
     private boolean fixedLength = false;
     private boolean binaryPrefix = false;
+    private boolean standardUnit = false;
     private long high = Units.TERA;
     private long low = Units.BYTE;
     private int depth = Integer.MAX_VALUE;
@@ -22,7 +24,7 @@ public class BytesSizeFormat implements DoubleFormat {
         this.binaryPrefix = binaryPrefix;
         this.high = high;
         this.low = low;
-        this.depth = depth<=0?Integer.MAX_VALUE:depth;
+        this.depth = depth <= 0 ? Integer.MAX_VALUE : depth;
     }
 
 //    public static void main(String[] args) {
@@ -35,7 +37,6 @@ public class BytesSizeFormat implements DoubleFormat {
 //            System.out.println(new BytesSizeFormat(s).format(value));
 //        }
 //    }
-
     public BytesSizeFormat() {
         this("B0EF");
     }
@@ -44,14 +45,21 @@ public class BytesSizeFormat implements DoubleFormat {
     public String formatDouble(double value) {
         return format((long) value);
     }
+
     /**
      * Size format is a sequence of commands :
      * <ul>
-     * <li>B,K,M,G,T : Show Bytes/Kilo/Mega/Giga/Tera, if this is the first multiplier it will be considered as the minimum multiplier otherwise it will be considered as the maximum multiplier</li>
+     * <li>B,K,M,G,T : Show Bytes/Kilo/Mega/Giga/Tera, if this is the first
+     * multiplier it will be considered as the minimum multiplier otherwise it
+     * will be considered as the maximum multiplier</li>
      * <li>I : binary prefix (use 1024 multipliers)</li>
-     * <li>D : multiplier maximum depth, should be suffixed with an integer (i.e BTD2 means that if number is in giga will not show further than kilo)</li>
+     * <li>D : multiplier maximum depth, should be suffixed with an integer (i.e
+     * BTD2 means that if number is in giga will not show further than
+     * kilo)</li>
      * <li>F : fixed length</li>
-     * <li>Z : if used in the very first position (0) consider leadingZeros, if at the last position consider trailing zeros if anywhere else consider intermediateZeros</li>
+     * <li>Z : if used in the very first position (0) consider leadingZeros, if
+     * at the last position consider trailing zeros if anywhere else consider
+     * intermediateZeros</li>
      * </ul>
      * examples
      * <pre>
@@ -100,13 +108,14 @@ public class BytesSizeFormat implements DoubleFormat {
         leadingZeros = false;
         intermediateZeros = false;
         trailingZeros = false;
+        alignRight = true;
         char low = '\0';
         char high = '\0';
         if (format != null) {
             boolean startInterval = true;
             char[] charArray = format.toCharArray();
             for (int i = 0; i < charArray.length; i++) {
-                char c = Character.toUpperCase(charArray[i]);
+                char c = charArray[i];//Character.toUpperCase(charArray[i]);
                 switch (c) {
                     case 'B':
                     case 'K':
@@ -116,8 +125,7 @@ public class BytesSizeFormat implements DoubleFormat {
                     case 'P':
                     case 'E':
                     case 'Z':
-                    case 'Y':
-                        {
+                    case 'Y': {
                         if (startInterval) {
                             startInterval = false;
                             low = c;
@@ -128,27 +136,43 @@ public class BytesSizeFormat implements DoubleFormat {
                     }
                     case 'I': {
                         binaryPrefix = true;
+                        standardUnit = false;
+                        break;
+                    }
+                    case 'i': {
+                        binaryPrefix = true;
+                        standardUnit = true;
                         break;
                     }
                     case 'D': {
                         i++;
-                        if(Character.isDigit(charArray[i])) {
+                        if (Character.isDigit(charArray[i])) {
                             depth = charArray[i] - '0';
-                        }else{
-                            depth=-1;
+                        } else {
+                            depth = -1;
                         }
-                        if(depth<=0 || depth>9){
-                            throw new IllegalArgumentException("Invalid depth "+depth);
+                        if (depth <= 0 || depth > 9) {
+                            throw new IllegalArgumentException("Invalid depth " + depth);
                         }
                     }
                     case 'F': {
                         fixedLength = true;
                         break;
                     }
+                    case '>': {
+                        fixedLength = true;
+                        alignRight = true;
+                        break;
+                    }
+                    case '<': {
+                        fixedLength = true;
+                        alignRight = false;
+                        break;
+                    }
                     case '0': {
                         if (i == 0) {
                             leadingZeros = true;
-                        } else if(i==charArray.length-1){
+                        } else if (i == charArray.length - 1) {
                             trailingZeros = true;
                         } else {
                             intermediateZeros = true;
@@ -174,15 +198,6 @@ public class BytesSizeFormat implements DoubleFormat {
             this.low = this.high;
             this.high = t;
         }
-    }
-
-    public static String sformatLeft(Object number, int size) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(number);
-        while (sb.length() < size) {
-            sb.insert(0, ' ');
-        }
-        return sb.toString();
     }
 
     private long eval(char c) {
@@ -220,7 +235,19 @@ public class BytesSizeFormat implements DoubleFormat {
 
     private String formatLeft(Object number, int size) {
         if (fixedLength) {
-            return sformatLeft(number, size);
+            return _StringUtils.formatLeft(number, size);
+        } else {
+            return String.valueOf(number);
+        }
+    }
+
+    private String formatNumber(Object number, int size) {
+        if (fixedLength) {
+            if (alignRight) {
+                return _StringUtils.formatRight(number, size);
+            } else {
+                return _StringUtils.formatLeft(number, size);
+            }
         } else {
             return String.valueOf(number);
         }
@@ -287,7 +314,7 @@ public class BytesSizeFormat implements DoubleFormat {
 //            }
             if (high >= E) {
                 r = v / T;
-                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % E)>0)) || (v==0 && trailingZeros)) {
+                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % E) > 0)) || (v == 0 && trailingZeros)) {
                     if (currDepth < 0) {
                         currDepth = 1;
                     } else {
@@ -297,9 +324,9 @@ public class BytesSizeFormat implements DoubleFormat {
                         if (sb.length() > 0) {
                             sb.append(" ");
                         }
-                        sb.append(formatLeft(r, 3)).append("E").append(binaryPrefix?"i":"");
-                        if(r!=0){
-                            leading=false;
+                        sb.append(formatNumber(r, 3)).append((binaryPrefix && !standardUnit) ? "Ei" : "E");
+                        if (r != 0) {
+                            leading = false;
                         }
                         v = v % E;
                         empty = false;
@@ -308,7 +335,7 @@ public class BytesSizeFormat implements DoubleFormat {
             }
             if (high >= P) {
                 r = v / T;
-                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % P)>0)) || (v==0 && trailingZeros)) {
+                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % P) > 0)) || (v == 0 && trailingZeros)) {
                     if (currDepth < 0) {
                         currDepth = 1;
                     } else {
@@ -318,9 +345,9 @@ public class BytesSizeFormat implements DoubleFormat {
                         if (sb.length() > 0) {
                             sb.append(" ");
                         }
-                        sb.append(formatLeft(r, 3)).append("P").append(binaryPrefix?"i":"");
-                        if(r!=0){
-                            leading=false;
+                        sb.append(formatNumber(r, 3)).append((binaryPrefix && !standardUnit) ? "Pi" : "P");
+                        if (r != 0) {
+                            leading = false;
                         }
                         v = v % P;
                         empty = false;
@@ -329,7 +356,7 @@ public class BytesSizeFormat implements DoubleFormat {
             }
             if (high >= T) {
                 r = v / T;
-                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % T)>0)) || (v==0 && trailingZeros)) {
+                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % T) > 0)) || (v == 0 && trailingZeros)) {
                     if (currDepth < 0) {
                         currDepth = 1;
                     } else {
@@ -339,9 +366,9 @@ public class BytesSizeFormat implements DoubleFormat {
                         if (sb.length() > 0) {
                             sb.append(" ");
                         }
-                        sb.append(formatLeft(r, 3)).append("T").append(binaryPrefix?"i":"");
-                        if(r!=0){
-                            leading=false;
+                        sb.append(formatNumber(r, 3)).append((binaryPrefix && !standardUnit) ? "Ti" : "T");
+                        if (r != 0) {
+                            leading = false;
                         }
                         v = v % T;
                         empty = false;
@@ -352,7 +379,7 @@ public class BytesSizeFormat implements DoubleFormat {
                 if (high >= G) {
                     r = v / G;
                 }
-                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % G)>0)) || (v==0 && trailingZeros)) {
+                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % G) > 0)) || (v == 0 && trailingZeros)) {
                     if (currDepth < 0) {
                         currDepth = 1;
                     } else {
@@ -362,10 +389,10 @@ public class BytesSizeFormat implements DoubleFormat {
                         if (sb.length() > 0) {
                             sb.append(" ");
                         }
-                        if(r!=0){
-                            leading=false;
+                        if (r != 0) {
+                            leading = false;
                         }
-                        sb.append(formatLeft(r, 3)).append("G").append(binaryPrefix?"i":"");
+                        sb.append(formatNumber(r, 3)).append((binaryPrefix && !standardUnit) ? "Gi" : "G");
                         v = v % G;
                         empty = false;
                     }
@@ -373,20 +400,20 @@ public class BytesSizeFormat implements DoubleFormat {
                 if (low <= M) {
                     if (high >= M) {
                         r = v / M;
-                        if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % M)>0)) || (v==0 && trailingZeros)) {
-                            if(currDepth<0){
-                                currDepth=1;
-                            }else{
+                        if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % M) > 0)) || (v == 0 && trailingZeros)) {
+                            if (currDepth < 0) {
+                                currDepth = 1;
+                            } else {
                                 currDepth++;
                             }
-                            if(currDepth<=depth) {
+                            if (currDepth <= depth) {
                                 if (sb.length() > 0) {
                                     sb.append(" ");
                                 }
-                                if(r!=0){
-                                    leading=false;
+                                if (r != 0) {
+                                    leading = false;
                                 }
-                                sb.append(formatLeft(r, 3)).append("M").append(binaryPrefix?"i":"");
+                                sb.append(formatNumber(r, 3)).append((binaryPrefix && !standardUnit) ? "Mi" : "M");
                                 v = v % M;
                                 empty = false;
                             }
@@ -395,20 +422,20 @@ public class BytesSizeFormat implements DoubleFormat {
                     if (low <= K) {
                         if (high >= K) {
                             r = v / K;
-                            if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % K)>0)) || (v==0 && trailingZeros)) {
-                                if(currDepth<0){
-                                    currDepth=1;
-                                }else{
+                            if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % K) > 0)) || (v == 0 && trailingZeros)) {
+                                if (currDepth < 0) {
+                                    currDepth = 1;
+                                } else {
                                     currDepth++;
                                 }
-                                if(currDepth<=depth) {
+                                if (currDepth <= depth) {
                                     if (sb.length() > 0) {
                                         sb.append(" ");
                                     }
-                                    if(r!=0){
-                                        leading=false;
+                                    if (r != 0) {
+                                        leading = false;
                                     }
-                                    sb.append(formatLeft(r, 3)).append("K").append(binaryPrefix?"i":"");
+                                    sb.append(formatNumber(r, 3)).append((binaryPrefix && !standardUnit) ? "Ki" : "K");
                                     v = v % K;
                                     empty = false;
                                 }
@@ -416,19 +443,19 @@ public class BytesSizeFormat implements DoubleFormat {
                         }
                         if (low <= 1) {
                             if ((leadingZeros && leading) || v > 0 || sb.length() == 0 /*|| (!empty && intermediateZeros)*/) {
-                                if(currDepth<0){
-                                    currDepth=1;
-                                }else{
+                                if (currDepth < 0) {
+                                    currDepth = 1;
+                                } else {
                                     currDepth++;
                                 }
-                                if(currDepth<=depth) {
+                                if (currDepth <= depth) {
                                     if (sb.length() > 0) {
                                         sb.append(" ");
                                     }
-                                    if(r!=0){
-                                        leading=false;
+                                    if (r != 0) {
+                                        leading = false;
                                     }
-                                    sb.append(formatLeft(v, 3)).append("B");
+                                    sb.append(formatNumber(v, 3)).append((binaryPrefix && !standardUnit) ? "B " : "B");
                                     empty = false;
                                 }
                             }
@@ -442,14 +469,14 @@ public class BytesSizeFormat implements DoubleFormat {
                 sb.insert(0, "-");
             }
             if (low >= T) {
-                sb.append(formatLeft(0, 3)).append("T");
+                sb.append(formatNumber(0, 3)).append((binaryPrefix && !standardUnit) ? "Ti" : "T");
             } else if (low >= G) {
-                sb.append(formatLeft(0, 3)).append("G");
+                sb.append(formatNumber(0, 3)).append((binaryPrefix && !standardUnit) ? "Gi" : "G");
             } else if (low >= M) {
-                sb.append(formatLeft(0, 3)).append("M");
+                sb.append(formatNumber(0, 3)).append((binaryPrefix && !standardUnit) ? "Mi" : "M");
             } else if (low >= K) {
-                sb.append(formatLeft(0, 3)).append("K");
-                sb.append(formatLeft(0, 3)).append("B");
+                sb.append(formatNumber(0, 3)).append((binaryPrefix && !standardUnit) ? "Ki" : "K");
+                sb.append(formatNumber(0, 3)).append((binaryPrefix && !standardUnit) ? "B " : "B");
             }
         } else {
             if (neg) {
@@ -458,6 +485,5 @@ public class BytesSizeFormat implements DoubleFormat {
         }
         return sb.toString();
     }
-
 
 }

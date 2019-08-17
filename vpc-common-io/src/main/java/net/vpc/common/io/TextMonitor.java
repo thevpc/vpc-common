@@ -1,7 +1,31 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * ====================================================================
+ *            vpc-common-io : common reusable library for
+ *                          input/output
+ *
+ * is a new Open Source Package Manager to help install packages
+ * and libraries for runtime execution. Nuts is the ultimate companion for
+ * maven (and other build managers) as it helps installing all package
+ * dependencies at runtime. Nuts is not tied to java and is a good choice
+ * to share shell scripts and other 'things' . Its based on an extensible
+ * architecture to help supporting a large range of sub managers / repositories.
+ *
+ * Copyright (C) 2016-2017 Taha BEN SALAH
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * ====================================================================
  */
 package net.vpc.common.io;
 
@@ -44,7 +68,6 @@ public class TextMonitor implements Iterable<String> {
 //            Logger.getLogger(TextMonitor.class.getName()).log(Level.SEVERE, null, ex);
 //        }
 //    }
-
     public void addListener(TextListener listener) {
         listeners.add(listener);
     }
@@ -55,7 +78,11 @@ public class TextMonitor implements Iterable<String> {
 
     @Override
     public Iterator<String> iterator() {
-        return new TextMonitorIterator();
+        try {
+            return new TextMonitorIterator();
+        } catch (IOException ex) {
+            throw new IllegalArgumentException(ex);
+        }
     }
 
     public void process() throws IOException {
@@ -65,15 +92,12 @@ public class TextMonitor implements Iterable<String> {
     }
 
     private class TextMonitorIterator implements Iterator<String> {
+
         private BufferedReader input = null;
         private String currentLine = null;
 
-        {
-            try {
-                input = new BufferedReader(new InputStreamReader(TextMonitor.this.source.open()));
-            } catch (IOException e) {
-                throw new IllegalArgumentException(e);
-            }
+        public TextMonitorIterator() throws IOException {
+            input = new BufferedReader(new InputStreamReader(TextMonitor.this.source.open()));
         }
 
         @Override

@@ -25,12 +25,6 @@ package net.vpc.common.swings;
 
 import java.util.List;
 import java.util.ArrayList;
-import net.vpc.common.swings.iconset.AbstractButtonIconSetUpdater;
-import net.vpc.common.prs.iconset.IconSet;
-import net.vpc.common.swings.iconset.SwingIconSetManager;
-import net.vpc.common.swings.messageset.AbstractButtonMessageSetUpdater;
-import net.vpc.common.prs.messageset.MessageSet;
-import net.vpc.common.swings.messageset.SwingMessageSetManager;
 
 import javax.accessibility.AccessibleContext;
 import javax.swing.*;
@@ -49,33 +43,6 @@ import java.util.Map;
  */
 public class JDropDownButton extends JButton {
 
-    static {
-        PRSManager.setDefaultComponentIconSetUpdater(JDropDownButton.class, new AbstractButtonIconSetUpdater() {
-
-            public void updateIconSet(JComponent comp, String id, IconSet iconSet) {
-                super.updateIconSet(comp, id, iconSet);
-                JPopupMenu jPopupMenu = ((JDropDownButton) comp).popupMenu;
-                if (jPopupMenu != null) {
-                    SwingIconSetManager.updateComponentTree(jPopupMenu, iconSet);
-                }
-
-            }
-        });
-        PRSManager.setDefaultComponentMessageSetUpdater(JDropDownButton.class, new AbstractButtonMessageSetUpdater() {
-
-            public void updateMessageSet(JComponent component, String id, MessageSet messageSet) {
-                super.updateMessageSet(component, id, messageSet);
-                JPopupMenu jPopupMenu = ((JDropDownButton) component).popupMenu;
-                if (jPopupMenu != null) {
-                    SwingMessageSetManager.updateComponentTree(jPopupMenu, messageSet);
-                }
-            }
-
-            public void install(JComponent comp, String id) {
-            }
-        });
-    }
-
     public int getQuickActionDelay() {
         return quickActionDelay;
     }
@@ -84,57 +51,57 @@ public class JDropDownButton extends JButton {
         this.quickActionDelay = quickActionDelay;
     }
 
-    public static void main(String[] args) {
-        boolean nativeLAF = true;
-        try {
-            String plaf;
-            if (nativeLAF) {
-                plaf = UIManager.getSystemLookAndFeelClassName();
-            } else {
-                plaf = UIManager.getCrossPlatformLookAndFeelClassName();
-            }
-            UIManager.setLookAndFeel(plaf);
-        } catch (Exception e) {
-            System.out.println("Error loading Look and Feel");
-        }
-        JFrame frame = new JFrame();
-        JDropDownButton button = new JDropDownButton();
-        button.add("test1");
-        button.add("test2");
-        button.add("test3");
-        //JButton button=new JButton();
-        //button.setText("Toto");
-        //button.setPreferredSize(new Dimension(20,20));
-        //button.setMinimumSize(new Dimension(20,20));
-        button.setIcon(new ImageIcon("D:/Personal/work/app/lib/resources/images/vpc/application/CalculatorAction.gif"));
-        frame.getContentPane().setLayout(new BorderLayout());
-        frame.getContentPane().add(new JLabel("..."), BorderLayout.PAGE_START);
-        Box box = Box.createHorizontalBox();
-        box.add(Box.createHorizontalGlue());
-        box.add(button);
-        box.add(Box.createHorizontalGlue());
-        frame.getContentPane().add(box);
-        JToolBar toolbar = new JToolBar();
-
-        JDropDownButton b1 = new JDropDownButton();
-//		b1.setIcon(new ImageIcon("D:/Personal/work/app/lib/resources/images/vpc/application/CalculatorAction.gif"));
-        b1.add("test1");
-        b1.add("test2");
-        b1.add("test3");
-        JDropDownButton b2 = new JDropDownButton();
-//		b2.setIcon(new ImageIcon("D:/Personal/work/app/lib/resources/images/vpc/application/CalculatorAction.gif"));
-        b2.add("test1");
-        b2.add("test2");
-        b2.add("test3");
-        toolbar.add(b1);
-        toolbar.add(b2);
-        toolbar.add(new JButton("titi"));
-        frame.getContentPane().add(toolbar, BorderLayout.PAGE_END);
-
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.show();
-    }
+//    public static void main(String[] args) {
+//        boolean nativeLAF = true;
+//        try {
+//            String plaf;
+//            if (nativeLAF) {
+//                plaf = UIManager.getSystemLookAndFeelClassName();
+//            } else {
+//                plaf = UIManager.getCrossPlatformLookAndFeelClassName();
+//            }
+//            UIManager.setLookAndFeel(plaf);
+//        } catch (Exception e) {
+//            System.out.println("Error loading Look and Feel");
+//        }
+//        JFrame frame = new JFrame();
+//        JDropDownButton button = new JDropDownButton();
+//        button.add("test1");
+//        button.add("test2");
+//        button.add("test3");
+//        //JButton button=new JButton();
+//        //button.setText("Toto");
+//        //button.setPreferredSize(new Dimension(20,20));
+//        //button.setMinimumSize(new Dimension(20,20));
+//        button.setIcon(new ImageIcon("D:/Personal/work/app/lib/resources/images/vpc/application/CalculatorAction.gif"));
+//        frame.getContentPane().setLayout(new BorderLayout());
+//        frame.getContentPane().add(new JLabel("..."), BorderLayout.PAGE_START);
+//        Box box = Box.createHorizontalBox();
+//        box.add(Box.createHorizontalGlue());
+//        box.add(button);
+//        box.add(Box.createHorizontalGlue());
+//        frame.getContentPane().add(box);
+//        JToolBar toolbar = new JToolBar();
+//
+//        JDropDownButton b1 = new JDropDownButton();
+////		b1.setIcon(new ImageIcon("D:/Personal/work/app/lib/resources/images/vpc/application/CalculatorAction.gif"));
+//        b1.add("test1");
+//        b1.add("test2");
+//        b1.add("test3");
+//        JDropDownButton b2 = new JDropDownButton();
+////		b2.setIcon(new ImageIcon("D:/Personal/work/app/lib/resources/images/vpc/application/CalculatorAction.gif"));
+//        b2.add("test1");
+//        b2.add("test2");
+//        b2.add("test3");
+//        toolbar.add(b1);
+//        toolbar.add(b2);
+//        toolbar.add(new JButton("titi"));
+//        frame.getContentPane().add(toolbar, BorderLayout.PAGE_END);
+//
+//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        frame.pack();
+//        frame.show();
+//    }
     /*
      * The popup menu portion of the menu.
      */
@@ -270,7 +237,7 @@ public class JDropDownButton extends JButton {
         addMouseListener(
                 new MouseAdapter() {
 
-                    private long time;
+            private long time;
 //                    public void mouseClicked(MouseEvent e) {
 //                        long d=System.currentTimeMillis()-e.getWhen();
 //                        if((d) >= getDelay()){
@@ -282,34 +249,34 @@ public class JDropDownButton extends JButton {
 //                        }
 //                    }
 
-                    public void mouseReleased(MouseEvent e) {
-                        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                            long d = e.getWhen() - time;
-                            time = 0;
+            public void mouseReleased(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    long d = e.getWhen() - time;
+                    time = 0;
 //                            System.out.println("d /delay= " + d+" / "+getDelay());
-                            if ((d) > getQuickActionDelay()) {
+                    if ((d) > getQuickActionDelay()) {
 //                                System.out.println("popup ok");
-                                setPopupMenuVisible(true);
-                                MenuElement[] me = buildMenuElementArray(JDropDownButton.this);
-                                MenuSelectionManager.defaultManager().setSelectedPath(me);
-                            } else {
+                        setPopupMenuVisible(true);
+                        MenuElement[] me = buildMenuElementArray(JDropDownButton.this);
+                        MenuSelectionManager.defaultManager().setSelectedPath(me);
+                    } else {
 //                                System.out.println("quick action");
-                                ActionEvent ae = new ActionEvent(JDropDownButton.this,
-                                        ActionEvent.ACTION_PERFORMED,
-                                        getActionCommand(),
-                                        e.getWhen(),
-                                        e.getModifiers());
-                                fireQuickActionPerformed(ae);
-                            }
-                        }
+                        ActionEvent ae = new ActionEvent(JDropDownButton.this,
+                                ActionEvent.ACTION_PERFORMED,
+                                getActionCommand(),
+                                e.getWhen(),
+                                e.getModifiers());
+                        fireQuickActionPerformed(ae);
                     }
+                }
+            }
 
-                    public void mousePressed(MouseEvent e) {
-                        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                            time = e.getWhen();
-                        }
-                    }
-                });
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    time = e.getWhen();
+                }
+            }
+        });
     }
 
     public void addQuickActionListener(ActionListener listener) {
@@ -365,7 +332,6 @@ public class JDropDownButton extends JButton {
 
         //g.setColor(getBackground());
         //g.fillRect(1, 1, w-2, h-2);
-
         /// Draw the proper Border
 /*
          * if (isPressed) { g.setColor(shadow); g.drawRect(0, 0, w-1, h-1); }
@@ -382,7 +348,6 @@ public class JDropDownButton extends JButton {
          * w-1, h-1); g.drawLine(w-1, h-1, w-1, 0);
             }
          */
-
         // If there's no room to draw arrow, bail
         if (h < 5 || w < 5) {
             g.setColor(origColor);
@@ -579,19 +544,15 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Computes the origin for the
-     * <code>JMenu</code>'s popup menu. This method uses Look and Feel
-     * properties named
-     * <code>Menu.menuPopupOffsetX</code>,
+     * Computes the origin for the <code>JMenu</code>'s popup menu. This method
+     * uses Look and Feel properties named <code>Menu.menuPopupOffsetX</code>,
      * <code>Menu.menuPopupOffsetY</code>,
      * <code>Menu.submenuPopupOffsetX</code>, and
      * <code>Menu.submenuPopupOffsetY</code> to adjust the exact location of
      * popup.
      *
-     * @return a
-     * <code>Point</code> in the coordinate space of the menu which should be
-     * used as the origin of the
-     * <code>JMenu</code>'s popup menu
+     * @return a <code>Point</code> in the coordinate space of the menu which
+     * should be used as the origin of the <code>JMenu</code>'s popup menu
      * @since 1.3
      */
     protected Point getPopupMenuOrigin() {
@@ -693,32 +654,30 @@ public class JDropDownButton extends JButton {
     /**
      * Returns the suggested delay, in milliseconds, before submenus are popped
      * up or down. Each look and feel (L&F) may determine its own policy for
-     * observing the
-     * <code>delay</code> property. In most cases, the delay is not observed for
-     * top level menus or while dragging. The default for
+     * observing the <code>delay</code> property. In most cases, the delay is
+     * not observed for top level menus or while dragging. The default for
      * <code>delay</code> is 0. This method is a property of the look and feel
      * code and is used to manage the idiosyncracies of the various UI
      * implementations.
      *
-     * @return the
-     * <code>delay</code> property
+     * @return the <code>delay</code> property
      */
     public int getDelay() {
         return delay;
     }
 
     /**
-     * Sets the suggested delay before the menu's
-     * <code>PopupMenu</code> is popped up or down. Each look and feel (L&F) may
-     * determine it's own policy for observing the delay property. In most
-     * cases, the delay is not observed for top level menus or while dragging.
-     * This method is a property of the look and feel code and is used to manage
-     * the idiosyncracies of the various UI implementations.
+     * Sets the suggested delay before the menu's <code>PopupMenu</code> is
+     * popped up or down. Each look and feel (L&F) may determine it's own policy
+     * for observing the delay property. In most cases, the delay is not
+     * observed for top level menus or while dragging. This method is a property
+     * of the look and feel code and is used to manage the idiosyncracies of the
+     * various UI implementations.
      *
      * @param d the number of milliseconds to delay
-     * @throws IllegalArgumentException if
-     * <code>d</code> is less than 0 @@beaninfo description: The delay between
-     * menu selection and making the popup menu visible expert: true
+     * @throws IllegalArgumentException if <code>d</code> is less than 0
+     * @@beaninfo description: The delay between menu selection and making the
+     * popup menu visible expert: true
      */
     public void setDelay(int d) {
         if (d < 0) {
@@ -785,10 +744,8 @@ public class JDropDownButton extends JButton {
     /**
      * Appends a menu item to the end of this menu. Returns the menu item added.
      *
-     * @param menuItem the
-     * <code>JMenuitem</code> to be added
-     * @return the
-     * <code>JMenuItem</code> added
+     * @param menuItem the <code>JMenuitem</code> to be added
+     * @return the <code>JMenuItem</code> added
      */
     public JMenuItem add(JMenuItem menuItem) {
         AccessibleContext ac = menuItem.getAccessibleContext();
@@ -803,10 +760,8 @@ public class JDropDownButton extends JButton {
     /**
      * Appends a component to the end of this menu. Returns the component added.
      *
-     * @param c the
-     * <code>Component</code> to add
-     * @return the
-     * <code>Component</code> added
+     * @param c the <code>Component</code> to add
+     * @return the <code>Component</code> added
      */
     public Component add(Component c) {
         if (c instanceof JComponent) {
@@ -825,11 +780,9 @@ public class JDropDownButton extends JButton {
      * Adds the specified component to this container at the given position. If
      * <code>index</code> equals -1, the component will be appended to the end.
      *
-     * @param c the
-     * <code>Component</code> to add
+     * @param c the <code>Component</code> to add
      * @param index the position at which to insert the component
-     * @return the
-     * <code>Component</code> added
+     * @return the <code>Component</code> added
      * @see #remove
      * @see java.awt.Container#add(Component, int)
      */
@@ -857,16 +810,14 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Creates a new menu item attached to the specified
-     * <code>Action</code> object and appends it to the end of this menu. As of
-     * 1.3, this is no longer the preferred method for adding
-     * <code>Actions</code> to a container. Instead it is recommended to
-     * configure a control with an action using
-     * <code>setAction</code>, and then add that control directly to the
-     * <code>Container</code>.
+     * Creates a new menu item attached to the specified <code>Action</code>
+     * object and appends it to the end of this menu. As of 1.3, this is no
+     * longer the preferred method for adding <code>Actions</code> to a
+     * container. Instead it is recommended to configure a control with an
+     * action using <code>setAction</code>, and then add that control directly
+     * to the <code>Container</code>.
      *
-     * @param a the
-     * <code>Action</code> for the menu item to be added
+     * @param a the <code>Action</code> for the menu item to be added
      * @see Action
      */
     public JMenuItem add(Action a) {
@@ -892,8 +843,7 @@ public class JDropDownButton extends JButton {
      * @param s the text for the menu item to add
      * @param pos an integer specifying the position at which to add the new
      * menu item
-     * @throws IllegalArgumentException when the value of
-     * <code>pos</code> < 0
+     * @throws IllegalArgumentException when the value of <code>pos</code> < 0
      */
     public void insert(String s, int pos) {
         if (pos < 0) {
@@ -906,16 +856,13 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Inserts the specified
-     * <code>JMenuitem</code> at a given position.
+     * Inserts the specified <code>JMenuitem</code> at a given position.
      *
-     * @param mi the
-     * <code>JMenuitem</code> to add
+     * @param mi the <code>JMenuitem</code> to add
      * @param pos an integer specifying the position at which to add the new
      * <code>JMenuitem</code>
      * @return the new menu item
-     * @throws IllegalArgumentException if the value of
-     * <code>pos</code> < 0
+     * @throws IllegalArgumentException if the value of <code>pos</code> < 0
      */
     public JMenuItem insert(JMenuItem mi, int pos) {
         if (pos < 0) {
@@ -930,15 +877,13 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Inserts a new menu item attached to the specified
-     * <code>Action</code> object at a given position.
+     * Inserts a new menu item attached to the specified <code>Action</code>
+     * object at a given position.
      *
-     * @param a the
-     * <code>Action</code> object for the menu item to add
+     * @param a the <code>Action</code> object for the menu item to add
      * @param pos an integer specifying the position at which to add the new
      * menu item
-     * @throws IllegalArgumentException if the value of
-     * <code>pos</code> < 0
+     * @throws IllegalArgumentException if the value of <code>pos</code> < 0
      */
     public JMenuItem insert(Action a, int pos) {
         if (pos < 0) {
@@ -962,8 +907,7 @@ public class JDropDownButton extends JButton {
      *
      * @param index an integer specifying the position at which to insert the
      * menu separator
-     * @throws IllegalArgumentException if the value of
-     * <code>index</code> < 0
+     * @throws IllegalArgumentException if the value of <code>index</code> < 0
      */
     public void insertSeparator(int index) {
         if (index < 0) {
@@ -976,18 +920,14 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Returns the
-     * <code>JMenuItem</code> at the specified position. If the component at
-     * <code>pos</code> is not a menu item,
-     * <code>null</code> is returned. This method is included for AWT
-     * compatibility.
+     * Returns the <code>JMenuItem</code> at the specified position. If the
+     * component at <code>pos</code> is not a menu item, <code>null</code> is
+     * returned. This method is included for AWT compatibility.
      *
      * @param pos an integer specifying the position
-     * @return the menu item at the specified position; or
-     * <code>null</code> if the item as the specified position is not a menu
-     * item
-     * @throws IllegalArgumentException if the value of
-     * <code>pos</code> < 0
+     * @return the menu item at the specified position; or <code>null</code> if
+     * the item as the specified position is not a menu item
+     * @throws IllegalArgumentException if the value of <code>pos</code> < 0
      */
     public JMenuItem getItem(int pos) {
         if (pos < 0) {
@@ -1019,8 +959,7 @@ public class JDropDownButton extends JButton {
      * Removes the specified menu item from this menu. If there is no popup
      * menu, this method will have no effect.
      *
-     * @param item the
-     * <code>JMenuItem</code> to be removed from the menu
+     * @param item the <code>JMenuItem</code> to be removed from the menu
      */
     public void remove(JMenuItem item) {
         if (popupMenu != null) {
@@ -1032,9 +971,8 @@ public class JDropDownButton extends JButton {
      * Removes the menu item at the specified index from this menu.
      *
      * @param pos the position of the item to be removed
-     * @throws IllegalArgumentException if the value of
-     * <code>pos</code> < 0, or if <code>pos</code> is greater than the number
-     * of menu items
+     * @throws IllegalArgumentException if the value of <code>pos</code> < 0, or
+     * if <code>pos</code> is greater than the number of menu items
      */
     public void remove(int pos) {
         if (pos < 0) {
@@ -1049,8 +987,7 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Removes the component
-     * <code>c</code> from this menu.
+     * Removes the component <code>c</code> from this menu.
      *
      * @param c the component to be removed
      */
@@ -1083,12 +1020,11 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Returns the component at position
-     * <code>n</code>.
+     * Returns the component at position <code>n</code>.
      *
      * @param n the position of the component to be returned
-     * @return the component requested, or
-     * <code>null</code> if there is no popup menu
+     * @return the component requested, or <code>null</code> if there is no
+     * popup menu
      */
     public Component getMenuComponent(int n) {
         if (popupMenu != null) {
@@ -1099,13 +1035,12 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Returns an array of
-     * <code>Component</code>s of the menu's subcomponents. Note that this
-     * returns all
-     * <code>Component</code>s in the popup menu, including separators.
+     * Returns an array of <code>Component</code>s of the menu's subcomponents.
+     * Note that this returns all <code>Component</code>s in the popup menu,
+     * including separators.
      *
-     * @return an array of
-     * <code>Component</code>s or an empty array if there is no popup menu
+     * @return an array of <code>Component</code>s or an empty array if there is
+     * no popup menu
      */
     public Component[] getMenuComponents() {
         if (popupMenu != null) {
@@ -1118,10 +1053,8 @@ public class JDropDownButton extends JButton {
     /**
      * Returns true if the specified component exists in the submenu hierarchy.
      *
-     * @param c the
-     * <code>Component</code> to be tested
-     * @return true if the
-     * <code>Component</code> exists, false otherwise
+     * @param c the <code>Component</code> to be tested
+     * @return true if the <code>Component</code> exists, false otherwise
      */
     public boolean isMenuComponent(Component c) {
         // Are we in the MenuItem part of the menu
@@ -1201,6 +1134,10 @@ public class JDropDownButton extends JButton {
         return popupMenu;
     }
 
+    public JPopupMenu getPopupMenuOrNull() {
+        return popupMenu;
+    }
+
     /**
      * Adds a listener for menu events.
      *
@@ -1220,12 +1157,11 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Returns an array of all the
-     * <code>MenuListener</code>s added to this JMenu with addMenuListener().
+     * Returns an array of all the <code>MenuListener</code>s added to this
+     * JMenu with addMenuListener().
      *
-     * @return all of the
-     * <code>MenuListener</code>s added or an empty array if no listeners have
-     * been added
+     * @return all of the <code>MenuListener</code>s added or an empty array if
+     * no listeners have been added
      * @since 1.4
      */
     public MenuListener[] getMenuListeners() {
@@ -1236,8 +1172,7 @@ public class JDropDownButton extends JButton {
      * Notifies all listeners that have registered interest for notification on
      * this event type. The event instance is created lazily.
      *
-     * @throws Error if there is a
-     * <code>null</code> listener
+     * @throws Error if there is a <code>null</code> listener
      * @see EventListenerList
      */
     protected void fireMenuSelected() {
@@ -1267,8 +1202,7 @@ public class JDropDownButton extends JButton {
      * Notifies all listeners that have registered interest for notification on
      * this event type. The event instance is created lazily.
      *
-     * @throws Error if there is a
-     * <code>null</code> listener
+     * @throws Error if there is a <code>null</code> listener
      * @see EventListenerList
      */
     protected void fireMenuDeselected() {
@@ -1298,8 +1232,7 @@ public class JDropDownButton extends JButton {
      * Notifies all listeners that have registered interest for notification on
      * this event type. The event instance is created lazily.
      *
-     * @throws Error if there is a
-     * <code>null</code> listener
+     * @throws Error if there is a <code>null</code> listener
      * @see EventListenerList
      */
     protected void fireMenuCanceled() {
@@ -1352,8 +1285,7 @@ public class JDropDownButton extends JButton {
     /**
      * Creates a window-closing listener for the popup.
      *
-     * @param p the
-     * <code>JPopupMenu</code>
+     * @param p the <code>JPopupMenu</code>
      * @return the new window-closing listener
      * @see WinListener
      */
@@ -1370,7 +1302,8 @@ public class JDropDownButton extends JButton {
      * is appropriate for short term storage or RMI between applications running
      * the same version of Swing. As of 1.4, support for long term storage of
      * all JavaBeans<sup><font size="-2">TM</font></sup> has been added to the
-     * <code>java.beans</code> package. Please see {@link java.beans.XMLEncoder}.
+     * <code>java.beans</code> package. Please see
+     * {@link java.beans.XMLEncoder}.
      */
     protected class WinListener extends WindowAdapter implements Serializable {
 
@@ -1393,8 +1326,7 @@ public class JDropDownButton extends JButton {
 
     /**
      * Messaged when the menubar selection changes to activate or deactivate
-     * this menu. Overrides
-     * <code>JMenuItem.menuSelectionChanged</code>.
+     * this menu. Overrides <code>JMenuItem.menuSelectionChanged</code>.
      *
      * @param isIncluded true if this menu is active, false if it is not
      */
@@ -1406,18 +1338,14 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Returns an array of
-     * <code>MenuElement</code>s containing the submenu for this menu component.
-     * If popup menu is
-     * <code>null</code> returns an empty array. This method is required to
-     * conform to the
-     * <code>MenuElement</code> interface. Note that since
-     * <code>JSeparator</code>s do not conform to the
+     * Returns an array of <code>MenuElement</code>s containing the submenu for
+     * this menu component. If popup menu is <code>null</code> returns an empty
+     * array. This method is required to conform to the <code>MenuElement</code>
+     * interface. Note that since <code>JSeparator</code>s do not conform to the
      * <code>MenuElement</code> interface, this array will only contain
      * <code>JMenuItem</code>s.
      *
-     * @return an array of
-     * <code>MenuElement</code> objects
+     * @return an array of <code>MenuElement</code> objects
      */
     public MenuElement[] getSubElements() {
         if (popupMenu == null) {
@@ -1431,8 +1359,7 @@ public class JDropDownButton extends JButton {
 
     // implements javax.swing.MenuElement
     /**
-     * Returns the
-     * <code>java.awt.Component</code> used to paint this
+     * Returns the <code>java.awt.Component</code> used to paint this
      * <code>MenuElement</code>. The returned component is used to convert
      * events and detect if an event is inside a menu component.
      */
@@ -1441,14 +1368,13 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Sets the
-     * <code>ComponentOrientation</code> property of this menu and all
-     * components contained within it. This includes all components returned by {@link #getMenuComponents getMenuComponents}.
+     * Sets the <code>ComponentOrientation</code> property of this menu and all
+     * components contained within it. This includes all components returned by
+     * {@link #getMenuComponents getMenuComponents}.
      *
      * @param orientation the new component orientation of this menu and the
      * components contained within it.
-     * @exception NullPointerException if
-     * <code>orientation</code> is null.
+     * @exception NullPointerException if <code>orientation</code> is null.
      * @see java.awt.Component#setComponentOrientation
      * @see java.awt.Component#getComponentOrientation
      * @since 1.4
@@ -1523,16 +1449,13 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Factory method which creates the
-     * <code>JMenuItem</code> for
-     * <code>Action</code>s added to the
-     * <code>JMenu</code>. As of 1.3, this is no longer the preferred method.
-     * Instead it is recommended to configure a control with an action using
-     * <code>setAction</code>, and then adding that control directly to the
-     * <code>Container</code>.
+     * Factory method which creates the <code>JMenuItem</code> for
+     * <code>Action</code>s added to the <code>JMenu</code>. As of 1.3, this is
+     * no longer the preferred method. Instead it is recommended to configure a
+     * control with an action using <code>setAction</code>, and then adding that
+     * control directly to the <code>Container</code>.
      *
-     * @param a the
-     * <code>Action</code> for the menu item to be added
+     * @param a the <code>Action</code> for the menu item to be added
      * @return the new menu item
      * @see Action
      * @since 1.3
@@ -1556,14 +1479,11 @@ public class JDropDownButton extends JButton {
     }
 
     /**
-     * Returns a properly configured
-     * <code>PropertyChangeListener</code> which updates the control as changes
-     * to the
-     * <code>Action</code> occur. As of 1.3, this is no longer the preferred
-     * method for adding
-     * <code>Action</code>s to a
-     * <code>Container</code>. Instead it is recommended to configure a control
-     * with an action using
+     * Returns a properly configured <code>PropertyChangeListener</code> which
+     * updates the control as changes to the <code>Action</code> occur. As of
+     * 1.3, this is no longer the preferred method for adding
+     * <code>Action</code>s to a <code>Container</code>. Instead it is
+     * recommended to configure a control with an action using
      * <code>setAction</code>, and then add that control directly to the
      * <code>Container</code>.
      */

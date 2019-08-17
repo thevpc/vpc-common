@@ -1,7 +1,8 @@
 package net.vpc.common.prs.util;
 
 public interface ProgressMonitor {
-    public static final ProgressMonitor NONE=new ProgressMonitor() {
+
+    public static final ProgressMonitor NONE = new ProgressMonitor() {
         public void progressStart(ProgressEvent e) {
             //Nothing
         }
@@ -14,7 +15,10 @@ public interface ProgressMonitor {
             //Nothing
         }
     };
+
     public void progressStart(ProgressEvent e);
+
     public void progressUpdate(ProgressEvent e);
+
     public void progressEnd(ProgressEvent e);
 }

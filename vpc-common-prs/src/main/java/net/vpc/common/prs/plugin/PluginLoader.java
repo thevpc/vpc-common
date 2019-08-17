@@ -1,7 +1,7 @@
 package net.vpc.common.prs.plugin;
 
 import net.vpc.common.prs.classloader.PluggableResourcesClassLoader;
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 import net.vpc.common.prs.Version;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -28,7 +28,7 @@ public class PluginLoader {
             //URLClassLoader ucl = new URLClassLoader(new URL[]{url}, parent);
             URLClassLoader ucl0 = new URLClassLoader(new URL[]{url}, null);
             URL xmlUrl = ucl0.getResource("META-INF/plugin.xml");
-            String CRC = IOUtils.computeCRC(url.openStream());
+            String CRC = PRSPrivateIOUtils.computeCRC(url.openStream());
             if (xmlUrl == null) {
                 xmlUrl = ucl0.getResource("meta-inf/plugin.xml");
             }
@@ -117,7 +117,7 @@ public class PluginLoader {
                 String pluginId = attributes.getValue("id");
                 PluggableResourcesClassLoader loader = null;
                 try {
-                    loader = new PluggableResourcesClassLoader(url, parent, IOUtils.getFileNameWithoutExtension(new File(url.getFile())));
+                    loader = new PluggableResourcesClassLoader(url, parent, PRSPrivateIOUtils.getFileNameWithoutExtension(new File(url.getFile())));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

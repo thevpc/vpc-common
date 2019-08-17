@@ -25,7 +25,7 @@
 
 package net.vpc.common.prs.plugin;
 
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 
 import java.io.*;
 import java.net.URL;
@@ -107,8 +107,8 @@ public class UrlCacheManager {
             defaultTempFile = null;
         }
         File ff = new File(getURLName(url));
-        String prefix = IOUtils.getFileNameWithoutExtension(ff);
-        String suffix = IOUtils.getFileExtension(ff);
+        String prefix = PRSPrivateIOUtils.getFileNameWithoutExtension(ff);
+        String suffix = PRSPrivateIOUtils.getFileExtension(ff);
         while (prefix.length() < 2) {
             prefix += "_";
         }
@@ -153,8 +153,8 @@ public class UrlCacheManager {
         tempFolder.mkdirs();
         File ff = new File(tempFolder, getURLName(url));
         if (ff.exists()) {
-            String prefix = IOUtils.getFileNameWithoutExtension(ff);
-            String suffix = IOUtils.getFileExtension(ff);
+            String prefix = PRSPrivateIOUtils.getFileNameWithoutExtension(ff);
+            String suffix = PRSPrivateIOUtils.getFileExtension(ff);
             while (prefix.length() < 2) {
                 prefix += "_";
             }

@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import net.vpc.common.strings.MessageNameFormat;
+import net.vpc.common.strings.MessageNameFormatContext;
 import org.junit.Test;
 
 /*
@@ -20,7 +21,7 @@ public class MessageNameFormatTest {
     @Test
     public void test1() {
         MessageNameFormat m = new MessageNameFormat("${title} named $name (id is ${id}) is updated. Fields updated are : ${fields}");
-        String s = m.format(new HashMap<String, Object>());
+        String s = m.format(new HashMap<String, Object>(), new MessageNameFormatContext().addDefaults());
         System.out.println(s);
 
     }
@@ -31,8 +32,8 @@ public class MessageNameFormatTest {
 
         HashMap<String, Object> p = new HashMap<>();
         p.put("world", "World");
-        System.out.println(f.format(p));
-        org.junit.Assert.assertEquals("Hello ${world}", f.format(p));
+        System.out.println(f.format(p, new MessageNameFormatContext().addDefaults()));
+        org.junit.Assert.assertEquals("Hello ${world}", f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 
     @Test
@@ -41,8 +42,8 @@ public class MessageNameFormatTest {
 
         HashMap<String, Object> p = new HashMap<>();
         p.put("world", "World");
-        System.out.println(f.format(p));
-        org.junit.Assert.assertEquals("Hello null", f.format(p));
+        System.out.println(f.format(p, new MessageNameFormatContext().addDefaults()));
+        org.junit.Assert.assertEquals("Hello null", f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 
     @Test
@@ -51,8 +52,8 @@ public class MessageNameFormatTest {
 
         HashMap<String, Object> p = new HashMap<>();
         p.put("date", new Date());
-        System.out.println(f.format(p));
-        org.junit.Assert.assertEquals("Hello " + new SimpleDateFormat("yyyy-MM").format(p.get("date")), f.format(p));
+        System.out.println(f.format(p, new MessageNameFormatContext().addDefaults()));
+        org.junit.Assert.assertEquals("Hello " + new SimpleDateFormat("yyyy-MM").format(p.get("date")), f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 
     @Test
@@ -62,15 +63,15 @@ public class MessageNameFormatTest {
         HashMap<String, Object> p = new HashMap<>();
         p.put("world", "World");
         p.put("count", 3);
-        org.junit.Assert.assertEquals("Hello World any", f.format(p));
+        org.junit.Assert.assertEquals("Hello World any", f.format(p, new MessageNameFormatContext().addDefaults()));
 
         p.put("count", 1);
-        org.junit.Assert.assertEquals("Hello World one", f.format(p));
+        org.junit.Assert.assertEquals("Hello World one", f.format(p, new MessageNameFormatContext().addDefaults()));
 
         p.put("count", 0);
-        org.junit.Assert.assertEquals("Hello World none", f.format(p));
+        org.junit.Assert.assertEquals("Hello World none", f.format(p, new MessageNameFormatContext().addDefaults()));
 
         p.put("count", 0.0);
-        org.junit.Assert.assertEquals("Hello World any", f.format(p));
+        org.junit.Assert.assertEquals("Hello World any", f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 }

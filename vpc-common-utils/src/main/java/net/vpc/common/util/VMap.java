@@ -7,12 +7,21 @@ import java.util.*;
  */
 public class VMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
     private Map<K, V> adaptee;
+
     private VMapValueFactory<K, V> factory;
 
     public VMap(VMapValueFactory<K, V> factory) {
-        this(null, factory);
+        this((Map<K, V>) null, factory);
     }
 
+//    public VMap(Map<K, V> adaptee, Class<V> factory) {
+//        this(adaptee, VMap.<K, V>createVMapValueFactory(factory));
+//    }
+//
+//    public VMap(Class<V> factory) {
+//        this((Map<K, V>) null, VMap.<K, V>createVMapValueFactory(factory));
+//    }
+//
     public VMap(Map<K, V> adaptee, VMapValueFactory<K, V> factory) {
         if (factory == null) {
             throw new NullPointerException();
@@ -61,319 +70,6 @@ public class VMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
         }
     }
 
-    public V plus(K key, int value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() + value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() + value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() + value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() + value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() + value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() + value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V mul(K key, int value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() * value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() * value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() * value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() * value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() * value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() * value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V div(K key, int value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() / value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() / value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() / value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() / value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() / value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() / value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V neg(K key) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = -old.intValue();
-        } else if (Long.class.isInstance(old)) {
-            newVal = -old.longValue();
-        } else if (Float.class.isInstance(old)) {
-            newVal = -old.floatValue();
-        } else if (Double.class.isInstance(old)) {
-            newVal = -old.doubleValue();
-        } else if (Byte.class.isInstance(old)) {
-            newVal = -old.byteValue();
-        } else if (Short.class.isInstance(old)) {
-            newVal = -old.shortValue();
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V plus(K key, double value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() + value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() + value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() + value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() + value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() + value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() + value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V mul(K key, double value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() * value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() * value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() * value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() * value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() * value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() * value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V div(K key, double value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() / value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() / value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() / value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() / value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() / value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() / value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V plus(K key, long value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() + value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() + value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() + value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() + value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() + value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() + value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V mul(K key, long value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() * value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() * value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() * value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() * value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() * value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() * value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V div(K key, long value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() / value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() / value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() / value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() / value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() / value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() / value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V plus(K key, float value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() + value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() + value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() + value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() + value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() + value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() + value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V mul(K key, float value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() * value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() * value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() * value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() * value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() * value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() * value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-    public V div(K key, float value) {
-        Number old = (Number) getOrCreate(key);
-        Number newVal = old;
-        if (old == null) {
-            // do nothing
-        } else if (Integer.class.isInstance(old)) {
-            newVal = old.intValue() / value;
-        } else if (Long.class.isInstance(old)) {
-            newVal = old.longValue() / value;
-        } else if (Float.class.isInstance(old)) {
-            newVal = old.floatValue() / value;
-        } else if (Double.class.isInstance(old)) {
-            newVal = old.doubleValue() / value;
-        } else if (Byte.class.isInstance(old)) {
-            newVal = old.byteValue() / value;
-        } else if (Short.class.isInstance(old)) {
-            newVal = old.shortValue() / value;
-        } else {
-            throw new ClassCastException();
-        }
-        adaptee.put(key, (V) newVal);
-        return (V) newVal;
-    }
-
-
     @Override
     public V put(K key, V value) {
         return adaptee.put(key, value);
@@ -418,4 +114,8 @@ public class VMap<K, V> extends AbstractMap<K, V> implements Map<K, V> {
     public String toString() {
         return adaptee.toString();
     }
+
+
+
+
 }

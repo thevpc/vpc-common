@@ -20,7 +20,7 @@ import javax.xml.parsers.SAXParserFactory;
 import net.vpc.common.prs.log.LoggerProvider;
 import net.vpc.common.prs.classloader.PluggableResourcesClassLoader;
 import net.vpc.common.prs.plugin.UrlCacheManager;
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -122,7 +122,7 @@ public class IconSetManager {
         if (iconsetxml == null) {
             throw new NoSuchElementException("missing iconset.xml");
         }
-        final PluggableResourcesClassLoader loader = new PluggableResourcesClassLoader(url, parent, IOUtils.getFileNameWithoutExtension(new File(url.getFile())));
+        final PluggableResourcesClassLoader loader = new PluggableResourcesClassLoader(url, parent, PRSPrivateIOUtils.getFileNameWithoutExtension(new File(url.getFile())));
 
         SAXParserFactory saxFactory = SAXParserFactory.newInstance();
         try {

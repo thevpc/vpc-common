@@ -37,11 +37,11 @@ import java.awt.event.ActionListener;
  * @creationtime 14 août 2007 20:39:47
  */
 public class JListTwins extends JPanel {
-    public static void main(String[] args) {
-        JListTwins ll = new JListTwins();
-        ll.setModel(new Object[]{"a", "b", "c", "d"}, new int[]{2, 3});
-        JOptionPane.showMessageDialog(null, ll);
-    }
+//    public static void main(String[] args) {
+//        JListTwins ll = new JListTwins();
+//        ll.setModel(new Object[]{"a", "b", "c", "d"}, new int[]{2, 3});
+//        JOptionPane.showMessageDialog(null, ll);
+//    }
 
     private ListSelectionListener listSelectionListener;
     private ListDataListener listDataListener;

@@ -10,11 +10,9 @@ import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import net.vpc.common.strings.format.MessageNameFormatFactory;
 
 /**
  *
@@ -24,8 +22,6 @@ public class MessageNameFormat {
 
     private String message;
     private MessagePart part;
-    private static MessageNameFormatContext DEFAULT = new MessageNameFormatContext(true, false);
-    private MessageNameFormatContext context = DEFAULT;
 
 
     public MessageNameFormat(String message) {
@@ -42,78 +38,7 @@ public class MessageNameFormat {
         }
     }
 
-    public final static class MessageNameFormatContext {
 
-        private Map<String, Function> functions = new HashMap<>();
-        private boolean editable;
-
-        public MessageNameFormatContext(boolean addDefaults, boolean editable) {
-            this.editable = true;
-            if (addDefaults) {
-                addDefaults();
-            }
-            this.editable = editable;
-        }
-
-        public MessageNameFormatContext toEditable() {
-            if (isEditable()) {
-                return this;
-            }
-            return copy(true);
-        }
-
-        public MessageNameFormatContext copy(boolean editable) {
-            MessageNameFormatContext r = new MessageNameFormatContext(false, editable);
-            r.functions.putAll(functions);
-            return r;
-        }
-
-        public void addDefaults() {
-            register("switch", MessageNameFormatFactory.FCT_SWITCH);
-            register("integer", MessageNameFormatFactory.FCT_INTEGER);
-            register("double", MessageNameFormatFactory.FCT_DOUBLE);
-            register("float", MessageNameFormatFactory.FCT_DOUBLE);
-            register("date", MessageNameFormatFactory.FCT_DATE);
-            register("parseDate", MessageNameFormatFactory.FCT_DATE_PARSE);
-        }
-
-        public void register(String name, Function function) {
-            if (!editable) {
-                throw new IllegalArgumentException("Read only");
-            }
-            if (function == null) {
-                functions.remove(name.toLowerCase());
-            } else {
-                functions.put(name.toLowerCase(), function);
-            }
-        }
-
-        public boolean isEditable() {
-            return editable;
-        }
-
-        private Function getFunction(String name) {
-            return functions.get(name.toLowerCase());
-        }
-    }
-
-    public final Function getFunction(String name) {
-        return context.getFunction(name);
-    }
-
-    public final void register(String name, Function function) {
-        if (!context.isEditable()) {
-            context = context.toEditable();
-        }
-        context.register(name, function);
-    }
-
-    public final void unregister(String name) {
-        if (!context.isEditable()) {
-            context = context.toEditable();
-        }
-        context.register(name, null);
-    }
 
     private static class MessageParser {
 
@@ -438,12 +363,12 @@ public class MessageNameFormat {
 
     public static interface Function {
 
-        Object eval(ExprNode[] args, MessageNameFormat format, StringToObject provider);
+        Object eval(ExprNode[] args, MessageNameFormat format, StringToObject provider, MessageNameFormatContext messageNameFormatContext);
     }
 
     public static interface ExprNode {
 
-        Object format(MessageNameFormat format, StringToObject provider);
+        Object format(MessageNameFormat format, StringToObject provider, MessageNameFormatContext messageNameFormatContext);
 
     }
 
@@ -456,7 +381,7 @@ public class MessageNameFormat {
         }
 
         @Override
-        public Object format(MessageNameFormat format, StringToObject f) {
+        public Object format(MessageNameFormat format, StringToObject f, MessageNameFormatContext messageNameFormatContext) {
             return literal;
         }
 
@@ -476,7 +401,7 @@ public class MessageNameFormat {
         }
 
         @Override
-        public Object format(MessageNameFormat format, StringToObject provider) {
+        public Object format(MessageNameFormat format, StringToObject provider, MessageNameFormatContext messageNameFormatContext) {
             return provider.toObject(name);
         }
 
@@ -497,14 +422,14 @@ public class MessageNameFormat {
         }
 
         @Override
-        public Object format(MessageNameFormat format, StringToObject provider) {
-            return format(args, format, provider);
+        public Object format(MessageNameFormat format, StringToObject provider, MessageNameFormatContext messageNameFormatContext) {
+            return format(args, format, provider, messageNameFormatContext);
         }
 
-        public Object format(List<ExprNode> args, MessageNameFormat format, StringToObject provider) {
-            Function f = format.getFunction(name);
+        public Object format(List<ExprNode> args, MessageNameFormat format, StringToObject provider, MessageNameFormatContext messageNameFormatContext) {
+            Function f = messageNameFormatContext.getFunction(name);
             if (f != null) {
-                return f.eval(args.toArray(new ExprNode[args.size()]), format, provider);
+                return f.eval(args.toArray(new ExprNode[args.size()]), format, provider, messageNameFormatContext);
             }
             StringBuilder sb = new StringBuilder(name);
             if (args.size() > 0) {
@@ -514,7 +439,7 @@ public class MessageNameFormat {
                     if (i > 0) {
                         sb.append(i);
                     }
-                    sb.append(n.format(format, provider));
+                    sb.append(n.format(format, provider, messageNameFormatContext));
                 }
                 sb.append(")");
             }
@@ -532,21 +457,21 @@ public class MessageNameFormat {
 
     }
 
-    public String format(Map<String, Object> map) {
-        return format(map == null ? null : new StringToObjectMap(map));
+    public String format(Map<String, Object> map, MessageNameFormatContext messageNameFormatContext) {
+        return format(map == null ? null : new StringToObjectMap(map), messageNameFormatContext);
     }
 
-    public String format(StringToObject provider) {
+    public String format(StringToObject provider, MessageNameFormatContext messageNameFormatContext) {
         StringBuilder sb = new StringBuilder(message.length() + 1);
         if (part != null) {
-            part.format(this, provider, sb);
+            part.format(this, provider, sb, messageNameFormatContext);
         }
         return sb.toString();
     }
 
     private static interface MessagePart {
 
-        void format(MessageNameFormat format, StringToObject stringToObject, StringBuilder sb);
+        void format(MessageNameFormat format, StringToObject stringToObject, StringBuilder sb, MessageNameFormatContext messageNameFormatContext);
     }
 
     private static class MessagePartExpr implements MessagePart {
@@ -558,8 +483,8 @@ public class MessageNameFormat {
         }
 
         @Override
-        public void format(MessageNameFormat format, StringToObject stringToObject, StringBuilder sb) {
-            Object o = layout.format(format, stringToObject);
+        public void format(MessageNameFormat format, StringToObject stringToObject, StringBuilder sb, MessageNameFormatContext messageNameFormatContext) {
+            Object o = layout.format(format, stringToObject, messageNameFormatContext);
             sb.append(String.valueOf(o));
         }
 
@@ -578,9 +503,9 @@ public class MessageNameFormat {
         }
 
         @Override
-        public void format(MessageNameFormat format, StringToObject f, StringBuilder sb) {
+        public void format(MessageNameFormat format, StringToObject f, StringBuilder sb, MessageNameFormatContext messageNameFormatContext) {
             for (MessagePart part : all) {
-                part.format(format, f, sb);
+                part.format(format, f, sb, messageNameFormatContext);
             }
         }
     }
@@ -593,7 +518,7 @@ public class MessageNameFormat {
             this.value = value;
         }
 
-        public void format(MessageNameFormat format, StringToObject f, StringBuilder sb) {
+        public void format(MessageNameFormat format, StringToObject f, StringBuilder sb, MessageNameFormatContext messageNameFormatContext) {
             sb.append(value);
         }
 
@@ -606,7 +531,7 @@ public class MessageNameFormat {
 
     ////////////////////////////////////////////////////////////////////////////
     public static DateFormat resolveDateFormat(String dateFormatString, Locale loc, String defaultDateFormatString) {
-        if (StringUtils.isEmpty(dateFormatString)) {
+        if (StringUtils.isBlank(dateFormatString)) {
             dateFormatString = defaultDateFormatString;
         }
         if (dateFormatString.equalsIgnoreCase("short")) {

@@ -5,7 +5,7 @@
     <groupId>net.vpc.common</groupId>
     <artifactId>vpc-common-lanterna</artifactId>
     <name>net.vpc.common.vpc-common-lanterna</name>
-    <version>3.1.0-SNAPSHOT</version>
+    <version>3.1.1</version>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/upa/wiki</url>
 
@@ -60,7 +60,7 @@
         <dependency>
             <groupId>net.vpc.common</groupId>
             <artifactId>vpc-common-utils</artifactId>
-            <version>1.10</version>
+            <version>1.22.6</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

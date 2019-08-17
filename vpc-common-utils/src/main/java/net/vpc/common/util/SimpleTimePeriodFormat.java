@@ -21,21 +21,21 @@ public class SimpleTimePeriodFormat implements TimePeriodFormat {
         int ms = (int) (period % 1000L);
 
         if (h > 0) {
-            sb.append(h).append(" h ");
+            sb.append(_StringUtils.formatRight(h,2)).append("h ");
             started = true;
         }
         if (mn > 0 || started) {
-            sb.append(mn).append(" mn ");
+            sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
             started = true;
         }
         if (s > 0 || started) {
-            sb.append(s).append(" s ");
+            sb.append(_StringUtils.formatRight(s,2)).append("s ");
             //started=true;
         }
-        sb.append(ms).append(" ms");
+        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
 
         if (ms < 10) {
-            sb.append(" ").append(nano).append(" nanos");
+            sb.append(" ").append(_StringUtils.formatRight(nano,6)).append("nanos");
         }
         return sb.toString();
     }

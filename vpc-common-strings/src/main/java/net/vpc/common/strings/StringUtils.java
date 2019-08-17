@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
+    public static final Pattern DOLLAR_PLACE_HOLDER_PATTERN = Pattern.compile("[$][{](?<name>([^}]+))[}]");
+
     public static final StringConverter UPPER = new StringConverter() {
         @Override
         public String convert(String str) {
@@ -64,26 +66,6 @@ public class StringUtils {
         return pattern.matcher(nfdNormalizedString).replaceAll("");
     }
 
-    /**
-     * return either a null string or a non empty string. If the object is not a
-     * string, it is first converted to a string using String.valueOf(object);
-     * if the resulting string is empty, null is returned
-     *
-     * @param object
-     * @return
-     */
-    public static String nonEmpty(Object object) {
-        String v = null;
-        if (object == null) {
-            return null;
-        } else {
-            v = String.valueOf(object);
-        }
-        if (isEmpty(v)) {
-            return null;
-        }
-        return v;
-    }
 
     public static String nonNull(Object object) {
         if (object == null) {
@@ -113,7 +95,7 @@ public class StringUtils {
         return value.trim();
     }
 
-    public static boolean isEmpty(String string) {
+    public static boolean isBlank(String string) {
         return string == null || string.trim().isEmpty();
     }
 
@@ -334,7 +316,21 @@ public class StringUtils {
 //        System.out.println(r);
 //    }
     public static String replaceDollarPlaceHolders(String s, StringConverter converter) {
-        return replacePlaceHolders(s, "${", "}", converter);
+//        return replacePlaceHolders(s, "${", "}", converter);
+        // return replacePlaceHolders(s, "${", "}", converter);
+        //faster default implementation
+        Matcher matcher = DOLLAR_PLACE_HOLDER_PATTERN.matcher(s);
+        StringBuffer sb = new StringBuffer();
+        while (matcher.find()) {
+            String name = matcher.group("name");
+            String x = converter.convert(name);
+            if (x == null) {
+                x = "${" + name + "}";
+            }
+            matcher.appendReplacement(sb, Matcher.quoteReplacement(x));
+        }
+        matcher.appendTail(sb);
+        return sb.toString();
     }
 
     public static String replacePlaceHolders(String s, String prefix, String suffix, StringConverter converter) {
@@ -575,7 +571,7 @@ public class StringUtils {
         if (chars == null || chars.length() == 0) {
             chars = " ";
         }
-        StringBuilder sb=new StringBuilder(value==null?"":value);
+        StringBuilder sb = new StringBuilder(value == null ? "" : value);
         while (sb.length() < min) {
             if (sb.length() + chars.length() <= min) {
                 sb.append(chars);
@@ -584,7 +580,7 @@ public class StringUtils {
                 if (x > chars.length()) {
                     x = chars.length();
                 }
-                sb.append(chars,0, x);
+                sb.append(chars, 0, x);
             }
         }
         return sb.toString();
@@ -622,11 +618,19 @@ public class StringUtils {
         return trimmed;
     }
 
-    public static String trimObjectToNull(Object str) {
-        if (str == null) {
+    /**
+     * return either a null string or a non empty string. If the object is not a
+     * string, it is first converted to a string using String.valueOf(object);
+     * if the resulting string is empty, null is returned
+     *
+     * @param any
+     * @return
+     */
+    public static String trimObjectToNull(Object any) {
+        if (any == null) {
             return null;
         }
-        String trimmed = str.toString().trim();
+        String trimmed = any.toString().trim();
         if (trimmed.isEmpty()) {
             return null;
         }
@@ -634,7 +638,21 @@ public class StringUtils {
     }
 
     public static String exceptionToString(Throwable ex) {
-        return ex.getMessage();
+        for (Class aClass : new Class[]{
+            NullPointerException.class,
+            ArrayIndexOutOfBoundsException.class,
+            ClassCastException.class,
+            UnsupportedOperationException.class,
+            ReflectiveOperationException.class,}) {
+            if (aClass.isInstance(ex)) {
+                return ex.toString();
+            }
+        }
+        String message = ex.getMessage();
+        if (message == null) {
+            message = ex.toString();
+        }
+        return message;
     }
 
     public static String fillString(char x, int width) {
@@ -644,13 +662,13 @@ public class StringUtils {
     }
 
     public static String fillString(String pattern, int width) {
-        if(pattern==null || pattern.length()==0){
+        if (pattern == null || pattern.length() == 0) {
             throw new IllegalArgumentException("Empty Pattern");
         }
         char[] cc = new char[width];
         int len = pattern.length();
         for (int i = 0; i < cc.length; i++) {
-            cc[i]=pattern.charAt(i% len);
+            cc[i] = pattern.charAt(i % len);
         }
         return new String(cc);
     }
@@ -678,7 +696,6 @@ public class StringUtils {
         }
         return sb.toString();
     }
-
 
     public static String join(String sep, int[] items) {
         StringBuilder sb = new StringBuilder();
@@ -774,7 +791,12 @@ public class StringUtils {
 
     public static <T> String join(String sep, Collection<T> items, ObjectToString<T> toStr) {
         if (toStr == null) {
-            toStr = x -> String.valueOf(x);
+            toStr = new ObjectToString<T>() {
+                @Override
+                public String toString(T x) {
+                    return String.valueOf(x);
+                }
+            };
         }
         StringBuilder sb = new StringBuilder();
         Iterator<T> i = items.iterator();
@@ -802,13 +824,12 @@ public class StringUtils {
     }
 
     /**
-     *
      * @param message in the form "This is a message with ${param}
      * @param parameters
      * @return
      */
-    public static String format(String message, Map<String, Object> parameters) {
-        return new MessageNameFormat(message).format(parameters);
+    public static String format(String message, Map<String, Object> parameters, MessageNameFormatContext messageNameFormatContext) {
+        return new MessageNameFormat(message).format(parameters, messageNameFormatContext);
     }
 
     public static String literalToString(Object literal) {
@@ -816,15 +837,15 @@ public class StringUtils {
             return "null";
         }
         if (literal instanceof String) {
-            String theString=(String)literal;
+            String theString = (String) literal;
             int len = theString.length();
             int bufLen = len * 2;
             if (bufLen < 0) {
                 bufLen = Integer.MAX_VALUE;
             }
-            StringBuilder sb = new StringBuilder(bufLen+2);
+            StringBuilder sb = new StringBuilder(bufLen + 2);
             sb.append("\"");
-            boolean escapeUnicode=true;
+            boolean escapeUnicode = true;
             for (int x = 0; x < len; x++) {
                 char cc = theString.charAt(x);
                 // Handle common case first, selecting largest block that
@@ -893,17 +914,19 @@ public class StringUtils {
 
     /**
      * Convert a nibble to a hex character
-     * @param   nibble  the nibble to convert.
+     *
+     * @param nibble the nibble to convert.
      */
     private static char toHex(int nibble) {
         return hexDigit[(nibble & 0xF)];
     }
 
-    /** A table of hex digits */
+    /**
+     * A table of hex digits
+     */
     private static final char[] hexDigit = {
-        '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F'
+        '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'
     };
-
 
     public static String toCapitalized(String name) {
         char[] chars = name.toLowerCase().toCharArray();
@@ -917,7 +940,6 @@ public class StringUtils {
         return new String(chars);
     }
 
-
     /**
      * *
      * **
@@ -925,14 +947,14 @@ public class StringUtils {
      * @param pattern containing {1}
      * @return
      */
-    public static Map<String,String> matchSubstring(String val,String pattern) {
+    public static Map<String, String> matchSubstring(String val, String pattern) {
         if (pattern == null) {
             pattern = "";
         }
         int i = 0;
         char[] cc = pattern.toCharArray();
         StringBuilder sb = new StringBuilder();
-        Set<String> ret=new HashSet<>();
+        Set<String> ret = new HashSet<>();
         while (i < cc.length) {
             char c = cc[i];
             switch (c) {
@@ -951,15 +973,15 @@ public class StringUtils {
                     break;
                 }
                 case '{': {
-                    StringBuilder sb2=new StringBuilder();
+                    StringBuilder sb2 = new StringBuilder();
                     i++;
-                    while(i<cc.length && cc[i]!='}'){
+                    while (i < cc.length && cc[i] != '}') {
                         sb2.append(cc[i]);
                         i++;
                     }
                     sb.append("(?<").append(sb2).append(">(.*))");
-                    if(ret.contains(sb2.toString())){
-                        throw new IllegalArgumentException("Already declared "+sb2);
+                    if (ret.contains(sb2.toString())) {
+                        throw new IllegalArgumentException("Already declared " + sb2);
                     }
                     ret.add(sb2.toString());
                     break;
@@ -971,13 +993,13 @@ public class StringUtils {
             i++;
         }
         sb.append("$");
-        sb.insert(0,"^");
+        sb.insert(0, "^");
         Pattern p = Pattern.compile(sb.toString());
         Matcher matcher = p.matcher(val);
-        while (matcher.find()){
-            Map<String,String> ok=new HashMap<>();
+        while (matcher.find()) {
+            Map<String, String> ok = new HashMap<>();
             for (String k : ret) {
-                ok.put(k,matcher.group(k));
+                ok.put(k, matcher.group(k));
             }
             return ok;
         }
@@ -998,21 +1020,27 @@ public class StringUtils {
         throw new IllegalArgumentException("Missing old Head");
     }
 
-    public static String formatLeft(String str, int size) {
-        StringBuilder sb = new StringBuilder(size);
-        sb.append(str);
-        while (sb.length() < size) {
+    public static String formatLeft(Object number, int size) {
+        String s = String.valueOf(number);
+        int len = s.length();
+        int bufferSize = Math.max(size, len);
+        StringBuilder sb = new StringBuilder(bufferSize);
+        sb.append(s);
+        for (int i = bufferSize - len; i > 0; i--) {
             sb.append(' ');
         }
         return sb.toString();
     }
 
-    public static String formatRight(String str, int size) {
-        StringBuilder sb = new StringBuilder(size);
-        sb.append(str);
-        while (sb.length() < size) {
-            sb.insert(0, ' ');
+    public static String formatRight(Object number, int size) {
+        String s = String.valueOf(number);
+        int len = s.length();
+        int bufferSize = Math.max(size, len);
+        StringBuilder sb = new StringBuilder(bufferSize);
+        for (int i = bufferSize - len; i > 0; i--) {
+            sb.append(' ');
         }
+        sb.append(s);
         return sb.toString();
     }
 
@@ -1021,8 +1049,8 @@ public class StringUtils {
     }
 
     public static Map<String, String> parseMap(String text, String eqSeparators, String entrySeparators) {
-        Map<String, String> m = new HashMap<>();
-        StringReader reader = new StringReader(text==null?"":text);
+        Map<String, String> m = new LinkedHashMap<>();
+        StringReader reader = new StringReader(text == null ? "" : text);
         while (true) {
             StringBuilder key = new StringBuilder();
             int r = 0;
@@ -1110,10 +1138,10 @@ public class StringUtils {
             }
         }
     }
+
     public static StringBuilder clear(StringBuilder c) {
         return c.delete(0, c.length());
     }
-
 
     /**
      * code from org.apache.tools.ant.types.Commandline copyrights goes to
@@ -1192,11 +1220,56 @@ public class StringUtils {
 
     public static String coalesce(String... cmd) {
         for (String string : cmd) {
-            if (!isEmpty(string)) {
+            if (!isBlank(string)) {
                 return string;
             }
         }
         return null;
+    }
+
+    private static Pattern SUB_PATTERN = Pattern.compile("£(?<index>[0-9]+)");
+
+    public static Pattern2 compileSubPatterns2(String text, String... subPatterns) {
+        Matcher matcher = SUB_PATTERN.matcher(text);
+        StringBuilder sb = new StringBuilder();
+        int pos = 0;
+        while (matcher.find()) {
+            sb.append(Pattern.quote(text.substring(pos, matcher.start())));
+            String u = subPatterns[Integer.parseInt(matcher.group("index"))];
+            sb.append('(');
+            sb.append(u);
+            sb.append(')');
+            pos = matcher.end();
+        }
+        sb.append(Pattern.quote(text.substring(pos)));
+        return Pattern2.compile(sb.toString());
+    }
+
+    /**
+     * Builds a pattern where all the string is escaped but £? will be replaced
+     * by valid patterns Example :
+     * <pre>
+     * StringUtils.compileSubPatterns("\"java.lang:type=Threading\".operations.dumpAllThreads[£0].threadName", "?&lt;Item&gt;[0-9]+")
+     * </pre>
+     *
+     * @param text
+     * @param subPatterns
+     * @return
+     */
+    public static Pattern compileSubPatterns(String text, String... subPatterns) {
+        Matcher matcher = SUB_PATTERN.matcher(text);
+        StringBuilder sb = new StringBuilder();
+        int pos = 0;
+        while (matcher.find()) {
+            sb.append(Pattern.quote(text.substring(pos, matcher.start())));
+            String u = subPatterns[Integer.parseInt(matcher.group("index"))];
+            sb.append('(');
+            sb.append(u);
+            sb.append(')');
+            pos = matcher.end();
+        }
+        sb.append(Pattern.quote(text.substring(pos)));
+        return Pattern.compile(sb.toString());
     }
 
 }

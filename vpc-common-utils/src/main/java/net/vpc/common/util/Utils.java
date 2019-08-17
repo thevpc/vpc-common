@@ -13,54 +13,54 @@ import java.util.*;
  */
 public class Utils {
 
-    public static Object joinArrays(Object ... arrays) {
-        Class<?> c1=null;
-        if(arrays.length==0){
+    public static Object joinArrays(Object... arrays) {
+        Class<?> c1 = null;
+        if (arrays.length == 0) {
             throw new IllegalArgumentException("No Array to join");
         }
-        int lenSum=0;
+        int lenSum = 0;
         for (int i = 0; i < arrays.length; i++) {
             Class<?> c = arrays.getClass().getComponentType();
-            if(c==null){
+            if (c == null) {
                 throw new IllegalArgumentException("Class Cast Exception");
             }
-            if(c1==null){
-                c1=c;
-            }else{
-                if(!c1.equals(c)){
+            if (c1 == null) {
+                c1 = c;
+            } else {
+                if (!c1.equals(c)) {
                     throw new IllegalArgumentException("Array expected");
                 }
             }
-            lenSum+=Array.getLength(arrays[i]);
+            lenSum += Array.getLength(arrays[i]);
         }
-        int pos=0;
+        int pos = 0;
         Object newObj = Array.newInstance(c1, lenSum);
         for (int i = 0; i < arrays.length; i++) {
             int len = Array.getLength(arrays[i]);
-            System.arraycopy(arrays[i],0,newObj,pos, len);
-            pos+=len;
+            System.arraycopy(arrays[i], 0, newObj, pos, len);
+            pos += len;
         }
         return newObj;
     }
 
-    public static Object joinArraysAsType(Class componentType,Object ... arrays) {
-        if(arrays.length==0){
+    public static Object joinArraysAsType(Class componentType, Object... arrays) {
+        if (arrays.length == 0) {
             throw new IllegalArgumentException("No Array to join");
         }
-        int lenSum=0;
+        int lenSum = 0;
         for (int i = 0; i < arrays.length; i++) {
             Class<?> c = arrays.getClass().getComponentType();
-            if(!componentType.isInstance(componentType)){
+            if (!componentType.isInstance(componentType)) {
                 throw new IllegalArgumentException("Array expected");
             }
-            lenSum+=Array.getLength(arrays[i]);
+            lenSum += Array.getLength(arrays[i]);
         }
-        int pos=0;
+        int pos = 0;
         Object newObj = Array.newInstance(componentType, lenSum);
         for (int i = 0; i < arrays.length; i++) {
             int len = Array.getLength(arrays[i]);
-            System.arraycopy(arrays[i],0,newObj,pos, len);
-            pos+=len;
+            System.arraycopy(arrays[i], 0, newObj, pos, len);
+            pos += len;
         }
         return newObj;
     }
@@ -72,12 +72,12 @@ public class Utils {
         return newObj;
     }
 
-    public static void main(String[] args) {
-        Object[] a=(Object[]) removeArray(new Object[]{1,2,3},-1,2);
-        System.out.println(Arrays.deepToString(a));
-    }
+//    public static void main(String[] args) {
+//        Object[] a = (Object[]) removeArray(new Object[]{1, 2, 3}, -1, 2);
+//        System.out.println(Arrays.deepToString(a));
+//    }
 
-//    public static Object[] joinArrays(Object[] array1, Object[] array2) {
+    //    public static Object[] joinArrays(Object[] array1, Object[] array2) {
 //        return (Object[]) joinArrays((Object)array1,array2);
 //    }
 //    public static Object joinArrays(Object array1, Object array2) {
@@ -86,15 +86,14 @@ public class Utils {
 //        System.arraycopy(array2, 0, newArr, Array.getLength(array1), Array.getLength(array2));
 //        return newArr;
 //    }
-
     public static Object removeArrayTail(Object array, int offset, int removeCount) {
-        return removeArray(array,Array.getLength(array)-offset,removeCount);
+        return removeArray(array, Array.getLength(array) - offset, removeCount);
     }
 
     public static Object removeArray(Object array, int offset, int removeCount) {
         int len = Array.getLength(array);
         if (offset < 0) {
-            removeCount+=offset;
+            removeCount += offset;
             offset = 0;
         }
         if (offset + removeCount > len) {
@@ -103,8 +102,8 @@ public class Utils {
         if (removeCount > 0) {
             Object newArr = Array.newInstance(array.getClass().getComponentType(), len - removeCount);
             System.arraycopy(array, 0, newArr, 0, offset);
-            int srcPos = offset + removeCount-1;
-            int length2 = len - srcPos-1;
+            int srcPos = offset + removeCount - 1;
+            int length2 = len - srcPos - 1;
             System.arraycopy(array, srcPos, newArr, offset, length2);
             return newArr;
         } else {
@@ -424,6 +423,96 @@ public class Utils {
         System.arraycopy(original, 0, copy, 0,
                 Math.min(original.length, newLength));
         return copy;
+    }
+
+    public static <T, V> List<T> sort(List<T> list, final Converter<T, V> converter, final Comparator<V> c) {
+        if (converter == null) {
+            Collections.sort(list, (Comparator<T>) c);
+            return list;
+        }
+        class TandV implements Comparable<TandV> {
+
+            T t;
+            V v;
+
+            public TandV(T t) {
+                this.t = t;
+                this.v = converter.convert(t);
+            }
+
+            @Override
+            public int compareTo(TandV o) {
+                final V v2 = o.v;
+                if (v == v2) {
+                    return 0;
+                }
+                if (v == null) {
+                    return -1;
+                }
+                if (v2 == null) {
+                    return 1;
+                }
+                if (c == null) {
+                    return ((Comparable) v).compareTo(((Comparable) (v2)));
+                }
+                return c.compare(v, v2);
+            }
+
+        }
+        TandV[] all = new TandV[list.size()];
+        for (int i = 0; i < all.length; i++) {
+            all[i] = new TandV(list.get(i));
+        }
+        Arrays.sort(all);
+        for (int i = 0; i < all.length; i++) {
+            list.set(i, all[i].t);
+        }
+        return list;
+    }
+
+    public static <T, V> T[] sort(T[] arr, final Converter<T, V> converter, final Comparator<V> c) {
+        if (converter == null) {
+            Arrays.sort(arr, (Comparator<T>) c);
+            return arr;
+        }
+        class TandV implements Comparable<TandV> {
+
+            T t;
+            V v;
+
+            public TandV(T t) {
+                this.t = t;
+                this.v = converter.convert(t);
+            }
+
+            @Override
+            public int compareTo(TandV o) {
+                final V v2 = o.v;
+                if (v == v2) {
+                    return 0;
+                }
+                if (v == null) {
+                    return -1;
+                }
+                if (v2 == null) {
+                    return 1;
+                }
+                if (c == null) {
+                    return ((Comparable) v).compareTo(((Comparable) (v2)));
+                }
+                return c.compare(v, v2);
+            }
+
+        }
+        TandV[] all = new TandV[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            all[i] = new TandV(arr[i]);
+        }
+        Arrays.sort(all);
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = all[i].t;
+        }
+        return arr;
     }
 
 }

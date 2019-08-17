@@ -33,7 +33,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
@@ -223,7 +223,7 @@ public class SoftReflector {
      * URL must denote either a jar file or a local folder
      */
     public static void visitURLClasses(URL url, SoftClassVisitor visitor, SoftClassLoader classLoader) throws IOException {
-        File folder = IOUtils.urlToFile(url);
+        File folder = PRSPrivateIOUtils.urlToFile(url);
         if (folder != null && folder.isDirectory()) {
             int prefixLength = folder.getPath().length();
             if(!folder.getPath().endsWith("/") && !folder.getPath().endsWith("\\")){

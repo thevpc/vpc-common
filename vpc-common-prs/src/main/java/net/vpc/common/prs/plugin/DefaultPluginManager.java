@@ -62,7 +62,7 @@ import net.vpc.common.prs.softreflect.classloader.HostToSoftClassLoader;
 import net.vpc.common.prs.softreflect.classloader.MultiSoftClassLoader;
 import net.vpc.common.prs.softreflect.classloader.URLSoftClassLoader;
 import net.vpc.common.prs.reflect.Reflector.ClassInfo;
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 import net.vpc.common.prs.util.ProgressMonitor;
 import net.vpc.common.prs.util.ProgressMonitorUtils;
 import net.vpc.common.prs.Version;
@@ -339,7 +339,7 @@ public abstract class DefaultPluginManager<App extends PluggableApplication, Plu
     @Override
     public void installPlugin(URL newPluginUrl, boolean installDependencies) throws PluginException {
         try {
-            URL localUrl = localRepository.addInstallable(newPluginUrl.openStream(), IOUtils.getFileNameWithoutExtension(new File(newPluginUrl.getFile())));
+            URL localUrl = localRepository.addInstallable(newPluginUrl.openStream(), PRSPrivateIOUtils.getFileNameWithoutExtension(new File(newPluginUrl.getFile())));
             PluginDescriptor pluginDescriptor = loadPluginDescriptor(localUrl);
             if (installDependencies && pluginDescriptor != null) {
                 for (PluginDependency s : pluginDescriptor.getDependencies()) {
@@ -366,7 +366,7 @@ public abstract class DefaultPluginManager<App extends PluggableApplication, Plu
             try {
                 URL url = new URL(descriptor.getAbsoluteBinaryUrl());
                 try {
-                    String fileName = IOUtils.getFileNameWithoutExtension(new File(url.getFile()));
+                    String fileName = PRSPrivateIOUtils.getFileNameWithoutExtension(new File(url.getFile()));
                     ProgressMonitorInputStream2 in = new ProgressMonitorInputStream2(null, "loading " + fileName + "...", url.openStream(), descriptor.getBinarySize());
                     localRepository.addInstallable(in, fileName);
                     if (installDependencies) {
@@ -771,14 +771,14 @@ public abstract class DefaultPluginManager<App extends PluggableApplication, Plu
         for (PluginDescriptor descriptor : pluginsInfosCollection) {
             crcs.add(descriptor.getUUID());
         }
-        return IOUtils.computeCRC(crcs.toString().getBytes());
+        return PRSPrivateIOUtils.computeCRC(crcs.toString().getBytes());
     }
 
     protected String getDescriptorsCRC() {
         File pluginsCacheCRCFile = new File(getPluginsVarFolder(), "plugins.cache.nfo");
         if (pluginsCacheCRCFile.exists()) {
             try {
-                return IOUtils.loadString(pluginsCacheCRCFile);
+                return PRSPrivateIOUtils.loadString(pluginsCacheCRCFile);
             } catch (IOException e) {
                 //ignore
             }
@@ -790,7 +790,7 @@ public abstract class DefaultPluginManager<App extends PluggableApplication, Plu
         File pluginsCacheCRCFile = new File(getPluginsVarFolder(), "plugins.cache.nfo");
         try {
             pluginsCacheCRCFile.delete();
-            IOUtils.saveString(pluginsCacheCRCFile, CRC);
+            PRSPrivateIOUtils.saveString(pluginsCacheCRCFile, CRC);
         } catch (IOException e) {
             //ignore
         }
@@ -814,7 +814,7 @@ public abstract class DefaultPluginManager<App extends PluggableApplication, Plu
             cache = null;
         } else if (pluginsCacheFile.exists()) {
             try {
-                cache = (PluginManagerCache) IOUtils.loadObject(pluginsCacheFile);
+                cache = (PluginManagerCache) PRSPrivateIOUtils.loadObject(pluginsCacheFile);
             } catch (Exception e) {
                 logger.log(Level.WARNING, "Unable to Load Cache to " + pluginsCacheFile.getPath(), e);
             }
@@ -824,7 +824,7 @@ public abstract class DefaultPluginManager<App extends PluggableApplication, Plu
             pluginsCacheFile.delete();
             setDescriptorsCRC(CRC);
             try {
-                IOUtils.saveObject(pluginsCacheFile, cache);
+                PRSPrivateIOUtils.saveObject(pluginsCacheFile, cache);
             } catch (IOException e) {
                 logger.log(Level.WARNING, "Unable to Save Cache to " + pluginsCacheFile.getPath(), e);
             }

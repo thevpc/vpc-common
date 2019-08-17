@@ -9,7 +9,7 @@ package net.vpc.common.util;
  *
  * @author vpc
  */
-@FunctionalInterface
+//@FunctionalInterface
 public interface GetWith<A, B> {
 
     B run(A a);

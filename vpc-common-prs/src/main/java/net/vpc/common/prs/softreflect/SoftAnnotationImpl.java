@@ -8,6 +8,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 /**
  *
@@ -35,6 +36,16 @@ public class SoftAnnotationImpl implements SoftAnnotation {
 
     public void setAtributes(SoftAnnotationAttribute[] atributes) {
         this.atributes = atributes;
+    }
+
+    @Override
+    public SoftAnnotationAttribute getAttribute(String name) {
+        for (SoftAnnotationAttribute attribute : atributes) {
+            if (attribute.getName().equals(name)) {
+                return attribute;
+            }
+        }
+        throw new NoSuchElementException(name);
     }
 
     public SoftAnnotationImpl(Annotation a) {

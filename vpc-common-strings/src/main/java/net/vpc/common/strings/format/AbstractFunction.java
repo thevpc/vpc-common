@@ -6,6 +6,7 @@
 package net.vpc.common.strings.format;
 
 import net.vpc.common.strings.MessageNameFormat;
+import net.vpc.common.strings.MessageNameFormatContext;
 import net.vpc.common.strings.StringToObject;
 
 /**
@@ -15,10 +16,10 @@ import net.vpc.common.strings.StringToObject;
 public abstract class AbstractFunction implements MessageNameFormat.Function {
     
     @Override
-    public final Object eval(MessageNameFormat.ExprNode[] args, MessageNameFormat format, StringToObject provider) {
+    public final Object eval(MessageNameFormat.ExprNode[] args, MessageNameFormat format, StringToObject provider, MessageNameFormatContext messageNameFormatContext) {
         Object[] oargs = new Object[args.length];
         for (int i = 0; i < args.length; i++) {
-            oargs[i] = args[i].format(format, provider);
+            oargs[i] = args[i].format(format, provider, messageNameFormatContext);
         }
         return evalArgs(oargs, format, provider);
     }

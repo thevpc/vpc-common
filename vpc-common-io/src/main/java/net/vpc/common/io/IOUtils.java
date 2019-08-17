@@ -1,115 +1,61 @@
-/*
-     * To change this license header, choose License Headers in Project Properties.
-     *
-     * and open the template in the editor.
+/**
+ * ====================================================================
+ * vpc-common-io : common reusable library for
+ * input/output
+ * <p>
+ * is a new Open Source Package Manager to help install packages and libraries
+ * for runtime execution. Nuts is the ultimate companion for maven (and other
+ * build managers) as it helps installing all package dependencies at runtime.
+ * Nuts is not tied to java and is a good choice to share shell scripts and
+ * other 'things' . Its based on an extensible architecture to help supporting a
+ * large range of sub managers / repositories.
+ * <p>
+ * Copyright (C) 2016-2017 Taha BEN SALAH
+ * <p>
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later
+ * version.
+ * <p>
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * <p>
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * ====================================================================
  */
 package net.vpc.common.io;
 
-import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.zip.GZIPInputStream;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.zip.*;
 
 /**
  * @author taha.bensalah@gmail.com
  */
 public class IOUtils {
 
+    private static final Logger log = Logger.getLogger(IOUtils.class.getName());
+    public static final OutputStream NULL_OUTPUT_STREAM = NullOutputStream.INSTANCE;
+    public static final PrintStream NULL_PRINT_STREAM = NullPrintStream.INSTANCE;
+
     /**
-     * taille par defaut du buffer de transfert
+     * taille par defaut du buffer de transfer
      */
     public static final int DEFAULT_BUFFER_SIZE = 1024;
 
-    public static String getCanonicalPath(File fileName) {
-        try {
-            return fileName.getCanonicalPath();
-        } catch (IOException e) {
-            return fileName.getAbsolutePath();
-        }
-    }
-
-    public static String probeContentType(String fileName) {
-        MimetypesFileTypeMap m = new MimetypesFileTypeMap();
-        String contentType = null;
-        try {
-            contentType = m.getContentType(fileName);
-        } catch (Exception ex) {
-            //ignore
-        }
-        if (contentType == null || "application/octet-stream".equals(contentType)) {
-            if (fileName.endsWith(".txt")) {
-                contentType = "text/plain";
-            } else if (fileName.endsWith(".html")) {
-                contentType = "text/html";
-            } else if (fileName.endsWith(".xml")) {
-                contentType = "text/xml";
-            } else if (fileName.toLowerCase().endsWith(".gif")) {
-                contentType = "image/gif";
-            } else if (fileName.toLowerCase().endsWith(".css")) {
-                contentType = "text/css";
-            } else if (fileName.toLowerCase().endsWith(".js")) {
-                contentType = "text/javascript";
-            } else {
-                contentType = "application/octet-stream";
-            }
-        }
-        return contentType;
-    }
-
-    public static String probeContentType(File file) {
-        String contentType = null;
-        try {
-            contentType = Files.probeContentType(file.toPath());
-        } catch (IOException ex) {
-            //ignore
-        }
-        if (contentType == null || "application/octet-stream".equals(contentType)) {
-            return probeContentType(file.getName());
-        }
-        return contentType;
-    }
-
-    public static String probeContentType(URL url) {
-        try {
-            if (url.getProtocol().equals("file")) {
-                File f;
-                f = new File(url.toURI());
-                return probeContentType(f);
-            }
-            File temp = File.createTempFile("t", "r");
-            Files.copy(url.openStream(), temp.toPath());
-            String ct = Files.probeContentType(temp.toPath());
-            temp.delete();
-            return ct;
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
-    public static byte[] toByteArray(InputStream is) throws IOException {
-        ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-
-        int nRead;
-        byte[] data = new byte[16384];
-
-        while ((nRead = is.read(data, 0, data.length)) != -1) {
-            buffer.write(data, 0, nRead);
-        }
-
-        buffer.flush();
-
-        return buffer.toByteArray();
-    }
-
-    public static Iterable<String> toStringIterable(InputStreamSource is, boolean trackChanges) throws IOException {
+    public static Iterable<String> toStringIterable(InputStreamSource is, boolean trackChanges) {
         if (!trackChanges) {
             return new InputStreamSourceStringIterable(is);
         } else {
@@ -118,7 +64,7 @@ public class IOUtils {
         }
     }
 
-    public static Iterable<String> filterExceptions(InputStreamSource is, boolean trackChanges) throws IOException {
+    public static Iterable<String> filterExceptions(InputStreamSource is, boolean trackChanges) {
         if (!trackChanges) {
             return new InputStreamSourceStringIterable(is);
         } else {
@@ -127,7 +73,7 @@ public class IOUtils {
         }
     }
 
-    public static String[] toStringArray(InputStreamSource is) throws IOException {
+    public static String[] loadStringArray(InputStreamSource is) throws IOException {
         try (BufferedReader r = new BufferedReader(new InputStreamReader(is.open()))) {
             List<String> lines = new ArrayList<>();
             String line = null;
@@ -138,7 +84,7 @@ public class IOUtils {
         }
     }
 
-    public static Properties toProperties(InputStreamSource is) throws IOException {
+    public static Properties loadProperties(InputStreamSource is) throws IOException {
         try (InputStream r = is.open()) {
             Properties p = new Properties();
             p.load(r);
@@ -146,7 +92,15 @@ public class IOUtils {
         }
     }
 
-    public static Properties toPropertiesXML(InputStreamSource is) throws IOException {
+    public static Properties loadProperties(Path is) throws IOException {
+        try (Reader r = Files.newBufferedReader(is)) {
+            Properties p = new Properties();
+            p.load(r);
+            return p;
+        }
+    }
+
+    public static Properties loadXMLProperties(InputStreamSource is) throws IOException {
         try (InputStream r = is.open()) {
             Properties p = new Properties();
             p.loadFromXML(r);
@@ -154,39 +108,29 @@ public class IOUtils {
         }
     }
 
-    public static String readString(File is) throws IOException {
-        return toString(toInputStreamSource(is));
+    public static String loadString(File is) throws IOException {
+        return loadString(toInputStreamSource(is));
     }
 
-    public static void writeString(File is, String string) throws IOException {
-        try (PrintStream p = new PrintStream(is)) {
-            p.print(string);
-        }
+    public static String loadString(InputStreamSource is) throws IOException {
+        return new String(loadCharArray(is));
     }
 
-    public static String toString(InputStreamSource is) throws IOException {
-        return new String(toCharArray(is));
-    }
-
-    public static String toString(InputStream is) throws IOException {
-        return new String(toCharArray(is));
-    }
-
-    public static char[] toCharArray(InputStreamSource is) throws IOException {
+    public static char[] loadCharArray(InputStreamSource is) throws IOException {
         try (InputStream in = is.open()) {
-            return toCharArray(in);
+            return loadCharArray(in);
         }
     }
 
-    public static char[] toCharArray(InputStream is) throws IOException {
-        return toCharArray(new InputStreamReader(is));
+    public static char[] loadCharArray(InputStream is) throws IOException {
+        return loadCharArray(new InputStreamReader(is));
     }
 
-    public static String toString(Reader r) throws IOException {
-        return new String(toCharArray(r));
+    public static String loadString(Reader r) throws IOException {
+        return new String(loadCharArray(r));
     }
 
-    public static char[] toCharArray(Reader r) throws IOException {
+    public static char[] loadCharArray(Reader r) throws IOException {
         CharArrayWriter buffer = new CharArrayWriter();
 
         int nRead;
@@ -199,35 +143,6 @@ public class IOUtils {
         buffer.flush();
 
         return buffer.toCharArray();
-    }
-
-    @Deprecated
-    public static byte[] read(InputStream in, int count) throws IOException {
-        byte[] buffer = new byte[count];
-        int i = in.read(buffer);
-        byte[] buffer2 = new byte[i];
-        System.arraycopy(buffer, 0, buffer2, 0, i);
-        return buffer2;
-    }
-
-    public static byte[] readByteArray(InputStream in, int count) throws IOException {
-        byte[] buffer = new byte[count];
-        int i = in.read(buffer);
-        byte[] buffer2 = new byte[i];
-        System.arraycopy(buffer, 0, buffer2, 0, i);
-        return buffer2;
-    }
-
-    public static char[] readCharArray(InputStream in, int count) throws IOException {
-        return readCharArray(new InputStreamReader(in), count);
-    }
-
-    public static char[] readCharArray(Reader in, int count) throws IOException {
-        char[] buffer = new char[count];
-        int i = in.read(buffer);
-        char[] buffer2 = new char[i];
-        System.arraycopy(buffer, 0, buffer2, 0, i);
-        return buffer2;
     }
 
     public static OutputStreamSource toOutputStreamSource(final File file) {
@@ -245,12 +160,20 @@ public class IOUtils {
         };
     }
 
+    public static InputStreamSource toInputStreamSource(byte[] bytes, String name) {
+        return new ByteArrayInputStreamSource(bytes, name, bytes);
+    }
+
+    public static InputStreamSource toInputStreamSource(Path path) {
+        return new PathInputStreamSource(path);
+    }
+
     public static InputStreamSource toInputStreamSource(byte[] bytes) {
-        return new ByteArrayInputStreamSource(bytes);
+        return new ByteArrayInputStreamSource(bytes, null, bytes);
     }
 
     public static InputStreamSource toInputStreamSource(String string) {
-        return new StringInputStreamSource(string);
+        return new StringInputStreamSource(string, null);
     }
 
     public static InputStreamSource toInputStreamSource(File file) {
@@ -262,77 +185,7 @@ public class IOUtils {
     }
 
     public static InputStreamSource toInputStreamSource(InputStream stream) {
-        return new SingleAccessInputStreamSource(stream);
-    }
-
-    public static boolean isURL(String url) {
-        try {
-            new URL(url);
-            return true;
-        } catch (MalformedURLException ex) {
-            return false;
-        }
-    }
-
-    public static File toFileLenient(String path) {
-        if (path == null || path.length() == 0) {
-            return null;
-        }
-        if (path.startsWith("/") || path.startsWith("\\")) {
-            return new File(path);
-        }
-        if (path.toLowerCase().startsWith("file:")) {
-            Path pa;
-            try {
-                pa = Paths.get(new URL(path).toURI());
-            } catch (Exception ex) {
-                return new File(path.substring("file:".length()));
-            }
-            return pa.toFile();
-        }
-        if (path.indexOf(':') == 1) {
-            for (int i = 0; i < 26; i++) {
-                if (path.toLowerCase().startsWith(('a') + ":")) {
-                    //windows drive letter
-                    return new File(path);
-                }
-            }
-        }
-        return null;
-    }
-
-    public static String getUrlProtocol(String path) {
-        if (path == null) {
-            return null;
-        }
-        int i = path.indexOf("://");
-        if (i > 0) {
-            String protocol = path.substring(0, i).trim();
-            if (protocol.matches("[a-zA-Z0-9_-]+")) {
-                return protocol;
-            }
-        }
-        return null;
-    }
-
-    public static String getUrlFile(String path) {
-        if (path == null) {
-            return null;
-        }
-        int i = path.indexOf("://");
-        if (i > 0) {
-            return path.substring(i + 3);
-        }
-        return path;
-    }
-
-    public static void createParents(File f) {
-        if (f != null) {
-            File pf = f.getParentFile();
-            if (pf != null) {
-                pf.mkdirs();
-            }
-        }
+        return new SingleAccessInputStreamSource(stream, null);
     }
 
     private static class InputStreamSourceStringIterable implements Iterable<String> {
@@ -347,86 +200,14 @@ public class IOUtils {
         public Iterator<String> iterator() {
             try {
                 return new InputStreamStringIterator(is.open());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } catch (IOException ex) {
+                throw new IllegalArgumentException(ex);
             }
-        }
-    }
-
-    public static File expandFile(String path) {
-        final String p = expandPath(path);
-        if(p==null){
-            return null;
-        }
-        return new File(p);
-    }
-    
-    /**
-     * path expansion replaces ~ with ${user.home} property value
-     *
-     * @param path to expand
-     * @return expanded path
-     */
-    public static String expandPath(String path) {
-        if (path == null) {
-            return path;
-        }
-        if (path.equals("~")) {
-            return System.getProperty("user.home");
-        }
-        if (path.startsWith("~") && path.length() > 1 && (path.charAt(1) == '/' || path.charAt(1) == '\\')) {
-            return System.getProperty("user.home") + path.substring(1);
-        }
-        return path;
-    }
-
-    public static void saveObject2(String physicalName, Object object) {
-        try {
-            saveObject(physicalName, object);
-        } catch (Exception e) {
-            e.printStackTrace();
-            //ignore
-        }
-    }
-
-    public static void saveObject(String physicalName, Object object) throws RuntimeIOException {
-        physicalName = expandPath(physicalName);
-        try {
-            ObjectOutputStream oos = null;
-            try {
-                oos = new ObjectOutputStream(new FileOutputStream(physicalName));
-                oos.writeObject(object);
-                oos.close();
-            } finally {
-                if (oos != null) {
-                    oos.close();
-                }
-            }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
-        }
-    }
-
-    public static void saveString(String physicalName, String object) throws RuntimeIOException {
-        physicalName = expandPath(physicalName);
-        try {
-            PrintStream oos = null;
-            try {
-                oos = new PrintStream(new File(physicalName));
-                oos.print(object);
-                oos.close();
-            } finally {
-                if (oos != null) {
-                    oos.close();
-                }
-            }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
         }
     }
 
     public static Object loadObject2(String physicalName) {
-        physicalName = expandPath(physicalName);
+        physicalName = FileUtils.expandPath(physicalName);
         try {
             File f = new File(physicalName);
             if (f.isFile()) {
@@ -438,228 +219,145 @@ public class IOUtils {
         return null;
     }
 
-    public static Object loadObject(String physicalName) throws RuntimeIOException, ClassNotFoundException {
-        physicalName = expandPath(physicalName);
+    public static Object loadObject(String physicalName) throws IOException, ClassNotFoundException {
+        physicalName = FileUtils.expandPath(physicalName);
         ObjectInputStream ois = null;
         try {
-            try {
-                ois = new ObjectInputStream(new FileInputStream(physicalName));
-                return ois.readObject();
-            } finally {
-                if (ois != null) {
-                    ois.close();
-                }
+            ois = new ObjectInputStream(new FileInputStream(physicalName));
+            return ois.readObject();
+        } finally {
+            if (ois != null) {
+                ois.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
         }
     }
 
-    public static Object loadZippedObject(String physicalName) throws RuntimeIOException, ClassNotFoundException {
+    public static Object loadZippedObject(String physicalName) throws IOException, ClassNotFoundException {
         ObjectInputStream ois = null;
         try {
-            try {
-                ois = new ObjectInputStream(new GZIPInputStream(new FileInputStream(expandPath(physicalName))));
-                return ois.readObject();
-            } finally {
-                if (ois != null) {
-                    ois.close();
-                }
-            }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
-        }
-    }
-
-    public static boolean deleteFolderTree(File folder, FileFilter fileFilter) {
-        if (!folder.exists()) {
-            return true;
-        }
-        File[] files = folder.listFiles(fileFilter);
-        boolean ok = true;
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile() && (fileFilter == null || fileFilter.accept(file))) {
-                    if (!file.delete()) {
-                        ok = false;
-                    }
-                } else if (file.isDirectory()) {
-                    deleteFolderTree(file, fileFilter);
-                } else {
-                    ok = false;
-                }
-            }
-        }
-        return ok && folder.delete();
-    }
-
-    public static URL toURL(File file) {
-        try {
-            return file.toURI().toURL();
-        } catch (MalformedURLException ex) {
-            throw new RuntimeIOException(ex);
-        }
-    }
-
-    public static void replaceInFile(File file, String oldContent, String newContent) throws RuntimeIOException {
-        byte[] bytes = loadStreamAsByteArray(toURL(file));
-        String str = new String(bytes);
-        copy(new ByteArrayInputStream(str.replace(oldContent, newContent).getBytes()), file);
-    }
-
-    public static void replaceAllInFile(File file, String oldContent, String newContent) throws RuntimeIOException {
-        byte[] bytes = loadStreamAsByteArray(toURL(file));
-        String str = new String(bytes);
-        copy(new ByteArrayInputStream(str.replaceAll(oldContent, newContent).getBytes()), file);
-    }
-
-    public static String loadStreamAsString(URL url) throws RuntimeIOException {
-        return new String(loadStreamAsByteArray(url));
-    }
-
-    public static String loadStreamAsString(InputStream r) throws RuntimeIOException {
-        return new String(loadStreamAsByteArray(r));
-    }
-
-    public static void replaceInFolder(File folder, FileFilter fileFilter, boolean recurse, String oldContent, String newContent) throws RuntimeIOException {
-        File[] files = folder.listFiles();
-        if (files != null) {
-            for (File file : files) {
-                if (file.isFile() && (fileFilter == null || fileFilter.accept(file))) {
-                    replaceInFile(file, oldContent, newContent);
-                } else if (recurse && file.isDirectory()) {
-                    replaceInFolder(file, fileFilter, recurse, oldContent, newContent);
-                }
+            ois = new ObjectInputStream(new GZIPInputStream(new FileInputStream(FileUtils.expandPath(physicalName))));
+            return ois.readObject();
+        } finally {
+            if (ois != null) {
+                ois.close();
             }
         }
     }
 
-    /**
-     * retourne le path relatif
-     *
-     * @param parent
-     * @param son
-     * @return relative path
-     */
-    public static String getRelativePath(File parent, File son) {
-        String parentPath;
-        String sonPath;
-        try {
-            parentPath = parent.getCanonicalPath();
-            sonPath = son.getCanonicalPath();
-        } catch (IOException e) {
-            parentPath = parent.getAbsolutePath();
-            sonPath = son.getAbsolutePath();
-        }
-        if (sonPath.startsWith(parentPath)) {
-            String p = sonPath.substring(parentPath.length());
-            if (p.startsWith("/") || p.startsWith("\\")) {
-                p = p.substring(1);
-            }
-            return p;
-        }
-        return null;
+    public static String loadString(URL url) throws IOException {
+        return new String(loadByteArray(url));
     }
 
-    public static byte[] loadStreamAsByteArray(URL url) throws RuntimeIOException {
+    public static String loadString(InputStream r) throws IOException {
+        return new String(loadByteArray(r));
+    }
+
+    public static byte[] loadByteArray(URL url) throws IOException {
         InputStream r = null;
         try {
-            try {
-                return loadStreamAsByteArray(url);
-            } finally {
-                if (r != null) {
-                    r.close();
-                }
+            return loadByteArray(r = url.openStream());
+        } finally {
+            if (r != null) {
+                r.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
         }
     }
 
-    public static byte[] loadStreamAsByteArray(InputStream r) throws RuntimeIOException {
-        ByteArrayOutputStream out = null;
-        try {
-            try {
-                out = new ByteArrayOutputStream();
-                copy(r, out);
-                out.flush();
-                return out.toByteArray();
-            } finally {
-                if (out != null) {
-                    out.close();
-                }
-            }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
-        }
-    }
-
-    public static void storeXMLProperties(File file, Properties p, String comments) throws RuntimeIOException {
+    public static void saveXMLProperties(Properties p, String comments, File file) throws IOException {
+        FileUtils.createParents(file);
         FileOutputStream os = null;
         try {
-            try {
-                os = new FileOutputStream(file);
-                p.storeToXML(os, comments);
-            } finally {
-                if (os != null) {
-                    os.close();
-                }
+            os = new FileOutputStream(file);
+            p.storeToXML(os, comments);
+        } finally {
+            if (os != null) {
+                os.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
         }
     }
 
-    public static void storeProperties(File file, Properties p, String comments) throws RuntimeIOException {
+    public static void saveString(String message, File file) throws IOException {
+        FileUtils.createParents(file);
+
+        try (PrintWriter w = new PrintWriter(file)) {
+            w.print(message);
+        }
+
+    }
+
+    public static void saveProperties(Properties p, String comments, File file) throws IOException {
+        FileUtils.createParents(file);
         FileOutputStream os = null;
+
         try {
-            try {
-                os = new FileOutputStream(file);
-                p.store(os, comments);
-            } finally {
-                if (os != null) {
-                    os.close();
-                }
+            os = new FileOutputStream(file);
+            p.store(os, comments);
+        } finally {
+            if (os != null) {
+                os.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
         }
+
     }
 
-    public static Properties loadXMLProperties(File file) throws RuntimeIOException {
+    public static void saveProperties(Properties p, String comments, Path file) throws IOException {
+        Files.createDirectories(file.getParent());
+        Writer os = null;
+
+        try {
+            os = Files.newBufferedWriter(file);
+            p.store(os, comments);
+        } finally {
+            if (os != null) {
+                os.close();
+            }
+        }
+
+    }
+
+    public static Properties loadXMLProperties(File file) throws IOException {
         Properties p = new Properties();
         FileInputStream is = null;
+
         try {
-            try {
-                is = new FileInputStream(file);
-                p.loadFromXML(is);
-            } finally {
-                if (is != null) {
-                    is.close();
-                }
+            is = new FileInputStream(file);
+            p.loadFromXML(is);
+        } finally {
+            if (is != null) {
+                is.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
         }
         return p;
     }
 
-    public static Properties loadProperties(File file) throws RuntimeIOException {
-        Properties p = new Properties();
-        FileInputStream is = null;
+    public static Properties loadProperties(File file) throws IOException {
+        return loadProperties(file, false);
+    }
+
+    public static Properties loadProperties(File file, boolean silent) throws IOException {
+        Properties props = new Properties();
+        InputStream inputStream = null;
         try {
             try {
-                is = new FileInputStream(file);
-                p.load(is);
+                if (file != null && file.isFile()) {
+                    inputStream = new FileInputStream(file);
+                    props.load(inputStream);
+                }
             } finally {
-                if (is != null) {
-                    is.close();
+                if (inputStream != null) {
+                    inputStream.close();
                 }
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
+        } catch (IOException e) {
+            if (!silent) {
+                throw e;
+            }
+        } catch (Exception e) {
+            if (!silent) {
+                throw new IOException(e.getMessage());
+            }
         }
-        return p;
+        return props;
     }
 
     /**
@@ -669,7 +367,7 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(InputStream in, OutputStream out) throws RuntimeIOException {
+    public static void copy(InputStream in, OutputStream out) throws IOException {
         copy(in, out, DEFAULT_BUFFER_SIZE);
     }
 
@@ -680,16 +378,14 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(InputStream in, OutputStream out, int bufferSize) throws RuntimeIOException {
+    public static void copy(InputStream in, OutputStream out, int bufferSize) throws IOException {
         byte[] buffer = new byte[bufferSize];
         int len;
-        try {
-            while ((len = in.read(buffer)) > 0) {
-                out.write(buffer, 0, len);
-            }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
+
+        while ((len = in.read(buffer)) > 0) {
+            out.write(buffer, 0, len);
         }
+
     }
 
     /**
@@ -699,8 +395,20 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(File in, File out) throws RuntimeIOException {
-        copy(in, out, DEFAULT_BUFFER_SIZE);
+    public static void copy(File in, File out) throws IOException {
+        if (in.isDirectory()) {
+            out.mkdirs();
+            File[] children = in.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    copy(child, new File(out, child.getName()));
+                }
+            }
+        } else {
+            FileUtils.createParents(out);
+            Files.copy(in.toPath(), out.toPath(), StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.COPY_ATTRIBUTES);
+        }
+//        copy(in, out, DEFAULT_BUFFER_SIZE);
     }
 
     /**
@@ -710,25 +418,24 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(File in, File out, int bufferSize) throws RuntimeIOException {
+    public static void copy(File in, File out, int bufferSize) throws IOException {
+        FileUtils.createParents(out);
         FileInputStream fis = null;
         FileOutputStream fos = null;
+
         try {
-            try {
-                fis = new FileInputStream(in);
-                fos = new FileOutputStream(out);
-                copy(fis, fos, bufferSize);
-            } finally {
-                if (fis != null) {
-                    fis.close();
-                }
-                if (fos != null) {
-                    fos.close();
-                }
+            fis = new FileInputStream(in);
+            fos = new FileOutputStream(out);
+            copy(fis, fos, bufferSize);
+        } finally {
+            if (fis != null) {
+                fis.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
+            if (fos != null) {
+                fos.close();
+            }
         }
+
     }
 
     /**
@@ -738,7 +445,7 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(File in, OutputStream out) throws RuntimeIOException {
+    public static void copy(File in, OutputStream out) throws IOException {
         copy(in, out, DEFAULT_BUFFER_SIZE);
     }
 
@@ -749,20 +456,18 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(File in, OutputStream out, int bufferSize) throws RuntimeIOException {
+    public static void copy(File in, OutputStream out, int bufferSize) throws IOException {
         FileInputStream fis = null;
+
         try {
-            try {
-                fis = new FileInputStream(in);
-                copy(fis, out, bufferSize);
-            } finally {
-                if (fis != null) {
-                    fis.close();
-                }
+            fis = new FileInputStream(in);
+            copy(fis, out, bufferSize);
+        } finally {
+            if (fis != null) {
+                fis.close();
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
         }
+
     }
 
     /**
@@ -772,24 +477,22 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(InputStream in, File out) throws RuntimeIOException {
+    public static void copy(InputStream in, File out) throws IOException {
         copy(in, out, DEFAULT_BUFFER_SIZE);
     }
 
-    public static void copy(URL url, File out) throws RuntimeIOException {
+    public static void copy(URL url, File out) throws IOException {
         InputStream in = null;
+
         try {
-            try {
-                in = url.openStream();
-                IOUtils.copy(in, out);
-            } finally {
-                if (in != null) {
-                    in.close();
-                }
+            in = url.openStream();
+            IOUtils.copy(in, out);
+        } finally {
+            if (in != null) {
+                in.close();
             }
-        } catch (IOException e) {
-            throw new RuntimeIOException(e);
         }
+
     }
 
     /**
@@ -799,89 +502,621 @@ public class IOUtils {
      * @param out sortie
      * @throws IOException when IO error
      */
-    public static void copy(InputStream in, File out, int bufferSize) throws RuntimeIOException {
+    public static void copy(InputStream in, File out, int bufferSize) throws IOException {
+        FileUtils.createParents(out);
         FileOutputStream fos = null;
+
+        try {
+            fos = new FileOutputStream(out);
+            copy(in, fos, bufferSize);
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+        }
+
+    }
+
+    public static void saveObject2(String physicalName, Object object) {
+        try {
+            saveObject(physicalName, object);
+        } catch (Exception e) {
+            e.printStackTrace();
+            //ignore
+        }
+    }
+
+    public static void saveObject(String physicalName, Object object) throws IOException {
+        physicalName = FileUtils.expandPath(physicalName);
+
+        ObjectOutputStream oos = null;
+        try {
+            File f = new File(physicalName);
+            if (f.getParentFile() != null) {
+                f.getParentFile().mkdirs();
+            }
+            oos = new ObjectOutputStream(new FileOutputStream(physicalName));
+            oos.writeObject(object);
+            oos.close();
+        } finally {
+            if (oos != null) {
+                oos.close();
+            }
+        }
+
+    }
+
+    /**
+     * writeString writeToFile
+     *
+     * @param string
+     * @param physicalName
+     * @throws IOException
+     */
+    public static void saveString(String string, String physicalName) throws IOException {
+        physicalName = FileUtils.expandPath(physicalName);
+
+        PrintStream oos = null;
+        try {
+            File f = new File(physicalName);
+            if (f.getParentFile() != null) {
+                f.getParentFile().mkdirs();
+            }
+            oos = new PrintStream(new File(physicalName));
+            if (string == null) {
+                string = "";
+            }
+            oos.print(string);
+            oos.close();
+        } finally {
+            if (oos != null) {
+                oos.close();
+            }
+        }
+
+    }
+
+    public static String computeCRC(File file) throws IOException {
+        FileOutputStream f = null;
+        try {
+            f = new FileOutputStream(file);
+            return computeCRC(file);
+        } finally {
+            if (f != null) {
+                f.close();
+            }
+        }
+    }
+
+    public static String computeCRC(byte[] bytes) throws IOException {
+        InputStream f = null;
+        try {
+            f = new ByteArrayInputStream(bytes);
+            return computeCRC(f);
+        } finally {
+            if (f != null) {
+                f.close();
+            }
+        }
+    }
+
+    public static String computeCRC(InputStream is) throws IOException {
+        CheckedInputStream cis = null;
+        try {
+            cis = new CheckedInputStream(is, new CRC32());
+            byte[] buf = new byte[1024];
+            int c;
+            while ((c = cis.read(buf)) >= 0) {
+                //
+            }
+            return Long.toString(cis.getChecksum().getValue(), 32).toUpperCase();
+        } finally {
+            if (cis != null) {
+                cis.close();
+            }
+        }
+    }
+
+    public static String computeCRC(Reader reader) throws IOException {
+        try {
+            char[] buf = new char[1024];
+            int c;
+            CRC32 crc = new CRC32();
+            while ((c = reader.read(buf)) > 0) {
+                crc.update(new String(buf, 0, c).getBytes());
+                //
+            }
+            return Long.toString(crc.getValue(), 32).toUpperCase();
+        } finally {
+            if (reader != null) {
+                reader.close();
+            }
+        }
+    }
+
+    public static InputStreamSource toInputStreamSource(Object anyObject, String variant, String optionalName, File cwd) throws IOException {
+        if (anyObject instanceof URL) {
+            return toInputStreamSource((URL) anyObject);
+        }
+        if (anyObject instanceof File) {
+            return toInputStreamSource((File) anyObject);
+        }
+        if (anyObject instanceof byte[]) {
+            return toInputStreamSource((byte[]) anyObject, optionalName);
+        }
+        if (anyObject instanceof InputStream) {
+            return toInputStreamSource((InputStream) anyObject, optionalName);
+        }
+        if (anyObject instanceof String) {
+            return toInputStreamSource((String) anyObject, variant, optionalName, cwd);
+        }
+        throw new RuntimeException("Unexpected stream source");
+    }
+
+    public static InputStreamSource toInputStreamSource(String path, String variant, String name, File cwd) throws IOException {
+        if ("path".equals(variant)) {
+            if (path.contains("://")) {
+                return toInputStreamSource(new URL(path));
+            }
+            return toInputStreamSource(new File(path));
+        }
+        if ("url".equals(variant)) {
+            return toInputStreamSource(new URL(path));
+        }
+        if ("file".equals(variant)) {
+            return toInputStreamSource(new URL(path));
+        }
+        if (variant == null || variant.isEmpty()) {
+            if (path.contains("://")) {
+                return toInputStreamSource(new URL(path));
+            }
+            return toInputStreamSource(new URL(path));
+        }
+        throw new IllegalArgumentException("Unsupported variant " + variant);
+    }
+
+    public static InputStreamSource toInputStreamSource(InputStream inputStream, String name) throws IOException {
+        byte[] bytes = loadByteArray(inputStream, true);
+        return new ByteArrayInputStreamSource(bytes, name, inputStream);
+    }
+
+//    public static InputStreamSource toInputStreamSource(File filecwd) {
+//        return new FileInputStreamSource(filecwd);
+//    }
+    public static byte[] loadByteArray(File stream) throws IOException {
+        return loadByteArray(new FileInputStream(stream), true);
+    }
+
+    public static byte[] loadByteArray(InputStream stream, int maxSize, boolean close) throws IOException {
+        try {
+            if (maxSize > 0) {
+                ByteArrayOutputStream to = new ByteArrayOutputStream();
+                byte[] bytes = new byte[Math.max(maxSize, 10240)];
+                int count;
+                int all = 0;
+                while ((count = stream.read(bytes)) > 0) {
+                    if (all + count < maxSize) {
+                        to.write(bytes, 0, count);
+                        all += count;
+                    } else {
+                        int count2 = maxSize - all;
+                        to.write(bytes, 0, count2);
+                        all += count2;
+                        break;
+                    }
+                }
+                return to.toByteArray();
+            } else {
+                ByteArrayOutputStream os = new ByteArrayOutputStream();
+                copy(stream, os, close, true);
+                return os.toByteArray();
+            }
+        } finally {
+            if (close) {
+                stream.close();
+            }
+        }
+    }
+
+    public static void copy(URL from, File to, boolean mkdirs) throws IOException {
+        ReadableByteChannel readableByteChannel = Channels.newChannel(from.openStream());
+        if (mkdirs) {
+            FileUtils.createParents(to);
+        }
+        FileOutputStream fileOutputStream = new FileOutputStream(to);
+        FileChannel fileChannel = fileOutputStream.getChannel();
+        fileChannel.transferFrom(readableByteChannel, 0, Long.MAX_VALUE);
+        //copy(from.openStream(), to, mkdirs, true);
+    }
+
+    public static void copy(File from, OutputStream to, boolean closeOutput) throws IOException {
+        copy(new FileInputStream(from), to, true, closeOutput);
+    }
+
+    public static void copy(Reader from, OutputStream to, boolean closeInput, boolean closeOutput) throws IOException {
+        char[] bytes = new char[10240];
+        int count;
         try {
             try {
-                fos = new FileOutputStream(out);
-                copy(in, fos, bufferSize);
+                to.flush();
+                OutputStreamWriter ps = new OutputStreamWriter(to);
+                while ((count = from.read(bytes)) > 0) {
+                    ps.write(bytes, 0, count);
+                }
+                ps.flush();
             } finally {
-                if (fos != null) {
-                    fos.close();
+                if (closeInput) {
+                    from.close();
                 }
             }
-        } catch (IOException ex) {
-            throw new RuntimeIOException(ex);
-        }
-    }
-
-    /**
-     * retourne le nom du fichier (sans l'extension)
-     *
-     * @param f fichier
-     * @return file name
-     */
-    public static String getFileName(File f) {
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
-        if (i == 0) {
-            return "";
-        } else if (i > 0) {
-            return s.substring(0, i);
-        } else {
-            return s;
-        }
-    }
-
-    /**
-     * retourne l'extension d'un fichier
-     *
-     * @param f fichier
-     * @return file extension
-     */
-    public static String getFileExtension(File f) {
-        String s = f.getName();
-        int i = s.lastIndexOf('.');
-        if (i == 0) {
-            return s.substring(1);
-        } else if (i > 0) {
-            if (i < (s.length() - 1)) {
-                return s.substring(i + 1);
-            } else {
-                return "";
+        } finally {
+            if (closeOutput) {
+                to.close();
             }
-        } else {
-            return "";
         }
     }
 
-    public static String getFilePath(File file) {
-        try {
-            return file.getCanonicalPath();
-        } catch (IOException e) {
-            return file.getAbsolutePath();
+    public static void copy(String what, File to, boolean mkdirs) throws IOException {
+        if (what == null) {
+            what = "";
         }
+        copy(new ByteArrayInputStream(what.getBytes()), to, mkdirs, true);
     }
 
-    public static File canonize(File file) {
+    public static void copy(File from, File to, boolean mkdirs) throws IOException {
+        if (from.equals(to)) {
+            return;
+        }
+        copy(new FileInputStream(from), to, mkdirs, true);
+    }
+
+    public static void copy(InputStream from, File to, boolean mkdirs, boolean closeInput) throws IOException {
+        copy(from, to, mkdirs, closeInput, null);
+    }
+
+    public static void copy(InputStream from, File to, boolean mkdirs, boolean closeInput, FileValidator validator) throws IOException {
         try {
-            return file.getCanonicalFile();
-        } catch (IOException e) {
+            File parentFile = to.getParentFile();
+            if (mkdirs && parentFile != null) {
+                parentFile.mkdirs();
+            }
+            File temp = new File(to.getPath() + "~");
             try {
-                return file.getAbsoluteFile();
-            } catch (Exception e1) {
-                return file;
+                Files.copy(from, temp.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                if (validator != null) {
+                    try {
+                        validator.validateFile(temp);
+                    } catch (Exception ex) {
+                        if (ex instanceof FileValidationException) {
+                            throw ex;
+                        }
+                        throw new FileValidationException("Validate file " + temp.getPath() + " failed", ex);
+                    }
+                }
+                Files.move(temp.toPath(), to.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            } finally {
+                temp.delete();
+            }
+        } finally {
+            if (closeInput) {
+                from.close();
             }
         }
     }
 
-    public static void writeToFile(String str, File file) throws IOException {
-        if (str == null) {
-            str = "";
-        }
-        try (PrintStream printStream = new PrintStream(file)) {
-            printStream.print(str);
+    public static long copy(InputStream from, OutputStream to, boolean closeInput, boolean closeOutput) throws IOException {
+        byte[] bytes = new byte[1024];//
+        int count;
+        long all = 0;
+        try {
+            try {
+                while ((count = from.read(bytes)) > 0) {
+                    to.write(bytes, 0, count);
+                    all += count;
+                }
+                return all;
+            } finally {
+                if (closeInput) {
+                    from.close();
+                }
+            }
+        } finally {
+            if (closeOutput) {
+                to.close();
+            }
         }
     }
 
+    public static long copy(InputStream from, OutputStream to, boolean closeInput, boolean closeOutput, StopMonitor monitor) throws IOException {
+        byte[] bytes = new byte[10240];
+        int count;
+        long all = 0;
+        try {
+            try {
+                while (true) {
+                    if (monitor.shouldStop()) {
+                        break;
+                    }
+                    if (from.available() > 0) {
+                        count = from.read(bytes);
+                        if (count > 0) {
+                            to.write(bytes, 0, count);
+                            all += count;
+                        }
+                    } else {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            //
+                        }
+                        if (from.available() > 0) {
+                            count = from.read(bytes);
+                            if (count > 0) {
+                                to.write(bytes, 0, count);
+                                all += count;
+                            }
+                        }
+                    }
+                }
+                return all;
+            } finally {
+                if (closeInput) {
+                    from.close();
+                }
+            }
+        } finally {
+            if (closeOutput) {
+                to.close();
+            }
+        }
+    }
+
+    public static long copy(NonBlockingInputStream from, OutputStream to, boolean closeInput, boolean closeOutput, StopMonitor monitor) throws IOException {
+        byte[] bytes = new byte[10240];
+        int count;
+        long all = 0;
+        try {
+            try {
+                while (true) {
+                    if (monitor.shouldStop()) {
+                        break;
+                    }
+                    if (from.hasMoreBytes()) {
+                        count = from.readNonBlocking(bytes, 500);
+                        all += count;
+                        to.write(bytes, 0, count);
+//                        System.out.println("push "+count);
+                    } else {
+                        break;
+                    }
+                }
+                return all;
+            } finally {
+                if (closeInput) {
+                    from.close();
+                }
+            }
+        } finally {
+            if (closeOutput) {
+                to.close();
+            }
+        }
+    }
+
+    public static String loadString(InputStream stream, boolean close) throws IOException {
+        return new String(loadByteArray(stream, close));
+    }
+
+    public static byte[] loadByteArray(InputStream stream, boolean close) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        copy(stream, os, close, true);
+        return os.toByteArray();
+    }
+
+    //TODO
+    public static Properties loadProperties(URL url) throws IOException {
+        Properties props = new Properties();
+        InputStream inputStream = null;
+        try {
+            try {
+                if (url != null) {
+                    inputStream = url.openStream();
+                    props.load(inputStream);
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return props;
+    }
+
+    public static boolean isValidInputStreamSource(Class type) {
+        return URL.class.isAssignableFrom(type)
+                || File.class.isAssignableFrom(type) || byte[].class.isAssignableFrom(type)
+                || InputStream.class.isAssignableFrom(type)
+                || String.class.isAssignableFrom(type);
+    }
+
+    public static byte[] loadByteArray(File stream, int maxSize) throws IOException {
+        return loadByteArray(new FileInputStream(stream), maxSize, true);
+    }
+
+    public static PipeThread pipe(String name, final NonBlockingInputStream in, final OutputStream out) {
+        PipeThread p = new PipeThread(name, in, out);
+        p.start();
+        return p;
+    }
+
+    public static InputStream monitor(URL from, InputStreamMonitor monitor) throws IOException {
+        return monitor(from.openStream(), from, URLUtils.getURLName(from), URLUtils.getURLHeader(from).getContentLength(), monitor);
+    }
+
+    public static InputStream monitor(InputStream from, Object source, String sourceName, long length, InputStreamMonitor monitor) {
+        return new MonitoredInputStream(from, source, sourceName, length, monitor);
+    }
+
+    public static Properties loadURLProperties(String url) {
+        try {
+            if (url != null) {
+                return loadURLProperties(new URL(url));
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return new Properties();
+    }
+
+    public static Properties loadURLProperties(URL url) {
+        Properties props = new Properties();
+        InputStream inputStream = null;
+        try {
+            try {
+                if (url != null) {
+                    inputStream = url.openStream();
+                    props.load(inputStream);
+                }
+            } finally {
+                if (inputStream != null) {
+                    inputStream.close();
+                }
+            }
+        } catch (Exception e) {
+            //e.printStackTrace();
+        }
+        return props;
+    }
+
+//    public static Properties loadFileProperties(String file) {
+//        try {
+//            if (file != null) {
+//                return loadProperties(new File(file));
+//            }
+//        } catch (Exception e) {
+//            //e.printStackTrace();
+//        }
+//        return new Properties();
+//    }
+    public static DeleteResult delete(File file) throws IOException {
+        return delete(file.toPath());
+    }
+
+    public static DeleteResult delete(Path file) throws IOException {
+        if (!Files.exists(file)) {
+            return new DeleteResult(0, 0, 0);
+        }
+        if (Files.isRegularFile(file)) {
+            try {
+                Files.delete(file);
+                return new DeleteResult(1, 0, 0);
+            } catch (IOException e) {
+                return new DeleteResult(0, 0, 1);
+            }
+        }
+        final int[] deleted = new int[]{0, 0, 0};
+
+        Files.walkFileTree(file, new FileVisitor<Path>() {
+            @Override
+            public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                try {
+                    Files.delete(file);
+                    log.log(Level.FINEST, "Delete file " + file);
+                    deleted[0]++;
+                } catch (IOException e) {
+                    log.log(Level.FINEST, "Delete file Failed : " + file);
+                    deleted[2]++;
+                }
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult visitFileFailed(Path file, IOException exc) throws IOException {
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                try {
+                    Files.delete(dir);
+                    log.log(Level.FINEST, "Delete folder " + dir);
+                    deleted[1]++;
+                } catch (IOException e) {
+                    log.log(Level.FINEST, "Delete folder Failed : " + dir);
+                    deleted[2]++;
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+
+        return new DeleteResult(
+                deleted[0],
+                deleted[1],
+                deleted[2]
+        );
+    }
+
+    public static byte[] loadByteArray(InputStream r) throws IOException {
+        ByteArrayOutputStream out = null;
+
+        try {
+            out = new ByteArrayOutputStream();
+            copy(r, out);
+            out.flush();
+            return out.toByteArray();
+        } finally {
+            if (out != null) {
+                out.close();
+            }
+        }
+
+    }
+
+    public static PathInfo getPathInfo(String path) {
+        return PathInfo.create(path);
+    }
+
+    public static PathInfo getPathInfo(File path) {
+        return PathInfo.create(path);
+    }
+
+    public static PathInfo getPathInfo(URL path) {
+        return PathInfo.create(path);
+    }
+
+    public static String concatPath(char separator, String... paths) {
+        StringBuilder sb = new StringBuilder();
+        for (String path : paths) {
+            if (sb.length() > 0 && sb.charAt(sb.length() - 1) != separator) {
+                sb.append(separator);
+            }
+            sb.append(path);
+        }
+        return sb.toString();
+    }
+//    public static byte[] toByteArray(InputStream is) throws UncheckedIOException {
+//        try {
+//            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+//
+//            int nRead;
+//            byte[] data = new byte[16384];
+//
+//            while ((nRead = is.read(data, 0, data.length)) != -1) {
+//                buffer.write(data, 0, nRead);
+//            }
+//
+//            buffer.flush();
+//
+//            return buffer.toByteArray();
+//        } catch (IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
 }

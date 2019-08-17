@@ -94,7 +94,7 @@ public class ClassMap<V> {
         V[] found = cachedValues.get(key);
         if (found == null) {
             Class[] keis = getKeis(key);
-            List<V> all = new ArrayList<V>();
+            List<V> all = new ArrayList<V>(keis.length);
             for (Class c : keis) {
                 V u = values.get(c);
                 if (u != null) {

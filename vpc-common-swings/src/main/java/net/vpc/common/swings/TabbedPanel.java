@@ -71,7 +71,13 @@ public class TabbedPanel extends JPanel {
     }
 
     public void addTab(String name, Component comp) {
-        JToggleButton b = PRSManager.createToggleButton(name);
+        JToggleButton b = new JToggleButton(name);
+        b.setName(name);
+        final SwingComponentConfigurer c = SwingComponentConfigurerFactory.getInstance().get(JToggleButton.class);
+        if(c!=null){
+            c.onCreateComponent(b);
+        }
+        //PRSManager.createToggleButton(name);
         putClientProperty("Button." + name, b);
         b.putClientProperty("Page", name);
         b.addItemListener(listener);

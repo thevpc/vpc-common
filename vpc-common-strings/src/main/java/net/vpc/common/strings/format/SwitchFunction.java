@@ -6,6 +6,7 @@
 package net.vpc.common.strings.format;
 
 import net.vpc.common.strings.MessageNameFormat;
+import net.vpc.common.strings.MessageNameFormatContext;
 import net.vpc.common.strings.StringToObject;
 
 /**
@@ -18,27 +19,27 @@ class SwitchFunction implements MessageNameFormat.Function {
     }
 
     @Override
-    public Object eval(MessageNameFormat.ExprNode[] args, MessageNameFormat format, StringToObject stringToObject) {
+    public Object eval(MessageNameFormat.ExprNode[] args, MessageNameFormat format, StringToObject stringToObject, MessageNameFormatContext messageNameFormatContext) {
         if (args.length == 0) {
             return null;
         }
         if (args.length == 1) {
-            return args[0].format(format, stringToObject);
+            return args[0].format(format, stringToObject, messageNameFormatContext);
         }
-        Object instance = args[0].format(format, stringToObject);
+        Object instance = args[0].format(format, stringToObject, messageNameFormatContext);
         int c = (args.length - 1) / 2;
         for (int i = 0; i < c; i++) {
-            Object k = args[1 + 2 * i].format(format, stringToObject);
+            Object k = args[1 + 2 * i].format(format, stringToObject, messageNameFormatContext);
             if (k == null) {
                 k = "";
             }
             if (k.equals(instance) || k.toString().equals(instance.toString())) {
-                Object v = args[1 + 2 * i + 1].format(format, stringToObject);
+                Object v = args[1 + 2 * i + 1].format(format, stringToObject, messageNameFormatContext);
                 return v;
             }
         }
         if (2 * c + 1 < args.length) {
-            return args[2 * c + 1].format(format, stringToObject);
+            return args[2 * c + 1].format(format, stringToObject, messageNameFormatContext);
         }
         return instance;
     }

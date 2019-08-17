@@ -69,7 +69,7 @@ class StringTokStringMap implements StringCollection {
         for (Object x : values) {
             if (x != null) {
                 String v = (x instanceof String) ? ((String) x) : String.valueOf(x);
-                if (!StringUtils.isEmpty(v)) {
+                if (!StringUtils.isBlank(v)) {
                     if (sb.length() > 0) {
                         sb.append(sep);
                     }

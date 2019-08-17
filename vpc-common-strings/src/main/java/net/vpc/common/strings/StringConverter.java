@@ -9,7 +9,7 @@ package net.vpc.common.strings;
  *
  * @author taha.bensalah@gmail.com
  */
-@FunctionalInterface
+//@FunctionalInterface
 public interface StringConverter {
 
     String convert(String str);

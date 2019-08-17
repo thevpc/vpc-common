@@ -25,7 +25,7 @@ package net.vpc.common.prs;
 
 import net.vpc.common.prs.plugin.PluginDescriptor;
 import net.vpc.common.prs.plugin.PluginRepositoryTool;
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -134,7 +134,7 @@ public class PRSTools {
                 p.category = localPlugin.getCategory();
                 p.description = localPlugin.getDescription();
                 p.name = localPlugin.getId();
-                p.srcFile = IOUtils.getFileNameWithoutExtension(new File(localPlugin.getPluginURL().getFile())) + "-src.zip";
+                p.srcFile = PRSPrivateIOUtils.getFileNameWithoutExtension(new File(localPlugin.getPluginURL().getFile())) + "-src.zip";
                 p.title = localPlugin.getTitle();
                 p.version = localPlugin.getVersion().toString();
             }

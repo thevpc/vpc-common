@@ -1,17 +1,12 @@
 package net.vpc.common.util;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class CollectionUtils {
+
     public static <T> List<T> head(List<T> anyList, int maxSize) {
-        if(maxSize<0){
-            maxSize=anyList.size()+maxSize;
+        if (maxSize < 0) {
+            maxSize = anyList.size() + maxSize;
         }
         if (anyList.size() > maxSize) {
             return anyList.subList(0, maxSize);
@@ -26,13 +21,13 @@ public class CollectionUtils {
         return anyList;
     }
 
-    public static <T> List<List<T>> splitBy(Collection<T> anyList,int groupSize) {
+    public static <T> List<List<T>> splitBy(Collection<T> anyList, int groupSize) {
         List<List<T>> grouped = new ArrayList<List<T>>();
         for (int i = 0; i < groupSize; i++) {
             grouped.add(new ArrayList<T>());
         }
         if (anyList != null) {
-            int i=0;
+            int i = 0;
             for (T item : anyList) {
                 grouped.get(i % groupSize).add(item);
                 i++;
@@ -41,7 +36,7 @@ public class CollectionUtils {
         return grouped;
     }
 
-    public static <T> List<List<T>> groupBy(Collection<T> anyList,int groupSize) {
+    public static <T> List<List<T>> groupBy(Collection<T> anyList, int groupSize) {
         List<List<T>> grouped = new ArrayList<List<T>>();
         List<T> curr = new ArrayList<T>();
         if (anyList != null) {
@@ -77,7 +72,6 @@ public class CollectionUtils {
         return ret;
     }
 
-
     public static <T> List<T> toList(Iterator<T> it) {
         List<T> all = new ArrayList<>();
         while (it.hasNext()) {
@@ -89,8 +83,8 @@ public class CollectionUtils {
     public static <T> List<T> toList(Iterable<T> it) {
         return toList(it.iterator());
     }
-    
-        public static <K, V> MapList<K, V> unmodifiableMapList(MapList<K, V> list) {
+
+    public static <K, V> MapList<K, V> unmodifiableMapList(MapList<K, V> list) {
         return list == null ? null : new UnmodifiableMapList<K, V>(list);
     }
 
@@ -110,7 +104,7 @@ public class CollectionUtils {
         if (filter == null) {
             throw new NullPointerException("Filter could not be null");
         }
-        for (Iterator<T> i = values.iterator(); i.hasNext(); ) {
+        for (Iterator<T> i = values.iterator(); i.hasNext();) {
             if (!filter.accept(i.next())) {
                 i.remove();
             }
@@ -118,16 +112,78 @@ public class CollectionUtils {
         return values;
     }
 
+    public static <T> Iterator<T> concatIterators(Iterator<T> a, Iterator<T> b) {
+        if (a == null && b == null) {
+            return Collections.emptyIterator();
+        } else if (a == null && b != null) {
+            return b;
+        } else if (a != null && b == null) {
+            return a;
+        } else {
+            if (a instanceof QueueIterator) {
+                QueueIterator<T> aa = (QueueIterator<T>) a;
+                aa.add(b);
+                return aa;
+            } else {
+                QueueIterator<T> aa = new QueueIterator<T>();
+                aa.add(a);
+                aa.add(b);
+                return aa;
+            }
+        }
+    }
+
+    public static <T> Iterator<T> coalesceIterators(Iterator<T> a, final Iterator<T> b) {
+        if (a == null && b == null) {
+            return Collections.emptyIterator();
+        } else if (a == null && b != null) {
+            return b;
+        } else if (a != null && b == null) {
+            return a;
+        } else {
+            if (a instanceof CoalesceIterator) {
+                CoalesceIterator<T> c = (CoalesceIterator<T>) a;
+                c.add(b);
+                return c;
+            } else {
+                CoalesceIterator<T> c = new CoalesceIterator<T>();
+                c.add(a);
+                c.add(b);
+                return c;
+            }
+        }
+    }
+
     public static <T> Collection<T> removeAll(Collection<T> values, Filter<T> filter) {
         if (filter == null) {
             throw new NullPointerException("Filter could not be null");
         }
-        for (Iterator<T> i = values.iterator(); i.hasNext(); ) {
+        for (Iterator<T> i = values.iterator(); i.hasNext();) {
             if (filter.accept(i.next())) {
                 i.remove();
             }
         }
         return values;
+    }
+
+    public static <T> Iterator<T> nullifyIfEmpty(Iterator<T> other) {
+        if (other == null) {
+            return null;
+        }
+        if (other instanceof PushBackIterator) {
+            PushBackIterator<T> b = (PushBackIterator<T>) other;
+            if (!b.isEmpty()) {
+                return b;
+            } else {
+                return null;
+            }
+        }
+        PushBackIterator<T> b = new PushBackIterator<>(other);
+        if (!b.isEmpty()) {
+            return b;
+        } else {
+            return null;
+        }
     }
 
     /**
@@ -165,5 +221,47 @@ public class CollectionUtils {
             }
         };
     }
+
+    public static <K, V> Map<K, V> mergeMaps(Map<K, V> source, Map<K, V> dest) {
+        if (dest == null) {
+            dest = new HashMap<>();
+        }
+        if (source != null) {
+            for (Map.Entry<K, V> e : source.entrySet()) {
+                if (e.getValue() != null) {
+                    dest.put(e.getKey(), e.getValue());
+                } else {
+                    dest.remove(e.getKey());
+                }
+            }
+        }
+        return dest;
+    }
+
+    public static Set<String> toSet(String[] values0, boolean trim, boolean ignoreEmpty, boolean ignoreNull) {
+        LinkedHashSet<String> set = new LinkedHashSet<>();
+        if (values0 != null) {
+            for (String a : values0) {
+                if (a != null) {
+                    if (trim) {
+                        a = a.trim();
+                    }
+                    if (a.isEmpty()) {
+                        a = null;
+                    }
+                }
+                if (a == null && ignoreNull) {
+                    continue;
+                }
+                if (a != null && a.isEmpty() && ignoreEmpty) {
+                    continue;
+                }
+                set.add(a);
+            }
+        }
+        return set;
+    }
+
+    
 
 }

@@ -31,7 +31,7 @@ public class MapBuilder<K, V> {
     }
 
     public MapBuilder() {
-        this(new HashMap<>());
+        this(new HashMap<K, V>());
     }
 
     public MapBuilder(Map<K, V> map) {

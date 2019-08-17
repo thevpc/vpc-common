@@ -23,7 +23,7 @@
  */
 package net.vpc.common.prs.plugin;
 
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 
 import java.io.*;
 import java.net.MalformedURLException;
@@ -94,7 +94,7 @@ public class LocalRepositoryImpl extends AbstractLocalRepository {
             try {
                 File parentFile = enableFile.getParentFile();
                 if (parentFile != null) {
-                    IOUtils.mkdirs(parentFile);
+                    PRSPrivateIOUtils.mkdirs(parentFile);
                 }
                 os = new FileOutputStream(enableFile);
                 properties.storeToXML(os, "LocalRepositoryImpl");
@@ -115,8 +115,8 @@ public class LocalRepositoryImpl extends AbstractLocalRepository {
         ArrayList<String> ok = new ArrayList<String>();
         if (files != null) {
             for (File file : files) {
-                if (IOUtils.getFileExtension(file).equals("jar")) {
-                    ok.add(IOUtils.getFileNameWithoutExtension(file));
+                if (PRSPrivateIOUtils.getFileExtension(file).equals("jar")) {
+                    ok.add(PRSPrivateIOUtils.getFileNameWithoutExtension(file));
                 }
             }
         }
@@ -126,11 +126,11 @@ public class LocalRepositoryImpl extends AbstractLocalRepository {
     @Override
     public URL addInstallable(InputStream inputStream, String name) throws IOException {
         File installFolder = getInstallFolder();
-        IOUtils.mkdirs(installFolder);
+        PRSPrivateIOUtils.mkdirs(installFolder);
         File file = null;
         try {
             file = new File(installFolder, name + ".jar");
-            IOUtils.copy(inputStream, file);
+            PRSPrivateIOUtils.copy(inputStream, file);
         } catch (IOException e) {
             if (file != null) {
                 file.delete();
@@ -150,8 +150,8 @@ public class LocalRepositoryImpl extends AbstractLocalRepository {
         ArrayList<String> ok = new ArrayList<String>();
         if (files != null) {
             for (File file : files) {
-                if (IOUtils.getFileExtension(file).equals("jar")) {
-                    ok.add(IOUtils.getFileNameWithoutExtension(file));
+                if (PRSPrivateIOUtils.getFileExtension(file).equals("jar")) {
+                    ok.add(PRSPrivateIOUtils.getFileNameWithoutExtension(file));
                 }
             }
         }
@@ -196,7 +196,7 @@ public class LocalRepositoryImpl extends AbstractLocalRepository {
         File uninstallFolder = getUninstallFolder();
         uninstallFolder.mkdirs();
         try {
-            IOUtils.mkdirs(uninstallFolder);
+            PRSPrivateIOUtils.mkdirs(uninstallFolder);
             File file = new File(uninstallFolder, pluginId + ".jar");
             if (!file.exists()) {
                 file.createNewFile();

@@ -99,6 +99,23 @@ public class PlatformUtils {
             return 0;
         }
     };
+    private static Comparator<TypeName> TYPE_REFERENCE_STR_HIERARCHY_COMPARATOR = new Comparator<TypeName>() {
+        @Override
+        public int compare(TypeName o1, TypeName o2) {
+            if (o1.isAssignableFrom(o2)) {
+                return 1;
+            } else if (o2.isAssignableFrom(o1)) {
+                return -1;
+            }
+            if (o1.isInterface() && !o2.isInterface()) {
+                return 1;
+            }
+            if (o2.isInterface() && !o1.isInterface()) {
+                return -1;
+            }
+            return 0;
+        }
+    };
     public static Class lowestCommonAncestor(Class a, Class b) {
         if (a.equals(b)) {
             return a;
@@ -176,6 +193,30 @@ public class PlatformUtils {
         return result.toArray(new TypeReference[result.size()]);
     }
 
+    public static TypeName[] findClassHierarchy(TypeName clazz, TypeName baseType) {
+        HashSet<TypeName> seen = new HashSet<TypeName>();
+        Queue<TypeName> queue = new LinkedList<TypeName>();
+        List<TypeName> result = new LinkedList<TypeName>();
+        queue.add(clazz);
+        while (!queue.isEmpty()) {
+            TypeName i = queue.remove();
+            if (baseType == null || baseType.isAssignableFrom(i)) {
+                if (!seen.contains(i)) {
+                    seen.add(i);
+                    result.add(i);
+                    if (i.getSuperclass() != null) {
+                        queue.add(i.getSuperclass());
+                    }
+                    for (TypeName ii : i.getInterfaces()) {
+                        queue.add(ii);
+                    }
+                }
+            }
+        }
+        Collections.sort(result, TYPE_REFERENCE_STR_HIERARCHY_COMPARATOR);
+        return result.toArray(new TypeName[0]);
+    }
+
     public static Class[] findClassOnlyHierarchy(Class clazz, Class baseType) {
         HashSet<Class> seen = new HashSet<Class>();
         Queue<Class> queue = new LinkedList<Class>();
@@ -224,6 +265,35 @@ public class PlatformUtils {
         }
         if (i1 < 0) {
             return TypeReference.of(Object.class);
+        }
+        return aHierarchy[i1];
+    }
+    public static TypeName lowestCommonAncestor(TypeName a, TypeName b) {
+        if (a.equals(b)) {
+            return a;
+        }
+        if (a.isAssignableFrom(b)) {
+            return a;
+        }
+        if (b.isAssignableFrom(a)) {
+            return b;
+        }
+        TypeName[] aHierarchy = findClassHierarchy(a, null);
+        TypeName[] bHierarchy = findClassHierarchy(b, null);
+        int i1 = -1;
+        int i2 = -1;
+        for (int ii = 0; ii < aHierarchy.length; ii++) {
+            for (int jj = 0; jj < bHierarchy.length; jj++) {
+                if (aHierarchy[ii].equals(bHierarchy[jj])) {
+                    if (i1 < 0 || ii + jj < i1 + i2) {
+                        i1 = ii;
+                        i2 = jj;
+                    }
+                }
+            }
+        }
+        if (i1 < 0) {
+            return new TypeName(Object.class.getName());
         }
         return aHierarchy[i1];
     }
@@ -1100,4 +1170,20 @@ public class PlatformUtils {
             // ignore in favor of subsequent IllegalAccessException
         }
     }
+
+
+    /**
+     * This is a work around if jdk 8 is not available
+     * @param d
+     * @return
+     */
+    public static boolean isDoubleFinite(double d) {
+        return Math.abs(d) <= Double.MAX_VALUE;
+    }
+
+    public static boolean isInt(double d) {
+        return ((int) (d)) == d;
+//        return Math.floor(d) == d;
+    }
+
 }

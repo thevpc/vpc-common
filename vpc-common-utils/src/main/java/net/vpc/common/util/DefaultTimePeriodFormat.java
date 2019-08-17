@@ -71,7 +71,7 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
                 if (!empty) {
                     sb.append(' ');
                 }
-                sb.append(_StringUtils.formatLeft(days, 2)).append('d');
+                sb.append(_StringUtils.formatRight(days, 2)).append('d');
                 empty = false;
             }
             max--;
@@ -82,7 +82,7 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
                 if (!empty) {
                     sb.append(' ');
                 }
-                sb.append(_StringUtils.formatLeft(hours, 2)).append('h');
+                sb.append(_StringUtils.formatRight(hours, 2)).append('h');
                 empty = false;
             }
             max--;
@@ -93,7 +93,7 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
                 if (!empty) {
                     sb.append(' ');
                 }
-                sb.append(_StringUtils.formatLeft(minutes, 2)).append("mn");
+                sb.append(_StringUtils.formatRight(minutes, 2)).append("mn");
                 empty = false;
             }
             max--;
@@ -105,7 +105,7 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
                     sb.append(' ');
                 }
                 if (seconds == (int) seconds) {
-                    sb.append(_StringUtils.formatLeft((int) seconds, 2)).append('s').append("    ");
+                    sb.append(_StringUtils.formatRight((int) seconds, 2)).append('s').append("    ");
                 } else {
                     sb.append(SECONDS_FORMAT.format(seconds)).append('s');
                 }

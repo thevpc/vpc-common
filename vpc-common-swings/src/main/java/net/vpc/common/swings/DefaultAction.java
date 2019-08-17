@@ -36,7 +36,10 @@ public abstract class DefaultAction extends AbstractAction {
         putValue(ACTION_COMMAND_KEY, name);
         putValue("KeyStroke", keyStroke);
         putValue(Action.ACCELERATOR_KEY, keyStroke.length==0?null:keyStroke[0]);
-        PRSManager.addSupport(this,name);
+        final SwingComponentConfigurer r = SwingComponentConfigurerFactory.getInstance().get(DefaultAction.class);
+        if(r!=null){
+            r.onCreateComponent(this);
+        }
     }
 
     public KeyStroke[] getKeyStrokes() {

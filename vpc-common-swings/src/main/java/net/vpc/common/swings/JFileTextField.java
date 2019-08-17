@@ -23,7 +23,7 @@
  */
 package net.vpc.common.swings;
 
-import net.vpc.common.swings.util.IOUtils;
+//import net.vpc.common.swings.util.IOUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusListener;
 import java.awt.event.FocusEvent;
 import java.io.File;
+import net.vpc.common.swings.util.SwingPrivateIOUtils;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
@@ -139,7 +140,7 @@ public class JFileTextField extends JPanel {
         if(file == null || df==null){
             textField.setText(file == null ? "" : file.getPath());
         }else if(file.isAbsolute()){
-            String path = IOUtils.getRelativePath(df, file);
+            String path = SwingPrivateIOUtils.getRelativePath(df, file);
             textField.setText(path==null?file.getPath():path);
         }else{
             textField.setText(file.getPath());

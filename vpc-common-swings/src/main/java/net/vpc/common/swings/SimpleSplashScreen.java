@@ -23,8 +23,6 @@
  */
 package net.vpc.common.swings;
 
-import net.vpc.common.prs.util.ProgressEvent;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
@@ -32,7 +30,7 @@ import java.util.Arrays;
 import java.util.TimerTask;
 import java.util.Vector;
 
-public class SimpleSplashScreen extends JWindow implements net.vpc.common.prs.util.ProgressMonitor {
+public class SimpleSplashScreen extends JWindow{
     private enum Status {
         START, HORIZONTAL_INIT, HORIZONTAL, VERTICAL_INIT, VERTICAL, END
     }
@@ -531,19 +529,19 @@ public class SimpleSplashScreen extends JWindow implements net.vpc.common.prs.ut
         repaint();
     }
 
-    public void progressStart(ProgressEvent e) {
+    public void progressStart(String e) {
         this.progress = 0f;
-        this.progressText = e.getMessage();
+        this.progressText = e;
     }
 
-    public void progressUpdate(ProgressEvent e) {
+    public void progressUpdate(String e) {
         this.progress = 0f;
-        this.progressText = e.getMessage();
+        this.progressText = e;
     }
 
-    public void progressEnd(ProgressEvent e) {
+    public void progressEnd(String e) {
         this.progress = 1f;
-        this.progressText = e.getMessage();
+        this.progressText = e;
     }
 
     public Color getErrorColor() {

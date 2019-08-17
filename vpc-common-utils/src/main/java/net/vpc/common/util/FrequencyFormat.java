@@ -118,9 +118,9 @@ public class FrequencyFormat implements DoubleFormat{
 //            }
 //        }
         if(fixedLength){
-            decimalFormat = new DecimalFormat("0."+FormatHelper.fillString('0',integerDigits));
+            decimalFormat = new DecimalFormat("0."+_StringUtils.fillString('0',integerDigits));
         }else{
-            decimalFormat = new DecimalFormat("0."+FormatHelper.fillString('#',fractionDigits));
+            decimalFormat = new DecimalFormat("0."+_StringUtils.fillString('#',fractionDigits));
         }
         //decimalFormat.setRoundingMode(RoundingMode.DOWN);
 //        decimalFormat.setMinimumIntegerDigits(fixedLength ? integerDigits : 0);
@@ -178,14 +178,14 @@ public class FrequencyFormat implements DoubleFormat{
     private String formatLeft(Object number, int size) {
         if (!decimal) {
             if (fixedLength) {
-                return FormatHelper.formatLeft(number, size,fixedLength);
+                return _StringUtils.formatLeft(number, size,fixedLength);
             } else {
                 return String.valueOf(number);
             }
         } else {
             String s = decimalFormat.format(number);
             if (fixedLength) {
-                return FormatHelper.formatLeft(s, size,fixedLength);
+                return _StringUtils.formatLeft(s, size,fixedLength);
             } else {
                 return s;
             }

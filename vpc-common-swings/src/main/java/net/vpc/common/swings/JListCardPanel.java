@@ -24,6 +24,7 @@
 package net.vpc.common.swings;
 
 import net.vpc.common.swings.util.StringShellFilter;
+import net.vpc.common.swings.util.SwingsStringUtils;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -32,7 +33,9 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.io.Serializable;
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
@@ -119,12 +122,78 @@ public class JListCardPanel extends JCardPanel {
         });
     }
 
-    public void addPage(String id, String title, Icon icon, JComponent c) {
-        ((FiltredListModel) list.getModel()).addElement(new PanelPage(c, id, title, icon));
+    private int indexOfId(String id) {
+        int size = list.getModel().getSize();
+        for (int i = 0; i < size; i++) {
+            PanelPage elementAt = (PanelPage) list.getModel().getElementAt(i);
+            if (id.equals(elementAt.id)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    private String validateId(String id) {
+        if (SwingsStringUtils.isEmpty(id)) {
+            id = "#";
+        }
+        int i = 0;
+        while (true) {
+            String n = i == 0 ? id : id + "(" + (i + 2) + ")";
+            int index = indexOfId(n);
+            if (index < 0) {
+                return n;
+            }
+            i++;
+        }
+    }
+    @Override
+    public String addPage(String id, String title, Icon icon, JComponent c) {
+        String newId = validateId(id);
+        if (newId == null) {
+            return null;
+        }
+        ((FiltredListModel) list.getModel()).addElement(new PanelPage(c, newId, title, icon));
+        main.add(c, newId);
+        if (list.getModel().getSize() == 1) {
+            list.setSelectedIndex(list.getModel().getSize() - 1);
+        }
+        return newId;
+    }
+
+    public void removePageAt(int index) {
+        FiltredListModel model = getFilteredListModel();
+        model.removeBaseAt(index);
+        main.remove(index);
+    }
+
+    private FiltredListModel getFilteredListModel() {
+        return (FiltredListModel) list.getModel();
+    }
+
+    public void setPageAt(int index, String id, String title, Icon icon, JComponent c) {
+        FiltredListModel model = getFilteredListModel();
+        if (index <= -1 || index >= model.getBaseSize()) {
+            addPage(id, title, icon, c);
+            return;
+        }
+        int oldIndex = indexOfId(id);
+        if (oldIndex != index) {
+            id = validateId(id);
+        }
+        model.setElementAt(index, new PanelPage(c, id, title, icon));
         main.add(c, id);
         if (list.getModel().getSize() == 1) {
             list.setSelectedIndex(list.getModel().getSize() - 1);
         }
+    }
+
+    public JComponent getPageComponent(int index) {
+        return getPageComponents()[index];
+    }
+
+    public int getPageComponentsCount() {
+        return getPageComponents().length;
     }
 
     public JComponent[] getPageComponents() {
@@ -143,6 +212,13 @@ public class JListCardPanel extends JCardPanel {
     }
 
     private PanelPage getPage(String id) {
+        if (id == null) {
+            id = "";
+        }
+        id = id.trim();
+        if (id.isEmpty()) {
+            id = "No Name";
+        }
         FiltredListModel listModel = ((FiltredListModel) list.getModel());
         for (Object o : listModel.toArray()) {
             PanelPage p = (PanelPage) o;
@@ -228,12 +304,17 @@ public class JListCardPanel extends JCardPanel {
 
     private static class FiltredListModel extends AbstractListModel {
         private FiltredListModelFilter filter = new NoFiltredListModelFilter();
-        private Vector<PanelPage> delegate = new Vector<PanelPage>();
-        private Vector<PanelPage> realDelegate = new Vector<PanelPage>();
+        private java.util.List<PanelPage> delegate = new ArrayList<PanelPage>();
+        private java.util.List<PanelPage> realDelegate = new ArrayList<PanelPage>();
 
 
         public PanelPage getElementAt(int index) {
             return delegate.get(index);
+        }
+
+
+        public int getBaseSize() {
+            return realDelegate.size();
         }
 
         public int getSize() {
@@ -270,7 +351,77 @@ public class JListCardPanel extends JCardPanel {
             }
         }
 
+        private PanelPage findPanelPageById(String id) {
+            for (PanelPage panelPage : delegate) {
+                if (panelPage.id.equals(id)) {
+                    return panelPage;
+                }
+            }
+            return null;
+        }
+
+//        public static void main(String[] args) {
+//            System.out.println(rename("hello [2]",6));
+//        }
+
+        private static String rename(String name, int index) {
+            Pattern p = Pattern.compile("^(.*)\\[([0-9]+)\\]$");
+            Matcher m = p.matcher(name);
+            if (m.find()) {
+                String prefix = m.group(1);
+                String suffix = m.group(2);
+                return prefix + "[" + index + "]";
+            } else {
+                if (index == 0) {
+                    return name;
+                }
+                return name + " [" + index + "]";
+            }
+        }
+
+        private void preInsertPanelPage(PanelPage page) {
+            if (page.id == null) {
+                page.id = "";
+            }
+            if (page.title == null) {
+                page.title = "";
+            }
+            if (page.title.isEmpty()) {
+                page.title = "Default";
+            }
+            int loop = 0;
+            while (true) {
+                PanelPage p = findPanelPageById(page.id);
+                if (p != null) {
+                    page.id = rename(page.id, loop);
+//                    page.title=page.title+"'";
+                } else {
+                    break;
+                }
+                loop++;
+            }
+        }
+
+        private void setElementAt(int index, PanelPage object) {
+            preInsertPanelPage(object);
+            for (PanelPage panelPage : delegate) {
+                if (panelPage.id.equals(object.id)) {
+                    object.id = object.id + "'";
+                    object.title = object.title + "'";
+//                    throw new IllegalArgumentException(object.id+" Already exists");
+                }
+            }
+            realDelegate.add(index, object);
+            if (filter.accept(object)) {
+                rebuild();
+//                int index = delegate.size();
+//                delegate.add(object);
+//                fireIntervalAdded(this, index, index);
+            }
+        }
+
         private void addElement(PanelPage object) {
+            preInsertPanelPage(object);
             for (PanelPage panelPage : delegate) {
                 if (panelPage.id.equals(object.id)) {
                     object.id = object.id + "'";
@@ -288,6 +439,11 @@ public class JListCardPanel extends JCardPanel {
 
         public PanelPage[] toArray() {
             return realDelegate.toArray(new PanelPage[realDelegate.size()]);
+        }
+
+        public void removeBaseAt(int index) {
+            realDelegate.remove(index);
+            rebuild();
         }
 
         public FiltredListModel() {

@@ -24,7 +24,7 @@
 package net.vpc.common.prs.plugin;
 
 //import net.vpc.swingext.util.Chronometer;
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -73,7 +73,7 @@ public class DefaultPluginRepository implements PluginRepository {
                 InputStream in = null;
                 try {
                     in = url.openStream();
-                    IOUtils.copy(in, byteArrayOutputStream);
+                    PRSPrivateIOUtils.copy(in, byteArrayOutputStream);
                 } finally {
                     if (in != null) {
                         in.close();

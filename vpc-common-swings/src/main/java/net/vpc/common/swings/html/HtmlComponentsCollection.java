@@ -33,37 +33,37 @@ import javax.swing.text.html.HTMLDocument;
  */
 public class HtmlComponentsCollection implements Iterable<HtmlComponent> {
 
-    public static void main(String[] args) {
-        try {
-            JEditorPane p = new JEditorPane();
-            p.setContentType("text/html");
-            p.setText("<html><body>Hello<form> <input id='jj' type=\"checkbox\" name=\"toto\"><a href='http://bye.com'>hihi</a></form></body></html>");
-            p.setEditable(false);
-            JScrollPane pp = new JScrollPane(p);
-            pp.setPreferredSize(new Dimension(400, 400));
-            p.addHyperlinkListener(new HyperlinkListener() {
-
-                @Override
-                public void hyperlinkUpdate(HyperlinkEvent e) {
-                    if (EventType.ACTIVATED.equals(e.getEventType())) {
-                        System.out.println("click " + e.getURL());
-                    }
-                }
-            });
-            HtmlComponentsCollection cc = parse(p);
-            cc.addItemListener(new ItemListener() {
-
-                @Override
-                public void itemStateChanged(ItemEvent e) {
-                    HtmlComponent c = (HtmlComponent) e.getSource();
-                    System.out.println(c.getId() + " : " + c.isSelected());
-                }
-            });
-            JOptionPane.showMessageDialog(null, pp);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) {
+//        try {
+//            JEditorPane p = new JEditorPane();
+//            p.setContentType("text/html");
+//            p.setText("<html><body>Hello<form> <input id='jj' type=\"checkbox\" name=\"toto\"><a href='http://bye.com'>hihi</a></form></body></html>");
+//            p.setEditable(false);
+//            JScrollPane pp = new JScrollPane(p);
+//            pp.setPreferredSize(new Dimension(400, 400));
+//            p.addHyperlinkListener(new HyperlinkListener() {
+//
+//                @Override
+//                public void hyperlinkUpdate(HyperlinkEvent e) {
+//                    if (EventType.ACTIVATED.equals(e.getEventType())) {
+//                        System.out.println("click " + e.getURL());
+//                    }
+//                }
+//            });
+//            HtmlComponentsCollection cc = parse(p);
+//            cc.addItemListener(new ItemListener() {
+//
+//                @Override
+//                public void itemStateChanged(ItemEvent e) {
+//                    HtmlComponent c = (HtmlComponent) e.getSource();
+//                    System.out.println(c.getId() + " : " + c.isSelected());
+//                }
+//            });
+//            JOptionPane.showMessageDialog(null, pp);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//    }
     private List<HtmlComponent> components = new ArrayList<HtmlComponent>();
     private Map<String, HtmlComponent> map = new HashMap<String, HtmlComponent>();
 

@@ -5,12 +5,15 @@
  */
 package net.vpc.common.util;
 
+import java.io.Serializable;
+
 /**
  *
  * @author taha.bensalah@gmail.com
  */
-public class Chronometer {
+public class Chronometer implements Serializable {
 
+    private final static long serialVersionUID = 1L;
     private long startDate;
     private long endDate;
     private String name;
@@ -20,13 +23,13 @@ public class Chronometer {
     }
 
     public Chronometer(boolean start) {
-        if(start){
+        if (start) {
             start();
         }
     }
 
-    public Chronometer copy(){
-        Chronometer c=new Chronometer();
+    public Chronometer copy() {
+        Chronometer c = new Chronometer();
         c.name = name;
         c.endDate = endDate;
         c.startDate = startDate;
@@ -35,9 +38,10 @@ public class Chronometer {
 
     /**
      * restart chronometer and returns a stopped snapshot/copy of the current
+     *
      * @return
      */
-    public Chronometer restart(){
+    public Chronometer restart() {
         stop();
         Chronometer c = copy();
         start();
@@ -45,11 +49,13 @@ public class Chronometer {
     }
 
     /**
-     * restart chronometer with new name and returns a stopped snapshot/copy of the current (with old name)
+     * restart chronometer with new name and returns a stopped snapshot/copy of
+     * the current (with old name)
+     *
      * @param newName
      * @return
      */
-    public Chronometer restart(String newName){
+    public Chronometer restart(String newName) {
         stop();
         Chronometer c = copy();
         setName(newName);
@@ -127,9 +133,8 @@ public class Chronometer {
         return (int) (period / (1000L * 60L * 60L));
     }
 
-
     public static String formatPeriod(long periodNanos) {
-        return formatPeriod(periodNanos,DatePart.MILLISECOND);
+        return formatPeriod(periodNanos, DatePart.MILLISECOND);
     }
 
     public static String formatPeriod(long periodNanos, DatePart precision) {
@@ -137,13 +142,13 @@ public class Chronometer {
     }
 
     public String toString() {
-        String s= name ==null?"": name +"=";
-        return s+formatPeriod(getTime());
+        String s = name == null ? "" : name + "=";
+        return s + formatPeriod(getTime());
     }
 
     public String toString(DatePart precision) {
-        String s= name ==null?"": name +"=";
-        return s+formatPeriod(getTime(),precision);
+        String s = name == null ? "" : name + "=";
+        return s + formatPeriod(getTime(), precision);
     }
 
     public static String formatPeriodNano(long periodNano) {
@@ -157,21 +162,21 @@ public class Chronometer {
         int ms = (int) (period % 1000L);
 
         if (h > 0) {
-            sb.append(h).append(" h ");
+            sb.append(_StringUtils.formatRight(h,2)).append("h ");
             started = true;
         }
         if (mn > 0 || started) {
-            sb.append(mn).append(" mn ");
+            sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
             started = true;
         }
         if (s > 0 || started) {
-            sb.append(s).append(" s ");
+            sb.append(_StringUtils.formatRight(s,2)).append("s ");
             //started=true;
         }
-        sb.append(ms).append(" ms");
+        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
 
         if (ms < 10) {
-            sb.append(" ").append(nano).append(" nanos");
+            sb.append(" ").append(_StringUtils.formatRight(nano,6)).append("nanos");
         }
         return sb.toString();
     }
@@ -186,21 +191,21 @@ public class Chronometer {
         int ms = (int) (period % 1000L);
         if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
             if (h > 0) {
-                sb.append(h).append(" h ");
+                sb.append(_StringUtils.formatRight(h,2)).append("h ");
                 started = true;
             }
             if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
                 if (mn > 0 || started) {
-                    sb.append(mn).append(" mn ");
+                    sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
                     started = true;
                 }
                 if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
                     if (s > 0 || started) {
-                        sb.append(s).append(" s ");
+                        sb.append(_StringUtils.formatRight(s,2)).append("s ");
                         //started=true;
                     }
                     if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
-                        sb.append(ms).append(" ms");
+                        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
                     }
                 }
             }
@@ -217,27 +222,28 @@ public class Chronometer {
         int ms = (int) (period % 1000L);
         if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
             if (h > 0) {
-                sb.append(h).append(" h ");
+                sb.append(_StringUtils.formatRight(h,2)).append("h ");
                 started = true;
             }
             if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
                 if (mn > 0 || started) {
-                    sb.append(mn).append(" mn ");
+                    sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
                     started = true;
                 }
                 if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
                     if (s > 0 || started) {
-                        sb.append(s).append(" s ");
+                        sb.append(_StringUtils.formatRight(s,2)).append("s ");
                         //started=true;
                     }
                     if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
-                        sb.append(ms).append(" ms");
+                        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
                     }
                 }
             }
         }
         return sb.toString();
     }
+
     public static String formatPeriodMilli(long period) {
         StringBuilder sb = new StringBuilder();
         boolean started = false;
@@ -246,18 +252,18 @@ public class Chronometer {
         int s = (int) ((period % 60000L) / 1000L);
         int ms = (int) (period % 1000L);
         if (h > 0) {
-            sb.append(h).append(" h ");
+            sb.append(_StringUtils.formatRight(h,2)).append("h ");
             started = true;
         }
         if (mn > 0 || started) {
-            sb.append(mn).append(" mn ");
+            sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
             started = true;
         }
         if (s > 0 || started) {
-            sb.append(s).append(" s ");
+            sb.append(_StringUtils.formatRight(s,2)).append("s ");
             //started=true;
         }
-        sb.append(ms).append(" ms");
+        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
         return sb.toString();
     }
 }

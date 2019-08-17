@@ -19,10 +19,14 @@ public @interface PluginInfo {
     String messageSet() default "";
     String iconSet() default "";
     String id() default "";
+    String title() default "";
     String category() default "";
     String version() default "";
     String author() default "";
     String contributors() default "";
     String description() default "";
+    String url() default "";
+    String applicationVersion() default "";
+    boolean dynamicLoading() default true;
     DBCPluginDependency[] dependencies() default {};
 }

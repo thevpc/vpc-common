@@ -1,15 +1,38 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- *
- * and open the template in the editor.
+/**
+ * ====================================================================
+ * vpc-common-io : common reusable library for
+ * input/output
+ * <p>
+ * is a new Open Source Package Manager to help install packages and libraries
+ * for runtime execution. Nuts is the ultimate companion for maven (and other
+ * build managers) as it helps installing all package dependencies at runtime.
+ * Nuts is not tied to java and is a good choice to share shell scripts and
+ * other 'things' . Its based on an extensible architecture to help supporting a
+ * large range of sub managers / repositories.
+ * <p>
+ * Copyright (C) 2016-2017 Taha BEN SALAH
+ * <p>
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 3 of the License, or (at your option) any later
+ * version.
+ * <p>
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
+ * <p>
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * ====================================================================
  */
 package net.vpc.common.io;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -20,20 +43,22 @@ import java.util.zip.ZipOutputStream;
  */
 public class ZipUtils {
 
+    private static final Logger log = Logger.getLogger(ZipUtils.class.getName());
+
     public static void zip(String target, ZipOptions options, String... source) throws IOException {
         if (options == null) {
             options = new ZipOptions();
         }
         File targetFile = new File(target);
         File f = options.isTempFile() ? File.createTempFile("zip", ".zip") : targetFile;
-
+        f.getParentFile().mkdirs();
         ZipOutputStream zip = null;
         FileOutputStream fW = null;
         try {
             fW = new FileOutputStream(f);
-            zip = new ZipOutputStream(fW);
             try {
-                if (options.isSkipRoots()) {
+                zip = new ZipOutputStream(fW);
+                if (options.isSkipRoot()) {
                     for (String s : source) {
                         File file1 = new File(s);
                         if (file1.isDirectory()) {
@@ -60,13 +85,14 @@ public class ZipUtils {
             }
         }
         if (options.isTempFile()) {
+            targetFile.getParentFile().mkdirs();
             if (!f.renameTo(targetFile)) {
-                FileUtils.copy(f, targetFile, null);
+                IOUtils.copy(f, targetFile);
             }
         }
     }
 
-//    private static void zipDir(String dirName, String nameZipFile) throws IOException {
+    //    private static void zipDir(String dirName, String nameZipFile) throws IOException {
 //        ZipOutputStream zip = null;
 //        FileOutputStream fW = null;
 //        fW = new FileOutputStream(nameZipFile);
@@ -124,6 +150,7 @@ public class ZipUtils {
         if (!pathPrefix.startsWith("/")) {
             pathPrefix = "/" + pathPrefix;
         }
+
         if (flag) {
 //            System.out.println("[FOLDER ]" + pathPrefix + folder.getName());
             zip.putNextEntry(new ZipEntry(pathPrefix + folder.getName() + "/"));
@@ -143,12 +170,154 @@ public class ZipUtils {
         }
     }
 
-    public static boolean visitZipStream(InputStream zipFile, PathFilter possiblePaths, InputStreamVisitor visitor) throws IOException {
-//        byte[] buffer = new byte[4 * 1024];
+    public static boolean visitZipFile(File zipFile, PathFilter possiblePaths, InputStreamVisitor visitor) throws IOException {
+        InputStream is = null;
+        try {
+            return visitZipStream(is = new FileInputStream(zipFile), possiblePaths, visitor);
+        } finally {
+            if (is != null) {
+                is.close();
+            }
+        }
+    }
+
+    /**
+     * Unzip it
+     *
+     * @param zipFile input zip file
+     * @param outputFolder zip file output folder
+     */
+    public static void unzip(String zipFile, String outputFolder, UnzipOptions options) throws IOException {
+        if (options == null) {
+            options = new UnzipOptions();
+        }
+        byte[] buffer = new byte[1024];
+
+        //create output directory is not exists
+        File folder = new File(outputFolder);
+        if (!folder.exists()) {
+            folder.mkdir();
+        }
+
+        //get the zip file content
+        ZipInputStream zis
+                = new ZipInputStream(new FileInputStream(new File(zipFile)));
+        //get the zipped file list entry
+        ZipEntry ze = zis.getNextEntry();
+        String root = null;
+        while (ze != null) {
+
+            String fileName = ze.getName();
+            if (options.isSkipRoot()) {
+                if (root == null) {
+                    if (fileName.endsWith("/")) {
+                        root = fileName;
+                        ze = zis.getNextEntry();
+                        continue;
+                    } else {
+                        throw new IOException("tot a single root zip");
+                    }
+                }
+                if (fileName.startsWith(root)) {
+                    fileName = fileName.substring(root.length());
+                } else {
+                    throw new IOException("tot a single root zip");
+                }
+            }
+            if (fileName.endsWith("/")) {
+                File newFile = new File(outputFolder + File.separator + fileName);
+                newFile.mkdirs();
+            } else {
+                File newFile = new File(outputFolder + File.separator + fileName);
+                log.log(Level.FINEST, "file unzip : " + newFile.getAbsoluteFile());
+                //create all non exists folders
+                //else you will hit FileNotFoundException for compressed folder
+                newFile.getParentFile().mkdirs();
+
+                FileOutputStream fos = new FileOutputStream(newFile);
+
+                int len;
+                while ((len = zis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, len);
+                }
+
+                fos.close();
+            }
+            ze = zis.getNextEntry();
+        }
+
+        zis.closeEntry();
+        zis.close();
+    }
+
+    public static boolean extractFirstPath(InputStream zipFile, Set<String> possiblePaths, OutputStream output, boolean closeOutput) throws IOException {
+        byte[] buffer = new byte[4 * 1024];
 
         //get the zip file content
         ZipInputStream zis = null;
+        try {
+            zis = new ZipInputStream(zipFile);
+            //get the zipped file list entry
+            ZipEntry ze = zis.getNextEntry();
 
+            while (ze != null) {
+
+                String fileName = ze.getName();
+                if (!fileName.endsWith("/")) {
+                    if (possiblePaths.contains(fileName)) {
+                        int len;
+                        try {
+                            while ((len = zis.read(buffer)) > 0) {
+                                output.write(buffer, 0, len);
+                            }
+                            zis.closeEntry();
+                        } finally {
+                            if (closeOutput) {
+                                output.close();
+                            }
+                        }
+                        return true;
+                    }
+                }
+                ze = zis.getNextEntry();
+            }
+        } finally {
+            if (zis != null) {
+                zis.close();
+            }
+        }
+        return false;
+    }
+
+//    public static void zip(final File _folder, final File _zipFilePath) {
+//        final Path folder = _folder.toPath();
+//        Path zipFilePath = _zipFilePath.toPath();
+//        try (
+//                FileOutputStream fos = new FileOutputStream(zipFilePath.toFile());
+//                ZipOutputStream zos = new ZipOutputStream(fos)) {
+//            Files.walkFileTree(folder, new SimpleFileVisitor<Path>() {
+//                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+//                    zos.putNextEntry(new ZipEntry(folder.relativize(file).toString()));
+//                    Files.copy(file, zos);
+//                    zos.closeEntry();
+//                    return FileVisitResult.CONTINUE;
+//                }
+//
+//                public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
+//                    zos.putNextEntry(new ZipEntry(folder.relativize(dir).toString() + "/"));
+//                    zos.closeEntry();
+//                    return FileVisitResult.CONTINUE;
+//                }
+//            });
+//        } catch (IOException e) {
+//            throw new UncheckedIOException(e);
+//        }
+//    }
+    public static boolean visitZipStream(InputStream zipFile, PathFilter possiblePaths, InputStreamVisitor visitor) throws IOException {
+        //byte[] buffer = new byte[4 * 1024];
+
+        //get the zip file content
+        ZipInputStream zis = null;
         try {
             zis = new ZipInputStream(zipFile);
             //get the zipped file list entry

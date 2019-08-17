@@ -9,7 +9,7 @@ package net.vpc.common.util;
  *
  * @author vpc
  */
-@FunctionalInterface
+//@FunctionalInterface
 public interface DoWith<A> {
 
     void run(A a);

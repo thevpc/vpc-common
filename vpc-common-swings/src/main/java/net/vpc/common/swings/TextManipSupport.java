@@ -6,23 +6,22 @@
  *
  * Copyright (C) 2006-2008 Taha BEN SALAH
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * This program is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the License, or (at your option) any later
+ * version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * This program is distributed in the hope that it will be useful, but WITHOUT
+ * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License along
- * with this program; if not, write to the Free Software Foundation, Inc.,
- * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * You should have received a copy of the GNU General Public License along with
+ * this program; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * ====================================================================
  */
 package net.vpc.common.swings;
-
 
 import javax.swing.*;
 import javax.swing.text.BadLocationException;
@@ -41,6 +40,7 @@ import java.util.Date;
  * @creationtime 26 avr. 2006 01:48:56
  */
 public class TextManipSupport {
+
     private JPopupMenu popup;
     private JTextComponent txtcomponent;
     private boolean clearAlwaysEnabled;
@@ -48,10 +48,10 @@ public class TextManipSupport {
     private static javax.swing.text.DefaultEditorKit.CopyAction swingCopyAction = new javax.swing.text.DefaultEditorKit.CopyAction();
     private static javax.swing.text.DefaultEditorKit.PasteAction swingPastAction = new javax.swing.text.DefaultEditorKit.PasteAction();
 
-    private DateFormat dateFormat=DateFormat.getDateInstance();
-    private DateFormat timeFormat=DateFormat.getTimeInstance();
-    private DateFormat dateTimeFormat=DateFormat.getDateTimeInstance();
-    private ArrayList<Action> actions=new ArrayList<Action>();
+    private DateFormat dateFormat = DateFormat.getDateInstance();
+    private DateFormat timeFormat = DateFormat.getTimeInstance();
+    private DateFormat dateTimeFormat = DateFormat.getDateTimeInstance();
+    private ArrayList<Action> actions = new ArrayList<Action>();
 
     public TextManipSupport(JTextComponent comp) {
         txtcomponent = comp;
@@ -59,7 +59,7 @@ public class TextManipSupport {
     }
 
     public void updateUI() {
-        if (popup != null){
+        if (popup != null) {
             SwingUtilities.updateComponentTreeUI(popup);
             SwingUtilities3.applyOrientation(popup);
         }
@@ -86,7 +86,7 @@ public class TextManipSupport {
         return Collections.unmodifiableCollection(actions);
     }
 
-    protected void addAction(TextAction a){
+    protected void addAction(TextAction a) {
         actions.add(a);
         popup.add(a);
         a.refresh();
@@ -101,7 +101,6 @@ public class TextManipSupport {
         }
     }
 
-
     public boolean isClearAlwaysEnabled() {
         return clearAlwaysEnabled;
     }
@@ -110,19 +109,28 @@ public class TextManipSupport {
         this.clearAlwaysEnabled = clearAlwaysEnabled;
     }
 
-    private abstract class TextAction extends AbstractAction {
+    public static abstract class TextAction extends AbstractAction {
+
         protected TextAction() {
-            PRSManager.addSupport(this, "TextAction");
+            prepare("TextAction");
         }
 
         protected TextAction(String name) {
             super(name);
-            PRSManager.addSupport(this, name);
+            prepare(name);
         }
 
         protected TextAction(String name, Icon icon) {
             super(name, icon);
-            PRSManager.addSupport(this, name);
+            prepare(name);
+        }
+
+        private void prepare(String id) {
+            putValue(Action.NAME, id);
+            final SwingComponentConfigurer c = SwingComponentConfigurerFactory.getInstance().get(TextAction.class);
+            if (c != null) {
+                c.onCreateComponent(this);
+            }
         }
 
         public void refresh() {
@@ -131,6 +139,7 @@ public class TextManipSupport {
     }
 
     private abstract class UpdateTextAction extends TextAction {
+
         PropertyChangeListener refreshener;
 
         protected UpdateTextAction() {

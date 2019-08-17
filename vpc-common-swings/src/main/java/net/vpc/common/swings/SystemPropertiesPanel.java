@@ -25,7 +25,6 @@ package net.vpc.common.swings;
 
 import net.vpc.common.swings.iswing.IJTable;
 import net.vpc.common.swings.table.JTableImpl;
-import net.vpc.common.swings.util.IOUtils;
 
 import javax.swing.*;
 import javax.swing.table.AbstractTableModel;
@@ -37,6 +36,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Properties;
+import net.vpc.common.swings.util.SwingPrivateIOUtils;
 
 public class SystemPropertiesPanel extends JPanel {
 
@@ -95,7 +95,7 @@ public class SystemPropertiesPanel extends JPanel {
     private JComponent createGeneralComponent() {
         String value = null;
         try {
-            value = IOUtils.loadStreamAsString(SystemPropertiesPanel.class.getResource("SystemPropertiesPanelSummary.html"));
+            value = SwingPrivateIOUtils.loadStreamAsString(SystemPropertiesPanel.class.getResource("SystemPropertiesPanelSummary.html"));
             for (Map.Entry<Object, Object> objectObjectEntry : System.getProperties().entrySet()) {
                 String k = (String) objectObjectEntry.getKey();
                 String v = (String) objectObjectEntry.getValue();

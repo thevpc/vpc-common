@@ -30,7 +30,7 @@ import net.vpc.common.prs.locale.LocaleManager;
 import net.vpc.common.prs.plugin.UrlCacheManager;
 import net.vpc.common.prs.classloader.PluggableResourcesClassLoader;
 import net.vpc.common.prs.classloader.MultiClassLoader;
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -94,7 +94,7 @@ public class MessageSetManager {
             if (defaultClassLoader == null) {
                 defaultClassLoader=new MultiClassLoader(MessageSetManager.class.getClassLoader());
             }
-            defaultClassLoader.setDelagateLoaders(new PluggableResourcesClassLoader(validClassLoaderURLs.toArray(new URL[validClassLoaderURLs.size()]), parent, IOUtils.getFileNameWithoutExtension(new File(messageSetURL.getFile()))));
+            defaultClassLoader.setDelagateLoaders(new PluggableResourcesClassLoader(validClassLoaderURLs.toArray(new URL[validClassLoaderURLs.size()]), parent, PRSPrivateIOUtils.getFileNameWithoutExtension(new File(messageSetURL.getFile()))));
         } catch (NoSuchElementException e) {
             throw e;
         } catch (Throwable e) {

@@ -29,11 +29,12 @@
 package net.vpc.common.swings;
 
 import net.vpc.common.swings.dialog.MessageDiscardContext;
-import net.vpc.common.swings.util.IOUtils;
+//import net.vpc.common.swings.util.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
+import net.vpc.common.swings.util.SwingPrivateIOUtils;
 
 /**
  *
@@ -50,7 +51,7 @@ public class FileMessageDiscardContext implements MessageDiscardContext{
 
     public boolean isDiscarded() {
         try {
-            Properties p = IOUtils.loadXMLProperties(file);
+            Properties p = SwingPrivateIOUtils.loadXMLProperties(file);
             return Boolean.valueOf(p.getProperty(parameter));
         } catch (IOException ex) {
             return false;
@@ -65,13 +66,13 @@ public class FileMessageDiscardContext implements MessageDiscardContext{
             if(pp!=null){
                 pp.mkdirs();
             }
-            p = IOUtils.loadXMLProperties(file);
+            p = SwingPrivateIOUtils.loadXMLProperties(file);
         } catch (IOException ex) {
             //Logger.getLogger(FileMessageDiscardContext.class.getName()).log(Level.SEVERE, null, ex);
         }
         p.put(parameter, String.valueOf(val));
         try {
-            IOUtils.storeXMLProperties(file,p,"FileMessageDiscardContext store file ** do not edit manually **");
+            SwingPrivateIOUtils.storeXMLProperties(file,p,"FileMessageDiscardContext store file ** do not edit manually **");
         } catch (IOException ex) {
             //Logger.getLogger(FileMessageDiscardContext.class.getName()).log(Level.SEVERE, null, ex);
         }

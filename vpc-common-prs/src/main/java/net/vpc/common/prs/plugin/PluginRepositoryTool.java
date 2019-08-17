@@ -1,6 +1,6 @@
 package net.vpc.common.prs.plugin;
 
-import net.vpc.common.prs.util.IOUtils;
+import net.vpc.common.prs.util.PRSPrivateIOUtils;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -55,16 +55,16 @@ public class PluginRepositoryTool {
 
             File destBinaryFile = new File(repositoryRootFolder + "/bin/" + (new File(pluginInfo.getPluginURL().getFile()).getName()));
             if (!pluginInfo.getPluginURL().equals(destBinaryFile.toURI().toURL())) {
-                IOUtils.copy(pluginInfo.getPluginURL(), destBinaryFile);
+                PRSPrivateIOUtils.copy(pluginInfo.getPluginURL(), destBinaryFile);
             }
             ipi.setBinarySize(destBinaryFile.length());
             ipi.setBinaryUrl("bin/" + (new File(pluginInfo.getPluginURL().getFile()).getName()));
 
-            File srcFile0 = new File(pluginSources, IOUtils.getFileNameWithoutExtension(new File(pluginInfo.getPluginURL().getFile())) + "-src.zip");
-            File srcFile1 = new File(repositoryRootFolder + "/src/", IOUtils.getFileNameWithoutExtension(new File(pluginInfo.getPluginURL().getFile())) + "-src.zip");
+            File srcFile0 = new File(pluginSources, PRSPrivateIOUtils.getFileNameWithoutExtension(new File(pluginInfo.getPluginURL().getFile())) + "-src.zip");
+            File srcFile1 = new File(repositoryRootFolder + "/src/", PRSPrivateIOUtils.getFileNameWithoutExtension(new File(pluginInfo.getPluginURL().getFile())) + "-src.zip");
             if (srcFile0.exists()) {
                 if (!srcFile0.toURI().toURL().equals(srcFile1.toURI().toURL())) {
-                    IOUtils.copy(srcFile0, srcFile1);
+                    PRSPrivateIOUtils.copy(srcFile0, srcFile1);
                 }
                 ipi.setSourceSize(srcFile1.length());
                 ipi.setSourceUrl("src/" + srcFile1.getName());

@@ -386,7 +386,7 @@ public final class StringBuilder2 implements java.io.Serializable, CharSequence,
      * If this str starts with the separator, it wont be appended either (the separator)
      * @param separator separator
      * @param str str
-     * @return this instance
+     * @return {@code this} instance
      */
     public StringBuilder2 appendWithSeparator(String separator,String str) {
         if(!endsWith(separator) && !str.startsWith(separator)){

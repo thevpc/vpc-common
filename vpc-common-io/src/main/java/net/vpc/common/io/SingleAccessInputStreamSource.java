@@ -1,29 +1,66 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
+/**
+ * ====================================================================
+ *            vpc-common-io : common reusable library for
+ *                          input/output
  *
- * and open the template in the editor.
+ * is a new Open Source Package Manager to help install packages
+ * and libraries for runtime execution. Nuts is the ultimate companion for
+ * maven (and other build managers) as it helps installing all package
+ * dependencies at runtime. Nuts is not tied to java and is a good choice
+ * to share shell scripts and other 'things' . Its based on an extensible
+ * architecture to help supporting a large range of sub managers / repositories.
+ *
+ * Copyright (C) 2016-2017 Taha BEN SALAH
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along
+ * with this program; if not, write to the Free Software Foundation, Inc.,
+ * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * ====================================================================
  */
 package net.vpc.common.io;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 /**
- *
  * @author taha.bensalah@gmail.com
  */
 class SingleAccessInputStreamSource implements InputStreamSource {
-    private InputStream file;
 
-    public SingleAccessInputStreamSource(InputStream file) {
-        this.file = file;
+    private InputStream stream;
+    private String name;
+
+    public SingleAccessInputStreamSource(InputStream file, String name) {
+        this.stream = file;
+        this.name = name;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void copyTo(Path path) throws IOException {
+        Files.copy(open(), path);
     }
 
     @Override
     public InputStream open() throws IOException {
-        InputStream file=this.file;
-        this.file=null;
+        InputStream file = this.stream;
+        this.stream = null;
         if (file != null) {
             return file;
         }
@@ -31,8 +68,13 @@ class SingleAccessInputStreamSource implements InputStreamSource {
     }
 
     @Override
-    public Object getSource() throws IOException {
-        return file;
+    public Object getSource() {
+        return stream;
     }
-    
+
+    @Override
+    public String toString() {
+        return "SingleAccessInputStreamSource{name=" + name + ", stream=" + stream + '}';
+    }
+
 }

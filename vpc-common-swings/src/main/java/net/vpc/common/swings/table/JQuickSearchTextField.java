@@ -23,15 +23,16 @@
  */
 package net.vpc.common.swings.table;
 
-import net.vpc.common.swings.PRSManager;
-import net.vpc.common.swings.messageset.ComponentMessageSetUpdater;
-import net.vpc.common.prs.messageset.MessageSet;
+//import net.vpc.common.swings.messageset.ComponentMessageSetUpdater;
+//import net.vpc.common.prs.messageset.MessageSet;
 import net.vpc.common.swings.JDropDownButton;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import net.vpc.common.swings.SwingComponentConfigurer;
+import net.vpc.common.swings.SwingComponentConfigurerFactory;
 import net.vpc.common.swings.util.StringFilter;
 import net.vpc.common.swings.util.StringPortionFilter;
 import net.vpc.common.swings.util.StringRegexpFilter;
@@ -51,34 +52,18 @@ public class JQuickSearchTextField extends JPanel {
         SHELL,
     }
 
-    private JCheckBoxMenuItem config_caseSensitive;
-    private JRadioButtonMenuItem config_regexp;
-    private JRadioButtonMenuItem config_shell;
-    private JRadioButtonMenuItem config_startsWith;
-    private JRadioButtonMenuItem config_contains;
-    private JRadioButtonMenuItem config_endsWith;
-    private JDropDownButton configButton;
-    private JTextField filterTextField;
-    private JMenuItem goFilter;
+    JCheckBoxMenuItem config_caseSensitive;
+    JRadioButtonMenuItem config_regexp;
+    JRadioButtonMenuItem config_shell;
+    JRadioButtonMenuItem config_startsWith;
+    JRadioButtonMenuItem config_contains;
+    JRadioButtonMenuItem config_endsWith;
+    JDropDownButton configButton;
+    JTextField filterTextField;
+    JMenuItem goFilter;
 
     public JQuickSearchTextField() {
-        PRSManager.addMessageSetSupport(this, "FilterTextField", new ComponentMessageSetUpdater() {
-            public void updateMessageSet(JComponent comp, String id, MessageSet messageSet) {
-                configButton.setToolTipText(messageSet.get("FilterTextField.ConfigButton.toolTipText"));
-                config_caseSensitive.setText(messageSet.get("FilterTextField.ConfigButton.CaseSensitive"));
-                config_startsWith.setText(messageSet.get("FilterTextField.ConfigButton.StartWith"));
-                config_contains.setText(messageSet.get("FilterTextField.ConfigButton.Contains"));
-                config_endsWith.setText(messageSet.get("FilterTextField.ConfigButton.EndWith"));
-                config_regexp.setText(messageSet.get("FilterTextField.ConfigButton.RegExp"));
-                config_shell.setText(messageSet.get("FilterTextField.ConfigButton.Shell"));
-                filterTextField.setToolTipText(messageSet.get("FilterTextField.FilterText.toolTipText"));
-                goFilter.setText(messageSet.get("FilterTextField.ConfigButton.ApplyFilter"));
-            }
-
-            public void install(JComponent comp, String id) {
-            }
-        });
-        goFilter = PRSManager.createMenuItem("ApplyFilter");
+        goFilter = new JMenuItem("ApplyFilter");
         configButton = new JDropDownButton(" ");
         configButton.setQuickActionDelay(0);
         configButton.setPopupOrientation(SwingConstants.RIGHT);
@@ -126,6 +111,11 @@ public class JQuickSearchTextField extends JPanel {
         add(configButton);
 //        PRSManager.update(this,table.getSession().getViewManager());
         setBorder(BorderFactory.createEtchedBorder());
+        final SwingComponentConfigurer r = SwingComponentConfigurerFactory.getInstance().get(JQuickSearchTextField.class);
+        if(r!=null){
+            r.onCreateComponent(this);
+        }
+
     }
 
     public StringFilter getStringFilter() {
