@@ -11,7 +11,6 @@ package net.vpc.common.util;
  */
 public class Convert {
 
-
     public static int toInt(Object o) {
         return toInt(o, null);
     }
@@ -45,9 +44,17 @@ public class Convert {
         if (o instanceof Number) {
             return ((Number) o).doubleValue();
         }
-        if (o instanceof String) {
+        if (o instanceof CharSequence || o instanceof Character) {
+            String s = String.valueOf(o);
+            s = s.trim();
+            if (s.isEmpty()) {
+                if (config.isErrorIfNull()) {
+                    throw new IllegalArgumentException("Cannot convert null to Long");
+                }
+                return config.getNullValue();
+            }
             try {
-                return Double.parseDouble(((String) o));
+                return Double.parseDouble(s);
             } catch (Exception e) {
                 if (config.isErrorIfInvalid()) {
                     throw new IllegalArgumentException("Cannot convert string " + o + " to Double", e);
@@ -74,9 +81,17 @@ public class Convert {
         if (o instanceof Number) {
             return ((Number) o).floatValue();
         }
-        if (o instanceof String) {
+        if (o instanceof CharSequence || o instanceof Character) {
+            String s = String.valueOf(o);
+            s = s.trim();
+            if (s.isEmpty()) {
+                if (config.isErrorIfNull()) {
+                    throw new IllegalArgumentException("Cannot convert null to Long");
+                }
+                return config.getNullValue();
+            }
             try {
-                return Float.parseFloat(((String) o));
+                return Float.parseFloat(s);
             } catch (Exception e) {
                 if (config.isErrorIfInvalid()) {
                     throw new IllegalArgumentException("Cannot convert string " + o + " to Float", e);
@@ -114,8 +129,15 @@ public class Convert {
             }
             return config.getInvalidValue();
         }
-        if (o instanceof CharSequence) {
+        if (o instanceof CharSequence || o instanceof Character) {
             String s = String.valueOf(o);
+            s = s.trim();
+            if (s.isEmpty()) {
+                if (config.isErrorIfNull()) {
+                    throw new IllegalArgumentException("Cannot convert null to Boolean");
+                }
+                return config.getNullValue();
+            }
             Boolean isTrue = null;
             Boolean isFalse = null;
             if (config.getTrueStringRegexp() != null && config.getTrueStringRegexp().length() > 0) {
@@ -157,8 +179,15 @@ public class Convert {
         if (o instanceof Number) {
             return ((Number) o).intValue();
         }
-        if (o instanceof String || o instanceof Character) {
+        if (o instanceof CharSequence || o instanceof Character) {
             String s = String.valueOf(o);
+            s = s.trim();
+            if (s.isEmpty()) {
+                if (config.isErrorIfNull()) {
+                    throw new IllegalArgumentException("Cannot convert null to Integer");
+                }
+                return config.getNullValue();
+            }
             try {
                 return Integer.parseInt(s);
             } catch (Exception e) {
@@ -180,15 +209,22 @@ public class Convert {
         }
         if (o == null) {
             if (config.isErrorIfNull()) {
-                throw new IllegalArgumentException("Cannot convert null to Integer");
+                throw new IllegalArgumentException("Cannot convert null to Long");
             }
             return config.getNullValue();
         }
         if (o instanceof Number) {
             return ((Number) o).longValue();
         }
-        if (o instanceof String || o instanceof Character) {
+        if (o instanceof CharSequence || o instanceof Character) {
             String s = String.valueOf(o);
+            s = s.trim();
+            if (s.isEmpty()) {
+                if (config.isErrorIfNull()) {
+                    throw new IllegalArgumentException("Cannot convert null to Long");
+                }
+                return config.getNullValue();
+            }
             try {
                 return Long.parseLong(s);
             } catch (Exception e) {
@@ -244,9 +280,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        Integer[] values=new Integer[strings.length];
+        Integer[] values = new Integer[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toInt(strings[i],config);
+            values[i] = toInt(strings[i], config);
         }
         return values;
     }
@@ -258,9 +294,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        int[] values=new int[strings.length];
+        int[] values = new int[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toInt(strings[i],config);
+            values[i] = toInt(strings[i], config);
         }
         return values;
     }
@@ -272,9 +308,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        Long[] values=new Long[strings.length];
+        Long[] values = new Long[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toLong(strings[i],config);
+            values[i] = toLong(strings[i], config);
         }
         return values;
     }
@@ -286,9 +322,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        long[] values=new long[strings.length];
+        long[] values = new long[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toLong(strings[i],config);
+            values[i] = toLong(strings[i], config);
         }
         return values;
     }
@@ -300,9 +336,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        Double[] values=new Double[strings.length];
+        Double[] values = new Double[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toDouble(strings[i],config);
+            values[i] = toDouble(strings[i], config);
         }
         return values;
     }
@@ -314,9 +350,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        double[] values=new double[strings.length];
+        double[] values = new double[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toDouble(strings[i],config);
+            values[i] = toDouble(strings[i], config);
         }
         return values;
     }
@@ -328,9 +364,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        Boolean[] values=new Boolean[strings.length];
+        Boolean[] values = new Boolean[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toBoolean(strings[i],config);
+            values[i] = toBoolean(strings[i], config);
         }
         return values;
     }
@@ -342,9 +378,9 @@ public class Convert {
         if (strings == null) {
             return null;
         }
-        boolean[] values=new boolean[strings.length];
+        boolean[] values = new boolean[strings.length];
         for (int i = 0; i < values.length; i++) {
-            values[i]=toBoolean(strings[i],config);
+            values[i] = toBoolean(strings[i], config);
         }
         return values;
     }

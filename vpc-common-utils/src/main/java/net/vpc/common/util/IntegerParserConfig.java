@@ -5,13 +5,16 @@
  */
 package net.vpc.common.util;
 
+import java.util.Objects;
+
 /**
  *
  * @author taha.bensalah@gmail.com
  */
 public class IntegerParserConfig {
 
-    public static final IntegerParserConfig STRICT = new IntegerParserConfig().setErrorIfInvalid(true).setErrorIfNull(true);
+    public static final IntegerParserConfig STRICT = new IntegerParserConfig().setErrorIfInvalid(true).setErrorIfNull(true).setNullValue(0).setInvalidValue(0);
+    public static final IntegerParserConfig NULL = new IntegerParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(null).setInvalidValue(null);
     public static final IntegerParserConfig LENIENT = new IntegerParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(0).setInvalidValue(0);
     public static final IntegerParserConfig LENIENT_F = new IntegerParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(-1).setInvalidValue(-1);
     private boolean errorIfNull = true;
@@ -22,7 +25,6 @@ public class IntegerParserConfig {
     private IntegerParserConfig() {
     }
 
-    
     public boolean isErrorIfNull() {
         return errorIfNull;
     }
@@ -40,24 +42,36 @@ public class IntegerParserConfig {
     }
 
     public IntegerParserConfig setErrorIfNull(boolean errorIfNull) {
+        if (this.errorIfNull == errorIfNull) {
+            return this;
+        }
         IntegerParserConfig x = copy();
         x.errorIfNull = errorIfNull;
         return x;
     }
 
     public IntegerParserConfig setErrorIfInvalid(boolean errorIfInvalid) {
+        if (this.errorIfInvalid == errorIfInvalid) {
+            return this;
+        }
         IntegerParserConfig x = copy();
         x.errorIfInvalid = errorIfInvalid;
         return x;
     }
 
-    public IntegerParserConfig setNullValue(Integer defaultNullValue) {
+    public IntegerParserConfig setNullValue(Integer nullValue) {
+        if (Objects.equals(this.nullValue, nullValue)) {
+            return this;
+        }
         IntegerParserConfig x = copy();
-        x.nullValue = defaultNullValue;
+        x.nullValue = nullValue;
         return x;
     }
 
     public IntegerParserConfig setInvalidValue(Integer defaultInvalidValue) {
+        if (Objects.equals(this.invalidValue, invalidValue)) {
+            return this;
+        }
         IntegerParserConfig x = copy();
         x.invalidValue = defaultInvalidValue;
         return x;

@@ -10,6 +10,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  *
@@ -48,7 +50,7 @@ public class IteratorBuilder<T> {
         return ofArray(file.listFiles());
     }
 
-    public IteratorBuilder<T> filter(Filter<T> t) {
+    public IteratorBuilder<T> filter(Predicate<T> t) {
         if (t == null) {
             return this;
         }
@@ -66,23 +68,23 @@ public class IteratorBuilder<T> {
         return new IteratorBuilder<>(IteratorUtils.concat(Arrays.asList(it, t)));
     }
 
-    public <V> IteratorBuilder<V> map(Converter<T, V> t) {
+    public <V> IteratorBuilder<V> map(Function<T, V> t) {
         return new IteratorBuilder<>(new ConvertedIterator<>(it, t));
     }
 
-    public <V> IteratorBuilder<V> convert(Converter<T, V> t) {
+    public <V> IteratorBuilder<V> convert(Function<T, V> t) {
         return new IteratorBuilder<>(new ConvertedIterator<>(it, t));
     }
 
-    public <V> IteratorBuilder<V> mapMulti(Converter<T, List<V>> t) {
+    public <V> IteratorBuilder<V> mapMulti(Function<T, List<V>> t) {
         return new IteratorBuilder<>(new ConvertedToListIterator<>(it, t));
     }
 
-    public <V> IteratorBuilder<V> convertMulti(Converter<T, List<V>> t) {
+    public <V> IteratorBuilder<V> convertMulti(Function<T, List<V>> t) {
         return new IteratorBuilder<>(new ConvertedToListIterator<>(it, t));
     }
 
-    public <V> IteratorBuilder<T> unique(Converter<T, V> t) {
+    public <V> IteratorBuilder<T> unique(Function<T, V> t) {
         if (t == null) {
             return new IteratorBuilder<>(IteratorUtils.unique(it));
         } else {

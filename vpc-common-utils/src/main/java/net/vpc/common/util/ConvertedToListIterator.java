@@ -32,6 +32,7 @@ package net.vpc.common.util;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by vpc on 1/9/17.
@@ -41,10 +42,10 @@ import java.util.List;
 public class ConvertedToListIterator<F, T> implements Iterator<T> {
 
     private final Iterator<F> base;
-    private final Converter<F, List<T>> converter;
+    private final Function<F, List<T>> converter;
     private final LinkedList<T> current=new LinkedList<>();
 
-    public ConvertedToListIterator(Iterator<F> base, Converter<F, List<T>> converter) {
+    public ConvertedToListIterator(Iterator<F> base, Function<F, List<T>> converter) {
         this.base = base;
         this.converter = converter;
     }
@@ -56,7 +57,7 @@ public class ConvertedToListIterator<F, T> implements Iterator<T> {
         }
         while(base.hasNext()){
             F f = base.next();
-            List<T> c = converter.convert(f);
+            List<T> c = converter.apply(f);
             current.addAll(c);
             if(!current.isEmpty()){
                 return true;

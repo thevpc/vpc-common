@@ -19,10 +19,12 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
     }
 
 
+    @Override
     public String formatMillis(long periodMillis) {
         return formatNanos(periodMillis*1000000L);
     }
 
+    @Override
     public String formatNanos(long periodNano) {
         int max;
         boolean empty = true;

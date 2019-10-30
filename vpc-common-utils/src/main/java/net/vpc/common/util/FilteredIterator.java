@@ -30,6 +30,7 @@
 package net.vpc.common.util;
 
 import java.util.Iterator;
+import java.util.function.Predicate;
 
 /**
  * Created by vpc on 1/9/17.
@@ -37,10 +38,10 @@ import java.util.Iterator;
 public class FilteredIterator<T> implements Iterator<T> {
 
     private Iterator<T> base;
-    private Filter<T> filter;
+    private Predicate<T> filter;
     private T last;
 
-    public FilteredIterator(Iterator<T> base, Filter<T> filter) {
+    public FilteredIterator(Iterator<T> base, Predicate<T> filter) {
         this.base = base;
         this.filter = filter;
     }
@@ -50,7 +51,7 @@ public class FilteredIterator<T> implements Iterator<T> {
         while (true) {
             if (base.hasNext()) {
                 last = base.next();
-                if (filter.accept(last)) {
+                if (filter.test(last)) {
                     return true;
                 }
             } else {

@@ -6,10 +6,12 @@ package net.vpc.common.util;
 public class SimpleTimePeriodFormat implements TimePeriodFormat {
     public static final TimePeriodFormat INSTANCE = new SimpleTimePeriodFormat();
 
+    @Override
     public String formatMillis(long periodMillis) {
         return formatNanos(periodMillis * 1000000);
     }
 
+    @Override
     public String formatNanos(long periodNano) {
         StringBuilder sb = new StringBuilder();
         int nano = (int) (periodNano % 1000000);

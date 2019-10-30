@@ -1,6 +1,5 @@
 package net.vpc.common.util;
 
-import net.vpc.common.util.DoubleFormat;
 
 import java.text.DecimalFormat;
 

@@ -7,6 +7,9 @@ package net.vpc.common.util;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.DoublePredicate;
+import java.util.function.IntPredicate;
+import java.util.function.Predicate;
 
 /**
  * @author vpc
@@ -65,10 +68,10 @@ public class ArrayUtils {
         return all.toArray((T[]) Array.newInstance(cls, all.size()));
     }
 
-    public static <T> T[] filterArray(Class<T> cls, T[] array, Filter<T> t) {
+    public static <T> T[] filterArray(Class<T> cls, T[] array, Predicate<T> t) {
         List<T> all = new ArrayList<>();
         for (T v : array) {
-            if (t == null || t.accept(v)) {
+            if (t == null || t.test(v)) {
                 all.add(v);
             }
         }
@@ -113,7 +116,7 @@ public class ArrayUtils {
         return d;
     }
 
-    public static double[] dtimes(double min, double max, int times, DoubleFilter filter) {
+    public static double[] dtimes(double min, double max, int times, DoublePredicate filter) {
         if (filter == null) {
             return dtimes(min, max, times);
         }
@@ -124,7 +127,7 @@ public class ArrayUtils {
             double step = (max - min) / (times - 1);
             for (int i = 0; i < d.length; i++) {
                 double v = min + i * step;
-                if (filter.accept(v)) {
+                if (filter.test(v)) {
                     d[i] = v;
                 }
             }
@@ -249,7 +252,7 @@ public class ArrayUtils {
         return d;
     }
 
-    public static int[] isteps(int min, int max, int step, IntFilter filter) {
+    public static int[] isteps(int min, int max, int step, IntPredicate filter) {
         if (filter == null) {
             return isteps(min, max, step);
         }
@@ -260,7 +263,7 @@ public class ArrayUtils {
         IntArrayList d = new IntArrayList();
         for (int i = 0; i < times; i++) {
             int v = min + i * step;
-            if (filter.accept(v)) {
+            if (filter.test(v)) {
                 d.add(v);
             }
         }

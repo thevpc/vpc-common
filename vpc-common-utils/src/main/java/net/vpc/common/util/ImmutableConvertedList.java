@@ -2,15 +2,16 @@ package net.vpc.common.util;
 
 import java.util.AbstractList;
 import java.util.List;
+import java.util.function.Function;
 
 /**
  * Created by vpc on 8/15/14.
  */
 public class ImmutableConvertedList<A, B> extends AbstractList<B> {
     private List<A> base;
-    private Converter<A, B> converter;
+    private Function<A, B> converter;
 
-    public ImmutableConvertedList(List<A> base, Converter<A, B> converter) {
+    public ImmutableConvertedList(List<A> base, Function<A, B> converter) {
         this.base = base;
         this.converter = converter;
     }
@@ -23,7 +24,7 @@ public class ImmutableConvertedList<A, B> extends AbstractList<B> {
 
     @Override
     public B get(int index) {
-        return converter.convert(base.get(index));
+        return converter.apply(base.get(index));
     }
 
     @Override

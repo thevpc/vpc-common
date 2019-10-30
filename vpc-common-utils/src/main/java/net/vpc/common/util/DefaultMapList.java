@@ -1,6 +1,7 @@
 package net.vpc.common.util;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Created by vpc on 6/1/16.
@@ -8,7 +9,7 @@ import java.util.*;
 public class DefaultMapList<K,V> implements MapList<K,V>{
     private Map<K,Integer> map=new LinkedHashMap<K, Integer>();
     private List<V> list=new LinkedList<V>();
-    private Converter<V,K> converter;
+    private Function<V,K> converter;
 
 //    public DefaultMapList(Function<V, K> converter) {
 //        this.converter = new Converter<K, V>() {
@@ -19,17 +20,17 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
 //        };
 //    }
 
-    public DefaultMapList(Converter<V,K> converter) {
+    public DefaultMapList(Function<V,K> converter) {
         this.converter = converter;
     }
 
-    public DefaultMapList(List<V> list, Converter<V,K> converter) {
+    public DefaultMapList(List<V> list, Function<V,K> converter) {
         this.converter = converter;
         addAll(list);
     }
 
     public boolean add(V v){
-        K k = converter.convert(v);
+        K k = converter.apply(v);
         if(map.containsKey(k)) {
             int pos=map.get(k);
             list.set(pos,v);
@@ -72,7 +73,7 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
 
 //    @Override
     public boolean remove(Object o) {
-        K k = converter.convert((V) o);
+        K k = converter.apply((V) o);
         Integer pos = map.get(k);
         if(pos!=null){
             list.remove(pos.intValue());
@@ -152,10 +153,10 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
 //    @Override
     public V set(int index, V element) {
         V v = list.get(index);
-        K k= converter.convert(v);
+        K k= converter.apply(v);
         map.remove(k);
 
-        k= converter.convert(element);
+        k= converter.apply(element);
         map.put(k, index);
         list.set(index,element);
         return v;
@@ -173,14 +174,14 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
 //    @Override
     public V remove(int index) {
         V v = list.get(index);
-        K k= converter.convert(v);
+        K k= converter.apply(v);
         map.remove(k);
         return v;
     }
 
 //    @Override
     public int indexOf(Object o) {
-        K k = converter.convert((V) o);
+        K k = converter.apply((V) o);
         return map.get(k);
     }
 
@@ -209,11 +210,11 @@ public class DefaultMapList<K,V> implements MapList<K,V>{
     }
 
     public boolean containsMappedValue(V object) {
-        return map.containsKey(converter.convert(object));
+        return map.containsKey(converter.apply(object));
     }
 
     public V getByValue(V object) {
-        return getByKey(converter.convert(object));
+        return getByKey(converter.apply(object));
     }
 
     public boolean containsValue(Object value) {

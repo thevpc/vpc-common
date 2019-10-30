@@ -1,6 +1,8 @@
 package net.vpc.common.util;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 public class CollectionUtils {
 
@@ -56,7 +58,7 @@ public class CollectionUtils {
         return grouped;
     }
 
-    public static <A, B> List<B> convert(List<A> list, Converter<A, B> converter) {
+    public static <A, B> List<B> convert(List<A> list, Function<A, B> converter) {
         return new ImmutableConvertedList<A, B>(list, converter);
     }
 
@@ -100,12 +102,12 @@ public class CollectionUtils {
         return list == null ? null : Collections.unmodifiableCollection(list);
     }
 
-    public static <T> Collection<T> retainAll(Collection<T> values, Filter<T> filter) {
+    public static <T> Collection<T> retainAll(Collection<T> values, Predicate<T> filter) {
         if (filter == null) {
             throw new NullPointerException("Filter could not be null");
         }
         for (Iterator<T> i = values.iterator(); i.hasNext();) {
-            if (!filter.accept(i.next())) {
+            if (!filter.test(i.next())) {
                 i.remove();
             }
         }
@@ -154,12 +156,12 @@ public class CollectionUtils {
         }
     }
 
-    public static <T> Collection<T> removeAll(Collection<T> values, Filter<T> filter) {
+    public static <T> Collection<T> removeAll(Collection<T> values, Predicate<T> filter) {
         if (filter == null) {
             throw new NullPointerException("Filter could not be null");
         }
         for (Iterator<T> i = values.iterator(); i.hasNext();) {
-            if (filter.accept(i.next())) {
+            if (filter.test(i.next())) {
                 i.remove();
             }
         }
@@ -195,7 +197,7 @@ public class CollectionUtils {
      * @param <T>
      * @return
      */
-    public <F, T> List<T> convertList(final List<F> from, final Converter<F, T> converter) {
+    public <F, T> List<T> convertList(final List<F> from, final Function<F, T> converter) {
         if (converter == null) {
             throw new NullPointerException("Null converter");
         }
@@ -203,7 +205,7 @@ public class CollectionUtils {
             @Override
             public T get(int index) {
                 F value = from.get(index);
-                return converter.convert(value);
+                return converter.apply(value);
             }
 
             @Override
@@ -212,7 +214,7 @@ public class CollectionUtils {
                 if (removed == null) {
                     return null;
                 }
-                return converter.convert(removed);
+                return converter.apply(removed);
             }
 
             @Override

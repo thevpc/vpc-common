@@ -10,6 +10,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 /**
  *
@@ -19,13 +21,13 @@ public class IteratorUtils {
 
     public static final NonNullFilter NON_NULL = new NonNullFilter();
 
-    public static class NonNullFilter<T> implements Filter<T> {
+    public static class NonNullFilter<T> implements Predicate<T> {
 
         public NonNullFilter() {
         }
 
         @Override
-        public boolean accept(T value) {
+        public boolean test(T value) {
             return value != null;
         }
     }
@@ -73,14 +75,14 @@ public class IteratorUtils {
         return t;
     }
 
-    public static <T> Iterator<T> filter(Iterator<T> from, Filter<T> filter) {
+    public static <T> Iterator<T> filter(Iterator<T> from, Predicate<T> filter) {
         if (filter == null) {
             return from;
         }
         return new FilteredIterator<>(from, filter);
     }
 
-    public static <F, T> Iterator<T> convert(Iterator<F> from, Converter<F, T> converter) {
+    public static <F, T> Iterator<T> convert(Iterator<F> from, Function<F, T> converter) {
         return new ConvertedIterator<>(from, converter);
     }
 
@@ -101,11 +103,11 @@ public class IteratorUtils {
     }
 
     public static <T> Iterator<T> unique(Iterator<T> it) {
-        Filter<T> filter = new Filter<T>() {
+        Predicate<T> filter = new Predicate<T>() {
             HashSet<T> visited = new HashSet<>();
 
             @Override
-            public boolean accept(T value) {
+            public boolean test(T value) {
                 if (visited.contains(value)) {
                     return false;
                 }
@@ -116,13 +118,13 @@ public class IteratorUtils {
         return new FilteredIterator<>(it, filter);
     }
 
-    public static <F, T> Iterator<F> unique(Iterator<F> it, final Converter<F, T> converter) {
-        Filter<F> filter = new Filter<F>() {
+    public static <F, T> Iterator<F> unique(Iterator<F> it, final Function<F, T> converter) {
+        Predicate<F> filter = new Predicate<F>() {
             HashSet<T> visited = new HashSet<>();
 
             @Override
-            public boolean accept(F value) {
-                T t = converter.convert(value);
+            public boolean test(F value) {
+                T t = converter.apply(value);
                 if (visited.contains(t)) {
                     return false;
                 }

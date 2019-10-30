@@ -30,6 +30,7 @@
 package net.vpc.common.util;
 
 import java.util.Iterator;
+import java.util.function.Function;
 
 /**
  * Created by vpc on 1/9/17.
@@ -39,9 +40,9 @@ import java.util.Iterator;
 public class ConvertedIterator<F, T> implements Iterator<T> {
 
     private final Iterator<F> base;
-    private final Converter<F, T> converter;
+    private final Function<F, T> converter;
 
-    public ConvertedIterator(Iterator<F> base, Converter<F, T> converter) {
+    public ConvertedIterator(Iterator<F> base, Function<F, T> converter) {
         this.base = base;
         this.converter = converter;
     }
@@ -53,7 +54,7 @@ public class ConvertedIterator<F, T> implements Iterator<T> {
 
     @Override
     public T next() {
-        return converter.convert(base.next());
+        return converter.apply(base.next());
     }
 
     @Override

@@ -7,11 +7,36 @@ package net.vpc.common.util;
 
 import java.lang.reflect.Array;
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * @author taha.bensalah@gmail.com
  */
 public class Utils {
+
+    public static int compare(Object a, Object b) {
+        return compare(a, b,null);
+    }
+
+    public static int compare(Object a, Object b, Comparator c) {
+        if (a == null && b == null) {
+            return 0;
+        } else if (a == null) {
+            return -1;
+        } else if (b == null) {
+            return 1;
+        } else if (c != null) {
+            return c.compare(a, b);
+        } else {
+            if (a instanceof Comparable) {
+                return ((Comparable) a).compareTo(b);
+            }
+            if (b instanceof Comparable) {
+                return -((Comparable) b).compareTo(a);
+            }
+            throw new IllegalArgumentException("Not comparable : " + a + "," + b);
+        }
+    }
 
     public static Object joinArrays(Object... arrays) {
         Class<?> c1 = null;
@@ -76,7 +101,6 @@ public class Utils {
 //        Object[] a = (Object[]) removeArray(new Object[]{1, 2, 3}, -1, 2);
 //        System.out.println(Arrays.deepToString(a));
 //    }
-
     //    public static Object[] joinArrays(Object[] array1, Object[] array2) {
 //        return (Object[]) joinArrays((Object)array1,array2);
 //    }
@@ -111,10 +135,10 @@ public class Utils {
         }
     }
 
-    public static <T, V> V ifType(Object object, Class<T> type, GetWith<T, V> r) {
+    public static <T, V> V ifType(Object object, Class<T> type, Function<T, V> r) {
         T t = ncast(type, object);
         if (t != null) {
-            return r.run(t);
+            return r.apply(t);
         }
         return null;
     }
@@ -290,12 +314,12 @@ public class Utils {
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
-     * @param original  the array to be copied
+     * @param original the array to be copied
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException       if <tt>original</tt> is null
+     * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
     public static int[] copyOf(int[] original, int newLength) {
@@ -314,12 +338,12 @@ public class Utils {
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
-     * @param original  the array to be copied
+     * @param original the array to be copied
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException       if <tt>original</tt> is null
+     * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
     public static long[] copyOf(long[] original, int newLength) {
@@ -338,12 +362,12 @@ public class Utils {
      * will exist if and only if the specified length is greater than that of
      * the original array.
      *
-     * @param original  the array to be copied
+     * @param original the array to be copied
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with null
      * characters to obtain the specified length
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException       if <tt>original</tt> is null
+     * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
     public static char[] copyOf(char[] original, int newLength) {
@@ -362,12 +386,12 @@ public class Utils {
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
-     * @param original  the array to be copied
+     * @param original the array to be copied
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException       if <tt>original</tt> is null
+     * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
     public static float[] copyOf(float[] original, int newLength) {
@@ -386,12 +410,12 @@ public class Utils {
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
-     * @param original  the array to be copied
+     * @param original the array to be copied
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException       if <tt>original</tt> is null
+     * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
     public static double[] copyOf(double[] original, int newLength) {
@@ -410,12 +434,12 @@ public class Utils {
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
-     * @param original  the array to be copied
+     * @param original the array to be copied
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with false
      * elements to obtain the specified length
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException       if <tt>original</tt> is null
+     * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
     public static boolean[] copyOf(boolean[] original, int newLength) {
@@ -425,7 +449,7 @@ public class Utils {
         return copy;
     }
 
-    public static <T, V> List<T> sort(List<T> list, final Converter<T, V> converter, final Comparator<V> c) {
+    public static <T, V> List<T> sort(List<T> list, final Function<T, V> converter, final Comparator<V> c) {
         if (converter == null) {
             Collections.sort(list, (Comparator<T>) c);
             return list;
@@ -437,7 +461,7 @@ public class Utils {
 
             public TandV(T t) {
                 this.t = t;
-                this.v = converter.convert(t);
+                this.v = converter.apply(t);
             }
 
             @Override
@@ -470,7 +494,7 @@ public class Utils {
         return list;
     }
 
-    public static <T, V> T[] sort(T[] arr, final Converter<T, V> converter, final Comparator<V> c) {
+    public static <T, V> T[] sort(T[] arr, final Function<T, V> converter, final Comparator<V> c) {
         if (converter == null) {
             Arrays.sort(arr, (Comparator<T>) c);
             return arr;
@@ -482,7 +506,7 @@ public class Utils {
 
             public TandV(T t) {
                 this.t = t;
-                this.v = converter.convert(t);
+                this.v = converter.apply(t);
             }
 
             @Override

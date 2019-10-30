@@ -5,13 +5,16 @@
  */
 package net.vpc.common.util;
 
+import java.util.Objects;
+
 /**
  *
  * @author taha.bensalah@gmail.com
  */
 public class BooleanParserConfig {
 
-    public static final BooleanParserConfig STRICT = new BooleanParserConfig().setErrorIfInvalid(true).setErrorIfNull(true);
+    public static final BooleanParserConfig STRICT = new BooleanParserConfig().setErrorIfInvalid(true).setErrorIfNull(true).setNullValue(false).setInvalidValue(false);
+    public static final BooleanParserConfig NULL = new BooleanParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(null).setInvalidValue(null);
     public static final BooleanParserConfig LENIENT = new BooleanParserConfig().setErrorIfInvalid(false).setErrorIfNull(false).setNullValue(false).setInvalidValue(false);
     private boolean errorIfNull = true;
     private boolean errorIfInvalid = true;
@@ -42,52 +45,72 @@ public class BooleanParserConfig {
     }
 
     public BooleanParserConfig setErrorIfNull(boolean errorIfNull) {
+        if (this.errorIfNull == errorIfNull) {
+            return this;
+        }
         BooleanParserConfig x = copy();
         x.errorIfNull = errorIfNull;
         return x;
     }
 
     public BooleanParserConfig setErrorIfInvalid(boolean errorIfInvalid) {
+        if (this.errorIfInvalid == errorIfInvalid) {
+            return this;
+        }
         BooleanParserConfig x = copy();
         x.errorIfInvalid = errorIfInvalid;
         return x;
     }
 
-    public BooleanParserConfig setNullValue(Boolean defaultNullValue) {
+    public BooleanParserConfig setNullValue(Boolean nullValue) {
+        if (Objects.equals(this.nullValue, nullValue)) {
+            return this;
+        }
         BooleanParserConfig x = copy();
-        x.nullValue = defaultNullValue;
+        x.nullValue = nullValue;
         return x;
     }
 
-    public BooleanParserConfig setInvalidValue(Boolean defaultInvalidValue) {
+    public BooleanParserConfig setInvalidValue(Boolean invalidValue) {
+        if (Objects.equals(this.invalidValue, invalidValue)) {
+            return this;
+        }
         BooleanParserConfig x = copy();
-        x.invalidValue = defaultInvalidValue;
+        x.invalidValue = invalidValue;
         return x;
     }
 
     public BooleanParserConfig setTrueStringRegexp(String trueStringRegexp) {
-        this.trueStringRegexp = trueStringRegexp;
+        if (Objects.equals(this.trueStringRegexp, trueStringRegexp)) {
+            return this;
+        }
         BooleanParserConfig x = copy();
         x.trueStringRegexp = trueStringRegexp;
         return x;
     }
 
     public BooleanParserConfig setFalseStringRegexp(String falseStringRegexp) {
-        this.falseStringRegexp = falseStringRegexp;
+        if (Objects.equals(this.falseStringRegexp, falseStringRegexp)) {
+            return this;
+        }
         BooleanParserConfig x = copy();
         x.falseStringRegexp = falseStringRegexp;
         return x;
     }
 
     public BooleanParserConfig setAcceptInt(boolean acceptInt) {
-        this.acceptInt = acceptInt;
+        if (this.acceptInt == acceptInt) {
+            return this;
+        }
         BooleanParserConfig x = copy();
         x.acceptInt = acceptInt;
         return x;
     }
 
     public BooleanParserConfig setAcceptNumber(boolean acceptNumber) {
-        this.acceptNumber = acceptNumber;
+        if (this.acceptNumber == acceptNumber) {
+            return this;
+        }
         BooleanParserConfig x = copy();
         x.acceptNumber = acceptNumber;
         return x;
