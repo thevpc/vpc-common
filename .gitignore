@@ -22,3 +22,5 @@
 /vpc-common-web-jsf/target/
 /vpc-common-desktop-automation/target/
 /vpc-common-xfile/target/
+/vpc-common-vfs/target/
+/vpc-common-cron/target/

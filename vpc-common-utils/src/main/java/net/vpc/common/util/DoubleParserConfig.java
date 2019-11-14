@@ -41,7 +41,7 @@ public class DoubleParserConfig {
     }
 
     public DoubleParserConfig setErrorIfNull(boolean errorIfNull) {
-        if (this.errorIfInvalid == errorIfNull) {
+        if (this.errorIfNull == errorIfNull) {
             return this;
         }
         DoubleParserConfig x = copy();
@@ -68,7 +68,7 @@ public class DoubleParserConfig {
     }
 
     public DoubleParserConfig setInvalidValue(Double defaultInvalidValue) {
-        if (Objects.equals(this.nullValue, defaultInvalidValue)) {
+        if (Objects.equals(this.invalidValue, defaultInvalidValue)) {
             return this;
         }
         DoubleParserConfig x = copy();

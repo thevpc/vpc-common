@@ -592,8 +592,6 @@ public class SwingUtilities3 {
             return;
         }
         Point p = SwingUtilities3.getPreferredPopupLocation(point, popup);
-        System.out.println(point+" ; "+p);
-//        popup.setLocation(p.x, p.y);
         popup.show(invoker,p.x,p.y);
 
     }

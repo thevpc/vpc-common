@@ -28,7 +28,7 @@
         <module>vpc-common-lanterna</module>
         <module>vpc-common-web-xml</module>
         <module>vpc-common-xfile</module>
-        <module>vpc-common-nuts-template</module>
+        <module>vpc-common-monitor</module>
     </modules>
 
 </project>

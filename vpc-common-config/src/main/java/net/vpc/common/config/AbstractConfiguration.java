@@ -28,7 +28,7 @@ public abstract class AbstractConfiguration implements Configuration {
 //    private static Configuration globalConfig;
 //    private static Configuration userConfig;
 
-    @Override
+//    @Override
     public ConfigOptions getOptions() {
         return options;
     }
@@ -85,119 +85,119 @@ public abstract class AbstractConfiguration implements Configuration {
         options.autoSave = true;
     }
 
-    @Override
+//    @Override
     public abstract void load() throws ConfigurationException ;
 
     
-    @Override
+//    @Override
     public boolean getBoolean(String key, boolean defaultValue) {
         Boolean s = (Boolean) getPropertyValueImpl(key);
         return s != null ? s : defaultValue;
     }
 
-    @Override
+//    @Override
     public char getChar(String key, char defaultValue) {
         Character s = (Character) getPropertyValueImpl(key);
         return s != null ? s : defaultValue;
     }
 
-    @Override
+//    @Override
     public void setDate(String key, Date date) {
         setProperty(key, date);
     }
 
-    @Override
+//    @Override
     public void setTime(String key, Time date) {
         setProperty(key, date);
 //        props.put(key, date ==null ? null : date);
     }
 
-    @Override
+//    @Override
     public Date getDate(String key) {
         return (Date) getPropertyValueImpl(key);
     }
 
-    @Override
+//    @Override
     public Date getDate(String key, Date defaultValue) {
         Date r = (Date) getPropertyValueImpl(key);
         return r == null ? defaultValue : r;
     }
 
-    @Override
+//    @Override
     public Time getTime(String key) {
         return (Time) getPropertyValueImpl(key);
     }
 
-    @Override
+//    @Override
     public Time getTime(String key, Time defaultValue) {
         Time r = (Time) getPropertyValueImpl(key);
         return r == null ? defaultValue : r;
     }
 
-    @Override
+//    @Override
     public double getDouble(String key, double defaultValue) {
         Number s = (Number) getPropertyValueImpl(key);
         return s != null ? s.doubleValue() : defaultValue;
     }
 
-    @Override
+//    @Override
     public float getFloat(String key, float defaultValue) {
         Number s = (Number) getPropertyValueImpl(key);
         return s != null ? s.floatValue() : defaultValue;
     }
 
-    @Override
+//    @Override
     public int getInt(String key, int defaultValue) {
         Number s = (Number) getPropertyValueImpl(key);
         return s != null ? s.intValue() : defaultValue;
     }
 
-    @Override
+//    @Override
     public Font getFont(String key, Font defaultValue) {
         Font s = (Font) getPropertyValueImpl(key);
         return s != null ? s : defaultValue;
     }
 
-    @Override
+//    @Override
     public Color getColor(String key, Color defaultValue) {
         Color s = (Color) getPropertyValueImpl(key);
         return s != null ? s : defaultValue;
     }
 
-    @Override
+//    @Override
     public Locale getLocale(String key) {
         return (Locale) getPropertyValueImpl(key);
     }
 
-    @Override
+//    @Override
     public void setLocale(String key, Locale locale) {
         setProperty(key, locale);
     }
 
-    @Override
+//    @Override
     public Locale getLocale(String key, Locale defaultValue) {
         Locale r = (Locale) getPropertyValueImpl(key);
         return r == null ? defaultValue : r;
     }
 
-    @Override
+//    @Override
     public long getLong(String key, long defaultValue) {
         Number s = (Number) getPropertyValueImpl(key);
         return s != null ? s.longValue() : defaultValue;
     }
 
-    @Override
+//    @Override
     public abstract void deleteTree(String key, boolean deleteRoot) ;
 
-    @Override
+//    @Override
     public abstract String[] getChildrenKeys(String key, boolean recurse) ;
 
-    @Override
+//    @Override
     public Object getProperty(String key) {
         return getPropertyValueImpl(key);
     }
 
-    @Override
+//    @Override
     public String getPropertyComments(String key) {
         
         if (getPropertyDescImpl(key)==null) {
@@ -213,7 +213,7 @@ public abstract class AbstractConfiguration implements Configuration {
         }
     }
 
-    @Override
+//    @Override
     public String getPropertyType(String key) {
         if (!containsKey(key)) {
             return null;
@@ -223,52 +223,52 @@ public abstract class AbstractConfiguration implements Configuration {
         }
     }
 
-    @Override
+//    @Override
     public short getShort(String key, short defaultValue) {
         Number s = (Number) getPropertyValueImpl(key);
         return s != null ? s.shortValue() : defaultValue;
     }
 
-    @Override
+//    @Override
     public String getString(String key) {
         return (String) getPropertyValueImpl(key);
     }
 
-    @Override
+//    @Override
     public int[] getIntArray(String key) {
         return (int[]) getPropertyValueImpl(key);
     }
 
-    @Override
+//    @Override
     public Object getObject(String key, Object defaultValue) {
         Object r = getPropertyValueImpl(key);
         return r == null ? defaultValue : r;
     }
 
-    @Override
+//    @Override
     public String getString(String key, String defaultValue) {
         String r = (String) getPropertyValueImpl(key);
         return r == null ? defaultValue : r;
     }
 
-    @Override
+//    @Override
     public String[] getStringArray(String key, String[] defaultValue) {
         String[] r = (String[]) getPropertyValueImpl(key);
         return r == null ? defaultValue : r;
     }
 
-    @Override
+//    @Override
     public Color[] getColorArray(String key, Color[] defaultValue) {
         Color[] r = (Color[]) getPropertyValueImpl(key);
         return r == null ? defaultValue : r;
     }
 
-    @Override
+//    @Override
     public Color[] getColorArray(String key) {
         return (Color[]) getPropertyValueImpl(key);
     }
 
-    @Override
+//    @Override
     public String[] getStringArray(String key) {
         return (String[]) getPropertyValueImpl(key);
     }
@@ -276,7 +276,7 @@ public abstract class AbstractConfiguration implements Configuration {
     public abstract Set<String> keySet() ;
 
     
-    @Override
+//    @Override
     public Converter getConverter(String type) {
         Converter conv = typesToConverters.get(type);
         if (conv == null) {
@@ -285,7 +285,7 @@ public abstract class AbstractConfiguration implements Configuration {
         return conv;
     }
 
-    @Override
+//    @Override
     public Converter getConverter(Class someClass) {
         Converter conv = classesToConverters.get(someClass);
         if (conv == null) {
@@ -294,7 +294,7 @@ public abstract class AbstractConfiguration implements Configuration {
         return conv;
     }
 
-    @Override
+//    @Override
     public Object getLoadedValue(String stringValue, String type) {
         try {
             if (stringValue == null) {
@@ -384,82 +384,82 @@ public abstract class AbstractConfiguration implements Configuration {
         autoSaveIfNecessary();
     }
 
-    @Override
+//    @Override
     public void setBoolean(String key, boolean value) {
         setProperty(key, value ? Boolean.TRUE : Boolean.FALSE);
     }
 
-    @Override
+//    @Override
     public void setChar(String key, char value) {
         setProperty(key, value);
     }
 
-    @Override
+//    @Override
     public void setConfidential(String key, String confidential) {
         setProperty(key, confidential, "confidential");
     }
 
-    @Override
+//    @Override
     public void setDouble(String key, double value) {
         setProperty(key, value);
     }
 
-    @Override
+//    @Override
     public void setFloat(String key, float value) {
         setProperty(key, value);
     }
 
-    @Override
+//    @Override
     public void setArray(String key, Object[] arr, char sep) {
         setProperty(key, arr, null, sep);
     }
 
-    @Override
+//    @Override
     public void setIntArray(String key, int[] intArray) {
         setProperty(key, intArray);
     }
 
-    @Override
+//    @Override
     public void setInt(String key, int value) {
         setProperty(key, value);
     }
 
-    @Override
+//    @Override
     public void setLong(String key, long value) {
         setProperty(key, value);
     }
 
-    @Override
+//    @Override
     public void setObfuscated(String key, String value) {
         setProperty(key, obfuscate(value), "obfuscated");
     }
 
-    @Override
+//    @Override
     public void setProperty(String key, Object value) {
         setProperty(key, value, null);
     }
 
-    @Override
+//    @Override
     public void setString(String key, String value) {
         setProperty(key, value, null);
     }
 
-    @Override
+//    @Override
     public void setFont(String key, Font value) {
         setProperty(key, value, FONT_TYPE);
     }
 
-    @Override
+//    @Override
     public void setColor(String key, Color value) {
         setProperty(key, value, COLOR_TYPE);
     }
 
-    @Override
+//    @Override
     public void setStringArray(String key, String[] value, char sep) {
         setProperty(key, value, null, sep);
     }
 
-    @Override
+//    @Override
     public void setColorArray(String key, Color[] value) {
         setProperty(key, value, null, ';');
     }
@@ -468,7 +468,7 @@ public abstract class AbstractConfiguration implements Configuration {
         setProperty(key, value, type, ';');
     }
 
-    @Override
+//    @Override
     public boolean isSupportedClass(Class aClass) {
         if (classesToConverters.containsKey(aClass)) {
             return true;
@@ -524,7 +524,7 @@ public abstract class AbstractConfiguration implements Configuration {
         }
     }
 
-    @Override
+//    @Override
     public void setPropertyComments(String key, String comments) {
         if (equals(getPropertyDescImpl(key), comments)) {
             return;
@@ -537,12 +537,12 @@ public abstract class AbstractConfiguration implements Configuration {
         autoSaveIfNecessary();
     }
 
-    @Override
+//    @Override
     public void setShort(String key, short value) {
         setProperty(key, value);
     }
 
-    @Override
+//    @Override
     public String getStoredValue(Object val, String type) {
         if (val == null) {
             return null;
@@ -872,7 +872,7 @@ public abstract class AbstractConfiguration implements Configuration {
         return "" + o;
     }
 
- @Override
+// @Override
     public void remove(String key) {
         setPropertyDescImpl(key, null);
         setPropertyValueImpl(key,null, null);

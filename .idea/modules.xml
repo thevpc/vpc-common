@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/common.iml" filepath="$PROJECT_DIR$/common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-classpath/vpc-common-classpath.iml" filepath="$PROJECT_DIR$/vpc-common-classpath/vpc-common-classpath.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-commandline/vpc-common-commandline.iml" filepath="$PROJECT_DIR$/vpc-common-commandline/vpc-common-commandline.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-config/vpc-common-config.iml" filepath="$PROJECT_DIR$/vpc-common-config/vpc-common-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-desktop-automation/vpc-common-desktop-automation.iml" filepath="$PROJECT_DIR$/vpc-common-desktop-automation/vpc-common-desktop-automation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-fprint/vpc-common-fprint.iml" filepath="$PROJECT_DIR$/vpc-common-fprint/vpc-common-fprint.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-io/vpc-common-io.iml" filepath="$PROJECT_DIR$/vpc-common-io/vpc-common-io.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-io-compress/vpc-common-io-compress.iml" filepath="$PROJECT_DIR$/vpc-common-io-compress/vpc-common-io-compress.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep.iml" filepath="$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-lanterna/vpc-common-lanterna.iml" filepath="$PROJECT_DIR$/vpc-common-lanterna/vpc-common-lanterna.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-log/vpc-common-log.iml" filepath="$PROJECT_DIR$/vpc-common-log/vpc-common-log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-mvn/vpc-common-mvn.iml" filepath="$PROJECT_DIR$/vpc-common-mvn/vpc-common-mvn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-prs/vpc-common-prs.iml" filepath="$PROJECT_DIR$/vpc-common-prs/vpc-common-prs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-sql/vpc-common-sql.iml" filepath="$PROJECT_DIR$/vpc-common-sql/vpc-common-sql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-ssh/vpc-common-ssh.iml" filepath="$PROJECT_DIR$/vpc-common-ssh/vpc-common-ssh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-strings/vpc-common-strings.iml" filepath="$PROJECT_DIR$/vpc-common-strings/vpc-common-strings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-swings/vpc-common-swings.iml" filepath="$PROJECT_DIR$/vpc-common-swings/vpc-common-swings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-swings-prs/vpc-common-swings-prs.iml" filepath="$PROJECT_DIR$/vpc-common-swings-prs/vpc-common-swings-prs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-utils/vpc-common-utils.iml" filepath="$PROJECT_DIR$/vpc-common-utils/vpc-common-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-web-jsf/vpc-common-web-jsf.iml" filepath="$PROJECT_DIR$/vpc-common-web-jsf/vpc-common-web-jsf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-web-xml/vpc-common-web-xml.iml" filepath="$PROJECT_DIR$/vpc-common-web-xml/vpc-common-web-xml.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-xfile/vpc-common-xfile.iml" filepath="$PROJECT_DIR$/vpc-common-xfile/vpc-common-xfile.iml" />
+    </modules>
+  </component>
+</project>

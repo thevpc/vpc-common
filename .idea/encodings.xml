@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/vpc-common-classpath" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-commandline" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-desktop-automation" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-fprint" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-io" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-io-compress" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-jeep" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-lanterna" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-log" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-mvn" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-prs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-sql" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-ssh" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-strings" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-swings" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-swings-prs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-utils" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-web-jsf" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-web-xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-xfile" charset="UTF-8" />
+  </component>
+</project>

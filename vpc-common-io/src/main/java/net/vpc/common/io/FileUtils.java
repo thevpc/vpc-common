@@ -29,7 +29,7 @@
  */
 package net.vpc.common.io;
 
-import javax.activation.MimetypesFileTypeMap;
+//import javax.activation.MimetypesFileTypeMap;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -144,31 +144,38 @@ public class FileUtils {
     }
 
     public static String probeContentType(String fileName) {
-        MimetypesFileTypeMap m = new MimetypesFileTypeMap();
-        String contentType = null;
         try {
-            contentType = m.getContentType(fileName);
-        } catch (Exception ex) {
+            return Files.probeContentType(Paths.get(fileName));
+        } catch (IOException ex) {
             //ignore
         }
-        if (contentType == null || "application/octet-stream".equals(contentType)) {
-            if (fileName.endsWith(".txt")) {
-                contentType = "text/plain";
-            } else if (fileName.endsWith(".html")) {
-                contentType = "text/html";
-            } else if (fileName.endsWith(".xml")) {
-                contentType = "text/xml";
-            } else if (fileName.toLowerCase().endsWith(".gif")) {
-                contentType = "image/gif";
-            } else if (fileName.toLowerCase().endsWith(".css")) {
-                contentType = "text/css";
-            } else if (fileName.toLowerCase().endsWith(".js")) {
-                contentType = "text/javascript";
-            } else {
-                contentType = "application/octet-stream";
-            }
-        }
-        return contentType;
+        return null;
+        // NO MORE SUPPORTED IN JDK
+//        MimetypesFileTypeMap m = new MimetypesFileTypeMap();
+//        String contentType = null;
+//        try {
+//            contentType = m.getContentType(fileName);
+//        } catch (Exception ex) {
+//            //ignore
+//        }
+//        if (contentType == null || "application/octet-stream".equals(contentType)) {
+//            if (fileName.endsWith(".txt")) {
+//                contentType = "text/plain";
+//            } else if (fileName.endsWith(".html")) {
+//                contentType = "text/html";
+//            } else if (fileName.endsWith(".xml")) {
+//                contentType = "text/xml";
+//            } else if (fileName.toLowerCase().endsWith(".gif")) {
+//                contentType = "image/gif";
+//            } else if (fileName.toLowerCase().endsWith(".css")) {
+//                contentType = "text/css";
+//            } else if (fileName.toLowerCase().endsWith(".js")) {
+//                contentType = "text/javascript";
+//            } else {
+//                contentType = "application/octet-stream";
+//            }
+//        }
+//        return contentType;
     }
 
     public static String probeContentType(File file) {

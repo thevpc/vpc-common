@@ -20,7 +20,7 @@ class StringTokStringMap implements StringCollection {
 
     public Map<String, String> split(String value) {
         if (value != null && !value.isEmpty()) {
-            StringTokenizer st = new StringTokenizer(separators);
+            StringTokenizer st = new StringTokenizer(value,separators);
             Map<String, String> all = new HashMap<>();
             while (st.hasMoreTokens()) {
                 String key0 = st.nextToken();
