@@ -16,6 +16,9 @@ public class ByteArrayPrintStream extends PrintStream {
 
     }
 
+    public byte[] toByteArray2() {
+        return null;
+    }
     public byte[] toByteArray() {
         flush();
         return out.toByteArray();

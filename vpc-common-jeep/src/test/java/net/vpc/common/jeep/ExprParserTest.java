@@ -27,7 +27,7 @@ public class ExprParserTest {
         e.declareBinaryOperators(",");
         e.declareOperator(new FunctionBase(";", String.class, new Class[]{Object.class, Object.class}) {
             @Override
-            public Object evaluate(ExpressionNode[] operands, ExpressionEvaluator evaluator) {
+            public Object eval(ExpressionNode[] operands, ExpressionEvaluator evaluator) {
                 StringBuilder sb = new StringBuilder();
                 Object op1 = operands[0].evaluate(evaluator);
                 Object op2 = operands[1].evaluate(evaluator);

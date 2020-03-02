@@ -17,9 +17,6 @@ import java.util.Map;
  * @author vpc
  */
 public class JeepUtils {
-    private static Map<Class, ExpressionEvaluatorConverter[]> cache_getTypeImplicitConversions = new HashMap<>();
-    private static final ExpressionEvaluatorConverter[] ARR0 = new ExpressionEvaluatorConverter[0];
-
     public static final String OPERATORS = "-+$=<>#~%~/*|&!^";
     public static final int PRECEDENCE_0 = 1;
     public static final int PRECEDENCE_1 = 5;
@@ -30,6 +27,8 @@ public class JeepUtils {
     public static final int PRECEDENCE_6 = 30;
     public static final int PRECEDENCE_7 = 40;
     public static final int PRECEDENCE_MAX = 42;
+    private static final ExpressionEvaluatorConverter[] ARR0 = new ExpressionEvaluatorConverter[0];
+    private static Map<Class, ExpressionEvaluatorConverter[]> cache_getTypeImplicitConversions = new HashMap<>();
 
     public static boolean isDefaultOp(String c) {
         return (c.length() > 0 && OPERATORS.indexOf(c.charAt(0)) >= 0);
@@ -103,6 +102,17 @@ public class JeepUtils {
         return false;
     }
 
+    public static long getDefaultBinaryOpPrecedence(String name) {
+        if (name.isEmpty()) {
+            return getDefaultBinaryOpPrecedence(' ');
+        }
+        long p = 0;
+        for (char c : name.toCharArray()) {
+            p = p * PRECEDENCE_MAX + getDefaultBinaryOpPrecedence(c);
+        }
+        return p;
+    }
+
     public static int getDefaultBinaryOpPrecedence(char c) {
         switch (c) {
             case ',':
@@ -133,17 +143,6 @@ public class JeepUtils {
                 return PRECEDENCE_7;
         }
         return PRECEDENCE_6;
-    }
-
-    public static long getDefaultBinaryOpPrecedence(String name) {
-        if (name.isEmpty()) {
-            return getDefaultBinaryOpPrecedence(' ');
-        }
-        long p = 0;
-        for (char c : name.toCharArray()) {
-            p = p * PRECEDENCE_MAX + getDefaultBinaryOpPrecedence(c);
-        }
-        return p;
     }
 
     public static int getArrayDim(Class arrayType) {
@@ -210,70 +209,22 @@ public class JeepUtils {
         }
         if (Number.class.isAssignableFrom(from1)) {
             if (Byte.class.equals(to1)) {
-                f = new AbstractExpressionEvaluatorConverter(from, to) {
-                    @Override
-                    public Object convert(Object value) {
-                        if (value == null) {
-                            return null;
-                        }
-                        return ((Number) value).byteValue();
-                    }
-                };
+                f = new NumberToByteExpressionEvaluatorConverter(from, to);
             }
             if (Short.class.equals(to1)) {
-                f = new AbstractExpressionEvaluatorConverter(from, to) {
-                    @Override
-                    public Object convert(Object value) {
-                        if (value == null) {
-                            return null;
-                        }
-                        return ((Number) value).shortValue();
-                    }
-                };
+                f = new NumberToShortExpressionEvaluatorConverter(from, to);
             }
             if (Integer.class.equals(to)) {
-                f = new AbstractExpressionEvaluatorConverter(from, to) {
-                    @Override
-                    public Object convert(Object value) {
-                        if (value == null) {
-                            return null;
-                        }
-                        return ((Number) value).intValue();
-                    }
-                };
+                f = new NumberToIntExpressionEvaluatorConverter(from, to);
             }
             if (Long.class.equals(to1)) {
-                f = new AbstractExpressionEvaluatorConverter(from, to) {
-                    @Override
-                    public Object convert(Object value) {
-                        if (value == null) {
-                            return null;
-                        }
-                        return ((Number) value).longValue();
-                    }
-                };
+                f = new NumberToLongExpressionEvaluatorConverter(from, to);
             }
             if (Float.class.equals(to1)) {
-                f = new AbstractExpressionEvaluatorConverter(from, to) {
-                    @Override
-                    public Object convert(Object value) {
-                        if (value == null) {
-                            return null;
-                        }
-                        return ((Number) value).floatValue();
-                    }
-                };
+                f = new NumberToFloatExpressionEvaluatorConverter(from, to);
             }
             if (Double.class.equals(to1)) {
-                f = new AbstractExpressionEvaluatorConverter(from, to) {
-                    @Override
-                    public Object convert(Object value) {
-                        if (value == null) {
-                            return null;
-                        }
-                        return ((Number) value).doubleValue();
-                    }
-                };
+                f = new NumberToDoubleExpressionEvaluatorConverter(from, to);
             }
         }
 
@@ -318,17 +269,24 @@ public class JeepUtils {
         } else if (Short.TYPE.equals(cls)) {
             all.add(createTypeImplicitConversions(cls, Short.class));
             all.add(createTypeImplicitConversions(cls, Integer.TYPE));
+            all.add(createTypeImplicitConversions(cls, Long.TYPE));
+            all.add(createTypeImplicitConversions(cls, Float.TYPE));
+            all.add(createTypeImplicitConversions(cls, Double.TYPE));
         } else if (Short.class.equals(cls)) {
             all.add(createTypeImplicitConversions(cls, Short.TYPE));
-
+            all.add(createTypeImplicitConversions(cls, Long.TYPE));
+            all.add(createTypeImplicitConversions(cls, Float.TYPE));
+            all.add(createTypeImplicitConversions(cls, Double.TYPE));
         } else if (Integer.TYPE.equals(cls)) {
             all.add(createTypeImplicitConversions(cls, Integer.class));
             all.add(createTypeImplicitConversions(cls, Long.TYPE));
             all.add(createTypeImplicitConversions(cls, Float.TYPE));
+            all.add(createTypeImplicitConversions(cls, Double.TYPE));
         } else if (Integer.class.equals(cls)) {
             all.add(createTypeImplicitConversions(cls, Integer.TYPE));
             all.add(createTypeImplicitConversions(cls, Long.TYPE));
             all.add(createTypeImplicitConversions(cls, Float.TYPE));
+            all.add(createTypeImplicitConversions(cls, Double.TYPE));
 
         } else if (Float.TYPE.equals(cls)) {
             all.add(createTypeImplicitConversions(cls, Float.class));
@@ -360,6 +318,90 @@ public class JeepUtils {
             if (Character.isWhitespace(c)) {
                 throw new IllegalArgumentException("operator could not contain white characters : " + name);
             }
+        }
+    }
+
+    private static class NumberToByteExpressionEvaluatorConverter extends AbstractExpressionEvaluatorConverter {
+        public NumberToByteExpressionEvaluatorConverter(Class from, Class to) {
+            super(from, to);
+        }
+
+        @Override
+        public Object convert(Object value) {
+            if (value == null) {
+                return null;
+            }
+            return ((Number) value).byteValue();
+        }
+    }
+
+    private static class NumberToShortExpressionEvaluatorConverter extends AbstractExpressionEvaluatorConverter {
+        public NumberToShortExpressionEvaluatorConverter(Class from, Class to) {
+            super(from, to);
+        }
+
+        @Override
+        public Object convert(Object value) {
+            if (value == null) {
+                return null;
+            }
+            return ((Number) value).shortValue();
+        }
+    }
+
+    private static class NumberToIntExpressionEvaluatorConverter extends AbstractExpressionEvaluatorConverter {
+        public NumberToIntExpressionEvaluatorConverter(Class from, Class to) {
+            super(from, to);
+        }
+
+        @Override
+        public Object convert(Object value) {
+            if (value == null) {
+                return null;
+            }
+            return ((Number) value).intValue();
+        }
+    }
+
+    private static class NumberToLongExpressionEvaluatorConverter extends AbstractExpressionEvaluatorConverter {
+        public NumberToLongExpressionEvaluatorConverter(Class from, Class to) {
+            super(from, to);
+        }
+
+        @Override
+        public Object convert(Object value) {
+            if (value == null) {
+                return null;
+            }
+            return ((Number) value).longValue();
+        }
+    }
+
+    private static class NumberToFloatExpressionEvaluatorConverter extends AbstractExpressionEvaluatorConverter {
+        public NumberToFloatExpressionEvaluatorConverter(Class from, Class to) {
+            super(from, to);
+        }
+
+        @Override
+        public Object convert(Object value) {
+            if (value == null) {
+                return null;
+            }
+            return ((Number) value).floatValue();
+        }
+    }
+
+    private static class NumberToDoubleExpressionEvaluatorConverter extends AbstractExpressionEvaluatorConverter {
+        public NumberToDoubleExpressionEvaluatorConverter(Class from, Class to) {
+            super(from, to);
+        }
+
+        @Override
+        public Object convert(Object value) {
+            if (value == null) {
+                return null;
+            }
+            return ((Number) value).doubleValue();
         }
     }
 }

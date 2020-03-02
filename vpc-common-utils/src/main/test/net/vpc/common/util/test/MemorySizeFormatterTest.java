@@ -30,7 +30,7 @@
 //        for (int i = 0; i < formats.length; i++) {
 //            String s = formats[i];
 //            String format = new MemorySizeFormatter(s).format(value);
-//            Assert.assertEquals(format,results[i]);
+//            Assertions.assertEquals(format,results[i]);
 //        }
 //    }
 //}

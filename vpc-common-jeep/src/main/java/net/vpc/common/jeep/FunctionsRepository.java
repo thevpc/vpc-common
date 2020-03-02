@@ -214,29 +214,46 @@ public class FunctionsRepository {
 //        }
 //        return o;
 //    }
-    Function findFunction(String name, ExpressionNode[] operands, ExpressionManager evaluator) {
+
+    Function findFunction(String name, ExpressionNode[] operands, final ExpressionManager expressionManager) {
         Function n = functionsByName.get(name);
         if (n != null) {
             return n;
         }
 
-        Class[] types = ((DefaultExpressionManager) evaluator).getTypes(operands);
-        Function oo = findFunction(name, types, evaluator, null);
-        if (oo != null) {
-            return oo;
+        Class[] operandTypes = ((DefaultExpressionManager) expressionManager).getTypes(operands);
+        Set<MethodSignature> fails=new HashSet<>();
+
+        Function f = findFunctionNoImplicit(name, operandTypes, expressionManager, fails);
+        if(f!=null){
+            return f;
         }
+
+
+        ArgsPossibility[] argsPossibilities = ArgsPossibility.allOf(operandTypes, new ArgsPossibility.ImplicitSupplier() {
+            @Override
+            public ExpressionEvaluatorConverter[] get(Class clazz) {
+                return getExpressionEvaluatorConverters(clazz, expressionManager);
+            }
+        });
         Set<String> names = getAllNames(name);
-        for (ExpressionEvaluatorResolver resolver : evaluator.getResolvers()) {
-            if (resolver != null) {
-                for (String nn : names) {
-                    Function resolved = resolver.resolveFunction(nn, operands, evaluator);
-                    if (resolved != null) {
-                        return resolved;
+        for (ArgsPossibility argsPossibility : argsPossibilities) {
+            f = findFunctionNoImplicit(name, argsPossibility.getConverted(), expressionManager, fails);
+            if(f!=null){
+                return new ConvertedFunction(f,argsPossibility.getConverters(),null);
+            }
+            for (ExpressionEvaluatorResolver resolver : expressionManager.getResolvers()) {
+                if (resolver != null) {
+                    for (String nn : names) {
+                        Function resolved = resolver.resolveFunction(nn, operands, argsPossibility, expressionManager);
+                        if (resolved != null) {
+                            return resolved;
+                        }
                     }
                 }
             }
         }
-        return oo;
+        return null;
     }
 
     public void declareFunction(Function function) {
@@ -252,7 +269,7 @@ public class FunctionsRepository {
         functionsByName.remove(getCanonicalName(name));
     }
 
-    Function findFunction(String name, Class[] operandTypes, ExpressionManager definition, Set<MethodSignature> fails) {
+    Function findFunctionNoImplicit(String name, Class[] operandTypes, ExpressionManager definition, Set<MethodSignature> fails) {
         if (fails == null) {
             fails = new HashSet<>();
         }
@@ -287,32 +304,27 @@ public class FunctionsRepository {
             functionsBySigCache.put(k0, d);
             return d;
         }
-        for (int i = 0; i < operandTypes.length; i++) {
-            if (operandTypes[i] == null) {
-                throw new IllegalArgumentException("Unable to resolve Operand "+i+" type for "+name);
-            } else {
-                Set<ExpressionEvaluatorConverter> allImplicitConverters = new HashSet<>(Arrays.asList(JeepUtils.getTypeImplicitConversions(operandTypes[i])));
-                for (ExpressionEvaluatorResolver resolver : definition.getResolvers()) {
-                    ExpressionEvaluatorConverter[] next = resolver.resolveImplicitConverters(operandTypes[i]);
-                    if (next != null) {
-                        allImplicitConverters.addAll(Arrays.asList(next));
-                    }
-                }
-                for (final ExpressionEvaluatorConverter currentConverter : allImplicitConverters) {
-                    if (currentConverter != null) {
-                        Class[] operandTypes2 = convertArgumentTypesByIndex(operandTypes, currentConverter, i);
-                        Function oo = findFunction(name, operandTypes2, definition, fails);
-                        if (oo != null) {
-                            oo = new FunctionConverter(name, oo, operandTypes, i, currentConverter);
-                            functionsBySigCache.put(k0, oo);
-                            return oo;
-                        }
-                    }
+        fails.add(k0);
+        return null;
+    }
+
+    private ExpressionEvaluatorConverter[] getExpressionEvaluatorConverters(Class operandType, ExpressionManager definition) {
+        LinkedHashSet<ExpressionEvaluatorConverter> allImplicitConverters = new LinkedHashSet<>();
+        allImplicitConverters.add(null);
+        for (ExpressionEvaluatorConverter ic : JeepUtils.getTypeImplicitConversions(operandType)) {
+            if(ic!=null){
+                allImplicitConverters.add(ic);
+            }
+        }
+        for (ExpressionEvaluatorResolver resolver : definition.getResolvers()) {
+            ExpressionEvaluatorConverter[] next = resolver.resolveImplicitConverters(operandType);
+            if (next != null) {
+                for (ExpressionEvaluatorConverter ic : next) {
+                    allImplicitConverters.add(ic);
                 }
             }
         }
-        fails.add(k0);
-        return null;
+        return allImplicitConverters.toArray(new ExpressionEvaluatorConverter[0]);
     }
 
     static Class[] convertArgumentTypesByIndex(Class[] operandTypes, ExpressionEvaluatorConverter currentConverter, int index) {

@@ -31,6 +31,27 @@ public class MetricFormat implements DoubleFormat {
         this("M-3 M3 I2 D2");
     }
 
+    public String toPattern(){
+        StringBuilder sb=new StringBuilder();
+        if(leadingZeros){
+            sb.append('0');
+        }
+        sb.append(' ').append('M').append(low);
+        sb.append(' ').append('M').append(high);
+        if(decimal){
+            sb.append('D').append(fractionDigits);
+        }
+        sb.append('I').append(integerDigits);
+        if(fixedLength){
+            sb.append('F');
+        }
+        if(intermediateZeros){
+            sb.append(' ');
+            sb.append('0');
+        }
+
+        return sb.toString();
+    }
     public MetricFormat(String format) {
         leadingZeros = false;
         intermediateZeros = false;
@@ -188,6 +209,38 @@ public class MetricFormat implements DoubleFormat {
         return format(value);
     }
 
+
+    private int evalInv(String pow) {
+        switch (pow) {
+            case "pm":
+                return -1;
+            case "nm":
+                return -8;
+            case "um":
+                return -6;
+            case "mm":
+                return -3;
+            case "cm":
+                return -2;
+            case "dm":
+                return -1;
+            case "m":
+                return 0;
+            case "dam":
+                return 1;
+            case "hm":
+                return 2;
+            case "km":
+                return 3;
+            case "Mm":
+                return 6;
+            case "Gm":
+                return 9;
+            case "Tm":
+                return 12;
+        }
+        throw new IllegalArgumentException("Unsupported");
+    }
 
     private String strUnit(int pow) {
         switch (pow) {

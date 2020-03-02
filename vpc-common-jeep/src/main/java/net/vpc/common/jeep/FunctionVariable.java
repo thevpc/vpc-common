@@ -40,7 +40,7 @@ class FunctionVariable extends AbstractVariable {
 
     @Override
     public Object getValue(ExpressionEvaluator evaluator) {
-        return fct.evaluate(new ExpressionNode[0], evaluator);
+        return fct.eval(new ExpressionNode[0], evaluator);
     }
 
     @Override

@@ -5,5 +5,7 @@ public enum DatePart {
     HOUR,
     MINUTE,
     SECOND,
-    MILLISECOND
+    MILLISECOND,
+    MICROSECOND,
+    NANOSECOND
 }

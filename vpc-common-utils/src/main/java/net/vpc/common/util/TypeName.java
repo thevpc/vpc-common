@@ -6,10 +6,10 @@ import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class TypeName<C> implements Serializable {
+public final class TypeName<C> implements Serializable {
     private static final long serialVersionUID = 1;
-    private String typeName;
-    private TypeName[] parameters;
+    private final String typeName;
+    private final TypeName[] parameters;
 
     public TypeName(String name, TypeName... parameters) {
         if (name.contains("<")) {

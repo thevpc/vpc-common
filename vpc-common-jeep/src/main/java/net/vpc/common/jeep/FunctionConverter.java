@@ -44,7 +44,7 @@ class FunctionConverter implements Function {
     }
 
     @Override
-    public Object evaluate(ExpressionNode[] operands, ExpressionEvaluator evaluator) {
+    public Object eval(ExpressionNode[] operands, ExpressionEvaluator evaluator) {
         ExpressionNode[] operands2 = new ExpressionNode[operands.length];
         for (int j = 0; j < getArgTypes().length; j++) {
             final ExpressionNode joperand = operands[j];
@@ -54,7 +54,7 @@ class FunctionConverter implements Function {
                 operands2[j] = joperand;
             }
         }
-        return oo.evaluate(operands2, evaluator);
+        return oo.eval(operands2, evaluator);
     }
 
     @Override

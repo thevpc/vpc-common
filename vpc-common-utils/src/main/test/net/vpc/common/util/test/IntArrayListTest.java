@@ -2,8 +2,9 @@ package net.vpc.common.util.test;
 
 import net.vpc.common.util.Chronometer;
 import net.vpc.common.util.IntArrayList;
-import org.junit.Assert;
-import org.junit.Test;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,11 +30,11 @@ public class IntArrayListTest {
     @Test
     public void test1(){
         IntArrayList a=new IntArrayList();
-        Assert.assertEquals("[]",a.toString());
+        Assertions.assertEquals("[]",a.toString());
         a.addAll(1,2,3);
-        Assert.assertEquals("[1,2,3]",a.toString());
+        Assertions.assertEquals("[1,2,3]",a.toString());
         a.addAll(a);
-        Assert.assertEquals("[1,2,3,1,2,3]",a.toString());
+        Assertions.assertEquals("[1,2,3,1,2,3]",a.toString());
 
         a.insertAll(2,7,9);
         System.out.println(a+" : insertAll "+a.toStringDebug());
@@ -62,7 +63,7 @@ public class IntArrayListTest {
 
     @Test
     public void testPerf(){
-        Chronometer c=new Chronometer();
+        Chronometer c=Chronometer.start();
         IntArrayList a1=new IntArrayList();
         int count = 100000;
         for (int i = 0; i < count; i++) {

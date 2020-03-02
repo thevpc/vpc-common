@@ -254,7 +254,7 @@ public class ExpressionStreamTokenizer {
                 StringBuilder sb = new StringBuilder();
                 sb.append((char) cc);
                 while (true) {
-                    reader.mark(1);
+                    reader.mark(3);
                     cc = reader.read();
                     switch (cc) {
                         case -1: {
@@ -324,8 +324,28 @@ public class ExpressionStreamTokenizer {
                                 token.cval = new ExprDoubleComplex(0, Double.valueOf(sb.toString()));
                                 return token;
                             } else {
-                                // now chek if we can go further as word and not as number
-                                //this happens when words an start with numbers
+                                if(cc=='+' || cc=='-'){
+                                    int cc2 = reader.read();
+                                    if(cc2=='E' || cc2=='e'){
+                                        sb.append((char)cc);
+                                        sb.append((char)cc2);
+                                        break;
+                                    }else{
+                                        reader.reset();
+                                        if (floatNumber) {
+                                            token.ttype = TT_NUMBER_FLOAT;
+                                            token.image = (sb.toString());
+                                            token.fval = Double.valueOf(sb.toString());
+                                        } else {
+                                            token.ttype = TT_NUMBER_INT;
+                                            token.image = (sb.toString());
+                                            token.ival = Long.valueOf(sb.toString());
+                                        }
+                                        return token;
+                                    }
+                                }
+                                // now check if we can go further as word and not as number
+                                //this happens when words can start with numbers
                                 if (isValidWord(sb.toString()) && isIdentifierPart((char) cc)) {
                                     sb.append((char) cc);
                                     while (true) {
@@ -544,7 +564,7 @@ public class ExpressionStreamTokenizer {
     }
 
     private boolean isComplexUnit(int cc, boolean precededWithNumber) {
-        if (config.isAcceptComplexNumber()) {
+        if (!config.isAcceptComplexNumber()) {
             return false;
         }
         if (precededWithNumber) {

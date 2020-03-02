@@ -5,10 +5,7 @@
  */
 package net.vpc.common.jeep;
 
-import net.vpc.common.jeep.nodes.ExpressionNodeArray;
-import net.vpc.common.jeep.nodes.ExpressionNodeFunctionCall;
-import net.vpc.common.jeep.nodes.ExpressionNodeLiteral;
-import net.vpc.common.jeep.nodes.ExpressionNodeVariableName;
+import net.vpc.common.jeep.nodes.*;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -27,6 +24,7 @@ public class DefaultExpressionParser {
         this.tokenizer = tokenizer;
         this.evaluator = evaluator;
     }
+
     public DefaultExpressionParser(String expression, ExpressionManager evaluator) {
         this(new ExpressionStreamTokenizer(new StringReader(expression), evaluator.getTokenizerConfig()), evaluator);
     }
@@ -104,7 +102,7 @@ public class DefaultExpressionParser {
                 throw new MissingTokenException(token.toString());
             }
             ExpressionNode[] args = {o};
-            return new ExpressionNodeFunctionCall(token.image, args);
+            return createFunctionCall(token, args);
         }
         switch (token.ttype) {
             case ExpressionStreamTokenizer.TT_WORD: {
@@ -117,19 +115,22 @@ public class DefaultExpressionParser {
                     ExpressionNode[] args = null;
                     if (i instanceof ExpressionNodeFunctionCall) {
                         ExpressionNodeFunctionCall ii = (ExpressionNodeFunctionCall) i;
-                        if(evaluator.isListSeparator(ii.getName())) {
+                        if (evaluator.isListSeparator(ii.getName())) {
                             args = ii.getOperands();
-                        }else{
+                        } else {
                             args = new ExpressionNode[]{i};
                         }
                     } else {
                         args = new ExpressionNode[]{i};
                     }
-                    return new ExpressionNodeFunctionCall(token.image, args);
-                } else {
+                    return createFunctionCall(token, args);
+                } else if (Character.isDigit(token.image.charAt(0))) {
                     String varName = token.image;
+
                     //getContext().getVariableValue(token.image)
-                    return new ExpressionNodeVariableName(varName, Object.class);
+                    return createSuffixedNumber(varName);
+                } else {
+                    return createVariableName(token.image);
                 }
             }
             case '(': {
@@ -170,6 +171,19 @@ public class DefaultExpressionParser {
         }
     }
 
+
+    protected ExpressionNodeFunctionCall createFunctionCall(ExpressionStreamTokenizer.Token token, ExpressionNode[] args) {
+        return new ExpressionNodeFunctionCall(token.image, args);
+    }
+
+    protected ExpressionNodeVariableName createVariableName(String varName) {
+        return new ExpressionNodeVariableName(varName, Object.class);
+    }
+
+    protected ExpressionNode createSuffixedNumber(String varName) {
+        return new ExpressionNodeVariableName(varName, Object.class);
+    }
+
     private ExpressionNode readL1(long opPrecedence, boolean openPar) throws IOException {
         ExpressionNode o1 = readL0();
         if (o1 == null) {
@@ -195,7 +209,7 @@ public class DefaultExpressionParser {
                 ExpressionNode[] p = readUplet('[', ']', ',');
                 ExpressionNode p0;
                 if (p.length != 0) {
-                    p0 = new ExpressionNodeArray("[",p);
+                    p0 = new ExpressionNodeArray("[", p);
                 } else {
                     p0 = p[0];
                 }
@@ -205,7 +219,7 @@ public class DefaultExpressionParser {
                 if (binaryOpPrecedence > opPrecedence) {
                     // a binary ?
                     ExpressionNode o2 = readL1(binaryOpPrecedence, openPar);
-                    o1=createOpNode(token.image,o1,o2);
+                    o1 = createOpNode(token.image, o1, o2);
                 } else {
                     tokenizer.pushBack(token);
                     return o1;
@@ -215,14 +229,14 @@ public class DefaultExpressionParser {
 //                return o1;
             } else if (evaluator.isListSeparator(token.image)) {
                 ExpressionNode o2 = readL1(opPrecedence, openPar);
-                if(o2 instanceof ExpressionNodeFunctionCall && (((ExpressionNodeFunctionCall) o2).getName()).equals(token.image)) {
+                if (o2 instanceof ExpressionNodeFunctionCall && (((ExpressionNodeFunctionCall) o2).getName()).equals(token.image)) {
                     ExpressionNodeFunctionCall o21 = (ExpressionNodeFunctionCall) o2;
-                    List<ExpressionNode> aa=new ArrayList<>();
+                    List<ExpressionNode> aa = new ArrayList<>();
                     aa.add(o1);
                     aa.addAll(Arrays.asList(o21.getArgs()));
-                    o1 = new ExpressionNodeFunctionCall(token.image,aa.toArray(new ExpressionNode[0]));
-                }else{
-                    o1 = new ExpressionNodeFunctionCall(token.image,new ExpressionNode[]{o1,o2});
+                    o1 = createFunctionCall(token, aa.toArray(new ExpressionNode[0]));
+                } else {
+                    o1 = createFunctionCall(token, new ExpressionNode[]{o1, o2});
                 }
             } else {
                 //inject implicit op
@@ -239,20 +253,20 @@ public class DefaultExpressionParser {
         }
     }
 
-    private ExpressionNode createOpNode(String op,ExpressionNode o1,ExpressionNode o2){
+    private ExpressionNode createOpNode(String op, ExpressionNode o1, ExpressionNode o2) {
         // a binary ?
         if (o1 instanceof ExpressionNodeFunctionCall) {
             ExpressionNodeFunctionCall o10 = (ExpressionNodeFunctionCall) o1;
             if (o10.getName().equals(op)) {
                 Function ff = evaluator.findFunction(o10.getName());
-                if(ff!=null && ff.isVarArgs()){
-                    if(o2 instanceof ExpressionNodeFunctionCall && ((ExpressionNodeFunctionCall) o2).getName().equals(op)){
+                if (ff != null && ff.isVarArgs()) {
+                    if (o2 instanceof ExpressionNodeFunctionCall && ((ExpressionNodeFunctionCall) o2).getName().equals(op)) {
                         return new ExpressionNodeFunctionCall(op,
-                                (ExpressionNode[]) JeepUtils.joinArraysAsType(ExpressionNode.class,new Object[]{
-                                        ((ExpressionNodeFunctionCall) o1).getArgs(),((ExpressionNodeFunctionCall) o2).getArgs()
+                                (ExpressionNode[]) JeepUtils.joinArraysAsType(ExpressionNode.class, new Object[]{
+                                        ((ExpressionNodeFunctionCall) o1).getArgs(), ((ExpressionNodeFunctionCall) o2).getArgs()
                                 })
                         );
-                    }else {
+                    } else {
                         return new ExpressionNodeFunctionCall(op,
                                 (ExpressionNode[]) JeepUtils.joinArraysAsType(ExpressionNode.class,
                                         new Object[]{((ExpressionNodeFunctionCall) o1).getArgs(),

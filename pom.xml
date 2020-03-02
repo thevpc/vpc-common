@@ -29,6 +29,10 @@
         <module>vpc-common-web-xml</module>
         <module>vpc-common-xfile</module>
         <module>vpc-common-monitor</module>
+        <module>vpc-common-diffCommand-jar</module>
+        <module>vpc-common-cron</module>
+        <module>vpc-common-vfs</module>
+        <module>vpc-common-java-shell</module>
     </modules>
 
 </project>

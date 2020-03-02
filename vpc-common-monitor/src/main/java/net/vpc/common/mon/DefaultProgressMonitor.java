@@ -4,26 +4,12 @@ package net.vpc.common.mon;
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
  * @creationtime 15 mai 2007 01:36:26
  */
-public class DefaultProgressMonitor extends BaseProgressMonitor {
-    protected double progress;
-    ProgressMessage progressMessage;
+public class DefaultProgressMonitor extends AbstractProgressMonitor {
 
-    public double getProgressValue() {
-        return progress;
+    public DefaultProgressMonitor() {
+        super(nextId());
     }
 
-    public void setProgressImpl(double progress, ProgressMessage message) {
-        if(progress<0 || progress>1){
-            System.err.println("%= "+progress+"????????????");
-        }
-        this.progress=progress;
-        this.progressMessage=message;
-    }
-
-    @Override
-    public ProgressMessage getProgressMessage() {
-        return progressMessage;
-    }
 
     @Override
     public String toString() {

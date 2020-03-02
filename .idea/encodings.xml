@@ -2,25 +2,57 @@
 <project version="4">
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/vpc-common-classpath" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-classpath/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-commandline" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-commandline/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-config" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-config/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-config/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-cron/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-desktop-automation" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-desktop-automation/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-diff-jar/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-fprint" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-fprint/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-io" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-io-compress" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-io-compress/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-io-compress/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-io/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-io/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-java-shell/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-jeep" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-jeep/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-lanterna" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-lanterna/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-log" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-log/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-log/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-monitor/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-mvn" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-mvn/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-prs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-prs/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-sql" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-sql/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-ssh" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-ssh/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-ssh/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-strings" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-strings/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-swings" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-swings-prs" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-swings-prs/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-swings/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-swings/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-utils" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-utils/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-vfs/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-web-jsf" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-web-jsf/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-web-xml" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-web-xml/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/vpc-common-xfile" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/vpc-common-xfile/src/main/java" charset="UTF-8" />
   </component>
 </project>

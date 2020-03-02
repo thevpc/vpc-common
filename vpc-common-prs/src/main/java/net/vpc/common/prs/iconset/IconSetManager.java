@@ -199,7 +199,7 @@ public class IconSetManager {
         } catch (Throwable t) {
             throw new InvalidIconSetException(t.toString());
         }
-        return descArray.toArray(new IconSetDescriptor[descArray.size()]);
+        return descArray.toArray(new IconSetDescriptor[0]);
     }
 
     public static Icon getIcon(String iconSetName, String icon) throws IconSetNotFoundException, IconNotFoundException {

@@ -5,6 +5,7 @@ package net.vpc.common.util;
  */
 public class BytesSizeFormat implements DoubleFormat {
 
+
     public static final BytesSizeFormat INSTANCE = new BytesSizeFormat();
     boolean leadingZeros = false;
     boolean intermediateZeros = true;
@@ -13,17 +14,17 @@ public class BytesSizeFormat implements DoubleFormat {
     private boolean fixedLength = false;
     private boolean binaryPrefix = false;
     private boolean standardUnit = false;
-    private long high = Units.TERA;
-    private long low = Units.BYTE;
+    private int high = 12;
+    private int low = 1;
     private int depth = Integer.MAX_VALUE;
 
-    public BytesSizeFormat(boolean leadingZeros, boolean intermediateZeros, boolean fixedLength, boolean binaryPrefix, long high, long low, int depth) {
+    public BytesSizeFormat(boolean leadingZeros, boolean intermediateZeros, boolean fixedLength, boolean binaryPrefix, char high, char low, int depth) {
         this.leadingZeros = leadingZeros;
         this.intermediateZeros = intermediateZeros;
         this.fixedLength = fixedLength;
         this.binaryPrefix = binaryPrefix;
-        this.high = high;
-        this.low = low;
+        this.high = evalIndex(high);
+        this.low = evalIndex(low);
         this.depth = depth <= 0 ? Integer.MAX_VALUE : depth;
     }
 
@@ -109,8 +110,6 @@ public class BytesSizeFormat implements DoubleFormat {
         intermediateZeros = false;
         trailingZeros = false;
         alignRight = true;
-        char low = '\0';
-        char high = '\0';
         if (format != null) {
             boolean startInterval = true;
             char[] charArray = format.toCharArray();
@@ -128,9 +127,9 @@ public class BytesSizeFormat implements DoubleFormat {
                     case 'Y': {
                         if (startInterval) {
                             startInterval = false;
-                            low = c;
+                            low = evalIndex(c);
                         } else {
-                            high = c;
+                            high = evalIndex(c);
                         }
                         break;
                     }
@@ -185,19 +184,77 @@ public class BytesSizeFormat implements DoubleFormat {
                 }
             }
         }
-        if (low == '\0') {
-            low = 'B';
-        }
-        if (high == '\0') {
-            high = 'T';
-        }
-        this.low = eval(low);
-        this.high = eval(high);
         if (this.high < this.low) {
-            long t = this.low;
+            int t = this.low;
             this.low = this.high;
             this.high = t;
         }
+    }
+
+    private char evalCharByIndex(int c) {
+        switch (c) {
+            case 1: {
+                return 'B';
+            }
+            case 2: {
+                return 'K';
+            }
+            case 6: {
+                return 'M';
+            }
+            case 9: {
+                return 'G';
+            }
+            case 12: {
+                return 'T';
+            }
+            case 15: {
+                return 'P';
+            }
+            case 18: {
+                return 'E';
+            }
+//            case 'Z': {
+//                return binaryPrefix ? ZiBYTE : ZETTA;
+//            }
+//            case 'Y': {
+//                return binaryPrefix ? YiBYTE : YOTTA;
+//            }
+        }
+        throw new IllegalArgumentException("Unsupported");
+    }
+
+    private int evalIndex(char c) {
+        switch (c) {
+            case 'B': {
+                return 1;
+            }
+            case 'K': {
+                return 3;
+            }
+            case 'M': {
+                return 6;
+            }
+            case 'G': {
+                return 9;
+            }
+            case 'T': {
+                return 12;
+            }
+            case 'P': {
+                return 15;
+            }
+            case 'E': {
+                return 18;
+            }
+//            case 'Z': {
+//                return binaryPrefix ? ZiBYTE : ZETTA;
+//            }
+//            case 'Y': {
+//                return binaryPrefix ? YiBYTE : YOTTA;
+//            }
+        }
+        throw new IllegalArgumentException("Unsupported");
     }
 
     private long eval(char c) {
@@ -221,6 +278,38 @@ public class BytesSizeFormat implements DoubleFormat {
                 return binaryPrefix ? Units.PiBYTE : Units.PETA;
             }
             case 'E': {
+                return binaryPrefix ? Units.EiBYTE : Units.EXA;
+            }
+//            case 'Z': {
+//                return binaryPrefix ? ZiBYTE : ZETTA;
+//            }
+//            case 'Y': {
+//                return binaryPrefix ? YiBYTE : YOTTA;
+//            }
+        }
+        throw new IllegalArgumentException("Unsupported");
+    }
+    private long evalLongByIndex(int c) {
+        switch (c) {
+            case 1: {
+                return binaryPrefix ? Units.BYTE : Units.BYTE;
+            }
+            case 3: {
+                return binaryPrefix ? Units.KiBYTE : Units.KILO;
+            }
+            case 6: {
+                return binaryPrefix ? Units.MiBYTE : Units.MEGA;
+            }
+            case 9: {
+                return binaryPrefix ? Units.GiBYTE : Units.GIGA;
+            }
+            case 12: {
+                return binaryPrefix ? Units.TiBYTE : Units.TERA;
+            }
+            case 15: {
+                return binaryPrefix ? Units.PiBYTE : Units.PETA;
+            }
+            case 18: {
                 return binaryPrefix ? Units.EiBYTE : Units.EXA;
             }
 //            case 'Z': {
@@ -486,4 +575,38 @@ public class BytesSizeFormat implements DoubleFormat {
         return sb.toString();
     }
 
+
+    public String toPattern(){
+        StringBuilder sb=new StringBuilder();
+        if(leadingZeros){
+            sb.append('0');
+        }
+        sb.append(' ').append(evalCharByIndex(low));
+        sb.append(' ').append(evalCharByIndex(high));
+        if(depth>=0){
+            sb.append('D').append(depth);
+        }
+        if(standardUnit){
+            sb.append('i');
+        }
+        if(binaryPrefix){
+            sb.append('I');
+        }
+        if(fixedLength){
+            sb.append('F');
+        }
+        if(intermediateZeros){
+            sb.append(' ');
+            sb.append('0');
+        }
+        if(alignRight){
+            sb.append('>');
+        }else{
+            sb.append('<');
+        }
+        if(trailingZeros){
+            sb.append('0');
+        }
+        return sb.toString();
+    }
 }

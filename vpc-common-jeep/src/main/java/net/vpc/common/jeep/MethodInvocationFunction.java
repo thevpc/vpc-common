@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class MethodInvocationFunction extends FunctionBase {
+public class MethodInvocationFunction extends FunctionBase {
 
     private final Method m;
     private final int baseIndex;
     private final int[] argIndices;
 
     public MethodInvocationFunction(String name, Method m, int baseIndex, int... argIndices) {
-        super(name, m.getReturnType(), computeParameterTypes(m, baseIndex, argIndices), false);
+        super(name, m.getReturnType(), evalParameterTypes(m, baseIndex, argIndices), false);
         this.m = m;
         this.baseIndex = baseIndex;
         if (baseIndex < 0 && !Modifier.isStatic(m.getModifiers())) {
@@ -23,7 +23,7 @@ class MethodInvocationFunction extends FunctionBase {
         this.argIndices = Arrays.copyOf(argIndices, argIndices.length);
     }
 
-    private static Class[] computeParameterTypes(Method m, int baseIndex, int[] argIndices) {
+    private static Class[] evalParameterTypes(Method m, int baseIndex, int[] argIndices) {
         List<Class> all = new ArrayList<>();
         if (baseIndex >= 0) {
             all.add(m.getDeclaringClass());
@@ -36,7 +36,7 @@ class MethodInvocationFunction extends FunctionBase {
     }
 
     @Override
-    public Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator) {
+    public Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator) {
         Object[] argsv = null;
         Object base = null;
         try {
@@ -47,12 +47,12 @@ class MethodInvocationFunction extends FunctionBase {
                 argsv[i] = narg.evaluate(evaluator);
                 Class exptected = getArgTypes()[argIndices[i]];
                 exptected = JeepPlatformUtils.toBoxingType(exptected);
-                if (argsv[i]!=null && !exptected.isInstance(argsv[i])) {
+                if (argsv[i] != null && !exptected.isInstance(argsv[i])) {
                     narg.evaluate(evaluator);
 //                    System.out.println("Why");
                 }
             }
-            return m.invoke(base, argsv);
+            return evaluateImpl(base, m, argsv, args, evaluator);
         } catch (IllegalAccessException e) {
             throw new IllegalArgumentException(e);
         } catch (InvocationTargetException e) {
@@ -60,6 +60,10 @@ class MethodInvocationFunction extends FunctionBase {
         } catch (Exception e) {
             throw new IllegalArgumentException(e);
         }
+    }
+
+    protected Object evaluateImpl(Object base, Method m, Object[] argsv, ExpressionNode[] args, ExpressionEvaluator evaluator) throws InvocationTargetException, IllegalAccessException {
+        return m.invoke(base, argsv);
     }
 
 }

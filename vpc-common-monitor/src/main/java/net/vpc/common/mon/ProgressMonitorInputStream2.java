@@ -63,15 +63,15 @@ import java.util.logging.Level;
  *
  *
  * <p>
- *
+ * <p>
  * For further documentation and examples see
  * <a href="http://java.sun.com/docs/books/tutorial/uiswing/components/progress.html">How to Monitor Progress</a>,
  * a section in <em>The Java Tutorial.</em>
  *
- * @see javax.swing.ProgressMonitor
- * @see javax.swing.JOptionPane
  * @author James Gosling
  * @version 1.20 11/17/05
+ * @see javax.swing.ProgressMonitor
+ * @see javax.swing.JOptionPane
  */
 public class ProgressMonitorInputStream2 extends FilterInputStream {
     private ProgressMonitor pmonitor;
@@ -88,7 +88,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
         super(in);
         this.size = size;
         if (pmonitor == null) {
-            pmonitor = ProgressMonitorFactory.logger(1000);
+            pmonitor = ProgressMonitors.logger(1000);
         }
         this.pmonitor = pmonitor;
     }
@@ -158,7 +158,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
         if (nr > 0) {
             nread += nr;
             double progress = (((double) nread) / size);
-            pmonitor.setProgress(progress, new StringProgressMessage(Level.INFO, ""));
+            pmonitor.setProgress(progress, new StringTaskMessage(Level.INFO, ""));
         }
         if (pmonitor.isCanceled()) {
             InterruptedIOException exc =
@@ -180,7 +180,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
             nread += nr;
             size = nread + in.available();
             int progress = (int) (((double) nread) * 100 / size);
-            pmonitor.setProgress(progress, new StringProgressMessage(Level.INFO, ""));
+            pmonitor.setProgress(progress, new StringTaskMessage(Level.INFO, ""));
         }
         return nr;
     }
@@ -192,7 +192,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
      */
     public void close() throws IOException {
         in.close();
-        pmonitor.stop();
+        pmonitor.terminate();
     }
 
 
@@ -204,7 +204,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
         in.reset();
         size = nread + in.available();
         int progress = (int) (((double) nread) * 100 / size);
-        pmonitor.setProgress(progress, new StringProgressMessage(Level.INFO, ""));
+        pmonitor.setProgress(progress, new StringTaskMessage(Level.INFO, ""));
     }
 
 }

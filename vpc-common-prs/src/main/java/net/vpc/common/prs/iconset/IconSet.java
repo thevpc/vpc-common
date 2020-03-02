@@ -39,29 +39,29 @@ public interface IconSet {
         ERROR, REQUIRED, WARN, SILENT
     }
 
-    public String getId();
+    String getId();
 
-    public String getIconPath(String iconName);
+    String getIconPath(String iconName);
     
-    public String getName();
+    String getName();
 
-    public Icon getIcon(String id) throws IconNotFoundException;
+    Icon getIcon(String id) throws IconNotFoundException;
 
-    public Icon getUnknowIcon() throws IconNotFoundException;
+    Icon getUnknowIcon() throws IconNotFoundException;
 
-    public Locale getLocale();
+    Locale getLocale();
 
-    public Icon getIcon(String icon, ErrorType errorType) throws IconNotFoundException;
+    Icon getIcon(String icon, ErrorType errorType) throws IconNotFoundException;
 
-    public Icon getIconE(String icon) throws IconNotFoundException;
+    Icon getIconE(String icon) throws IconNotFoundException;
 
-    public Icon getIconR(String icon) throws IconNotFoundException;
+    Icon getIconR(String icon) throws IconNotFoundException;
 
-    public Icon getIconW(String icon) throws IconNotFoundException;
+    Icon getIconW(String icon) throws IconNotFoundException;
 
-    public Icon getIconS(String icon) throws IconNotFoundException;
+    Icon getIconS(String icon) throws IconNotFoundException;
 
-    public void setLocale(Locale locale);
+    void setLocale(Locale locale);
 
-    public abstract Icon loadImageIcon(String path);
+    Icon loadImageIcon(String path);
 }

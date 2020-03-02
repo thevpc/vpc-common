@@ -24,3 +24,12 @@
 /vpc-common-xfile/target/
 /vpc-common-vfs/target/
 /vpc-common-cron/target/
+/vpc-common-diffCommand-jar/target/
+/vpc-common-monitor/target/
+/vpc-common-diff-jar/target/
+/vpc-common-java-shell/target/surefire-reports/
+/vpc-common-prop-binding/target/
+/vpc-common-swings-app/target/
+/vpc-common-swings-iconset/target/classes/net/vpc/common/swings/
+/vpc-common-swings-iconset-default/target/classes/
+/vpc-common-tson/target/

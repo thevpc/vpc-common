@@ -9,7 +9,7 @@ public class FunctionForHandler extends FunctionBase {
     }
 
     @Override
-    public Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator) {
+    public Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator) {
         return handler.evaluate(new DefaultFunctionEvaluationContext(evaluator, evaluator.getExpressionManager(),args, getName(), getArgTypes(),
                 getResultType(evaluator.getExpressionManager(),args)));
     }

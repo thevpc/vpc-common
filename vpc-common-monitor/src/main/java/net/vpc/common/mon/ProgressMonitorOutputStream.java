@@ -14,7 +14,7 @@ public class ProgressMonitorOutputStream extends OutputStream {
 
     public ProgressMonitorOutputStream(OutputStream target, ProgressMonitor monitor, String messagePrefix) {
         this.target = target;
-        this.monitor = ProgressMonitorFactory.nonnull(monitor);
+        this.monitor = ProgressMonitors.nonnull(monitor);
         message = messagePrefix==null?"":messagePrefix.trim();
         if (message.length() > 0) {
             message += " ";

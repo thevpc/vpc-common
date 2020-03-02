@@ -1,74 +1,17 @@
 package net.vpc.common.mon;
 
-public class ReusableProgressMonitor extends AbstractProgressMonitor {
-    private final ProgressMonitor base;
+public class ReusableProgressMonitor extends ProgressMonitorDelegate {
 
     public ReusableProgressMonitor(ProgressMonitor base) {
-        this.base = base;
+        super(base);
     }
 
-    @Override
-    public double getProgressValue() {
-        return base.getProgressValue();
-    }
-
-    @Override
-    public ProgressMessage getProgressMessage() {
-        return base.getProgressMessage();
-    }
-
-    @Override
-    protected void setProgressImpl(double progress, ProgressMessage message) {
-        if (progress == 1.0) {
+    public void setProgress(double progress, TaskMessage message) {
+        if (progress >= 1.0) {
             progress = Double.NaN;
         }
-        base.setProgress(progress, message);
+        super.setProgress(progress, message);
     }
-
-    @Override
-    public boolean isCanceled() {
-        return base.isCanceled();
-    }
-
-    @Override
-    public void stop() {
-        super.stop();
-        base.stop();
-    }
-
-    public void terminateAll() {
-        base.terminate("");
-    }
-
-    @Override
-    public ProgressMonitorInc getIncrementor() {
-        return base.getIncrementor();
-    }
-
-    @Override
-    public ProgressMonitor setIncrementor(ProgressMonitorInc incrementor) {
-        base.setIncrementor(incrementor);
-        return this;
-    }
-
-    @Override
-    public ProgressMonitor cancel() {
-        base.cancel();
-        return this;
-    }
-
-    @Override
-    public ProgressMonitor resume() {
-        base.resume();
-        return this;
-    }
-
-    @Override
-    public ProgressMonitor suspend() {
-        base.suspend();
-        return this;
-    }
-
 
     @Override
     public boolean isTerminated() {

@@ -8,24 +8,47 @@ package net.vpc.common.util;
 import java.io.Serializable;
 
 /**
- *
  * @author taha.bensalah@gmail.com
  */
 public class Chronometer implements Serializable {
 
     private final static long serialVersionUID = 1L;
+    private long accumulated;
     private long startDate;
     private long endDate;
     private String name;
+    private long lastTime;
+    private boolean running;
 
-    public Chronometer() {
-        start();
+    public static void main(String[] args) {
+        Chronometer c = Chronometer.start();
+        long a = System.currentTimeMillis();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        c.stop();
+        long b = System.currentTimeMillis();
+        System.out.println(c.getDuration().getTime());
+        System.out.println(c.getDuration().getSeconds());
+        System.out.println(c.getDuration());
+        System.out.println(b - a);
     }
 
-    public Chronometer(boolean start) {
-        if (start) {
-            start();
-        }
+    public static Chronometer start() {
+        Chronometer c = new Chronometer();
+        c.startNow();
+        return c;
+    }
+
+    public static Chronometer start(String name) {
+        Chronometer c = new Chronometer(name);
+        c.startNow();
+        return c;
+    }
+
+    private Chronometer() {
     }
 
     public Chronometer copy() {
@@ -33,6 +56,9 @@ public class Chronometer implements Serializable {
         c.name = name;
         c.endDate = endDate;
         c.startDate = startDate;
+        c.accumulated = accumulated;
+        c.lastTime = lastTime;
+        c.running = running;
         return c;
     }
 
@@ -44,7 +70,7 @@ public class Chronometer implements Serializable {
     public Chronometer restart() {
         stop();
         Chronometer c = copy();
-        start();
+        startNow();
         return c;
     }
 
@@ -59,13 +85,13 @@ public class Chronometer implements Serializable {
         stop();
         Chronometer c = copy();
         setName(newName);
-        start();
+        startNow();
         return c;
     }
 
     public Chronometer(String name) {
         this.name = name;
-        start();
+        startNow();
     }
 
     public Chronometer setName(String desc) {
@@ -83,21 +109,71 @@ public class Chronometer implements Serializable {
     }
 
     public boolean isStarted() {
-        return startDate != 0 && endDate == 0;
+        return startDate != 0;
     }
 
     public boolean isStopped() {
         return endDate == 0;
     }
 
-    public Chronometer start() {
+    public Chronometer startNow() {
         endDate = 0;
         startDate = System.nanoTime();
+        lastTime = startDate;
+        accumulated = 0;
+        running = true;
+        return this;
+    }
+
+    public Chronometer accumulate() {
+        if (running) {
+            long n = System.nanoTime();
+            accumulated += n - lastTime;
+            lastTime = n;
+        }
+        return this;
+    }
+
+    public TimeDuration lap() {
+        if (running) {
+            long n = System.nanoTime();
+            long lapValue = n - lastTime;
+            this.accumulated += lapValue;
+            lastTime = n;
+            return new TimeDuration(lapValue);
+        }
+        return TimeDuration.ZERO;
+    }
+
+    public boolean isSuspended() {
+        return !running;
+    }
+
+    public Chronometer suspend() {
+        if (running) {
+            long n = System.nanoTime();
+            accumulated += n - lastTime;
+            lastTime = -1;
+            running = false;
+        }
+        return this;
+    }
+
+    public Chronometer resume() {
+        if (!running) {
+            lastTime = System.nanoTime();
+            running = true;
+        }
         return this;
     }
 
     public Chronometer stop() {
-        endDate = System.nanoTime();
+        if (running) {
+            endDate = System.nanoTime();
+            accumulated += endDate - lastTime;
+            lastTime = -1;
+            running = false;
+        }
         return this;
     }
 
@@ -109,161 +185,36 @@ public class Chronometer implements Serializable {
         return endDate;
     }
 
+    public TimeDuration getDuration() {
+        if (startDate == 0) {
+            return TimeDuration.ZERO;
+        }
+        if (running) {
+            long curr = System.nanoTime() - lastTime;
+            return new TimeDuration(curr + accumulated);
+        }
+        return new TimeDuration(accumulated);
+
+    }
+
     public long getTime() {
-        return startDate == 0 ? 0 : ((endDate <= 0) ? System.nanoTime() : endDate) - startDate;
-    }
-
-    public int getMilliSeconds() {
-        long period = getTime() / 1000000;
-        return (int) (getTime() % 1000L);
-    }
-
-    public int getSeconds() {
-        long period = getTime() / 1000000;
-        return (int) ((period % 60000L) / 1000L);
-    }
-
-    public int getMinutes() {
-        long period = getTime() / 1000000;
-        return (int) ((period % (1000L * 60L * 60L)) / 60000L);
-    }
-
-    public int getHours() {
-        long period = getTime() / 1000000;
-        return (int) (period / (1000L * 60L * 60L));
-    }
-
-    public static String formatPeriod(long periodNanos) {
-        return formatPeriod(periodNanos, DatePart.MILLISECOND);
-    }
-
-    public static String formatPeriod(long periodNanos, DatePart precision) {
-        return SimpleTimePeriodFormat.INSTANCE.formatNanos(periodNanos);
+        if (startDate == 0) {
+            return 0;
+        }
+        if (running) {
+            long curr = System.nanoTime() - lastTime;
+            return (curr + accumulated);
+        }
+        return accumulated;
     }
 
     public String toString() {
         String s = name == null ? "" : name + "=";
-        return s + formatPeriod(getTime());
+        return s + getDuration().toString();
     }
 
     public String toString(DatePart precision) {
         String s = name == null ? "" : name + "=";
-        return s + formatPeriod(getTime(), precision);
-    }
-
-    public static String formatPeriodNano(long periodNano) {
-        StringBuilder sb = new StringBuilder();
-        int nano = (int) (periodNano % 1000000);
-        long period = periodNano / 1000000;
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-
-        if (h > 0) {
-            sb.append(_StringUtils.formatRight(h,2)).append("h ");
-            started = true;
-        }
-        if (mn > 0 || started) {
-            sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
-            started = true;
-        }
-        if (s > 0 || started) {
-            sb.append(_StringUtils.formatRight(s,2)).append("s ");
-            //started=true;
-        }
-        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
-
-        if (ms < 10) {
-            sb.append(" ").append(_StringUtils.formatRight(nano,6)).append("nanos");
-        }
-        return sb.toString();
-    }
-
-    public static String formatPeriodNano(long period, DatePart precision) {
-        StringBuilder sb = new StringBuilder();
-        period = period / 1000000;
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
-            if (h > 0) {
-                sb.append(_StringUtils.formatRight(h,2)).append("h ");
-                started = true;
-            }
-            if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
-                if (mn > 0 || started) {
-                    sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
-                    started = true;
-                }
-                if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
-                    if (s > 0 || started) {
-                        sb.append(_StringUtils.formatRight(s,2)).append("s ");
-                        //started=true;
-                    }
-                    if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
-                        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
-                    }
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    public static String formatPeriodMilli(long period, DatePart precision) {
-        StringBuilder sb = new StringBuilder();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
-            if (h > 0) {
-                sb.append(_StringUtils.formatRight(h,2)).append("h ");
-                started = true;
-            }
-            if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
-                if (mn > 0 || started) {
-                    sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
-                    started = true;
-                }
-                if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
-                    if (s > 0 || started) {
-                        sb.append(_StringUtils.formatRight(s,2)).append("s ");
-                        //started=true;
-                    }
-                    if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
-                        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
-                    }
-                }
-            }
-        }
-        return sb.toString();
-    }
-
-    public static String formatPeriodMilli(long period) {
-        StringBuilder sb = new StringBuilder();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        if (h > 0) {
-            sb.append(_StringUtils.formatRight(h,2)).append("h ");
-            started = true;
-        }
-        if (mn > 0 || started) {
-            sb.append(_StringUtils.formatRight(mn,2)).append("mn ");
-            started = true;
-        }
-        if (s > 0 || started) {
-            sb.append(_StringUtils.formatRight(s,2)).append("s ");
-            //started=true;
-        }
-        sb.append(_StringUtils.formatRight(ms,3)).append("ms");
-        return sb.toString();
+        return s + getDuration().toString(precision);
     }
 }

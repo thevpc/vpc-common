@@ -322,7 +322,7 @@ public class DefaultExpressionManager extends AbstractExpressionManager {
     }
 
     public ExpressionEvaluatorResolver[] getResolvers() {
-        return resolvers.toArray(new ExpressionEvaluatorResolver[resolvers.size()]);
+        return resolvers.toArray(new ExpressionEvaluatorResolver[0]);
     }
 
     public ExpressionManager configureDefaults() {
@@ -449,7 +449,7 @@ public class DefaultExpressionManager extends AbstractExpressionManager {
         }
 
         @Override
-        public Object evaluate(ExpressionNode[] operands, ExpressionEvaluator evaluator) {
+        public Object eval(ExpressionNode[] operands, ExpressionEvaluator evaluator) {
             return operator.evaluate(new DefaultFunctionEvaluationContext(evaluator, evaluator.getExpressionManager(),operands, getName(), new Class[]{operandTypeArr},
                     getResultType(evaluator.getExpressionManager(), operands)));
         }
@@ -611,7 +611,7 @@ public class DefaultExpressionManager extends AbstractExpressionManager {
         }
 
         @Override
-        public Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator) {
+        public Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator) {
             return v.getValue(evaluator);
         }
 
@@ -661,7 +661,7 @@ public class DefaultExpressionManager extends AbstractExpressionManager {
                 ExpressionNode[] finalArgs = args;
                 Function op2 = functionsRepository.findFunction(name, args, this.getExpressionManager());
                 if (op2 != null) {
-                    return op2.evaluate(finalArgs, AbstractExpressionEvaluator.this);
+                    return op2.eval(finalArgs, AbstractExpressionEvaluator.this);
                 }
             } catch (Exception ex) {
                 throw new RuntimeException(toStr(name, args) + " failed to execute", ex);

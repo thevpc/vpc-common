@@ -3,32 +3,19 @@ package net.vpc.common.mon;
 import java.awt.*;
 import java.util.logging.Level;
 
-public class DialogProgressMonitor extends BaseProgressMonitor {
+public class DialogProgressMonitor extends AbstractProgressMonitor {
     private javax.swing.ProgressMonitor monitor;
-    private double nv;
-    private ProgressMessage msg;
 
     public DialogProgressMonitor(Component parentComponent, Object message) {
+        super(nextId());
         monitor = new javax.swing.ProgressMonitor(parentComponent, message, null, 0, 100);
-        nv = 0;
-        msg = new StringProgressMessage(Level.INFO, "");
-    }
+        //monitor.pane
+     }
+
 
     @Override
-    public double getProgressValue() {
-        return nv;
-    }
-
-    @Override
-    public ProgressMessage getProgressMessage() {
-        return msg;
-    }
-
-    @Override
-    public void setProgressImpl(double progress, ProgressMessage message) {
-        this.nv = progress;
-        msg = message;
-        monitor.setProgress((int) (100 * nv));
+    public void setProgressImpl(double progress) {
+        monitor.setProgress((int) (100 * progress));
     }
 
     @Override
@@ -37,8 +24,8 @@ public class DialogProgressMonitor extends BaseProgressMonitor {
     }
 
     @Override
-    public void stop() {
-        super.stop();
+    public void terminate() {
+        super.terminate();
         monitor.close();
     }
 }

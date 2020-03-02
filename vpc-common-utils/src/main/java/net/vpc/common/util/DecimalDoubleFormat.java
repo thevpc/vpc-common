@@ -11,6 +11,9 @@ public class DecimalDoubleFormat implements DoubleFormat {
         this.subFormat = subFormat;
         d = new DecimalFormat(subFormat);
     }
+    public String toPattern(){
+        return subFormat;
+    }
 
     @Override
     public String formatDouble(double value) {

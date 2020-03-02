@@ -3,25 +3,10 @@ package net.vpc.common.mon;
 /**
  * @author taha.bensalah@gmail.com on 7/17/16.
  */
-public class SilentProgressMonitor extends BaseProgressMonitor {
-    private double progress;
-    private ProgressMessage message;
+public class SilentProgressMonitor extends AbstractProgressMonitor {
 
-    @Override
-    public double getProgressValue() {
-        return progress;
-    }
-
-    @Override
-    public void setProgressImpl(double progress, ProgressMessage message) {
-        this.progress = progress;
-        this.message = message;
-        //do nothing
-    }
-
-    @Override
-    public ProgressMessage getProgressMessage() {
-        return message;
+    public SilentProgressMonitor() {
+        super(nextId());
     }
 
     @Override

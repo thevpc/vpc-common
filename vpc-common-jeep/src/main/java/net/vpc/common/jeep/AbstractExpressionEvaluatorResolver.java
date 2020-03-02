@@ -7,7 +7,7 @@ public abstract class AbstractExpressionEvaluatorResolver implements ExpressionE
     }
 
     @Override
-    public Function resolveFunction(String name, ExpressionNode[] args, ExpressionManager context) {
+    public Function resolveFunction(String name, ExpressionNode[] args, ArgsPossibility argPossibility, ExpressionManager context) {
         return null;
     }
 

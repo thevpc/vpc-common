@@ -23,6 +23,10 @@ public class ClassPairMap<V> {
         this.symmetric = symmetric;
     }
 
+    public Set<ClassPair> keySet(){
+        return values.keySet();
+    }
+
     public V put(Class classKey1, Class classKey2, V value) {
         cachedValues.clear();
         return values.put(createKey(classKey1, classKey2), value);
@@ -33,11 +37,11 @@ public class ClassPairMap<V> {
         return values.remove(createKey(classKey1, classKey2));
     }
 
-    public ClassPair[] getKeis(Class classKey1, Class classKey2) {
-        return getKeis(createKey(classKey1, classKey2));
+    public ClassPair[] getKeys(Class classKey1, Class classKey2) {
+        return getKeys(createKey(classKey1, classKey2));
     }
 
-    private ClassPair[] getKeis(ClassPair classKey) {
+    private ClassPair[] getKeys(ClassPair classKey) {
         ClassPair[] keis = cachedHierarchy.get(classKey);
         if (keis == null) {
             keis = evalHierarchy(classKey);
@@ -90,7 +94,7 @@ public class ClassPairMap<V> {
     private V[] getAll(ClassPair classKey) {
         V[] found = cachedValues.get(classKey);
         if (found == null) {
-            ClassPair[] keis = getKeis(classKey);
+            ClassPair[] keis = getKeys(classKey);
             List<V> all = new ArrayList<V>();
             for (ClassPair c : keis) {
                 V u = values.get(c);

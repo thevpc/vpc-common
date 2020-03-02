@@ -26,12 +26,38 @@ public class FrequencyFormat implements DoubleFormat{
         this.high = high;
         this.low = low;
         this.decimal = decimal;
+        if(fixedLength){
+            decimalFormat = new DecimalFormat("0."+_StringUtils.fillString('0',integerDigits));
+        }else{
+            decimalFormat = new DecimalFormat("0."+_StringUtils.fillString('#',fractionDigits));
+        }
     }
 
     public FrequencyFormat() {
         this("HT I2 D3 ");
     }
 
+    public String toPattern(){
+        StringBuilder sb=new StringBuilder();
+        if(leadingZeros){
+            sb.append('0');
+        }
+        sb.append(evalInv(low));
+        sb.append(evalInv(high));
+        if(decimal){
+            sb.append('D').append(fractionDigits);
+        }
+        sb.append('I').append(integerDigits);
+        if(fixedLength){
+            sb.append('F');
+        }
+        if(intermediateZeros){
+            sb.append(' ');
+            sb.append('0');
+        }
+
+        return sb.toString();
+    }
     public FrequencyFormat(String format) {
         leadingZeros = false;
         intermediateZeros = false;
@@ -106,45 +132,12 @@ public class FrequencyFormat implements DoubleFormat{
             this.low = this.high;
             this.high = t;
         }
-//        StringBuilder sb=new StringBuilder("0");
-//        if(fractionDigits >0){
-//            sb.append(".");
-//            for (int i = 0; i < fractionDigits; i++) {
-//                if(i==0) {
-//                    sb.append("O");
-//                }else{
-//                    sb.append("#");
-//                }
-//            }
-//        }
         if(fixedLength){
             decimalFormat = new DecimalFormat("0."+_StringUtils.fillString('0',integerDigits));
         }else{
             decimalFormat = new DecimalFormat("0."+_StringUtils.fillString('#',fractionDigits));
         }
-        //decimalFormat.setRoundingMode(RoundingMode.DOWN);
-//        decimalFormat.setMinimumIntegerDigits(fixedLength ? integerDigits : 0);
-//        decimalFormat.setMaximumIntegerDigits(1);
-//        decimalFormat.setMinimumFractionDigits(fixedLength ? fractionDigits : 0);
-//        decimalFormat.setMaximumFractionDigits(fractionDigits);
-//        decimalFormat.setGroupingSize(0);
-//        DecimalFormat f2 = new DecimalFormat("#.00");
-//        System.out.printf("");
-//        decimalFormat.set(fractionDigits);
     }
-
-//    public static void main(String[] args) {
-////        DecimalFormat decimalFormat = new DecimalFormat("#.00");
-////        System.out.println(decimalFormat.format(100.3));
-//        FrequencyFormat frequencyFormatter = new FrequencyFormat();
-//        System.out.println(frequencyFormatter.format(0));
-//        long f = 100;
-//        for (int i = 0; i < 10; i++) {
-//            String s = frequencyFormatter.format(f);
-//            System.out.println(s+" <== "+f);
-//            f = (f + 1) * 100L;
-//        }
-//    }
 
     private long eval(char c) {
         switch (c) {
@@ -163,6 +156,25 @@ public class FrequencyFormat implements DoubleFormat{
             case 'T': {
                 return Units.TERA;
             }
+        }
+        throw new IllegalArgumentException("Unsupported");
+    }
+
+    private char evalInv(long c) {
+        if(c==Units.HERTZ){
+            return 'H';
+        }
+        if(c==Units.KILO){
+            return 'K';
+        }
+        if(c==Units.MEGA){
+            return 'M';
+        }
+        if(c==Units.GIGA){
+            return 'G';
+        }
+        if(c==Units.TERA){
+            return 'T';
         }
         throw new IllegalArgumentException("Unsupported");
     }

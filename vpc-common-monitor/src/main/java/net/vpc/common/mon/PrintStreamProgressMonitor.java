@@ -3,12 +3,10 @@ package net.vpc.common.mon;
 import java.io.PrintStream;
 import java.util.Date;
 
-public class PrintStreamProgressMonitor extends BaseProgressMonitor {
-    private double progress;
-    private ProgressMessage message;
+public class PrintStreamProgressMonitor extends AbstractProgressMonitor {
+    private static _BytesSizeFormat MF = new _BytesSizeFormat("0K0TF");
     private String messageFormat;
     private PrintStream printStream;
-    private static _BytesSizeFormat MF = new _BytesSizeFormat("0K0TF");
 
     /**
      * %value%
@@ -17,6 +15,7 @@ public class PrintStreamProgressMonitor extends BaseProgressMonitor {
      * @param messageFormat
      */
     public PrintStreamProgressMonitor(String messageFormat, PrintStream printStream) {
+        super(nextId());
         if (messageFormat == null) {
             messageFormat = "%date% | %inuse-mem% | %free-mem% : %value%";
         }
@@ -30,26 +29,15 @@ public class PrintStreamProgressMonitor extends BaseProgressMonitor {
         this.printStream = printStream;
     }
 
-    public double getProgressValue() {
-        return progress;
-    }
-
-    public void setProgressImpl(double progress, ProgressMessage message) {
-        this.progress = progress;
-        this.message = message;
+    public void setMessageImpl(TaskMessage message) {
         long newd = System.currentTimeMillis();
         printStream.println(messageFormat
                 .replace("%date%", new Date(newd).toString())
-                .replace("%value%", Double.isNaN(progress) ? "   ?%" : ProgressMonitorFactory.PERCENT_FORMAT.format(progress))
+                .replace("%value%", Double.isNaN(getProgressValue()) ? "   ?%" : ProgressMonitors.PERCENT_FORMAT.format(getProgressValue()))
                 .replace("%inuse-mem%", MF.format(_MemUtils.inUseMemory()))
                 .replace("%free-mem%", MF.format(_MemUtils.maxFreeMemory()))
                 + " " + message
         );
-    }
-
-    @Override
-    public ProgressMessage getProgressMessage() {
-        return message;
     }
 
     @Override

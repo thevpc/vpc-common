@@ -66,8 +66,8 @@
 //                    throw new UnsupportedOperationException(op.getName());
 //                }
 //            });
-//            Assert.assertEquals("","(((((const(a, 15) 'b') const(c, 15))*const(A, 15))+pi())+sin(val(25)))",str);
-//            Assert.assertEquals("",678.009240903492,o);
+//            Assertions.assertEquals("","(((((const(a, 15) 'b') const(c, 15))*const(A, 15))+pi())+sin(val(25)))",str);
+//            Assertions.assertEquals("",678.009240903492,o);
 //        } catch (Exception e1) {
 //            e1.printStackTrace();
 //        }

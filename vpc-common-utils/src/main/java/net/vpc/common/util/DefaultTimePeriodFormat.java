@@ -6,12 +6,23 @@ import java.text.DecimalFormat;
  * Created by vpc on 3/20/17.
  */
 public class DefaultTimePeriodFormat implements TimePeriodFormat {
-
-    private static final DecimalFormat SECONDS_FORMAT = new DecimalFormat("00.000");
+    //    private static final DecimalFormat SECONDS_FORMAT = new DecimalFormat("00.000");
     private DatePart precision;
+    boolean skipZeros = false;
+    private static TimePeriodFormat[] _FORMATS=new TimePeriodFormat[DatePart.values().length];
+    static{
+        DatePart[] values = DatePart.values();
+        for (int i = 0; i < values.length; i++) {
+            _FORMATS[i]=new DefaultTimePeriodFormat(values[i]);
+        }
+    }
+    public static final TimePeriodFormat DEFAULT = of(DatePart.NANOSECOND);
+    public static TimePeriodFormat of(DatePart d){
+        return _FORMATS[d.ordinal()];
+    }
 
     public DefaultTimePeriodFormat() {
-        this(DatePart.MILLISECOND);
+        this(DatePart.NANOSECOND);
     }
 
     public DefaultTimePeriodFormat(DatePart precision) {
@@ -21,7 +32,7 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
 
     @Override
     public String formatMillis(long periodMillis) {
-        return formatNanos(periodMillis*1000000L);
+        return formatNanos(periodMillis * 1000000L);
     }
 
     @Override
@@ -49,27 +60,40 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
                 max = 5;
                 break;
             }
+            case MICROSECOND: {
+                max = 6;
+                break;
+            }
+            case NANOSECOND: {
+                max = 7;
+                break;
+            }
             default: {
                 throw new IllegalArgumentException("Unsupported precision use Calendar.DATE,Calendar.HOUR, ...Calendar.MILLISECOND");
             }
         }
-        int nano = (int) (periodNano % 1000000);
-        long period = periodNano / 1000000;
+        int nano = (int) (periodNano % 1000L);
+        int micro = (int) ((periodNano / 1000L) % 1000L);
+        long periodms = periodNano / 1000000;
 
-        int milliSeconds = (int) (period % 1000L);
+        int milliSeconds = (int) (periodms % 1000L);
 
-        double seconds = ((period % (60L * 1000L)) / 1000.0);
+        double seconds = (int)((periodms /1000) % 60);
 
-        int minutes = (int) ((period % (60L * 60L * 1000L)) / (60L * 1000L));
+        int minutes = (int)((periodms /60000) % 60);
 
-        int hours = (int) ((period % (24L * 60L * 60L * 1000L)) / (60L * 60L * 1000L));
+        int hours = (int)((periodms /3600000) % 24);
 
-        int days = (int) (period / (24L * 60L * 60L * 1000L));
-        boolean skipZeros = false;
+        int days = (int)((periodms /3600000 /24));
+
         StringBuilder sb = new StringBuilder();
 
         if (max > 0) {
             if (days != 0 || (empty && max == 1)) {
+                int years=days/365;
+                if(years>=1){
+                    return "an eternity";
+                }
                 if (!empty) {
                     sb.append(' ');
                 }
@@ -101,32 +125,56 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
             max--;
         }
 
-        if (max > 1) {
-            if (seconds != 0 || empty) {
+        if (max > 0) {
+            if (seconds != 0 || (empty && max == 1) || (!empty && !skipZeros)) {
                 if (!empty) {
                     sb.append(' ');
                 }
-                if (seconds == (int) seconds) {
-                    sb.append(_StringUtils.formatRight((int) seconds, 2)).append('s').append("    ");
-                } else {
-                    sb.append(SECONDS_FORMAT.format(seconds)).append('s');
+                if(max==1) {
+                    sb.append(_StringUtils.formatRight(seconds, 2)).append("s");
+                }else{
+                    sb.append(_StringUtils.formatRight((int) seconds, 2)).append("s");
                 }
-
-//                empty = false;
+                empty = false;
             }
-//            max--;
-//            max--;
+            max--;
+        }
 
-        } else if (max > 0) {
-            if (seconds != 0 || empty) {
+        if (max > 0) {
+            if (milliSeconds != 0 || (empty && max == 1) || (!empty && !skipZeros)) {
                 if (!empty) {
                     sb.append(' ');
                 }
-                sb.append((int) seconds);
-                sb.append('s');
-//                empty = false;
+                sb.append(_StringUtils.formatRight(milliSeconds, 3)).append("ms");
+                empty = false;
             }
-//            max--;
+            max--;
+        }
+
+        if (max > 0) {
+            if (micro != 0 || (empty && max == 1) || (!empty && !skipZeros)) {
+                if (!empty) {
+                    sb.append(' ');
+                }
+                sb.append(_StringUtils.formatRight(micro, 3)).append("us");
+                empty = false;
+            }
+            max--;
+        }
+
+        if (max > 0) {
+            if (nano != 0 || (empty && max == 1) || (!empty && !skipZeros)) {
+                if (!empty) {
+                    sb.append(' ');
+                }
+                sb.append(_StringUtils.formatRight(nano, 3)).append("ns");
+                empty = false;
+            }
+            max--;
+        }
+
+        if (empty) {
+            sb.append('0');
         }
         return sb.toString();
     }

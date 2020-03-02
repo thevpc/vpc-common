@@ -61,7 +61,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
             }
         }
         if (checkEmptyArgMethods) {
-            Function f = resolveFunction(name, new ExpressionNode[0], context);
+            Function f = resolveFunction(name, new ExpressionNode[0], null, context);
             if (f != null) {
                 return new FunctionVariable(f);
             }
@@ -70,8 +70,8 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
     }
 
     @Override
-    public Function resolveFunction(String name, ExpressionNode[] args, ExpressionManager evaluator) {
-        Function r = resolveFunctionDef0(name, args, evaluator);
+    public Function resolveFunction(String name, ExpressionNode[] args, ArgsPossibility argPossibility, ExpressionManager evaluator) {
+        Function r = resolveFunctionDef0(name, args, argPossibility, evaluator);
         if (r == null) {
             return null;
         }
@@ -79,10 +79,17 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
         boolean someConv = false;
         for (int i = 0; i < conv.length; i++) {
             Class to = r.getArgTypes()[i];
-            Class from = args[i].getExprType(evaluator);
-            if (!to.isAssignableFrom(from)) {
-                conv[i] = JeepUtils.createTypeImplicitConversions(from, to);
-                someConv = true;
+            Class from = argPossibility == null ? args[i].getExprType(evaluator) : argPossibility.getConverted(i);
+            if (argPossibility != null) {
+                if (argPossibility.getConverter(i) != null) {
+                    conv[i] = argPossibility.getConverter(i);
+                    someConv = true;
+                }
+            } else {
+                if (!to.isAssignableFrom(from)) {
+                    conv[i] = JeepUtils.createTypeImplicitConversions(from, to);
+                    someConv = true;
+                }
             }
         }
         if (someConv) {
@@ -92,7 +99,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
         }
     }
 
-    protected Function resolveFunctionDef0(String name, ExpressionNode[] args, ExpressionManager evaluator) {
+    protected Function resolveFunctionDef0(String name, ExpressionNode[] args, ArgsPossibility argPossibility, ExpressionManager evaluator) {
         switch (name) {
             case "": {
                 return null;
@@ -102,91 +109,91 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
                     //unary
                     return JeepFactory.createConstFunction(name, args[0]);
                 } else if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "add", "reverseAdd", "add", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "add", "reverseAdd", "add", evaluator);
                 }
                 break;
             }
             case "-": {
                 if (args.length == 1) {
                     //unary
-                    Function m = getUnaryExpressionNode(name, args, "neg", "neg", evaluator);
+                    Function m = getUnaryExpressionNode(name, args, argPossibility, "neg", "neg", evaluator);
                     if (m != null) {
                         return m;
                     }
                 } else if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "sub", "reverseSub", "sub", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "sub", "reverseSub", "sub", evaluator);
                 }
                 break;
             }
             case "*": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "mul", "reverseMul", "mul", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "mul", "reverseMul", "mul", evaluator);
                 }
                 break;
             }
             case "/": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "div", "reverseDiv", "div", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "div", "reverseDiv", "div", evaluator);
                 }
                 break;
             }
             case "^": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "xor", "reverseXor", "xor", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "xor", "reverseXor", "xor", evaluator);
                 }
                 break;
             }
             case "~": {
                 if (args.length == 1) {
                     //unary
-                    Function m = getUnaryExpressionNode(name, args, "tilde", "tilde", evaluator);
+                    Function m = getUnaryExpressionNode(name, args, argPossibility, "tilde", "tilde", evaluator);
                     if (m != null) {
                         return m;
                     }
                 } else if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "power", "reversePower", "power", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "power", "reversePower", "power", evaluator);
                 }
                 break;
             }
             case "**": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "scalarProduct", "reverseScalarProduct", "scalarProduct", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "scalarProduct", "reverseScalarProduct", "scalarProduct", evaluator);
                 }
                 break;
             }
             case "||": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "or", "reverseOr", "or", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "or", "reverseOr", "or", evaluator);
                 }
                 break;
             }
             case "|": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "binaryOr", "reverseBinaryOr", "binaryOr", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "binaryOr", "reverseBinaryOr", "binaryOr", evaluator);
                 }
                 break;
             }
             case "&&": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "and", "reverseAnd", "and", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "and", "reverseAnd", "and", evaluator);
                 }
                 break;
             }
             case "&": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "binaryAnd", "reverseBinaryAnd", "binaryAnd", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "binaryAnd", "reverseBinaryAnd", "binaryAnd", evaluator);
                 }
                 break;
             }
             case "->": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "rightArrow", "reverseRightArrow", "rightArrow", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "rightArrow", "reverseRightArrow", "rightArrow", evaluator);
                 }
                 break;
             }
             case "<": {
                 if (args.length == 2) {
-                    Function n = getBinaryExpressionNode(name, args, "compareTo", "reverseCompareTo", "compare", evaluator);
+                    Function n = getBinaryExpressionNode(name, args, argPossibility, "compareTo", "reverseCompareTo", "compare", evaluator);
                     if (n != null) {
                         return new ConvertedFunction(n, null, new AbstractExpressionEvaluatorConverter(Integer.TYPE, Boolean.TYPE) {
                             @Override
@@ -202,7 +209,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
             }
             case "<=": {
                 if (args.length == 2) {
-                    Function n = getBinaryExpressionNode(name, args, "compareTo", "reverseCompareTo", "compare", evaluator);
+                    Function n = getBinaryExpressionNode(name, args, argPossibility, "compareTo", "reverseCompareTo", "compare", evaluator);
                     if (n != null) {
                         return new ConvertedFunction(n, null, new AbstractExpressionEvaluatorConverter(Integer.TYPE, Boolean.TYPE) {
                             @Override
@@ -218,7 +225,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
             }
             case ">": {
                 if (args.length == 2) {
-                    Function n = getBinaryExpressionNode(name, args, "compareTo", "reverseCompareTo", "compare", evaluator);
+                    Function n = getBinaryExpressionNode(name, args, argPossibility, "compareTo", "reverseCompareTo", "compare", evaluator);
                     if (n != null) {
                         return new ConvertedFunction(n, null, new AbstractExpressionEvaluatorConverter(Integer.TYPE, Boolean.TYPE) {
                             @Override
@@ -234,7 +241,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
             }
             case ">=": {
                 if (args.length == 2) {
-                    Function n = getBinaryExpressionNode(name, args, "compareTo", "reverseCompareTo", "compare", evaluator);
+                    Function n = getBinaryExpressionNode(name, args, argPossibility, "compareTo", "reverseCompareTo", "compare", evaluator);
                     if (n != null) {
                         return new ConvertedFunction(n, null, new AbstractExpressionEvaluatorConverter(Integer.TYPE, Boolean.TYPE) {
                             @Override
@@ -250,13 +257,13 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
             }
             case "==": {
                 if (args.length == 2) {
-                    return getBinaryExpressionNode(name, args, "equals", "equals", "equals", evaluator);
+                    return getBinaryExpressionNode(name, args, argPossibility, "equals", "equals", "equals", evaluator);
                 }
                 break;
             }
             case "!=": {
                 if (args.length == 2) {
-                    Function n = getBinaryExpressionNode(name, args, "equals", "equals", "equals", evaluator);
+                    Function n = getBinaryExpressionNode(name, args, argPossibility, "equals", "equals", "equals", evaluator);
                     if (n != null) {
                         return new ConvertedFunction(n, null, new AbstractExpressionEvaluatorConverter(Integer.TYPE, Boolean.TYPE) {
                             @Override
@@ -272,7 +279,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
             }
             case "<>": {
                 if (args.length == 2) {
-                    Function n = getBinaryExpressionNode(name, args, "equals", "equals", "equals", evaluator);
+                    Function n = getBinaryExpressionNode(name, args, argPossibility, "equals", "equals", "equals", evaluator);
                     if (n != null) {
                         return new ConvertedFunction(n, null, new AbstractExpressionEvaluatorConverter(Integer.TYPE, Boolean.TYPE) {
                             @Override
@@ -287,9 +294,14 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
                 break;
             }
             default: {
-                Class[] argTypes = new Class[args.length];
-                for (int i = 0; i < argTypes.length; i++) {
-                    argTypes[i] = args[i].getExprType(evaluator);
+                Class[] argTypes = null;
+                if (argPossibility != null) {
+                    argTypes = argPossibility.getConverted();
+                } else {
+                    argTypes = new Class[args.length];
+                    for (int i = 0; i < argTypes.length; i++) {
+                        argTypes[i] = args[i].getExprType(evaluator);
+                    }
                 }
                 for (Class type : importedTypes) {
                     final Method m = JeepPlatformUtils.getMatchingMethod(type, name, argTypes);
@@ -297,7 +309,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
                         if (m.isVarArgs()) {
                             return new FunctionBase(name, m.getReturnType(), argTypes, importsFirst) {
                                 @Override
-                                public Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator) {
+                                public Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator) {
                                     Object[] all = new Object[m.getParameterTypes().length];
                                     for (int i = 0; i < all.length - 1; i++) {
                                         if (ExpressionNode.class.isAssignableFrom(m.getParameterTypes()[i])) {
@@ -335,7 +347,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
                         for (int i = 0; i < argTypes.length; i++) {
                             indices[i] = i;
                         }
-                        return new MethodInvocationFunction(name, m, -1, indices);
+                        return createMethodInvocationFunction(name, m, -1, indices);
                     }
                 }
             }
@@ -343,8 +355,50 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
         return null;
     }
 
-    private Function getUnaryExpressionNode(String name, ExpressionNode[] args, String directName, String staticName, ExpressionManager evaluator) {
-        Class arg1Type = args[0].getExprType(evaluator);
+    private Function getBinaryExpressionNode(String name, ExpressionNode[] args, ArgsPossibility argPossibility, String directName, String reverseName, String staticName, ExpressionManager evaluator) {
+        Class arg1 = null;
+        Class arg2 = null;
+        if (argPossibility != null) {
+            arg1 = argPossibility.getConverted(0);
+            arg2 = argPossibility.getConverted(1);
+        } else {
+            arg1 = args[0].getExprType(evaluator);
+            arg2 = args[1].getExprType(evaluator);
+        }
+        int[] order = !(importsFirst) ? new int[]{1, 2} : new int[]{2, 1};
+        LinkedHashSet<Class> t = new LinkedHashSet<>(importedTypes);
+        t.addAll(importedMethods);
+        for (int i = 0; i < order.length; i++) {
+            switch (order[i]) {
+                case 1: {
+                    Method m = JeepPlatformUtils.getMatchingMethod(arg1, directName, arg2);
+                    if (m != null) {
+                        return createMethodInvocationFunction(name, m, 0, 1);
+                    }
+
+                    Method rm = JeepPlatformUtils.getMatchingMethod(arg2, reverseName, arg1);
+                    if (rm != null) {
+                        return createMethodInvocationFunction(name, rm, 1, 0);
+                    }
+                    break;
+                }
+                case 2: {
+                    for (Class type : t) {
+                        Method sm = JeepPlatformUtils.getMatchingMethod(type, staticName, arg1, arg2);
+                        if (sm != null) {
+                            return createMethodInvocationFunction(name, sm, -1, 0, 1);
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private Function getUnaryExpressionNode(String name, ExpressionNode[] args, ArgsPossibility argPossibility, String directName, String staticName, ExpressionManager evaluator) {
+        Class arg1Type = argPossibility != null ? argPossibility.getConverted(0) : args[0].getExprType(evaluator);
         int[] order = !(importsFirst) ? new int[]{1, 2} : new int[]{2, 1};
         LinkedHashSet<Class> t = new LinkedHashSet<>(importedTypes);
         t.addAll(importedMethods);
@@ -354,7 +408,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
                 case 1: {
                     Method m = JeepPlatformUtils.getMatchingMethod(arg1Type, directName);
                     if (m != null) {
-                        return new MethodInvocationFunction(name, m, 0);
+                        return createMethodInvocationFunction(name, m, 0);
                     }
                     break;
 
@@ -363,7 +417,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
                     for (Class type : t) {
                         Method sm = JeepPlatformUtils.getMatchingMethod(type, staticName, arg1Type);
                         if (sm != null) {
-                            return new MethodInvocationFunction(name, sm, -1, 0);
+                            return createMethodInvocationFunction(name, sm, -1, 0);
                         }
                     }
                     break;
@@ -374,38 +428,7 @@ public class UtilClassExpressionEvaluatorResolver extends AbstractExpressionEval
         return null;
     }
 
-    private Function getBinaryExpressionNode(String name, ExpressionNode[] args, String directName, String reverseName, String staticName, ExpressionManager evaluator) {
-        Class arg1 = args[0].getExprType(evaluator);
-        Class arg2 = args[1].getExprType(evaluator);
-        int[] order = !(importsFirst) ? new int[]{1, 2} : new int[]{2, 1};
-        LinkedHashSet<Class> t = new LinkedHashSet<>(importedTypes);
-        t.addAll(importedMethods);
-        for (int i = 0; i < order.length; i++) {
-            switch (order[i]) {
-                case 1: {
-                    Method m = JeepPlatformUtils.getMatchingMethod(arg1, directName, arg2);
-                    if (m != null) {
-                        return new MethodInvocationFunction(name, m, 0, 1);
-                    }
-
-                    Method rm = JeepPlatformUtils.getMatchingMethod(arg2, reverseName, arg1);
-                    if (rm != null) {
-                        return new MethodInvocationFunction(name, rm, 1, 0);
-                    }
-                    break;
-                }
-                case 2: {
-                    for (Class type : t) {
-                        Method sm = JeepPlatformUtils.getMatchingMethod(type, staticName, arg1, arg2);
-                        if (sm != null) {
-                            return new MethodInvocationFunction(name, sm, -1, 0, 1);
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
-        return null;
+    public Function createMethodInvocationFunction(String name, Method m, int baseIndex, int... argIndices) {
+        return new MethodInvocationFunction(name, m, baseIndex, argIndices);
     }
 }

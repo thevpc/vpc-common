@@ -3,13 +3,40 @@ package net.vpc.common.util;
 public class MinMax {
     private double min = Double.NaN;
     private double max = Double.NaN;
+    private boolean infinite = true;
 
     public MinMax() {
+    }
+
+    public boolean isInfinite() {
+        return infinite;
+    }
+
+    public MinMax setInfinite(boolean infinite) {
+        this.infinite = infinite;
+        return this;
     }
 
     public void registerAbsValues(double[] d) {
         for (double aD : d) {
             registerAbsValue(aD);
+        }
+    }
+
+    public void registerAbsValue(double d) {
+        registerValue(Math.abs(d));
+    }
+
+    public void registerValue(double d) {
+        if (Double.isNaN(min) || (!Double.isNaN(d) && d < min)) {
+            if (infinite || Double.isFinite(d)) {
+                min = d;
+            }
+        }
+        if (Double.isNaN(max) || (!Double.isNaN(d) && d > max)) {
+            if (infinite || Double.isFinite(d)) {
+                max = d;
+            }
         }
     }
 
@@ -45,19 +72,6 @@ public class MinMax {
         }
     }
 
-    public void registerValue(double d) {
-        if (Double.isNaN(min) || (!Double.isNaN(d) && d < min)) {
-            min = d;
-        }
-        if (Double.isNaN(max) || (!Double.isNaN(d) && d > max)) {
-            max = d;
-        }
-    }
-
-    public void registerAbsValue(double d) {
-        registerValue(Math.abs(d));
-    }
-
     public float getRatio(double d) {
         if (Double.isNaN(d)) {
             return Float.NaN;
@@ -68,6 +82,10 @@ public class MinMax {
         return (float) ((d - min) / (max - min));
     }
 
+
+    public boolean isUnset() {
+        return Double.isNaN(min) || Double.isNaN(max);
+    }
 
     public double getMin() {
         return min;
@@ -86,10 +104,12 @@ public class MinMax {
     }
 
     @Override
-    public String toString() {
-        return "{" + "min=" + min + ", max=" + max + '}';
+    public int hashCode() {
+        int result;
+        result = Double.hashCode(min);
+        result = 31 * result + Double.hashCode(max);
+        return result;
     }
-    
 
     @Override
     public boolean equals(Object o) {
@@ -103,13 +123,7 @@ public class MinMax {
     }
 
     @Override
-    public int hashCode() {
-        int result;
-        long temp;
-        temp = Double.doubleToLongBits(min);
-        result = (int) (temp ^ (temp >>> 32));
-        temp = Double.doubleToLongBits(max);
-        result = 31 * result + (int) (temp ^ (temp >>> 32));
-        return result;
+    public String toString() {
+        return "{" + "min=" + min + ", max=" + max + '}';
     }
 }

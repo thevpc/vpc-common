@@ -38,7 +38,7 @@ public class ConvertedFunction extends FunctionBase{
     }
 
     @Override
-    public Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator) {
+    public Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator) {
         ExpressionNode[] args2=new ExpressionNode[args.length];
         for (int i = 0; i < args.length; i++) {
             if(argConverters!=null && argConverters[i]!=null){
@@ -47,7 +47,7 @@ public class ConvertedFunction extends FunctionBase{
                 args2[i]=args[i];
             }
         }
-        Object v = other.evaluate(args2, evaluator);
+        Object v = other.eval(args2, evaluator);
         if(resultConverter!=null){
             v=resultConverter.convert(v);
         }

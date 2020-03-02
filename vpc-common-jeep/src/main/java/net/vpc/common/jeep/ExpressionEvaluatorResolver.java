@@ -4,7 +4,7 @@ public interface ExpressionEvaluatorResolver {
 
     Variable resolveVariable(String name, ExpressionManager context) ;
 
-    Function resolveFunction(String name, ExpressionNode[] args, ExpressionManager context);
+    Function resolveFunction(String name, ExpressionNode[] args, ArgsPossibility argPossibility, ExpressionManager context);
 
     Object implicitConvertLiteral(Object literal, ExpressionManager evaluator);
 

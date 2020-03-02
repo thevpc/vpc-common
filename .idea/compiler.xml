@@ -6,19 +6,23 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="vpc-common-cron" />
         <module name="vpc-common-mvn" />
         <module name="vpc-common-log" />
         <module name="vpc-common-fprint" />
+        <module name="vfs" />
         <module name="vpc-common-classpath" />
         <module name="vpc-common-strings" />
-        <module name="vpc-common-sql" />
         <module name="vpc-common-utils" />
         <module name="vpc-common-prs" />
         <module name="vpc-common-lanterna" />
+        <module name="vpc-common-diff-jar" />
         <module name="vpc-common-io-compress" />
-        <module name="vpc-common-web-jsf" />
+        <module name="vpc-common-sql" />
         <module name="vpc-common-swings" />
         <module name="vpc-common-desktop-automation" />
+        <module name="vpc-common-web-jsf" />
+        <module name="vpc-common-monitor" />
         <module name="vpc-common-web-xml" />
         <module name="vpc-common-config" />
         <module name="vpc-common-swings-prs" />
@@ -26,21 +30,27 @@
         <module name="vpc-common-io" />
         <module name="vpc-common-xfile" />
         <module name="vpc-common-ssh" />
+        <module name="java-shell" />
         <module name="vpc-common-jeep" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="common" target="1.5" />
+      <module name="java-shell" target="1.7" />
+      <module name="vfs" target="1.8" />
       <module name="vpc-common-classpath" target="1.7" />
       <module name="vpc-common-commandline" target="1.7" />
-      <module name="vpc-common-config" target="1.5" />
+      <module name="vpc-common-config" target="1.8" />
+      <module name="vpc-common-cron" target="1.8" />
       <module name="vpc-common-desktop-automation" target="1.7" />
+      <module name="vpc-common-diff-jar" target="1.8" />
       <module name="vpc-common-fprint" target="1.7" />
       <module name="vpc-common-io" target="1.7" />
       <module name="vpc-common-io-compress" target="1.7" />
       <module name="vpc-common-jeep" target="1.7" />
       <module name="vpc-common-lanterna" target="1.7" />
-      <module name="vpc-common-log" target="1.5" />
+      <module name="vpc-common-log" target="1.8" />
+      <module name="vpc-common-monitor" target="1.7" />
       <module name="vpc-common-mvn" target="1.7" />
       <module name="vpc-common-prs" target="1.8" />
       <module name="vpc-common-sql" target="1.7" />

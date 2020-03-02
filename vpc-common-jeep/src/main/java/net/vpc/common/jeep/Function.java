@@ -17,7 +17,7 @@ public interface Function {
     
     Class[] getArgTypes();
 
-    Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator);
+    Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator);
 
     String getName();
 

@@ -3,7 +3,7 @@ package net.vpc.common.mon;
 import java.util.Date;
 import java.util.logging.Logger;
 
-public class LogProgressMonitor extends BaseProgressMonitor {
+public class LogProgressMonitor extends AbstractProgressMonitor {
     private static _BytesSizeFormat MF = new _BytesSizeFormat("0K0TF");
     private static Logger defaultLog = Logger.getLogger(LogProgressMonitor.class.getName());
 
@@ -11,8 +11,7 @@ public class LogProgressMonitor extends BaseProgressMonitor {
         defaultLog.setUseParentHandlers(false);
     }
 
-    private double progress;
-    private ProgressMessage message;
+    private TaskMessage message;
     private String messageFormat;
     private Logger logger;
 
@@ -23,6 +22,7 @@ public class LogProgressMonitor extends BaseProgressMonitor {
      * @param messageFormat
      */
     public LogProgressMonitor(String messageFormat, Logger logger) {
+        super(nextId());
         if (messageFormat == null) {
             messageFormat = "%inuse-mem% | %free-mem% : %value%";
         }
@@ -40,17 +40,13 @@ public class LogProgressMonitor extends BaseProgressMonitor {
         return defaultLog;
     }
 
-    public double getProgressValue() {
-        return progress;
-    }
 
-    public void setProgressImpl(double progress, ProgressMessage message) {
-        this.progress = progress;
+    public void setMessageImpl(TaskMessage message) {
         this.message = message;
         long newd = System.currentTimeMillis();
         String msg = messageFormat
                 .replace("%date%", new Date(newd).toString())
-                .replace("%value%", Double.isNaN(progress)?"   ?%": ProgressMonitorFactory.PERCENT_FORMAT.format(progress))
+                .replace("%value%", Double.isNaN(getProgressValue()) ? "   ?%" : ProgressMonitors.PERCENT_FORMAT.format(getProgressValue()))
                 .replace("%inuse-mem%", MF.format(_MemUtils.inUseMemory()))
                 .replace("%free-mem%", MF.format(_MemUtils.maxFreeMemory()))
                 + " " + message;
@@ -58,8 +54,8 @@ public class LogProgressMonitor extends BaseProgressMonitor {
     }
 
     @Override
-    public ProgressMessage getProgressMessage() {
-        return message;
+    public TaskMessage getProgressMessage() {
+        return message==null? EMPTY_MESSAGE : message;
     }
 
     @Override

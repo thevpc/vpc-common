@@ -3,6 +3,7 @@ package net.vpc.common.util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by vpc on 5/11/14.
@@ -12,6 +13,10 @@ public class ClassPairMapList<V> {
 
     public ClassPairMapList(Class baseKey1Type, Class baseKey2Type, Class<V> valueType, boolean symmetric) {
         base = new ClassPairMap<List<V>>(baseKey1Type, baseKey2Type, (Class) List.class, symmetric);
+    }
+
+    public Set<ClassPair> keySet(){
+        return base.keySet();
     }
 
     public void add(Class classKey1, Class classKey2, V value) {

@@ -27,7 +27,7 @@ public class LongIterationProgressMonitorInc implements ProgressMonitorInc {
 //        }
 //
 //        private double progress;
-//        private ProgressMessage message;
+//        private TaskMessage message;
 //        private FastMessageFormat fastMessageFormat;
 //        private Logger logger;
 //
@@ -93,7 +93,7 @@ public class LongIterationProgressMonitorInc implements ProgressMonitorInc {
 //            return progress;
 //        }
 //
-//        public void setProgressImpl(double progress, ProgressMessage message) {
+//        public void setProgressImpl(double progress, TaskMessage message) {
 //            this.progress = progress;
 //            this.message = message;
 //            Map<String, Object> context = new HashMap<>();
@@ -103,7 +103,7 @@ public class LongIterationProgressMonitorInc implements ProgressMonitorInc {
 //        }
 //
 //        @Override
-//        public ProgressMessage getProgressMessage() {
+//        public TaskMessage getProgressMessage() {
 //            return message;
 //        }
 //

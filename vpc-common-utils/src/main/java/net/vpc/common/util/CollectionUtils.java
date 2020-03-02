@@ -86,8 +86,8 @@ public class CollectionUtils {
         return toList(it.iterator());
     }
 
-    public static <K, V> MapList<K, V> unmodifiableMapList(MapList<K, V> list) {
-        return list == null ? null : new UnmodifiableMapList<K, V>(list);
+    public static <K, V> KeyValueList<K, V> unmodifiableMapList(KeyValueList<K, V> list) {
+        return list == null ? null : new UnmodifiableKeyValueList<K, V>(list);
     }
 
     public static <K, V> Map<K, V> unmodifiableMap(Map<K, V> map) {

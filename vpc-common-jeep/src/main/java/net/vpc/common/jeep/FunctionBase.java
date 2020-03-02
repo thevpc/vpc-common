@@ -46,7 +46,7 @@ public abstract class FunctionBase implements Function {
         return Arrays.copyOf(argTypes, argTypes.length);
     }
 
-    public abstract Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator);
+    public abstract Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator);
 
 
     @Override

@@ -8,7 +8,7 @@ class ConstFunction extends FunctionBase {
     }
 
     @Override
-    public Object evaluate(ExpressionNode[] args, ExpressionEvaluator evaluator) {
+    public Object eval(ExpressionNode[] args, ExpressionEvaluator evaluator) {
         return value;
     }
     

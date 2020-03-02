@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.vpc.common</groupId>
     <artifactId>vpc-common-monitor</artifactId>
-    <version>1.22.6</version>
+    <version>1.22.7</version>
     <packaging>jar</packaging>
     <name>net.vpc.common.vpc-common-monitor</name>
     <url>https://github.com/thevpc/upa/wiki</url>

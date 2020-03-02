@@ -4,12 +4,11 @@ package net.vpc.common.mon;
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
  * @creationtime 15 mai 2007 01:34:27
  */
-public interface ProgressMonitor {
+public interface ProgressMonitor extends TaskMonitor {
     double INDETERMINATE_PROGRESS = Double.NaN;
 
     double getProgressValue();
 
-    ProgressMessage getProgressMessage();
 
     /**
      * [0..1]
@@ -17,13 +16,7 @@ public interface ProgressMonitor {
      * @param progress
      * @param message
      */
-    void setProgress(double progress, ProgressMessage message);
-
-    boolean isStarted();
-
-    boolean isCanceled();
-
-    void stop();
+    void setProgress(double progress, TaskMessage message);
 
 //    void setProgress(double progress, String message);
 
@@ -55,29 +48,14 @@ public interface ProgressMonitor {
 
     void setProgress(double progress, String message, Object... args);
 
-    ProgressMonitor setMessage(ProgressMessage message);
-
     ProgressMonitor setIndeterminate(String message);
-
-    ProgressMonitor setMessage(String message, Object... args);
 
     ProgressMonitor setIndeterminate(String message, Object... args);
 
 
-    ProgressMonitor setMessage(String message);
+    ProgressMonitor incremental(int iterations);
 
-    ProgressMonitor start(String message);
-
-    ProgressMonitor start(String message, Object... args);
-
-    ProgressMonitor terminate(String message);
-
-
-    ProgressMonitor terminate(String message, Object... args);
-
-    ProgressMonitor createIncrementalMonitor(int iterations);
-
-    ProgressMonitor createIncrementalMonitor(ProgressMonitor baseMonitor, double delta);
+    ProgressMonitor incremental(ProgressMonitor baseMonitor, double delta);
 
     ProgressMonitor temporize(long freq);
 
@@ -93,16 +71,17 @@ public interface ProgressMonitor {
 
     ProgressMonitor inc(String message, Object... args);
 
-    ProgressMonitor cancel();
+    long getEstimatedTotalDuration();
 
-    ProgressMonitor resume();
+    long getEstimatedRemainingDuration();
 
-    ProgressMonitor suspend();
+    ProgressMonitor terminate(String message);
 
-    long getDuration();
+    ProgressMonitor terminate(String message, Object... args);
 
-    long getStartTime();
+    ProgressMonitor start(String message);
 
-    boolean isTerminated();
+    ProgressMonitor start(String message, Object... args);
+
 
 }
