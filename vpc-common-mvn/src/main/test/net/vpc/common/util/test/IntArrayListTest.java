@@ -2,8 +2,8 @@ package net.vpc.common.util.test;
 
 import net.vpc.common.util.Chronometer;
 import net.vpc.common.util.IntArrayList;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;

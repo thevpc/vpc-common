@@ -1,0 +1,82 @@
+package net.vpc.common.jeep.impl.functions;
+
+import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.JFunctionBase;
+import net.vpc.common.jeep.impl.eval.JEvaluableConverter;
+
+public class JFunctionConverted3 extends JFunctionBase {
+    private JConverter[] argConverters;
+    private JConverter resultConverter;
+    private JFunction other;
+    //return type was Object.class, fix it!
+    public JFunctionConverted3(JFunction other,
+                               JConverter[] argConverters,
+                               JConverter resultConverter,
+                               JType returnType) {
+        super(other.name(),
+                returnType,
+                convArgTypes(other.signature().argTypes(), argConverters)
+                ,false
+        );
+        this.other = other;
+        this.argConverters = argConverters;
+        this.resultConverter = resultConverter;
+    }
+
+    public JConverter[] getArgConverters() {
+        return argConverters;
+    }
+
+    public JConverter getResultConverter() {
+        return resultConverter;
+    }
+
+    public JFunction getOther() {
+        return other;
+    }
+
+    @Override
+    public JType returnType() {
+        return resultConverter!=null?resultConverter.targetType().getType():other.returnType();
+    }
+
+    private static JType[] convArgTypes(JType[] argTypes, JConverter[] converters){
+        JType[] newArgTypes=new JType[argTypes.length];
+        for (int i = 0; i < newArgTypes.length; i++) {
+            if(converters!=null && converters[i]!=null){
+                newArgTypes[i]=converters[i].originalType().getType();
+                if(newArgTypes[i]==null){
+                    newArgTypes[i]=argTypes[i];
+                }
+            }else{
+                newArgTypes[i]=argTypes[i];
+            }
+        }
+        return newArgTypes;
+    }
+
+    @Override
+    public Object invoke(JInvokeContext icontext) {
+        JEvaluable[] args = icontext.arguments();
+        JEvaluable[] args2=new JEvaluable[args.length];
+        JType[] oldTypes=icontext.argumentTypes();
+        JType[] types2=new JType[args.length];
+        for (int i = 0; i < args.length; i++) {
+            if(argConverters!=null && argConverters[i]!=null){
+                args2[i]=new JEvaluableConverter(argConverters[i],args[i]);
+                types2[i]=argConverters[i].targetType().getType();
+            }else{
+                args2[i]=args[i];
+                types2[i]=oldTypes[i];
+            }
+        }
+        Object v = other.invoke(
+                icontext.builder()
+                        .arguments(args2)
+                        .build());
+        if(resultConverter!=null){
+            v=resultConverter.convert(v, icontext);
+        }
+        return v;
+    }
+}

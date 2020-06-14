@@ -839,37 +839,37 @@ public class PlatformUtils {
         return r;
     }
 
-    public static Method getMatchingMethod(Class cls, String methodName, Class... parameterTypes) {
-        return getMatchingMethod(true, cls, methodName, parameterTypes);
-    }
+//    public static Method getMatchingMethod(Class cls, String methodName, Class... parameterTypes) {
+//        return getMatchingMethod(true, cls, methodName, parameterTypes);
+//    }
 
-    public static Method getMatchingMethod(boolean accessibleOnly, Class cls, String methodName, Class... parameterTypes) {
-        try {
-            Method method = cls.getMethod(methodName, parameterTypes);
-            setAccessibleWorkaround(method);
-            return method;
-        } catch (NoSuchMethodException e) { // NOPMD - Swallow the exception
-        }
-        // search through all methods
-        Method[] methods = accessibleOnly ? cls.getMethods() : cls.getDeclaredMethods();//cls.getMethods();
-        List<MethodObject<Method>> m = new ArrayList<>();
-        for (int i = 0; i < methods.length; i++) {
-            if(methods[i].getName().equals(methodName)) {
-                m.add(new MethodObject<>(
-                        new MethodSignature(
-                                methods[i].getParameterTypes(),
-                                methods[i].isVarArgs()
-                        ), methods[i]
-                ));
-            }
-        }
-        MethodObject<Method> rr = getMatchingMethod(m.toArray(new MethodObject[m.size()]), parameterTypes);
-        if (rr == null) {
-            return null;
-        }
-        setAccessibleWorkaround(rr.method);
-        return rr.method;
-    }
+//    public static Method getMatchingMethod(boolean accessibleOnly, Class cls, String methodName, Class... parameterTypes) {
+//        try {
+//            Method method = cls.getMethod(methodName, parameterTypes);
+//            setAccessibleWorkaround(method);
+//            return method;
+//        } catch (NoSuchMethodException e) { // NOPMD - Swallow the exception
+//        }
+//        // search through all methods
+//        Method[] methods = accessibleOnly ? cls.getMethods() : cls.getDeclaredMethods();//cls.getMethods();
+//        List<MethodObject<Method>> m = new ArrayList<>();
+//        for (int i = 0; i < methods.length; i++) {
+//            if(methods[i].getName().equals(methodName)) {
+//                m.add(new MethodObject<>(
+//                        new MethodSignature(
+//                                methods[i].getParameterTypes(),
+//                                methods[i].isVarArgs()
+//                        ), methods[i]
+//                ));
+//            }
+//        }
+//        MethodObject<Method> rr = getMatchingMethod(m.toArray(new MethodObject[0]), parameterTypes);
+//        if (rr == null) {
+//            return null;
+//        }
+//        setAccessibleWorkaround(rr.method);
+//        return rr.method;
+//    }
 
     public static Class toBoxingType(Class type) {
         Class t = PRIMITIVE_TO_REF_TYPES.get(type);

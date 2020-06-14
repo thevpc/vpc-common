@@ -6,6 +6,7 @@
 package net.vpc.common.classpath;
 
 import java.io.File;
+import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -85,60 +86,60 @@ public class ClassPathUtils {
         return list;
     }
 
-    public static List<Class> resolveContextClassesList() {
-        return iterableToList(resolveContextClasses((ClassPathFilter) null));
+    public static List<Class> resolveContextClassesList(boolean includeSDK) {
+        return iterableToList(resolveContextClasses((ClassPathFilter) null, includeSDK));
     }
 
-    public static List<String> resolveContextClassNamesList() {
-        return iterableToList(resolveContextClassNames((ClassPathFilter) null));
+    public static List<String> resolveContextClassNamesList(boolean includeSDK) {
+        return iterableToList(resolveContextClassNames((ClassPathFilter) null, includeSDK));
     }
 
-    public static List<Class> resolveContextClassesList(ClassNameFilter filter) {
-        return iterableToList(resolveContextClasses(filter));
+    public static List<Class> resolveContextClassesList(ClassNameFilter filter, boolean includeSDK) {
+        return iterableToList(resolveContextClasses(filter, includeSDK));
     }
 
-    public static List<Class> resolveContextClassesList(ClassFilter filter) {
-        return iterableToList(resolveContextClasses(filter));
+    public static List<Class> resolveContextClassesList(ClassFilter filter, boolean includeSDK) {
+        return iterableToList(resolveContextClasses(filter, includeSDK));
     }
 
-    public static List<Class> resolveContextClassesList(ClassPathFilter filter) {
-        return iterableToList(resolveContextClasses(filter));
+    public static List<Class> resolveContextClassesList(ClassPathFilter filter, boolean includeSDK) {
+        return iterableToList(resolveContextClasses(filter, includeSDK));
     }
 
-    public static List<String> resolveContextClassNamesList(ClassPathFilter filter) {
-        return iterableToList(resolveContextClassNames(filter));
+    public static List<String> resolveContextClassNamesList(ClassPathFilter filter, boolean includeSDK) {
+        return iterableToList(resolveContextClassNames(filter, includeSDK));
     }
 
-    public static Iterable<Class> resolveContextClasses() {
+    public static Iterable<Class> resolveContextClasses(boolean includeSDK) {
         return resolveClasses(
-                resolveContextLibraries(),
+                resolveContextLibraries(includeSDK),
                 (ClassPathFilter) null,
                 Thread.currentThread().getContextClassLoader()
 
         );
     }
 
-    public static Iterable<Class> resolveContextClasses(ClassFilter filter) {
+    public static Iterable<Class> resolveContextClasses(ClassFilter filter, boolean includeSDK) {
         return resolveClasses(
-                resolveContextLibraries(),
+                resolveContextLibraries(includeSDK),
                 filter,
                 Thread.currentThread().getContextClassLoader()
 
         );
     }
 
-    public static Iterable<Class> resolveContextClasses(ClassPathFilter filter) {
+    public static Iterable<Class> resolveContextClasses(ClassPathFilter filter, boolean includeSDK) {
         return resolveClasses(
-                resolveContextLibraries(),
+                resolveContextLibraries(includeSDK),
                 filter,
                 Thread.currentThread().getContextClassLoader()
 
         );
     }
 
-    public static Iterable<Class> resolveContextClasses(ClassNameFilter filter) {
+    public static Iterable<Class> resolveContextClasses(ClassNameFilter filter, boolean includeSDK) {
         return resolveClasses(
-                resolveContextLibraries(),
+                resolveContextLibraries(includeSDK),
                 classNameFilterToClassPathFilter(filter),
                 Thread.currentThread().getContextClassLoader()
 
@@ -146,11 +147,11 @@ public class ClassPathUtils {
     }
 
     public static Iterable<Class> resolveClasses(URL[] urls, ClassLoader classLoader) {
-        return resolveClasses(urls,(ClassPathFilter) null,classLoader);
+        return resolveClasses(urls, (ClassPathFilter) null, classLoader);
     }
 
     public static Iterable<Class> resolveClasses(URL[] urls) {
-        return resolveClasses(urls,(ClassPathFilter) null,null);
+        return resolveClasses(urls, (ClassPathFilter) null, null);
     }
 
     public static Iterable<Class> resolveClasses(URL[] urls, ClassFilter filter, ClassLoader classLoader) {
@@ -194,6 +195,37 @@ public class ClassPathUtils {
         );
     }
 
+    private static URL[] toURLs(String[] paths) {
+        List<URL> u = new ArrayList<>();
+        try {
+            for (String path : paths) {
+                if (path.startsWith("file://") || path.startsWith("http://")) {
+                    u.add(new URL(path));
+                }else{
+                    u.add(new File(path).toURI().toURL());
+                }
+            }
+            return u.toArray(new URL[0]);
+        } catch (MalformedURLException e) {
+            throw new UncheckedIOException(e);
+        }
+    }
+
+    public static Iterable<String> resolveClassNames(String[] paths, ClassPathFilter filter) {
+        return resolveClassNames(toURLs(paths),filter);
+    }
+
+    public static Iterable<String> resolveClassNames(String[] paths, ClassNameFilter filter) {
+        return resolveClassNames(toURLs(paths),filter);
+    }
+    public static Iterable<String> resolveClassNames(String[] paths) {
+        return resolveClassNames(toURLs(paths),(ClassPathFilter) null);
+    }
+
+    public static Iterable<String> resolveClassNames(URL[] urls) {
+        return resolveClassNames(urls,(ClassPathFilter) null);
+    }
+
     public static Iterable<String> resolveClassNames(URL[] urls, ClassPathFilter filter) {
         return new URLClassNameIterable(
                 urls,
@@ -202,35 +234,101 @@ public class ClassPathUtils {
         );
     }
 
-    public static Iterable<String> resolveContextClassNames() {
-        return resolveContextClassNames((ClassPathFilter) null);
+    public static Iterable<String> resolveSDKClassNames() {
+        return new URLClassNameIterable(
+                resolveContextLibraries(true,false),
+                null
+        );
     }
 
-    public static Iterable<String> resolveContextClassNames(ClassNameFilter filter) {
+    public static Iterable<String> resolveContextClassNames(boolean includeSDK) {
+        return resolveContextClassNames((ClassPathFilter) null, includeSDK);
+    }
+
+    public static Iterable<String> resolveContextClassNames(ClassNameFilter filter, boolean includeSDK) {
         return new URLClassNameIterable(
-                resolveContextLibraries(),
+                resolveContextLibraries(includeSDK),
                 classNameFilterToClassPathFilter(filter)
 
         );
     }
 
-    public static Iterable<String> resolveContextClassNames(ClassPathFilter filter) {
+    public static Iterable<String> resolveContextClassNames(ClassPathFilter filter, boolean includeSDK) {
         return new URLClassNameIterable(
-                resolveContextLibraries(),
+                resolveContextLibraries(includeSDK),
                 filter
 
         );
     }
 
-    public static URL[] resolveContextLibraries() {
-        return resolveClassPathLibs("META-INF/MANIFEST.MF");
+    public static Iterable<ClassPathResource> resolveResources(URL[] libraries, ClassPathResourceFilter filter) {
+
+        return new URLResourceIterable(
+                libraries == null ? new URL[0] : libraries,
+                filter
+        );
     }
 
-    public static URL[] resolveClassPathLibs(String referenceURL) {
+    public static Iterable<ClassPathResource> resolveContextResources(ClassPathResourceFilter filter, boolean includeSDK) {
+        return new URLResourceIterable(
+                resolveContextLibraries(includeSDK),
+                filter
+        );
+    }
+
+    public static URL[] resolveContextLibraries() {
+        return resolveContextLibraries(false);
+    }
+
+    public static URL[] resolveContextLibraries(boolean includeSDK) {
+        return resolveClassPathLibs("META-INF/MANIFEST.MF", includeSDK,true);
+    }
+
+    public static URL[] resolveContextLibraries(boolean includeSDK, boolean includeNonNonSDK) {
+        return resolveClassPathLibs("META-INF/MANIFEST.MF", includeSDK,includeNonNonSDK);
+    }
+
+    public static URL[] resolveClassPathLibs(String referenceURL, boolean includeSDK, boolean includeNonSDK) {
 
         Set<URL> urls = new HashSet<URL>();
         ClassLoader sysClassLoader = ClassLoader.getSystemClassLoader();
         ClassLoader threadClassLoader = Thread.currentThread().getContextClassLoader();
+        if(includeSDK){
+            //sdk is found only in sysClassLoader
+            String javaHome = System.getProperty("java.home");
+            for (String s1 : System.getProperty("java.class.path").split(System.getProperty("path.separator"))) {
+                if (s1.startsWith(javaHome + "/")) {
+                    try {
+                        File file = new File(s1);
+                        if(file.exists()) {
+                            urls.add(file.toURI().toURL());
+                        }
+                    } catch (MalformedURLException e) {
+                        log.log(Level.SEVERE, "Unable to load Classpath Context. invalid path "+s1, e);
+                    }
+                }
+            }
+            //this works only on JDK<9 !!
+            //should see this :: https://stackoverflow.com/questions/41932635/scanning-classpath-modulepath-in-runtime-in-java-9
+            String sun_boot_class_path = System.getProperty("sun.boot.class.path");
+            if(sun_boot_class_path!=null) {
+                for (String s1 : sun_boot_class_path.split(System.getProperty("path.separator"))) {
+                    //if (s1.startsWith(javaHome + "/")) {
+                        try {
+                            File file = new File(s1);
+                            if(file.exists()) {
+                                urls.add(file.toURI().toURL());
+                            }
+                        } catch (MalformedURLException e) {
+                            log.log(Level.SEVERE, "Unable to load Classpath Context. invalid path "+s1, e);
+                        }
+                    //}
+                }
+            }
+        }
+        if(!includeNonSDK){
+            return urls.toArray(new URL[0]);
+        }
         if (threadClassLoader == null) {
             //do nothing
             log.log(Level.SEVERE, "Unable to load Classpath Context. Class loader is null");
@@ -240,11 +338,12 @@ public class ClassPathUtils {
                 //simple standalone application
                 String javaHome = System.getProperty("java.home");
                 for (String s1 : System.getProperty("java.class.path").split(System.getProperty("path.separator"))) {
-                    if (s1.startsWith(javaHome + "/")) {
-                        //ignore
-                    } else {
+                    if ((!s1.startsWith(javaHome + "/"))) {
                         try {
-                            urls.add(new File(s1).toURI().toURL());
+                            File file = new File(s1);
+                            if(file.exists()) {
+                                urls.add(file.toURI().toURL());
+                            }
                         } catch (MalformedURLException e) {
                             log.log(Level.SEVERE, "Unable to load Classpath Context", e);
                         }
@@ -253,14 +352,16 @@ public class ClassPathUtils {
             } else {
                 try {
                     //Only Class Path Roots that define META-INF/upa.xml will be parsed
-                    Enumeration<URL> upaXmls = threadClassLoader.getResources(referenceURL);
-                    while (upaXmls.hasMoreElements()) {
-                        URL url = upaXmls.nextElement();
+                    Enumeration<URL> referenceURLPaths = threadClassLoader.getResources(referenceURL);
+                    while (referenceURLPaths.hasMoreElements()) {
+                        URL url = referenceURLPaths.nextElement();
                         urls.add(getClasspathRoot(url, referenceURL));
                     }
                     //now check all other urls
-                    for (URL url : Collections.list(threadClassLoader.getResources("META-INF/MANIFEST.MF"))) {
-                        urls.add(getClasspathRoot(url, "META-INF/MANIFEST.MF"));
+                    if(!"META-INF/MANIFEST.MF".equals(referenceURL)) {
+                        for (URL url : Collections.list(threadClassLoader.getResources("META-INF/MANIFEST.MF"))) {
+                            urls.add(getClasspathRoot(url, "META-INF/MANIFEST.MF"));
+                        }
                     }
                     //for some reason some jar do not have META-INF files
                     for (URL url : Collections.list(threadClassLoader.getResources("/"))) {
@@ -276,7 +377,7 @@ public class ClassPathUtils {
                 }
             }
         }
-        return urls.toArray(new URL[urls.size()]);
+        return urls.toArray(new URL[0]);
     }
 
     public static URL getClasspathRoot(URL url, String resource) throws MalformedURLException {
@@ -329,12 +430,12 @@ public class ClassPathUtils {
         }
     }
 
-    public void visitContextAnnotations(AnnotationVisitor visitor, AnnotationFilter annotationFilter) {
-        visitAnnotations(resolveContextClasses(),visitor,annotationFilter);
+    public void visitContextAnnotations(AnnotationVisitor visitor, AnnotationFilter annotationFilter, boolean includeSDK) {
+        visitAnnotations(resolveContextClasses(includeSDK), visitor, annotationFilter);
     }
 
     public void visitAnnotations(URL[] urls, AnnotationVisitor visitor, AnnotationFilter annotationFilter) {
-        visitAnnotations(resolveClasses(urls),visitor,annotationFilter);
+        visitAnnotations(resolveClasses(urls), visitor, annotationFilter);
     }
 
     public void visitAnnotations(Iterable<Class> classes, AnnotationVisitor visitor, AnnotationFilter annotationFilter) {

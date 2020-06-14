@@ -5,7 +5,8 @@ import java.util.HashMap;
 
 import net.vpc.common.strings.MessageNameFormat;
 import net.vpc.common.strings.MessageNameFormatContext;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -33,7 +34,7 @@ public class MessageNameFormatTest {
         HashMap<String, Object> p = new HashMap<>();
         p.put("world", "World");
         System.out.println(f.format(p, new MessageNameFormatContext().addDefaults()));
-        org.junit.Assert.assertEquals("Hello ${world}", f.format(p, new MessageNameFormatContext().addDefaults()));
+        Assertions.assertEquals("Hello ${world}", f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 
     @Test
@@ -43,7 +44,7 @@ public class MessageNameFormatTest {
         HashMap<String, Object> p = new HashMap<>();
         p.put("world", "World");
         System.out.println(f.format(p, new MessageNameFormatContext().addDefaults()));
-        org.junit.Assert.assertEquals("Hello null", f.format(p, new MessageNameFormatContext().addDefaults()));
+        Assertions.assertEquals("Hello null", f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 
     @Test
@@ -53,7 +54,7 @@ public class MessageNameFormatTest {
         HashMap<String, Object> p = new HashMap<>();
         p.put("date", new Date());
         System.out.println(f.format(p, new MessageNameFormatContext().addDefaults()));
-        org.junit.Assert.assertEquals("Hello " + new SimpleDateFormat("yyyy-MM").format(p.get("date")), f.format(p, new MessageNameFormatContext().addDefaults()));
+        Assertions.assertEquals("Hello " + new SimpleDateFormat("yyyy-MM").format(p.get("date")), f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 
     @Test
@@ -63,15 +64,15 @@ public class MessageNameFormatTest {
         HashMap<String, Object> p = new HashMap<>();
         p.put("world", "World");
         p.put("count", 3);
-        org.junit.Assert.assertEquals("Hello World any", f.format(p, new MessageNameFormatContext().addDefaults()));
+        Assertions.assertEquals("Hello World any", f.format(p, new MessageNameFormatContext().addDefaults()));
 
         p.put("count", 1);
-        org.junit.Assert.assertEquals("Hello World one", f.format(p, new MessageNameFormatContext().addDefaults()));
+        Assertions.assertEquals("Hello World one", f.format(p, new MessageNameFormatContext().addDefaults()));
 
         p.put("count", 0);
-        org.junit.Assert.assertEquals("Hello World none", f.format(p, new MessageNameFormatContext().addDefaults()));
+        Assertions.assertEquals("Hello World none", f.format(p, new MessageNameFormatContext().addDefaults()));
 
         p.put("count", 0.0);
-        org.junit.Assert.assertEquals("Hello World any", f.format(p, new MessageNameFormatContext().addDefaults()));
+        Assertions.assertEquals("Hello World any", f.format(p, new MessageNameFormatContext().addDefaults()));
     }
 }

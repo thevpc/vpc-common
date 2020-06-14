@@ -1,5 +1,7 @@
 package net.vpc.common.mon;
 
+import net.vpc.common.msg.Message;
+
 public interface TaskMonitor {
     //    ProgressMonitor getProgressMonitor();
     void start();
@@ -42,12 +44,12 @@ public interface TaskMonitor {
 
     long getStartTime();
 
-    void setMessage(TaskMessage message);
+    void setMessage(Message message);
 
     void setMessage(String message);
 
     void setMessage(String message, Object... args);
 
-    TaskMessage getProgressMessage();
+    Message getMessage();
 
 }

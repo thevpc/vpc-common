@@ -13,13 +13,6 @@ public class URLClassNameIterable implements Iterable<String> {
     protected static final Logger log = Logger.getLogger(URLClassNameIterable.class.getName());
     public URL[] urls;
     public ClassPathFilter configFilter;
-//    private Map<Class, Set<Class>> entityClasses = new LinkedHashMap<Class, Set<Class>>();
-//        Map<Class, Class> entityToPrimary = new LinkedHashMap<Class, Class>();
-//    public Map<String, List<AnnotatedClass>> annotatedClassMap = new HashMap<String, List<AnnotatedClass>>();
-
-    //    public Set<Class> classAnnotations = new HashSet<Class>();
-//    PersistenceNameStrategyConfig nameStrategyModel = null;
-    public int nameStrategyModelConfigOrder = Integer.MIN_VALUE;
     public ClassLoader contextClassLoader;
 
     public URLClassNameIterable(URL[] urls, ClassPathFilter configFilter) {
@@ -31,43 +24,6 @@ public class URLClassNameIterable implements Iterable<String> {
         this.contextClassLoader = Thread.currentThread().getContextClassLoader();
     }
 
-    //    private void configureFolder(File rootFolder, File folder, ClassPathFilter typeFilter) throws MalformedURLException, ClassNotFoundException {
-//        File[] files = folder.listFiles();
-//        URL src = rootFolder.toURI().toURL();
-//        if (files != null) {
-//            for (File file : files) {
-//                if (file.isDirectory()) {
-//                    configureFolder(rootFolder, file, typeFilter);
-//                } else if (file.isFile()) {
-//                    String path = file.getPath().substring(rootFolder.getPath().length());
-//                    configureClassURL(src, path);
-//                }
-//            }
-//        }
-//    }
-//    protected String getMethodSig(Method method) {
-//        StringBuilder types = new StringBuilder();
-//        for (Class<?> parameterType : method.getParameterTypes()) {
-//            if (types.length() > 0) {
-//                types.append(",");
-//            }
-//            types.append(parameterType.getName());
-//        }
-//        return method.getName() + "(" + types + ")";
-//    }
-//    public void parse() throws IOException, ClassNotFoundException, URISyntaxException {
-//        for (URL jarURL : urls) {
-//            if (configFilter.acceptLibrary(jarURL)) {
-//                log.log(Level.FINE, "configuration from  url : {0}", jarURL);
-//                ClassPathRoot r = new ClassPathRoot(jarURL);
-//                for (ClassPathResource cr : r) {
-//                    configureClassURL(jarURL, cr.getPath());
-//                }
-//            } else {
-//                log.log(Level.FINE, "ignoring  configuration from url : {0}", jarURL);
-//            }
-//        }
-//    }
     public Iterator<String> iterator() {
         return new URLClassNameIterableIterator(this);
     }

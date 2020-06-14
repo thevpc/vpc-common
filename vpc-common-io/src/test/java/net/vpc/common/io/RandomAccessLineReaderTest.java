@@ -5,14 +5,15 @@
  */
 package net.vpc.common.io;
 
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
 
 /**
  *
@@ -22,7 +23,7 @@ public class RandomAccessLineReaderTest {
 
     static File file;
 
-    @BeforeClass
+    @BeforeAll
     public static void setup() throws IOException {
         file = File.createTempFile("temp", "temp");
         PrintStream out = new PrintStream(file);
@@ -32,7 +33,7 @@ public class RandomAccessLineReaderTest {
         out.close();
     }
 
-    @AfterClass
+    @AfterAll
     public static void tearup() {
         file.delete();
     }
@@ -40,10 +41,10 @@ public class RandomAccessLineReaderTest {
     @Test
     public void test_count() throws FileNotFoundException, IOException {
         try (RandomAccessLineReader r = new RandomAccessLineReader(file)) {
-            Assert.assertEquals(100,r.countLines());
-            org.junit.Assert.assertEquals("line number " + 0, r.readLine());
-            Assert.assertEquals(100,r.countLines());
-            org.junit.Assert.assertEquals("line number " + 1, r.readLine());
+            Assertions.assertEquals(100,r.countLines());
+            Assertions.assertEquals("line number " + 0, r.readLine());
+            Assertions.assertEquals(100,r.countLines());
+            Assertions.assertEquals("line number " + 1, r.readLine());
         }
     }
     @Test
@@ -51,12 +52,12 @@ public class RandomAccessLineReaderTest {
         try (RandomAccessLineReader r = new RandomAccessLineReader(file)) {
             for (int i = 3; i < 5; i++) {
                 String s = r.readLine(i);
-                org.junit.Assert.assertEquals("line number " + i, s);
+                Assertions.assertEquals("line number " + i, s);
             }
             for (int i = 3; i < 5; i++) {
                 int j = 5 - i + 3;
                 String s = r.readLine(j);
-                org.junit.Assert.assertEquals("line number " + j, s);
+                Assertions.assertEquals("line number " + j, s);
             }
         }
     }

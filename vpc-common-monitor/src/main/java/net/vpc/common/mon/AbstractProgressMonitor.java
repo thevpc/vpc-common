@@ -1,45 +1,48 @@
 package net.vpc.common.mon;
 
 import java.util.logging.Level;
+import net.vpc.common.msg.FormattedMessage;
+import net.vpc.common.msg.Message;
+import net.vpc.common.msg.StringMessage;
 
 
 public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implements ProgressMonitor {
 
     private ProgressMonitorInc incrementor = new DeltaProgressMonitorInc(1E-2);
-    private double progress=Double.NaN;
+//    private double progress=Double.NaN;
+
+    public AbstractProgressMonitor() {
+        this(nextId());
+    }
 
     public AbstractProgressMonitor(long id) {
         super(id);
     }
 
-    @Override
-    public double getProgressValue() {
-        return progress;
-    }
+//    @Override
+//    public double getProgress() {
+//        return progress;
+//    }
 
 
-    public final void setProgress(double progress, TaskMessage message) {
+    public final void setProgress(double progress, Message message) {
         setProgress(progress);
         setMessage(message);
     }
 
-    public ProgressMonitor[] split(int nbrElements) {
+    public final ProgressMonitor[] split(int nbrElements) {
         return ProgressMonitors.split(this, nbrElements);
     }
 
-    public ProgressMonitor[] split(double[] weight) {
+    public final ProgressMonitor[] split(double... weight) {
         return ProgressMonitors.split(this, weight);
     }
 
-    public ProgressMonitor[] split(double[] weight, boolean[] enabledElements) {
-        return ProgressMonitors.split(this, weight, enabledElements);
-    }
-
-    public ProgressMonitor translate(double factor, double start) {
+    public final ProgressMonitor translate(double factor, double start) {
         return ProgressMonitors.translate(this, factor, start);
     }
 
-    public ProgressMonitor translate(int index, int max) {
+    public final ProgressMonitor translate(int index, int max) {
         return new ProgressMonitorTranslator(this, 1.0 / max, index * (1.0 / max));
     }
 
@@ -74,12 +77,11 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
             }
         }
         if (ProgressMonitors.Config.isStrictComputationMonitor()) {
-            if (!Double.isNaN(progress) && progress < getProgressValue() && getProgressValue() >= 1) {
-                throw new RuntimeException("Invalid Progress value [0..1] : " + progress + "<" + getProgressValue());
+            if (!Double.isNaN(progress) && progress < getProgress() && getProgress() >= 1) {
+                throw new RuntimeException("Invalid Progress value [0..1] : " + progress + "<" + getProgress());
             }
         }
-        if(this.progress != progress){
-            this.progress = progress;
+        if(this.getProgress() != progress){
             setProgressImpl(progress);
         }
         if (progress >= 1) {
@@ -93,95 +95,97 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
 //        setProgress(i, getProgressMessage());
 //    }
 
-    public void setProgress(int i, int max) {
-        this.setProgress((1.0 * i / max), getProgressMessage());
+    public final void setProgress(int i, int max) {
+        this.setProgress((1.0 * i / max), getMessage());
     }
 
-    public void setProgress(int i, int max, String message) {
+    public final void setProgress(int i, int max, String message) {
         this.setProgress((1.0 * i / max), message);
     }
 
-    public void setProgress(int i, int max, String message, Object... args) {
+    public final void setProgress(int i, int max, String message, Object... args) {
         this.setProgress((1.0 * i / max), message, args);
     }
 
-    public void setProgress(int i, int j, int maxi, int maxj, String message) {
+    public final void setProgress(int i, int maxi, int j, int maxj, String message) {
         this.setProgress(((1.0 * i * maxi) + j) / (maxi * maxj), message);
     }
 
-    public void setProgress(int i, int j, int maxi, int maxj, String message, Object... args) {
+    @Override
+    public final ProgressMonitor translate(int i, int imax, int j, int jmax) {
+        return new ProgressMonitorTranslator(this, 1.0 / (imax*jmax), ((1.0 * i * imax) + j) / (imax * jmax));
+    }
+
+
+    public final void setProgress(int i, int j, int maxi, int maxj, String message, Object... args) {
         this.setProgress(((1.0 * i * maxi) + j) / (maxi * maxj), message, args);
     }
 
-    public void setProgress(double progress, String message) {
-        setProgress(progress, new StringTaskMessage(Level.FINE, message));
+    public final void setProgress(double progress, String message) {
+        setProgress(progress, new StringMessage(Level.FINE, message));
     }
 
-    public void setProgress(double progress, String message, Object... args) {
-        setProgress(progress, new FormattedTaskMessage(Level.FINE, message, args));
+    public final void setProgress(double progress, String message, Object... args) {
+        setProgress(progress, new FormattedMessage(Level.FINE, message, args));
     }
 
-    public ProgressMonitor setIndeterminate(String message) {
-        setProgress(ProgressMonitor.INDETERMINATE_PROGRESS, new StringTaskMessage(Level.FINE, message));
+    public final ProgressMonitor setIndeterminate(String message) {
+        setProgress(ProgressMonitor.INDETERMINATE_PROGRESS, new StringMessage(Level.FINE, message));
         return this;
     }
 
-    public ProgressMonitor setIndeterminate(String message, Object... args) {
-        setProgress(ProgressMonitor.INDETERMINATE_PROGRESS, new FormattedTaskMessage(Level.FINE, message, args));
+    public final ProgressMonitor setIndeterminate(String message, Object... args) {
+        setProgress(ProgressMonitor.INDETERMINATE_PROGRESS, new FormattedMessage(Level.FINE, message, args));
         return this;
     }
 
-    public ProgressMonitor incremental(int iterations) {
+    public final ProgressMonitor incremental(int iterations) {
         return ProgressMonitors.incremental(this, iterations);
     }
 
-    public ProgressMonitor incremental(ProgressMonitor baseMonitor, double delta) {
+    public final ProgressMonitor incremental(ProgressMonitor baseMonitor, double delta) {
         return ProgressMonitors.incremental(this, delta);
     }
 
-    public ProgressMonitor temporize(long freq) {
+    public final ProgressMonitor temporize(long freq) {
         return ProgressMonitors.temporize(this, freq);
     }
 
-    public ProgressMonitor[] split(boolean... enabledElements) {
-        return ProgressMonitors.split(this, enabledElements);
-    }
-
-    public ProgressMonitorInc getIncrementor() {
+    public final ProgressMonitorInc getIncrementor() {
         return this.incrementor;
     }
 
-    public ProgressMonitor setIncrementor(ProgressMonitorInc incrementor) {
+    public final ProgressMonitor setIncrementor(ProgressMonitorInc incrementor) {
         this.incrementor = incrementor;
         return this;
     }
 
-    public ProgressMonitor inc() {
+    public final ProgressMonitor inc() {
         inc("");
         return this;
     }
 
-    public ProgressMonitor inc(String message) {
+    public final ProgressMonitor inc(String message) {
         ProgressMonitorInc incrementor = getIncrementor();
         if (incrementor == null) {
             throw new IllegalArgumentException("Missing Incrementor");
         }
-        setProgress(incrementor.inc(getProgressValue()), new StringTaskMessage(Level.FINE, message));
+        setProgress(incrementor.inc(getProgress()), new StringMessage(Level.FINE, message));
         return this;
     }
 
-    public ProgressMonitor inc(String message, Object... args) {
+    public final ProgressMonitor inc(String message, Object... args) {
         ProgressMonitorInc incrementor = getIncrementor();
         if (incrementor == null) {
             throw new IllegalArgumentException("Missing Incrementor");
         }
-        setProgress(incrementor.inc(getProgressValue()), new FormattedTaskMessage(Level.FINE, message, args));
+        setProgress(incrementor.inc(getProgress()), new FormattedMessage(Level.FINE, message, args));
         return this;
     }
 
     @Override
-    public long getEstimatedTotalDuration() {
-        double d = getProgressValue();
+    public final long getEstimatedTotalDuration() {
+        double d = getProgress();
         long spent = getDuration();
         if (spent <= 0) {
             return -1;
@@ -190,8 +194,8 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
     }
 
     @Override
-    public long getEstimatedRemainingDuration() {
-        double d = getProgressValue();
+    public final long getEstimatedRemainingDuration() {
+        double d = getProgress();
         long spent = getDuration();
         if (spent <= 0) {
             return -1;
@@ -200,48 +204,46 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
     }
 
 
-    public ProgressMonitor terminate(String message) {
+    public final ProgressMonitor terminate(String message) {
         if (!isTerminated()) {
             super.terminate();
-            setProgress(1, new StringTaskMessage(Level.INFO, message));
+            setProgress(1, new StringMessage(Level.INFO, message));
         }
         return this;
     }
 
-    public ProgressMonitor terminate(String message, Object... args) {
+    public final ProgressMonitor terminate(String message, Object... args) {
         if (!isTerminated()) {
-            setProgress(1, new FormattedTaskMessage(Level.INFO, message, args));
+            setProgress(1, new FormattedMessage(Level.INFO, message, args));
         }
         return this;
     }
 
-    public ProgressMonitor start(String message) {
+    public final ProgressMonitor start(String message) {
         if (!isStarted()) {
-            setProgress(0, new StringTaskMessage(Level.FINE, message));
+            setProgress(0, new StringMessage(Level.FINE, message));
         }
         return this;
     }
 
-    public ProgressMonitor start(String message, Object... args) {
+    public final ProgressMonitor start(String message, Object... args) {
         if (!isStarted()) {
             start();
-            setProgress(0, new FormattedTaskMessage(Level.INFO, message, args));
+            setProgress(0, new FormattedMessage(Level.INFO, message, args));
         }
         return this;
     }
 
     @Override
     protected void startImpl() {
-        setProgress(0, new StringTaskMessage(Level.FINE, ""));
+        setProgress(0, new StringMessage(Level.FINE, ""));
     }
 
     protected void terminateImpl() {
-        setProgress(1, new StringTaskMessage(Level.FINE, ""));
+        setProgress(1, new StringMessage(Level.FINE, ""));
     }
 
-    protected void setProgressImpl(double progress) {
-
-    }
+    protected abstract void setProgressImpl(double progress);
 
 }
 

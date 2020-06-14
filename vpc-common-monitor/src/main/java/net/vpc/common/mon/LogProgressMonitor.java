@@ -2,6 +2,7 @@ package net.vpc.common.mon;
 
 import java.util.Date;
 import java.util.logging.Logger;
+import net.vpc.common.msg.Message;
 
 public class LogProgressMonitor extends AbstractProgressMonitor {
     private static _BytesSizeFormat MF = new _BytesSizeFormat("0K0TF");
@@ -11,9 +12,10 @@ public class LogProgressMonitor extends AbstractProgressMonitor {
         defaultLog.setUseParentHandlers(false);
     }
 
-    private TaskMessage message;
+    private Message message=EMPTY_MESSAGE;
     private String messageFormat;
     private Logger logger;
+    private double progress=Double.NaN;
 
     /**
      * %value%
@@ -36,17 +38,27 @@ public class LogProgressMonitor extends AbstractProgressMonitor {
         this.logger = logger;
     }
 
+    @Override
+    protected void setProgressImpl(double progress) {
+        this.progress=progress;
+    }
+
+    @Override
+    public double getProgress() {
+        return progress;
+    }
+
     public static Logger getDefaultLogger() {
         return defaultLog;
     }
 
 
-    public void setMessageImpl(TaskMessage message) {
+    public void setMessageImpl(Message message) {
         this.message = message;
         long newd = System.currentTimeMillis();
         String msg = messageFormat
                 .replace("%date%", new Date(newd).toString())
-                .replace("%value%", Double.isNaN(getProgressValue()) ? "   ?%" : ProgressMonitors.PERCENT_FORMAT.format(getProgressValue()))
+                .replace("%value%", Double.isNaN(getProgress()) ? "   ?%" : ProgressMonitors.PERCENT_FORMAT.format(getProgress()))
                 .replace("%inuse-mem%", MF.format(_MemUtils.inUseMemory()))
                 .replace("%free-mem%", MF.format(_MemUtils.maxFreeMemory()))
                 + " " + message;
@@ -54,13 +66,13 @@ public class LogProgressMonitor extends AbstractProgressMonitor {
     }
 
     @Override
-    public TaskMessage getProgressMessage() {
-        return message==null? EMPTY_MESSAGE : message;
+    public Message getMessage() {
+        return message;
     }
 
     @Override
     public String toString() {
-        return logger + "(" + getProgressValue() + ")";
+        return logger + "(" + getProgress() + ")";
     }
 
 

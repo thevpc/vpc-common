@@ -3,8 +3,8 @@
 //
 //import net.vpc.common.util.MemorySizeFormatter;
 //import net.vpc.common.util.Units;
-//import org.junit.Assert;
-//import org.junit.Test;
+//import org.junit.jupiter.api.Assertions;
+//import org.junit.jupiter.api.Test;
 //
 //public class MemorySizeFormatterTest {
 //    @Test

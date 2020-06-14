@@ -42,7 +42,7 @@ public abstract class AbstractCommandAutoComplete implements net.vpc.common.comm
     private LinkedHashMap<String, ArgumentCandidate> candidates = new LinkedHashMap<>();
 
     @Override
-    public List getCandidates() {
+    public List<ArgumentCandidate> getCandidates() {
         return new ArrayList<>(candidates.values());
     }
 

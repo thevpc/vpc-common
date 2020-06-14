@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="vpc-common-cron" />
+        <module name="vpc-common-config" />
         <module name="vpc-common-mvn" />
         <module name="vpc-common-log" />
         <module name="vpc-common-fprint" />
-        <module name="vfs" />
+        <module name="vpc-common-xfile" />
         <module name="vpc-common-classpath" />
         <module name="vpc-common-strings" />
         <module name="vpc-common-utils" />
@@ -20,15 +20,15 @@
         <module name="vpc-common-io-compress" />
         <module name="vpc-common-sql" />
         <module name="vpc-common-swings" />
-        <module name="vpc-common-desktop-automation" />
+        <module name="vfs" />
         <module name="vpc-common-web-jsf" />
         <module name="vpc-common-monitor" />
         <module name="vpc-common-web-xml" />
-        <module name="vpc-common-config" />
+        <module name="vpc-common-desktop-automation" />
         <module name="vpc-common-swings-prs" />
         <module name="vpc-common-commandline" />
         <module name="vpc-common-io" />
-        <module name="vpc-common-xfile" />
+        <module name="vpc-common-cron" />
         <module name="vpc-common-ssh" />
         <module name="java-shell" />
         <module name="vpc-common-jeep" />
@@ -58,7 +58,7 @@
       <module name="vpc-common-strings" target="1.7" />
       <module name="vpc-common-swings" target="1.8" />
       <module name="vpc-common-swings-prs" target="1.8" />
-      <module name="vpc-common-utils" target="1.7" />
+      <module name="vpc-common-utils" target="1.8" />
       <module name="vpc-common-web-jsf" target="1.7" />
       <module name="vpc-common-web-xml" target="1.7" />
       <module name="vpc-common-xfile" target="1.7" />

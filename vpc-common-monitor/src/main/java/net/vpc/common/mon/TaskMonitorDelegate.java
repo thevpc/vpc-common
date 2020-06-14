@@ -1,5 +1,7 @@
 package net.vpc.common.mon;
 
+import net.vpc.common.msg.Message;
+
 public class TaskMonitorDelegate implements TaskMonitor {
     private TaskMonitor delegate;
 
@@ -112,7 +114,7 @@ public class TaskMonitorDelegate implements TaskMonitor {
     }
 
     @Override
-    public void setMessage(TaskMessage message) {
+    public void setMessage(Message message) {
         getDelegate().setMessage(message);
     }
 
@@ -127,7 +129,7 @@ public class TaskMonitorDelegate implements TaskMonitor {
     }
 
     @Override
-    public TaskMessage getProgressMessage() {
-        return getDelegate().getProgressMessage();
+    public Message getMessage() {
+        return getDelegate().getMessage();
     }
 }

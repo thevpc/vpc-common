@@ -1,19 +1,21 @@
 package net.vpc.common.mon;
 
 import static net.vpc.common.mon.AbstractTaskMonitor.EMPTY_MESSAGE;
+import net.vpc.common.msg.Message;
+import net.vpc.common.msg.StringPrefixMessage;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
  * @creationtime 19 juil. 2007 00:27:15
  */
-public class ProgressMonitorTranslator extends ProgressMonitorDelegate {
+public class ProgressMonitorTranslator extends AbstractProgressMonitor {
 
     private double start;
-    private TaskMessage message;
     private double factor;
+    private ProgressMonitor delegate;
 
     public ProgressMonitorTranslator(ProgressMonitor baseMonitor, double factor, double start) {
-        super(baseMonitor);
+        this.delegate=baseMonitor;
         if (baseMonitor == null) {
             throw new NullPointerException("baseMonitor could not be null");
         }
@@ -21,15 +23,28 @@ public class ProgressMonitorTranslator extends ProgressMonitorDelegate {
         this.start = start;
     }
 
+    public ProgressMonitor getDelegate() {
+        return delegate;
+    }
+
     @Override
-    public double getProgressValue() {
-        double d = (getDelegate().getProgressValue() - start) / factor;
+    public double getProgress() {
+        double d = (getDelegate().getProgress() - start) / factor;
         return d < 0 ? 0 : d > 1 ? 1 : d;
     }
 
     @Override
-    public void setProgress(double progress, TaskMessage message) {
-        this.message = message;
+    public void setMessageImpl(Message message) {
+        getDelegate().setMessage(message);
+    }
+
+    @Override
+    public Message getMessage() {
+        return getDelegate().getMessage();
+    }
+
+    @Override
+    public void setProgressImpl(double progress) {
         double translatedProgress = Double.isNaN(progress)?progress:(progress * factor + start);
 //        double translatedProgress = (progress-start)/factor;
         if (!Double.isNaN(progress) && (translatedProgress < 0 || translatedProgress > 1)) {
@@ -39,31 +54,14 @@ public class ProgressMonitorTranslator extends ProgressMonitorDelegate {
                 System.err.println("ProgressMonitorTranslator : %= " + translatedProgress + "????????????");
             }
         }
-        if (message != null && message instanceof StringPrefixTaskMessage) {
-            message = new StringPrefixTaskMessage(
-                    ProgressMonitors.PERCENT_FORMAT.format(progress) + " " +
-                            ((StringPrefixTaskMessage) message).getPrefix(),
-                    ((StringPrefixTaskMessage) message).getMessage()
-            );
-        } else {
-            message = new StringPrefixTaskMessage(
-                    ProgressMonitors.PERCENT_FORMAT.format(progress) + " ",
-                    message
-            );
-        }
-        getDelegate().setProgress(translatedProgress, message);
+        getDelegate().setProgress(translatedProgress);
 //        baseMonitor.setProgress((progress-start)/factor);
-    }
-
-    @Override
-    public TaskMessage getProgressMessage() {
-        return message==null? EMPTY_MESSAGE : message;
     }
 
     @Override
     public String toString() {
         return "Translator(" +
-                "value=" + getProgressValue() +
+                "value=" + getProgress() +
                 ",start=" + start +
                 ", factor=" + factor +
                 ", " + getDelegate() +

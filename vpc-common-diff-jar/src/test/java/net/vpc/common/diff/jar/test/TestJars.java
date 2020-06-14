@@ -2,7 +2,7 @@ package net.vpc.common.diff.jar.test;
 
 import net.vpc.common.diff.jar.Diff;
 import net.vpc.common.diff.jar.DiffResult;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 

@@ -1,5 +1,7 @@
 package net.vpc.common.mon;
 
+import net.vpc.common.msg.Message;
+
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
  * @creationtime 15 mai 2007 01:34:27
@@ -7,7 +9,7 @@ package net.vpc.common.mon;
 public interface ProgressMonitor extends TaskMonitor {
     double INDETERMINATE_PROGRESS = Double.NaN;
 
-    double getProgressValue();
+    double getProgress();
 
 
     /**
@@ -16,17 +18,11 @@ public interface ProgressMonitor extends TaskMonitor {
      * @param progress
      * @param message
      */
-    void setProgress(double progress, TaskMessage message);
-
-//    void setProgress(double progress, String message);
-
+    void setProgress(double progress, Message message);
 
     ProgressMonitor[] split(int nbrElements);
 
-    ProgressMonitor[] split(double[] weight);
-
-
-    ProgressMonitor[] split(double[] weight, boolean[] enabledElements);
+    ProgressMonitor[] split(double... weight);
 
     ProgressMonitor translate(double factor, double start);
 
@@ -40,7 +36,9 @@ public interface ProgressMonitor extends TaskMonitor {
 
     void setProgress(int i, int max, String message, Object... args);
 
-    void setProgress(int i, int j, int maxi, int maxj, String message);
+    void setProgress(int i, int maxi, int j, int maxj, String message);
+
+    ProgressMonitor translate(int i, int imax, int j, int jmax);
 
     void setProgress(int i, int j, int maxi, int maxj, String message, Object... args);
 
@@ -58,8 +56,6 @@ public interface ProgressMonitor extends TaskMonitor {
     ProgressMonitor incremental(ProgressMonitor baseMonitor, double delta);
 
     ProgressMonitor temporize(long freq);
-
-    ProgressMonitor[] split(boolean... enabledElements);
 
     ProgressMonitorInc getIncrementor();
 

@@ -1,0 +1,38 @@
+package net.vpc.common.jeep.impl;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NoSuchElementException;
+
+public class JEnumTypeRegistry {
+
+    public static final JEnumTypeRegistry INSTANCE = new JEnumTypeRegistry();
+
+    private final Map<String, JEnumType> names = new HashMap<>();
+
+    public <T extends JEnum> JEnumType<T> find(String enumType) {
+        return names.get(enumType);
+    }
+
+    public JEnumType get(String enumType) {
+        JEnumType e = names.get(enumType);
+        if (e == null) {
+            throw new NoSuchElementException("enum " + enumType + " not found");
+        }
+        return e;
+    }
+
+    public <T extends JEnum> JEnumType<T> register(Class<T> enumClass) {
+        return register(enumClass.getSimpleName(), enumClass);
+    }
+
+    public <T extends JEnum> JEnumType<T> register(String enumType, Class<T> enumClass) {
+        if (names.containsKey(enumType)) {
+            throw new IllegalArgumentException("enum " + enumType + " already registered");
+        }
+        JEnumType value = new JEnumType(enumType, enumClass);
+        names.put(enumType, value);
+        return value;
+    }
+
+}
