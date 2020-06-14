@@ -42,3 +42,11 @@
 /vpc-common-props/target/
 /vpc-common-app-swingx/target/
 /vpc-common-jshell/target/
+/vpc-common-app/target/
+/vpc-common-i18n/target/
+/vpc-common-iconset/target/
+/vpc-common-jeep/vpc-common-jeep/target/
+/vpc-common-jeep/vpc-common-jeep-editor-swing/target/
+/vpc-common-msg/target/
+/vpc-common-jeep/vpc-common-jeep-nodes/target/
+/vpc-common-swings-iconset-default/target/
