@@ -1,0 +1,5 @@
+package net.vpc.common.jeep;
+
+public interface JTypesLoader {
+    JType loadType(String name,JTypes types);
+}
