@@ -5,9 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
+import net.vpc.common.msg.FormattedMessage;
+import net.vpc.common.msg.Message;
+import net.vpc.common.msg.StringMessage;
 
-public class AbstractTaskMonitor implements TaskMonitor {
-    public static final StringTaskMessage EMPTY_MESSAGE = new StringTaskMessage(Level.INFO, "");
+public abstract class AbstractTaskMonitor implements TaskMonitor {
+    public static final StringMessage EMPTY_MESSAGE = new StringMessage(Level.INFO, "");
     private static long _NEXT_ID = 0;
     protected MonChronometer chronometer = new MonChronometer();
     private boolean suspended = false;
@@ -19,7 +22,6 @@ public class AbstractTaskMonitor implements TaskMonitor {
     private long id;
     private String name;
     private String desc;
-    private TaskMessage message;
 
     public AbstractTaskMonitor(long id) {
         this.id = id;
@@ -48,6 +50,9 @@ public class AbstractTaskMonitor implements TaskMonitor {
     @Override
     public void terminate() {
         if (!isTerminated()) {
+            if(!isStarted()){
+                start();
+            }
             terminated = true;
             terminateImpl();
             for (TaskListener listener : getListeners()) {
@@ -227,36 +232,27 @@ public class AbstractTaskMonitor implements TaskMonitor {
 
     }
 
-    public TaskMessage getMessage() {
-        return message;
-    }
-
     @Override
-    public final void setMessage(TaskMessage message) {
-        TaskMessage newMessage = message == null ? new StringTaskMessage(Level.FINE, null) : message;
-        if (!Objects.equals(this.message, newMessage)) {
-            this.message = newMessage;
-            setMessageImpl(this.message);
+    public final void setMessage(Message message) {
+        Message newMessage = message == null ? new StringMessage(Level.FINE, null) : message;
+        if (!Objects.equals(getMessage(), newMessage)) {
+            setMessageImpl(newMessage);
         }
     }
 
     @Override
-    public void setMessage(String message) {
-        setMessage(new StringTaskMessage(Level.FINE, message));
+    public final void setMessage(String message) {
+        setMessage(new StringMessage(Level.FINE, message));
     }
 
     @Override
     public void setMessage(String message, Object... args) {
-        setMessage(new FormattedTaskMessage(Level.FINE, message, args));
+        setMessage(
+                message==null?EMPTY_MESSAGE:
+                new FormattedMessage(Level.FINE, message, args));
     }
 
-    @Override
-    public TaskMessage getProgressMessage() {
-        return message==null? EMPTY_MESSAGE : message;
-    }
-
-    protected void setMessageImpl(TaskMessage message) {
-    }
+    protected abstract void setMessageImpl(Message message);
 
     protected static class MonChronometer implements Serializable {
 

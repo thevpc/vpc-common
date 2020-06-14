@@ -2,8 +2,10 @@ package net.vpc.common.mon;
 
 import java.io.PrintStream;
 import java.text.DecimalFormat;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.vpc.common.msg.StringMessage;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
@@ -23,75 +25,36 @@ public class ProgressMonitors {
     /**
      * creates Monitors for each enabled Element or null if false
      *
-     * @param baseMonitor     translated
-     * @param enabledElements translated elements flag
-     * @return ProgressMonitor[] array that contains nulls or  translated baseMonitor
-     */
-    public static ProgressMonitor[] split(ProgressMonitor baseMonitor, boolean... enabledElements) {
-        ProgressMonitor[] all = new ProgressMonitor[enabledElements.length];
-        int count = 0;
-        for (boolean enabledElement : enabledElements) {
-            if (enabledElement) {
-                count++;
-            }
-        }
-        int index = 0;
-        for (int i = 0; i < enabledElements.length; i++) {
-            boolean enabledElement = enabledElements[i];
-            if (enabledElement) {
-                all[i] = translate(baseMonitor, 1.0 / count, ((double) index) / count);
-                index++;
-            }
-        }
-        return all;
-    }
-
-    /**
-     * creates Monitors for each enabled Element or null if false
-     *
      * @param baseMonitor translated
      * @return ProgressMonitor[] array that contains nulls or  translated baseMonitor
      */
     public static ProgressMonitor[] split(ProgressMonitor baseMonitor, int nbrElements) {
         double[] dd = new double[nbrElements];
-        boolean[] bb = new boolean[nbrElements];
-        for (int i = 0; i < bb.length; i++) {
-            dd[i] = 1;
-            bb[i] = true;
-        }
-        return split(baseMonitor, dd, bb);
+        Arrays.fill(dd, 1);
+        return split(baseMonitor, dd);
     }
 
-    public static ProgressMonitor[] split(ProgressMonitor baseMonitor, double[] weight) {
-        boolean[] bb = new boolean[weight.length];
-        for (int i = 0; i < bb.length; i++) {
-            bb[i] = true;
-        }
-        return split(baseMonitor, weight, bb);
-    }
-
-    public static ProgressMonitor[] split(ProgressMonitor baseMonitor, double[] weight, boolean[] enabledElements) {
-        ProgressMonitor[] all = new ProgressMonitor[enabledElements.length];
-        double[] coeffsOffsets = new double[enabledElements.length];
-        double[] xweight = new double[enabledElements.length];
+    public static ProgressMonitor[] split(ProgressMonitor baseMonitor, double... weight) {
+        ProgressMonitor[] all = new ProgressMonitor[weight.length];
+        double[] coeffsOffsets = new double[weight.length];
+        double[] xweight = new double[weight.length];
         double coeffsSum = 0;
-        for (int i = 0; i < enabledElements.length; i++) {
-            boolean enabledElement = enabledElements[i];
-            if (enabledElement) {
+        for (int i = 0; i < weight.length; i++) {
+            if (weight[i]>0) {
                 coeffsSum += weight[i];
             }
         }
         double coeffsOffset = 0;
-        for (int i = 0; i < enabledElements.length; i++) {
-            boolean enabledElement = enabledElements[i];
+        for (int i = 0; i < weight.length; i++) {
+            boolean enabledElement = weight[i]>0;
             if (enabledElement) {
                 coeffsOffsets[i] = coeffsOffset;
                 xweight[i] = (weight[i] / coeffsSum);
                 coeffsOffset += xweight[i];
             }
         }
-        for (int i = 0; i < enabledElements.length; i++) {
-            boolean enabledElement = enabledElements[i];
+        for (int i = 0; i < weight.length; i++) {
+            boolean enabledElement = weight[i]>0;
             if (enabledElement) {
                 all[i] = translate(baseMonitor, xweight[i], coeffsOffsets[i]);
             }else{
@@ -110,11 +73,11 @@ public class ProgressMonitors {
     }
 
     public static void setProgress(ProgressMonitor baseMonitor, int i, int max, String message) {
-        baseMonitor.setProgress((1.0 * i / max), new StringTaskMessage(Level.FINE, message));
+        baseMonitor.setProgress((1.0 * i / max), new StringMessage(Level.FINE, message));
     }
 
     public static void setProgress(ProgressMonitor baseMonitor, int i, int j, int maxi, int maxj, String message) {
-        baseMonitor.setProgress(((1.0 * i * maxi) + j) / (maxi * maxj), new StringTaskMessage(Level.FINE, message));
+        baseMonitor.setProgress(((1.0 * i * maxi) + j) / (maxi * maxj), new StringMessage(Level.FINE, message));
     }
 
     public static ProgressMonitor[] createSilentMonitors(int count) {

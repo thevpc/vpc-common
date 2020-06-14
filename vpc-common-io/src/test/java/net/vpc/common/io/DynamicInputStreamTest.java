@@ -1,7 +1,7 @@
 package net.vpc.common.io;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.InputStream;
 import java.util.Arrays;
@@ -26,8 +26,8 @@ public class DynamicInputStreamTest {
 //            }
             byte[] buf=new byte[5];
             while (max > 0 && (x = b.read(buf)) != -1) {
-                Assert.assertEquals(4,x);
-                Assert.assertArrayEquals(new byte[]{1,2,3,4,0}, buf);
+                Assertions.assertEquals(4,x);
+                Assertions.assertArrayEquals(new byte[]{1,2,3,4,0}, buf);
                 System.out.println(max+"::"+ x+"::"+Arrays.toString(buf));
                 max--;
             }
@@ -55,11 +55,11 @@ public class DynamicInputStreamTest {
             byte[] buf=new byte[2];
             boolean ot=true;
             while (max > 0 && (x = b.read(buf)) != -1) {
-                Assert.assertEquals(2,x);
+                Assertions.assertEquals(2,x);
                 if(ot) {
-                    Assert.assertArrayEquals(new byte[]{1, 2}, buf);
+                    Assertions.assertArrayEquals(new byte[]{1, 2}, buf);
                 }else{
-                    Assert.assertArrayEquals(new byte[]{3, 4}, buf);
+                    Assertions.assertArrayEquals(new byte[]{3, 4}, buf);
                 }
                 System.out.println(max+"::"+ x+"::"+Arrays.toString(buf));
                 max--;
@@ -84,7 +84,7 @@ public class DynamicInputStreamTest {
             int v=1;
             while (max > 0 && (x = b.read()) != -1) {
                 System.out.println(max+"::"+x);
-                Assert.assertEquals(v,x);
+                Assertions.assertEquals(v,x);
                 v+=1;
                 if(v>4){
                     v=1;

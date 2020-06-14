@@ -1,30 +1,27 @@
 /**
  * ====================================================================
  * vpc-swingext library
- *
+ * <p>
  * Description: <start><end>
- *
+ * <p>
  * Copyright (C) 2006-2008 Taha BEN SALAH
- *
+ * <p>
  * This program is free software; you can redistribute it and/or modify it under
  * the terms of the GNU General Public License as published by the Free Software
  * Foundation; either version 2 of the License, or (at your option) any later
  * version.
- *
+ * <p>
  * This program is distributed in the hope that it will be useful, but WITHOUT
  * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details.
- *
+ * <p>
  * You should have received a copy of the GNU General Public License along with
  * this program; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  * ====================================================================
  */
 package net.vpc.common.swings;
-
-import java.util.List;
-import java.util.ArrayList;
 
 import javax.accessibility.AccessibleContext;
 import javax.swing.*;
@@ -35,6 +32,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,15 +42,26 @@ import java.util.Map;
  */
 public class JDropDownButton extends JButton {
 
-    public int getQuickActionDelay() {
-        return quickActionDelay;
-    }
-
-    public void setQuickActionDelay(int quickActionDelay) {
-        this.quickActionDelay = quickActionDelay;
-    }
-
-//    public static void main(String[] args) {
+    /*
+     * Diagnostic aids -- should be false for production builds.
+     */
+    private static final boolean TRACE = false; // trace creates and disposes
+    private static final boolean VERBOSE = false; // show reuse hits/misses
+    private static final boolean DEBUG = false;  // show bad params, misc.
+    /*
+     * Registry of listeners created for <code>Action-JMenuItem</code> linkage.
+     * This is needed so that references can be cleaned up at remove time to
+     * allow garbage collection Default is <code>null</code>.
+     */
+    private static Map listenerRegistry = null;
+    protected List<ActionListener> quickListeners = new ArrayList();
+    /**
+     * The window-closing listener for the popup.
+     *
+     * @see WinListener
+     */
+    protected WinListener popupListener;
+    //    public static void main(String[] args) {
 //        boolean nativeLAF = true;
 //        try {
 //            String plaf;
@@ -106,45 +116,28 @@ public class JDropDownButton extends JButton {
      * The popup menu portion of the menu.
      */
     private JPopupMenu popupMenu;
-
+    private boolean paintHandle = true;
     /*
      * The button's model listeners. Default is <code>null</code>.
      */
     private ChangeListener menuChangeListener = null;
-
     /*
      * Only one <code>MenuEvent</code> is needed for each menu since the event's
      * only state is the source property. The source of events generated is
      * always "this". Default is <code>null</code>.
      */
     private MenuEvent menuEvent = null;
-
-    /*
-     * Registry of listeners created for <code>Action-JMenuItem</code> linkage.
-     * This is needed so that references can be cleaned up at remove time to
-     * allow garbage collection Default is <code>null</code>.
-     */
-    private static Map listenerRegistry = null;
-
     /*
      * Used by the look and feel (L&F) code to handle implementation specific
      * menu behaviors.
      */
     private int delay;
     private int quickActionDelay = 200;
-
     /*
      * Location of the popup component. Location is <code>null</code> if it was
      * not customized by <code>setMenuLocation</code>
      */
     private Point customMenuLocation = null;
-
-    /*
-     * Diagnostic aids -- should be false for production builds.
-     */
-    private static final boolean TRACE = false; // trace creates and disposes
-    private static final boolean VERBOSE = false; // show reuse hits/misses
-    private static final boolean DEBUG = false;  // show bad params, misc.
     private int popupOrientation;
 
     public JDropDownButton() {
@@ -170,6 +163,23 @@ public class JDropDownButton extends JButton {
     public JDropDownButton(String text, Icon icon) {
         super(text, icon);
         prepareButton();
+    }
+
+    public int getQuickActionDelay() {
+        return quickActionDelay;
+    }
+
+    public void setQuickActionDelay(int quickActionDelay) {
+        this.quickActionDelay = quickActionDelay;
+    }
+
+    public boolean isPaintHandle() {
+        return paintHandle;
+    }
+
+    public JDropDownButton setPaintHandle(boolean paintHandle) {
+        this.paintHandle = paintHandle;
+        return this;
     }
 
     protected void installAncestorListener() {
@@ -237,7 +247,7 @@ public class JDropDownButton extends JButton {
         addMouseListener(
                 new MouseAdapter() {
 
-            private long time;
+                    private long time;
 //                    public void mouseClicked(MouseEvent e) {
 //                        long d=System.currentTimeMillis()-e.getWhen();
 //                        if((d) >= getDelay()){
@@ -249,34 +259,34 @@ public class JDropDownButton extends JButton {
 //                        }
 //                    }
 
-            public void mouseReleased(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                    long d = e.getWhen() - time;
-                    time = 0;
-//                            System.out.println("d /delay= " + d+" / "+getDelay());
-                    if ((d) > getQuickActionDelay()) {
-//                                System.out.println("popup ok");
-                        setPopupMenuVisible(true);
-                        MenuElement[] me = buildMenuElementArray(JDropDownButton.this);
-                        MenuSelectionManager.defaultManager().setSelectedPath(me);
-                    } else {
-//                                System.out.println("quick action");
-                        ActionEvent ae = new ActionEvent(JDropDownButton.this,
-                                ActionEvent.ACTION_PERFORMED,
-                                getActionCommand(),
-                                e.getWhen(),
-                                e.getModifiers());
-                        fireQuickActionPerformed(ae);
+                    public void mousePressed(MouseEvent e) {
+                        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                            time = e.getWhen();
+                        }
                     }
-                }
-            }
 
-            public void mousePressed(MouseEvent e) {
-                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                    time = e.getWhen();
-                }
-            }
-        });
+                    public void mouseReleased(MouseEvent e) {
+                        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                            long d = e.getWhen() - time;
+                            time = 0;
+//                            System.out.println("d /delay= " + d+" / "+getDelay());
+                            if ((d) > getQuickActionDelay()) {
+//                                System.out.println("popup ok");
+                                setPopupMenuVisible(true);
+                                MenuElement[] me = buildMenuElementArray(JDropDownButton.this);
+                                MenuSelectionManager.defaultManager().setSelectedPath(me);
+                            } else {
+//                                System.out.println("quick action");
+                                ActionEvent ae = new ActionEvent(JDropDownButton.this,
+                                        ActionEvent.ACTION_PERFORMED,
+                                        getActionCommand(),
+                                        e.getWhen(),
+                                        e.getModifiers());
+                                fireQuickActionPerformed(ae);
+                            }
+                        }
+                    }
+                });
     }
 
     public void addQuickActionListener(ActionListener listener) {
@@ -288,7 +298,6 @@ public class JDropDownButton extends JButton {
     public void removeQuickActionListener(ActionListener listener) {
         quickListeners.remove(listener);
     }
-    protected List<ActionListener> quickListeners = new ArrayList();
 
     protected void fireQuickActionPerformed(ActionEvent event) {
         // Process the listeners last to first, notifying
@@ -296,6 +305,10 @@ public class JDropDownButton extends JButton {
         for (int i = quickListeners.size() - 1; i >= 0; i--) {
             ((ActionListener) quickListeners.get(i)).actionPerformed(event);
         }
+    }
+
+    public int getPopupOrientation() {
+        return popupOrientation;
     }
 
     /**
@@ -308,31 +321,27 @@ public class JDropDownButton extends JButton {
         popupOrientation = orientation;
     }
 
-    public int getPopupOrientation() {
-        return popupOrientation;
-    }
-
     public void paint(Graphics g) {
         super.paint(g);
+        if (isPaintHandle()) {
+            Color shadow = UIManager.getColor("controlShadow");
+            Color darkShadow = UIManager.getColor("controlDkShadow");
+            Color highlight = UIManager.getColor("controlLtHighlight");
+            int direction = SOUTH;
 
-        Color shadow = UIManager.getColor("controlShadow");
-        Color darkShadow = UIManager.getColor("controlDkShadow");
-        Color highlight = UIManager.getColor("controlLtHighlight");
-        int direction = SOUTH;
+            Color origColor;
+            boolean isPressed, isEnabled;
+            int w, h, size;
 
-        Color origColor;
-        boolean isPressed, isEnabled;
-        int w, h, size;
+            w = getSize().width;
+            h = getSize().height;
+            origColor = g.getColor();
+            isPressed = getModel().isPressed();
+            isEnabled = isEnabled();
 
-        w = getSize().width;
-        h = getSize().height;
-        origColor = g.getColor();
-        isPressed = getModel().isPressed();
-        isEnabled = isEnabled();
-
-        //g.setColor(getBackground());
-        //g.fillRect(1, 1, w-2, h-2);
-        /// Draw the proper Border
+            //g.setColor(getBackground());
+            //g.fillRect(1, 1, w-2, h-2);
+            /// Draw the proper Border
 /*
          * if (isPressed) { g.setColor(shadow); g.drawRect(0, 0, w-1, h-1); }
          * else { // Using the background color set above g.drawLine(0, 0, 0,
@@ -348,69 +357,70 @@ public class JDropDownButton extends JButton {
          * w-1, h-1); g.drawLine(w-1, h-1, w-1, 0);
             }
          */
-        // If there's no room to draw arrow, bail
-        if (h < 5 || w < 5) {
-            g.setColor(origColor);
-            return;
-        }
+            // If there's no room to draw arrow, bail
+            if (h < 5 || w < 5) {
+                g.setColor(origColor);
+                return;
+            }
 
-        if (isPressed) {
-            g.translate(1, 1);
-        }
+            if (isPressed) {
+                g.translate(1, 1);
+            }
 
-        // Draw the arrow
-        size = Math.min((h - 4) / 4, (w - 4) / 4);
+            // Draw the arrow
+            size = Math.min((h - 4) / 4, (w - 4) / 4);
 //            size = Math.max(size, 2);
 
-        //paintTriangle(g, (w - size) / 2, (h - size) / 2,size, direction, isEnabled);
-        String txt = getText();
-        Icon icon = getIcon();
+            //paintTriangle(g, (w - size) / 2, (h - size) / 2,size, direction, isEnabled);
+            String txt = getText();
+            Icon icon = getIcon();
 
-        if (txt != null && (txt.length() == 0 || txt.equals(" "))) {
-            txt = null;
-        }
-        if (txt == null && icon == null) {
+            if (txt != null && (txt.length() == 0 || txt.equals(" "))) {
+                txt = null;
+            }
+            if (txt == null && icon == null) {
 //            System.out.println("a");
-            int rest = w;
-            size = Math.min(size, Math.min(rest, 5));
-            paintTriangle(g, ((w - size) / 2), ((h - size) / 2), size, direction, isEnabled);
-        } else if (txt != null && icon == null) {
-            int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth()) / 2;
+                int rest = w;
+                size = Math.min(size, Math.min(rest, 5));
+                paintTriangle(g, ((w - size) / 2), ((h - size) / 2), size, direction, isEnabled);
+            } else if (txt != null && icon == null) {
+                int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth()) / 2;
 //            System.out.println("b rest="+rest+" ; size="+size+" ==> "+Math.min(size, Math.min(rest,4)));
-            size = Math.min(size, Math.min(rest, 5));
-            if (rest < 7) {
-                paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
-            } else {
-                paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
-            }
-        } else if (txt == null && icon != null) {
+                size = Math.min(size, Math.min(rest, 5));
+                if (rest < 7) {
+                    paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
+                } else {
+                    paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
+                }
+            } else if (txt == null && icon != null) {
 //            System.out.println("c");
-            int rest = (w - icon.getIconWidth()) / 2;
-            size = Math.min(size, Math.min(rest, 5));
-            if (rest < 7) {
-                paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
-            } else {
-                paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
-            }
+                int rest = (w - icon.getIconWidth()) / 2;
+                size = Math.min(size, Math.min(rest, 5));
+                if (rest < 7) {
+                    paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
+                } else {
+                    paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
+                }
 
-        } else /*
-         * (txt!=null && icon!=null)
-         */ {
+            } else /*
+             * (txt!=null && icon!=null)
+             */ {
 //            System.out.println("d");
-            int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth() - icon.getIconWidth()) / 3;
-            size = Math.min(size, Math.min(rest, 5));
-            if (rest < 7) {
-                paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
-            } else {
-                paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
+                int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth() - icon.getIconWidth()) / 3;
+                size = Math.min(size, Math.min(rest, 5));
+                if (rest < 7) {
+                    paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
+                } else {
+                    paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
+                }
             }
-        }
 
-        // Reset the Graphics back to it's original settings
-        if (isPressed) {
-            g.translate(-1, -1);
+            // Reset the Graphics back to it's original settings
+            if (isPressed) {
+                g.translate(-1, -1);
+            }
+            g.setColor(origColor);
         }
-        g.setColor(origColor);
     }
 
     public void paintTriangle(Graphics g, int x, int y, int size, int direction, boolean isEnabled) {
@@ -686,12 +696,6 @@ public class JDropDownButton extends JButton {
 
         delay = d;
     }
-    /**
-     * The window-closing listener for the popup.
-     *
-     * @see WinListener
-     */
-    protected WinListener popupListener;
 
     private void ensurePopupMenuCreated() {
         Point pt = this.getLocation();
@@ -797,6 +801,45 @@ public class JDropDownButton extends JButton {
         popupMenu.add(c, index);
         SwingUtilities3.applyOrientation(popupMenu);
         return c;
+    }
+
+    /**
+     * Removes the menu item at the specified index from this menu.
+     *
+     * @param pos the position of the item to be removed
+     * @throws IllegalArgumentException if the value of <code>pos</code> < 0, or
+     * if <code>pos</code> is greater than the number of menu items
+     */
+    public void remove(int pos) {
+        if (pos < 0) {
+            throw new IllegalArgumentException("index less than zero.");
+        }
+        if (pos > getItemCount()) {
+            throw new IllegalArgumentException("index greater than the number of items.");
+        }
+        if (popupMenu != null) {
+            popupMenu.remove(pos);
+        }
+    }
+
+    /**
+     * Removes the component <code>c</code> from this menu.
+     *
+     * @param c the component to be removed
+     */
+    public void remove(Component c) {
+        if (popupMenu != null) {
+            popupMenu.remove(c);
+        }
+    }
+
+    /**
+     * Removes all menu items from this menu.
+     */
+    public void removeAll() {
+        if (popupMenu != null) {
+            popupMenu.removeAll();
+        }
     }
 
     /**
@@ -964,45 +1007,6 @@ public class JDropDownButton extends JButton {
     public void remove(JMenuItem item) {
         if (popupMenu != null) {
             popupMenu.remove(item);
-        }
-    }
-
-    /**
-     * Removes the menu item at the specified index from this menu.
-     *
-     * @param pos the position of the item to be removed
-     * @throws IllegalArgumentException if the value of <code>pos</code> < 0, or
-     * if <code>pos</code> is greater than the number of menu items
-     */
-    public void remove(int pos) {
-        if (pos < 0) {
-            throw new IllegalArgumentException("index less than zero.");
-        }
-        if (pos > getItemCount()) {
-            throw new IllegalArgumentException("index greater than the number of items.");
-        }
-        if (popupMenu != null) {
-            popupMenu.remove(pos);
-        }
-    }
-
-    /**
-     * Removes the component <code>c</code> from this menu.
-     *
-     * @param c the component to be removed
-     */
-    public void remove(Component c) {
-        if (popupMenu != null) {
-            popupMenu.remove(c);
-        }
-    }
-
-    /**
-     * Removes all menu items from this menu.
-     */
-    public void removeAll() {
-        if (popupMenu != null) {
-            popupMenu.removeAll();
         }
     }
 
@@ -1259,25 +1263,6 @@ public class JDropDownButton extends JButton {
         }
     }
 
-    class MenuChangeListener implements ChangeListener, Serializable {
-
-        boolean isSelected = false;
-
-        public void stateChanged(ChangeEvent e) {
-            ButtonModel model = (ButtonModel) e.getSource();
-            boolean modelSelected = model.isSelected();
-
-            if (modelSelected != isSelected) {
-                if (modelSelected == true) {
-                    fireMenuSelected();
-                } else {
-                    fireMenuDeselected();
-                }
-                isSelected = modelSelected;
-            }
-        }
-    }
-
     private ChangeListener createMenuChangeListener() {
         return new MenuChangeListener();
     }
@@ -1291,37 +1276,6 @@ public class JDropDownButton extends JButton {
      */
     protected WinListener createWinListener(JPopupMenu p) {
         return new WinListener(p);
-    }
-
-    /**
-     * A listener class that watches for a popup window closing. When the popup
-     * is closing, the listener deselects the menu.
-     * <p/>
-     * <strong>Warning:</strong> Serialized objects of this class will not be
-     * compatible with future Swing releases. The current serialization support
-     * is appropriate for short term storage or RMI between applications running
-     * the same version of Swing. As of 1.4, support for long term storage of
-     * all JavaBeans<sup><font size="-2">TM</font></sup> has been added to the
-     * <code>java.beans</code> package. Please see
-     * {@link java.beans.XMLEncoder}.
-     */
-    protected class WinListener extends WindowAdapter implements Serializable {
-
-        JPopupMenu popupMenu;
-
-        /**
-         * Create the window listener for the specified popup.
-         */
-        public WinListener(JPopupMenu p) {
-            this.popupMenu = p;
-        }
-
-        /**
-         * Deselect the menu when the popup is closed from outside.
-         */
-        public void windowClosing(WindowEvent e) {
-            setSelected(false);
-        }
     }
 
     /**
@@ -1357,7 +1311,6 @@ public class JDropDownButton extends JButton {
         }
     }
 
-    // implements javax.swing.MenuElement
     /**
      * Returns the <code>java.awt.Component</code> used to paint this
      * <code>MenuElement</code>. The returned component is used to convert
@@ -1367,18 +1320,6 @@ public class JDropDownButton extends JButton {
         return this;
     }
 
-    /**
-     * Sets the <code>ComponentOrientation</code> property of this menu and all
-     * components contained within it. This includes all components returned by
-     * {@link #getMenuComponents getMenuComponents}.
-     *
-     * @param orientation the new component orientation of this menu and the
-     * components contained within it.
-     * @exception NullPointerException if <code>orientation</code> is null.
-     * @see java.awt.Component#setComponentOrientation
-     * @see java.awt.Component#getComponentOrientation
-     * @since 1.4
-     */
     /**
      * Programmatically performs a "click". This overrides the method
      * <code>AbstractButton.doClick</code> in order to make the menu pop up.
@@ -1403,20 +1344,23 @@ public class JDropDownButton extends JButton {
         }
     }
 
+    // implements javax.swing.MenuElement
+
     /*
      * Build an array of menu elements - from <code>PopupMenu</code> to the root
      * <code>JMenuBar</code>. @param leaf the leaf node from which to start
      * building up the array @return the array of menu items
      */
     private MenuElement[] buildMenuElementArray(/*
-             * -- TAHA --
-             */JDropDownButton leaf) {
+     * -- TAHA --
+     */JDropDownButton leaf) {
         List elements = new ArrayList();
         Component current = leaf.getPopupMenu();
         JPopupMenu pop;
         /*
          * taha JMenu
-         */ Object menu;
+         */
+        Object menu;
         JMenuBar bar;
 
         while (true) {
@@ -1447,6 +1391,19 @@ public class JDropDownButton extends JButton {
             }
         }
     }
+
+    /**
+     * Sets the <code>ComponentOrientation</code> property of this menu and all
+     * components contained within it. This includes all components returned by
+     * {@link #getMenuComponents getMenuComponents}.
+     *
+     * @param orientation the new component orientation of this menu and the
+     * components contained within it.
+     * @exception NullPointerException if <code>orientation</code> is null.
+     * @see java.awt.Component#setComponentOrientation
+     * @see java.awt.Component#getComponentOrientation
+     * @since 1.4
+     */
 
     /**
      * Factory method which creates the <code>JMenuItem</code> for
@@ -1491,6 +1448,56 @@ public class JDropDownButton extends JButton {
         return new ActionChangedListener(b);
     }
 
+    class MenuChangeListener implements ChangeListener, Serializable {
+
+        boolean isSelected = false;
+
+        public void stateChanged(ChangeEvent e) {
+            ButtonModel model = (ButtonModel) e.getSource();
+            boolean modelSelected = model.isSelected();
+
+            if (modelSelected != isSelected) {
+                if (modelSelected == true) {
+                    fireMenuSelected();
+                } else {
+                    fireMenuDeselected();
+                }
+                isSelected = modelSelected;
+            }
+        }
+    }
+
+    /**
+     * A listener class that watches for a popup window closing. When the popup
+     * is closing, the listener deselects the menu.
+     * <p/>
+     * <strong>Warning:</strong> Serialized objects of this class will not be
+     * compatible with future Swing releases. The current serialization support
+     * is appropriate for short term storage or RMI between applications running
+     * the same version of Swing. As of 1.4, support for long term storage of
+     * all JavaBeans<sup><font size="-2">TM</font></sup> has been added to the
+     * <code>java.beans</code> package. Please see
+     * {@link java.beans.XMLEncoder}.
+     */
+    protected class WinListener extends WindowAdapter implements Serializable {
+
+        JPopupMenu popupMenu;
+
+        /**
+         * Create the window listener for the specified popup.
+         */
+        public WinListener(JPopupMenu p) {
+            this.popupMenu = p;
+        }
+
+        /**
+         * Deselect the menu when the popup is closed from outside.
+         */
+        public void windowClosing(WindowEvent e) {
+            setSelected(false);
+        }
+    }
+
     private class ActionChangedListener implements PropertyChangeListener {
 
         WeakReference menuItem;
@@ -1524,12 +1531,12 @@ public class JDropDownButton extends JButton {
             }
         }
 
-        public void setTarget(JMenuItem b) {
-            menuItem = new WeakReference(b);
-        }
-
         public JMenuItem getTarget() {
             return (JMenuItem) menuItem.get();
+        }
+
+        public void setTarget(JMenuItem b) {
+            menuItem = new WeakReference(b);
         }
     }
 //    		protected void fireActionPerformed(ActionEvent event) {

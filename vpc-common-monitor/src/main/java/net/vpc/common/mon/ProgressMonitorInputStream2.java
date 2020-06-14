@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InterruptedIOException;
 import java.util.logging.Level;
+import net.vpc.common.msg.StringMessage;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
@@ -158,7 +159,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
         if (nr > 0) {
             nread += nr;
             double progress = (((double) nread) / size);
-            pmonitor.setProgress(progress, new StringTaskMessage(Level.INFO, ""));
+            pmonitor.setProgress(progress, new StringMessage(Level.INFO, ""));
         }
         if (pmonitor.isCanceled()) {
             InterruptedIOException exc =
@@ -180,7 +181,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
             nread += nr;
             size = nread + in.available();
             int progress = (int) (((double) nread) * 100 / size);
-            pmonitor.setProgress(progress, new StringTaskMessage(Level.INFO, ""));
+            pmonitor.setProgress(progress, new StringMessage(Level.INFO, ""));
         }
         return nr;
     }
@@ -204,7 +205,7 @@ public class ProgressMonitorInputStream2 extends FilterInputStream {
         in.reset();
         size = nread + in.available();
         int progress = (int) (((double) nread) * 100 / size);
-        pmonitor.setProgress(progress, new StringTaskMessage(Level.INFO, ""));
+        pmonitor.setProgress(progress, new StringMessage(Level.INFO, ""));
     }
 
 }

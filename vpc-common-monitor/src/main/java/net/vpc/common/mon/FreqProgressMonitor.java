@@ -2,30 +2,34 @@ package net.vpc.common.mon;
 
 import java.util.logging.Level;
 
-import static net.vpc.common.mon.AbstractTaskMonitor.EMPTY_MESSAGE;
+import net.vpc.common.msg.Message;
 
-public class FreqProgressMonitor extends ProgressMonitorDelegate {
+public class FreqProgressMonitor extends AbstractProgressMonitor {
     private long freq;
     private long lastMessageDate;
     private long lastProgressDate;
     private double progress;
-    private TaskMessage message;
     private Level level = Level.INFO;
+    private ProgressMonitor delegate;
 
-    public FreqProgressMonitor(ProgressMonitor base, long freq) {
-        super(base);
+    public FreqProgressMonitor(ProgressMonitor delegate, long freq) {
+        this.delegate = delegate;
         if (freq < 0) {
             freq = 0;
         }
         this.freq = freq;
     }
 
+    public ProgressMonitor getDelegate() {
+        return delegate;
+    }
+
     @Override
-    public double getProgressValue() {
+    public double getProgress() {
         return progress;
     }
 
-    public void setProgress(double progress) {
+    public void setProgressImpl(double progress) {
         this.progress = progress;
         long newd = System.currentTimeMillis();
         if (newd > lastProgressDate + freq
@@ -33,13 +37,12 @@ public class FreqProgressMonitor extends ProgressMonitorDelegate {
                 || progress == 1
                 || Double.isNaN(progress)
         ) {
-            getDelegate().setProgress(progress, message);
+            getDelegate().setProgress(progress);
             lastProgressDate = newd;
         }
     }
 
-    public void setMessage(TaskMessage message) {
-        this.message = message;
+    public void setMessageImpl(Message message) {
         long newd = System.currentTimeMillis();
         if (message.getLevel().intValue() >= level.intValue() || newd > lastMessageDate + freq) {
             getDelegate().setMessage(message);
@@ -48,14 +51,14 @@ public class FreqProgressMonitor extends ProgressMonitorDelegate {
     }
 
     @Override
-    public TaskMessage getProgressMessage() {
-        return message==null? AbstractTaskMonitor.EMPTY_MESSAGE : message;
+    public Message getMessage() {
+        return getDelegate().getMessage();
     }
 
     @Override
     public String toString() {
         return "Freq(" +
-                "value=" + getProgressValue() +
+                "value=" + getProgress() +
                 ",time=" + freq +
                 ", " + getDelegate() +
                 ')';

@@ -20,21 +20,21 @@ public class Chronometer implements Serializable {
     private long lastTime;
     private boolean running;
 
-    public static void main(String[] args) {
-        Chronometer c = Chronometer.start();
-        long a = System.currentTimeMillis();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        c.stop();
-        long b = System.currentTimeMillis();
-        System.out.println(c.getDuration().getTime());
-        System.out.println(c.getDuration().getSeconds());
-        System.out.println(c.getDuration());
-        System.out.println(b - a);
-    }
+//    public static void main(String[] args) {
+//        Chronometer c = Chronometer.start();
+//        long a = System.currentTimeMillis();
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        c.stop();
+//        long b = System.currentTimeMillis();
+//        System.out.println(c.getDuration().getTime());
+//        System.out.println(c.getDuration().getSeconds());
+//        System.out.println(c.getDuration());
+//        System.out.println(b - a);
+//    }
 
     public static Chronometer start() {
         Chronometer c = new Chronometer();
