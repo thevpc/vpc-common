@@ -94,7 +94,7 @@ Function
         Examples :
 
         complex(1,2)
-            function named complex with two parameters
+            JFunction named complex with two parameters
 
 Uplet
         Examples :

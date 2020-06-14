@@ -2,7 +2,7 @@ package net.vpc.common.tson;
 
 import net.vpc.common.tson.impl.util.Base64DecoderAdapter;
 import net.vpc.common.tson.impl.util.Base64EncoderAdapter;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assertions;
 
 import java.io.IOException;

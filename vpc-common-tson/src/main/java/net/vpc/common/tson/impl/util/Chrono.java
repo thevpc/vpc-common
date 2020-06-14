@@ -39,6 +39,9 @@ public class Chrono implements Comparable<Chrono>{
     }
 
     public long nanos() {
+        if(end<=0){
+            return System.nanoTime() - start;
+        }
         return end - start;
     }
 

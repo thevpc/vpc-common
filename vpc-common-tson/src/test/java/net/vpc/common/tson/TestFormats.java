@@ -1,6 +1,6 @@
 package net.vpc.common.tson;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Assertions;
 
 import java.math.BigDecimal;
