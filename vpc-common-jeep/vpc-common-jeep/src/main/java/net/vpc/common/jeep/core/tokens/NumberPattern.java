@@ -51,7 +51,7 @@ public class NumberPattern extends AbstractTokenPattern {
     }
 
     public NumberPattern(JTokenDef intDef, JTokenDef floatDef, JTokenDef infinityDef, String name, boolean acceptIntNumber, boolean acceptFloatNumber, boolean acceptInfinity, char[] numberSuffixes, JTokenEvaluator numberEvaluator) {
-        super(ORDER_NUMBER, name == null ? "Numbers" : name);
+        super(JTokenPatternOrder.ORDER_NUMBER, name == null ? "Numbers" : name);
         this.intDef = intDef ==null?INT : intDef;
         this.floatDef = floatDef ==null?FLOAT : floatDef;
         this.infinityDef =infinityDef==null?INFINITY : infinityDef;

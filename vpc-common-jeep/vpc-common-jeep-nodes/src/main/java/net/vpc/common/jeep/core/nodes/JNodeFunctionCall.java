@@ -16,10 +16,10 @@ import java.util.Arrays;
 public class JNodeFunctionCall extends JNodeStatement {
 
     private String name;
-    private JNode[] args;
+    private JDefaultNode[] args;
     private JInvokablePrefilled impl;
 
-    public JNodeFunctionCall(String name, JNode[] args) {
+    public JNodeFunctionCall(String name, JDefaultNode[] args) {
         super();
         this.name = name;
         this.args = args;
@@ -49,7 +49,7 @@ public class JNodeFunctionCall extends JNodeStatement {
         return this;
     }
 
-    public JNodeFunctionCall setArgs(JNode[] args) {
+    public JNodeFunctionCall setArgs(JDefaultNode[] args) {
         this.args = args;
         return this;
     }
@@ -73,7 +73,7 @@ public class JNodeFunctionCall extends JNodeStatement {
         return name;
     }
 
-    public JNode[] getArgs() {
+    public JDefaultNode[] getArgs() {
         return Arrays.copyOf(args, args.length);
     }
 
@@ -102,11 +102,11 @@ public class JNodeFunctionCall extends JNodeStatement {
         return sb.toString();
     }
 
-    public JNode get(int index) {
+    public JDefaultNode get(int index) {
         return args[index];
     }
 
-    public JNode getOperand(int index) {
+    public JDefaultNode getOperand(int index) {
         return args[index];
     }
 

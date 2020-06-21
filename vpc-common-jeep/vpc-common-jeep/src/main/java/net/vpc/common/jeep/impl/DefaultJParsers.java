@@ -1,7 +1,9 @@
 package net.vpc.common.jeep.impl;
 
 import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.compiler.JSourceFactory;
+import net.vpc.common.jeep.core.SimpleJParser;
+import net.vpc.common.jeep.core.SimpleNodeNodeFactory;
+import net.vpc.common.textsource.JTextSourceFactory;
 
 import java.io.*;
 import java.net.URL;
@@ -47,7 +49,7 @@ public class DefaultJParsers implements JParsers {
 
     @Override
     public JParser of(URL url) {
-        return of(url, new DefaultJCompilationUnit(JSourceFactory.fromURL(url)));
+        return of(url, new DefaultJCompilationUnit(JTextSourceFactory.fromURL(url)));
     }
 
     @Override
@@ -61,7 +63,7 @@ public class DefaultJParsers implements JParsers {
 
     @Override
     public JParser of(File file) {
-        return of(file, new DefaultJCompilationUnit(JSourceFactory.fromFile(file)));
+        return of(file, new DefaultJCompilationUnit(JTextSourceFactory.fromFile(file)));
     }
 
     @Override
@@ -78,7 +80,7 @@ public class DefaultJParsers implements JParsers {
 
     @Override
     public JParser of(String text) {
-        return of(text, new DefaultJCompilationUnit(JSourceFactory.fromString(text,null)));
+        return of(text, new DefaultJCompilationUnit(JTextSourceFactory.fromString(text,null)));
     }
 
     @Override
@@ -112,7 +114,7 @@ public class DefaultJParsers implements JParsers {
                 return s;
             }
         }
-        throw new JParseException("Missing Parser");
+        return new SimpleJParser(context.tokens().of(reader,true,true),compilationUnit,context);
 //        return new DefaultJParser(context.tokens().of(reader), compilationUnit, context);
     }
 

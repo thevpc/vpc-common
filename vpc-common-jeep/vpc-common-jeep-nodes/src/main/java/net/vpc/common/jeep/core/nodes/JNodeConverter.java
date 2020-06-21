@@ -1,15 +1,14 @@
 package net.vpc.common.jeep.core.nodes;
 
 import net.vpc.common.jeep.JConverter;
-import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.util.JTypeUtils;
 
 public class JNodeConverter extends JDefaultNode {
 
     private final JConverter currentConverter;
-    private final JNode node;
+    private final JDefaultNode node;
 
-    public JNodeConverter(JNode node, JConverter currentConverter) {
+    public JNodeConverter(JDefaultNode node, JConverter currentConverter) {
         super();
         this.currentConverter = currentConverter;
         this.node = node;
@@ -34,7 +33,7 @@ public class JNodeConverter extends JDefaultNode {
         return currentConverter;
     }
 
-    public JNode getNode() {
+    public JDefaultNode getNode() {
         return node;
     }
 

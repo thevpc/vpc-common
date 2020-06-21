@@ -36,7 +36,7 @@ public class JNodePath implements Iterable<JNode>{
             throw new NullPointerException();
         }
         if(elements.length>0 && n==elements[elements.length-1]){
-            System.out.println("Why?");
+//            System.out.println("Why?");
         }
         JNode[] p = new JNode[elements.length + 1];
         System.arraycopy(elements, 0, p, 0, elements.length);

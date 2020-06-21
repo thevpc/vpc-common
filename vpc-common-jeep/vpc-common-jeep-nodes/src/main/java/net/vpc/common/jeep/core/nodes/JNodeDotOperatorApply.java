@@ -4,7 +4,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 
 /**
  * @author vpc
@@ -12,9 +11,9 @@ import net.vpc.common.jeep.JNode;
 public class JNodeDotOperatorApply extends JNodeStatement {
 
     private final String name;
-    private final JNode parent;
+    private final JDefaultNode parent;
 
-    public JNodeDotOperatorApply(String name, JNode parent) {
+    public JNodeDotOperatorApply(String name, JDefaultNode parent) {
         super();
         this.name = name;
         this.parent = parent;
@@ -34,7 +33,7 @@ public class JNodeDotOperatorApply extends JNodeStatement {
         return name;
     }
 
-    public JNode getParent() {
+    public JDefaultNode getParent() {
         return parent;
     }
 

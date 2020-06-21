@@ -14,7 +14,7 @@ public class TestKeywordsPattern {
         JTokenMatcher matcher = p.matcher();
         check(matcher, "a", true, false);
         check(matcher, "abc", true, true);
-        check(matcher, "abcd", false, true);
+        check(matcher, "abcd", false, false);
         check(matcher, "abd", true, true);
         check(matcher, "gt", true, false);
         check(matcher, "", true, false);

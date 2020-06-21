@@ -6,5 +6,8 @@ public interface JInvokable{
     Object invoke(JInvokeContext context);
     JSignature signature();
     JType returnType();
+    default JType genericReturnType(){
+        return returnType();
+    }
     String name();
 }

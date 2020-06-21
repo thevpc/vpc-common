@@ -78,4 +78,13 @@ public interface JTokenizer extends Iterable<JToken> {
     JTokenizerState[] getStates();
 
     JTokenDef[] getTokenDefinitions();
+    JTokenDef[] getTokenDefinitions(Predicate<JTokenDef> filter);
+
+    /**
+     * return first Token Definition matching the predicate
+     * or throw Exception if not found
+     * @param filter filter
+     * @return first Token Definition matching the predicate or throws exception
+     */
+    JTokenDef getFirstTokenDefinition(Predicate<JTokenDef> filter);
 }

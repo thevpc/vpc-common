@@ -5,18 +5,16 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
-
 /**
  *
  * @author vpc
  */
 public class JNodeArrayCall extends JDefaultNode {
 
-    private final JNode base;
+    private final JDefaultNode base;
     private final JNodeArray arrayIndex;
 
-    public JNodeArrayCall(JNode base, JNodeArray arrayIndex) {
+    public JNodeArrayCall(JDefaultNode base, JNodeArray arrayIndex) {
         super();
         this.base = base;
         this.arrayIndex = arrayIndex;
@@ -27,7 +25,7 @@ public class JNodeArrayCall extends JDefaultNode {
         return JNodeDefaultIds.NODE_ARRAY_CALL;
     }
 
-    public JNode getBase() {
+    public JDefaultNode getBase() {
         return base;
     }
 

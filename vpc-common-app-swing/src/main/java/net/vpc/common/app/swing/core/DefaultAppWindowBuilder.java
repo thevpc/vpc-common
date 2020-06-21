@@ -83,7 +83,7 @@ public class DefaultAppWindowBuilder implements AppWindowBuilder {
         if (w != null) {
             AppWorkspace bar = w.createWorkspace(window);
             if (bar != null) {
-                window.workspace().set(bar);
+                window.getWorkspace().set(bar);
             }
         }
         return window;

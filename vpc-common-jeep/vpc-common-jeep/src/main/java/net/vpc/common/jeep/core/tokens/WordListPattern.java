@@ -20,19 +20,19 @@ public class WordListPattern extends AbstractTokenPattern {
     private JTokenDef[] wordInfos;
     private int startId;
 
-    public WordListPattern(String name, int startId, JTokenType ttype, int order, String... words) {
-        this(startId, order, name, toJTypedImages(startId, ttype, words));
+    public WordListPattern(String name, int startId, JTokenPatternOrder order, JTokenType ttype, String... words) {
+        this(name, startId, order, toJTypedImages(startId, ttype, words));
     }
 
-    public WordListPattern(String name, int startId, JTokenType ttype, int order, JNamedImage... words) {
-        this(startId, order, name, toJTypedImages(startId, ttype, words));
+    public WordListPattern(String name, int startId, JTokenPatternOrder order, JTokenType ttype, JNamedImage... words) {
+        this(name, startId, order, toJTypedImages(startId, ttype, words));
     }
 
-    public WordListPattern(String name, JTokenType ttype, int order, JNamedImage... words) {
-        this(Integer.MIN_VALUE, order, name, toJTypedImages(Integer.MIN_VALUE, ttype, words));
+    public WordListPattern(String name, JTokenPatternOrder order, JTokenType ttype, JNamedImage... words) {
+        this(name, Integer.MIN_VALUE, order, toJTypedImages(Integer.MIN_VALUE, ttype, words));
     }
 
-    public WordListPattern(int startId, int order, String name, JTypedImage... words) {
+    public WordListPattern(String name, int startId, JTokenPatternOrder order, JTypedImage... words) {
         super(order, name == null ? "Words" : name);
         this.startId = startId;
         //remove duplicates!

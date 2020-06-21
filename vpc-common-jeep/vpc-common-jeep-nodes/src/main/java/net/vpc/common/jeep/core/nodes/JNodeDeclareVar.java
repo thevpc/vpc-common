@@ -5,7 +5,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 
 /**
  *
@@ -13,11 +12,11 @@ import net.vpc.common.jeep.JNode;
  */
 public class JNodeDeclareVar extends JNodeStatement {
 
-    private final JNode name;
-    private final JNode value;
+    private final JDefaultNode name;
+    private final JDefaultNode value;
 //    private final JType type;
 
-    public JNodeDeclareVar(JNode name, JNode val) {
+    public JNodeDeclareVar(JDefaultNode name, JDefaultNode val) {
         super();
         this.name = name;
         this.value = val;
@@ -28,11 +27,11 @@ public class JNodeDeclareVar extends JNodeStatement {
         return JNodeDefaultIds.NODE_DECLARE_VAR;
     }
 
-    public JNode getName() {
+    public JDefaultNode getName() {
         return name;
     }
 
-    public JNode getValue() {
+    public JDefaultNode getValue() {
         return value;
     }
 

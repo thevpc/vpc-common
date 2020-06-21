@@ -22,7 +22,7 @@ public class BlocCommentsPattern extends AbstractTokenPattern {
         this(null,start,end);
     }
     public BlocCommentsPattern(JTokenDef tokenDef, String start, String end) {
-        super(ORDER_BLOCK_COMMENTS,tokenDef==null?"BlocComments":tokenDef.idName);
+        super(JTokenPatternOrder.ORDER_BLOCK_COMMENTS,tokenDef==null?"BlocComments":tokenDef.idName);
         this.tokenDef =tokenDef==null?DEFAULT : tokenDef;
         this.start = start;
         this.end = end;

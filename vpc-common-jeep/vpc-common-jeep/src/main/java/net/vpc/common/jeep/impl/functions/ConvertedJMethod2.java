@@ -108,6 +108,22 @@ public class ConvertedJMethod2 extends AbstractJMethod {
         return newArgTypes;
     }
 
+    public JInstanceArgumentResolver getInstanceArgumentResolver() {
+        return instanceArgumentResolver;
+    }
+
+    public JType[] getArgTypes() {
+        return argTypes;
+    }
+
+    public JType getReturnType() {
+        return returnType;
+    }
+
+    public JSignature getSignature() {
+        return signature;
+    }
+
     @Override
     public Object invoke(JInvokeContext icontext) {
         int otherArgsCount = other.signature().argsCount();

@@ -6,7 +6,6 @@
 package net.vpc.common.jeep.core.nodes;
 
 import net.vpc.common.jeep.JContext;
-import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.util.JeepUtils;
 
 /**
@@ -15,9 +14,9 @@ import net.vpc.common.jeep.util.JeepUtils;
  */
 public class JNodeIf extends JNodeStatement {
 
-    private JNode condition;
-    private JNode trueBlock;
-    private JNode falseBlock;
+    private JDefaultNode condition;
+    private JDefaultNode trueBlock;
+    private JDefaultNode falseBlock;
 
     public JNodeIf() {
         super();
@@ -28,31 +27,31 @@ public class JNodeIf extends JNodeStatement {
         return JNodeDefaultIds.NODE_IF;
     }
 
-    public JNode getCondition() {
+    public JDefaultNode getCondition() {
         return condition;
     }
 
-    public void setCondition(JNode condition) {
+    public void setCondition(JDefaultNode condition) {
         this.condition = condition;
     }
 
-    public JNode getTrueBlock() {
+    public JDefaultNode getTrueBlock() {
         return trueBlock;
     }
 
-    public void setTrueBlock(JNode trueBlock) {
+    public void setTrueBlock(JDefaultNode trueBlock) {
         this.trueBlock = trueBlock;
     }
 
-    public JNode getFalseBlock() {
+    public JDefaultNode getFalseBlock() {
         return falseBlock;
     }
 
-    public void setFalseBlock(JNode falseBlock) {
+    public void setFalseBlock(JDefaultNode falseBlock) {
         this.falseBlock = falseBlock;
     }
 
-    public static boolean evalBoolean(JNode condition, JContext context) {
+    public static boolean evalBoolean(JDefaultNode condition, JContext context) {
         boolean ok = false;
         if (condition == null) {
             ok = true;

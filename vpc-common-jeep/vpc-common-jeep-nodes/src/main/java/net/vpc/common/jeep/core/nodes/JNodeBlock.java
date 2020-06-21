@@ -5,7 +5,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,14 +17,14 @@ import net.vpc.common.jeep.util.JeepUtils;
  */
 public class JNodeBlock extends JNodeStatement {
 
-    private List<JNode> statements = new ArrayList<JNode>();
+    private List<JDefaultNode> statements = new ArrayList<JDefaultNode>();
 
     public JNodeBlock() {
         super();
     }
 
     
-    public void add(JNode node) {
+    public void add(JDefaultNode node) {
         statements.add(node);
     }
     @Override
@@ -44,14 +43,14 @@ public class JNodeBlock extends JNodeStatement {
 //    @Override
 //    public Object evaluate(JContext context) {
 //        Object o = null;
-//        for (JNode statement : statements) {
+//        for (JDefaultNode statement : statements) {
 //            context.debug("##EXEC "+statement);
 //            o = statement.evaluate(context);
 //        }
 //        return o;
 //    }
 
-    public List<JNode> getStatements() {
+    public List<JDefaultNode> getStatements() {
         return statements;
     }
 
@@ -62,7 +61,7 @@ public class JNodeBlock extends JNodeStatement {
             if (i > 0) {
                 sb.append("\n");
             }
-            JNode n = statements.get(i);
+            JDefaultNode n = statements.get(i);
             String t = n.toString();
             sb.append(JeepUtils.indent(t));
         }

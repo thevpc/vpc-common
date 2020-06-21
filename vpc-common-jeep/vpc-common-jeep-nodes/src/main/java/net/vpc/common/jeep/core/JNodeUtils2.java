@@ -29,7 +29,7 @@ public class JNodeUtils2 {
         return t;
     }
 
-    public static JNodeFunctionCall createFunctionCall(JFunction f, JNode... nargs) {
+    public static JNodeFunctionCall createFunctionCall(JFunction f, JDefaultNode... nargs) {
         JNodeFunctionCall jnf = new JNodeFunctionCall(f.name(), nargs);
         jnf.setImpl(new JInvokablePrefilled(f, JNodeUtils2.getEvaluatables((JDefaultNode[])nargs)));
         jnf.setType(f.returnType());

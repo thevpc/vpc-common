@@ -41,7 +41,7 @@
 //    }
 //
 //    @Override
-//    public int order() {
+//    public JTokenPatternOrder order() {
 //        return Integer.MAX_VALUE;
 //    }
 //

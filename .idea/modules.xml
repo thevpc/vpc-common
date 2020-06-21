@@ -4,7 +4,14 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/common.iml" filepath="$PROJECT_DIR$/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-java-shell/java-shell.iml" filepath="$PROJECT_DIR$/vpc-common-java-shell/java-shell.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-jeep/jeep-build.iml" filepath="$PROJECT_DIR$/vpc-common-jeep/jeep-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-tson/tson.iml" filepath="$PROJECT_DIR$/vpc-common-tson/tson.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-vfs/vfs.iml" filepath="$PROJECT_DIR$/vpc-common-vfs/vfs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-app/vpc-common-app.iml" filepath="$PROJECT_DIR$/vpc-common-app/vpc-common-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-app-swing/vpc-common-app-swing.iml" filepath="$PROJECT_DIR$/vpc-common-app-swing/vpc-common-app-swing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-app-swing-dock-mydoggy/vpc-common-app-swing-dock-mydoggy.iml" filepath="$PROJECT_DIR$/vpc-common-app-swing-dock-mydoggy/vpc-common-app-swing-dock-mydoggy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-app-swing-plaf/vpc-common-app-swing-plaf.iml" filepath="$PROJECT_DIR$/vpc-common-app-swing-plaf/vpc-common-app-swing-plaf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-app-swingx/vpc-common-app-swingx.iml" filepath="$PROJECT_DIR$/vpc-common-app-swingx/vpc-common-app-swingx.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-classpath/vpc-common-classpath.iml" filepath="$PROJECT_DIR$/vpc-common-classpath/vpc-common-classpath.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-commandline/vpc-common-commandline.iml" filepath="$PROJECT_DIR$/vpc-common-commandline/vpc-common-commandline.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-config/vpc-common-config.iml" filepath="$PROJECT_DIR$/vpc-common-config/vpc-common-config.iml" />
@@ -12,19 +19,29 @@
       <module fileurl="file://$PROJECT_DIR$/vpc-common-desktop-automation/vpc-common-desktop-automation.iml" filepath="$PROJECT_DIR$/vpc-common-desktop-automation/vpc-common-desktop-automation.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-diff-jar/vpc-common-diff-jar.iml" filepath="$PROJECT_DIR$/vpc-common-diff-jar/vpc-common-diff-jar.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-fprint/vpc-common-fprint.iml" filepath="$PROJECT_DIR$/vpc-common-fprint/vpc-common-fprint.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-i18n/vpc-common-i18n.iml" filepath="$PROJECT_DIR$/vpc-common-i18n/vpc-common-i18n.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-iconset/vpc-common-iconset.iml" filepath="$PROJECT_DIR$/vpc-common-iconset/vpc-common-iconset.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-io/vpc-common-io.iml" filepath="$PROJECT_DIR$/vpc-common-io/vpc-common-io.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-io-compress/vpc-common-io-compress.iml" filepath="$PROJECT_DIR$/vpc-common-io-compress/vpc-common-io-compress.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep.iml" filepath="$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep/vpc-common-jeep.iml" filepath="$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep/vpc-common-jeep.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep-editor-swing/vpc-common-jeep-editor-swing.iml" filepath="$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep-editor-swing/vpc-common-jeep-editor-swing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep-nodes/vpc-common-jeep-nodes.iml" filepath="$PROJECT_DIR$/vpc-common-jeep/vpc-common-jeep-nodes/vpc-common-jeep-nodes.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-jshell/vpc-common-jshell.iml" filepath="$PROJECT_DIR$/vpc-common-jshell/vpc-common-jshell.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-lanterna/vpc-common-lanterna.iml" filepath="$PROJECT_DIR$/vpc-common-lanterna/vpc-common-lanterna.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-log/vpc-common-log.iml" filepath="$PROJECT_DIR$/vpc-common-log/vpc-common-log.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-monitor/vpc-common-monitor.iml" filepath="$PROJECT_DIR$/vpc-common-monitor/vpc-common-monitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-msg/vpc-common-msg.iml" filepath="$PROJECT_DIR$/vpc-common-msg/vpc-common-msg.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-mvn/vpc-common-mvn.iml" filepath="$PROJECT_DIR$/vpc-common-mvn/vpc-common-mvn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-props/vpc-common-props.iml" filepath="$PROJECT_DIR$/vpc-common-props/vpc-common-props.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-prs/vpc-common-prs.iml" filepath="$PROJECT_DIR$/vpc-common-prs/vpc-common-prs.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-sql/vpc-common-sql.iml" filepath="$PROJECT_DIR$/vpc-common-sql/vpc-common-sql.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-ssh/vpc-common-ssh.iml" filepath="$PROJECT_DIR$/vpc-common-ssh/vpc-common-ssh.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-strings/vpc-common-strings.iml" filepath="$PROJECT_DIR$/vpc-common-strings/vpc-common-strings.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-swings/vpc-common-swings.iml" filepath="$PROJECT_DIR$/vpc-common-swings/vpc-common-swings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-swings-plaf/vpc-common-swings-plaf.iml" filepath="$PROJECT_DIR$/vpc-common-swings-plaf/vpc-common-swings-plaf.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-swings-prs/vpc-common-swings-prs.iml" filepath="$PROJECT_DIR$/vpc-common-swings-prs/vpc-common-swings-prs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-text-source/vpc-common-text-source.iml" filepath="$PROJECT_DIR$/vpc-common-text-source/vpc-common-text-source.iml" />
+      <module fileurl="file://$PROJECT_DIR$/vpc-common-text-source-log/vpc-common-text-source-log.iml" filepath="$PROJECT_DIR$/vpc-common-text-source-log/vpc-common-text-source-log.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-utils/vpc-common-utils.iml" filepath="$PROJECT_DIR$/vpc-common-utils/vpc-common-utils.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-web-jsf/vpc-common-web-jsf.iml" filepath="$PROJECT_DIR$/vpc-common-web-jsf/vpc-common-web-jsf.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-web-xml/vpc-common-web-xml.iml" filepath="$PROJECT_DIR$/vpc-common-web-xml/vpc-common-web-xml.iml" />

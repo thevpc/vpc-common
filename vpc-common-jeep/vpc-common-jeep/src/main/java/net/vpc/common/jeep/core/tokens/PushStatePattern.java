@@ -9,7 +9,7 @@ public class PushStatePattern extends AbstractTokenPattern {
     private String text;
     private int pushState;
 
-    public PushStatePattern(int id, String idName, int ttype, String ttypeName, String imageLayout,int order, String text, int pushState) {
+    public PushStatePattern(int id, String idName, int ttype, String ttypeName, String imageLayout,JTokenPatternOrder order, String text, int pushState) {
         super(order,idName);
         this.text = text;
         this.info = new JTokenDef( id, idName, ttype, ttypeName,imageLayout);

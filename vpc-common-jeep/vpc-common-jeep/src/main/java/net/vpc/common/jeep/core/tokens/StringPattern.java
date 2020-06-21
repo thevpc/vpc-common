@@ -36,7 +36,7 @@ public class StringPattern extends AbstractTokenPattern {
         this(info, start, end, '\\', true);
     }
     public StringPattern(JTokenDef info, String start, String end, char escape, boolean cstyleEscape) {
-        super(ORDER_STRING, info.idName);
+        super(JTokenPatternOrder.ORDER_STRING, info.idName);
         this.info = info;
         this.start = start;
         this.end = end;
@@ -48,7 +48,7 @@ public class StringPattern extends AbstractTokenPattern {
         }
     }
     public StringPattern(JTokenDef info, char quote, char escape, boolean cstyleEscape) {
-        super(ORDER_STRING, info.idName);
+        super(JTokenPatternOrder.ORDER_STRING, info.idName);
         this.info = info;
         this.start = String.valueOf(quote);
         this.end = start;
@@ -107,7 +107,7 @@ public class StringPattern extends AbstractTokenPattern {
         int status = INIT;
         private StringBuilder value = new StringBuilder();
 
-        public StringJMatcherShort(int order, char quote, char escape, boolean cstyleEscape) {
+        public StringJMatcherShort(JTokenPatternOrder order, char quote, char escape, boolean cstyleEscape) {
             super(order);
             this.quote = quote;
             this.escape = escape;
@@ -237,7 +237,7 @@ public class StringPattern extends AbstractTokenPattern {
         int counter = 0;
         private StringBuilder value = new StringBuilder();
 
-        public StringJMatcherLong(int order, String start, String end, char escape, boolean cstyleEscape) {
+        public StringJMatcherLong(JTokenPatternOrder order, String start, String end, char escape, boolean cstyleEscape) {
             super(order);
             this.start = start;
             this.end = end;

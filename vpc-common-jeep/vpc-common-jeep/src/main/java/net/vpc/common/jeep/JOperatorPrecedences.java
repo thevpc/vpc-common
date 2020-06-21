@@ -8,58 +8,58 @@ public class JOperatorPrecedences {
     /**
      * none
      */
-    public static final int PRECEDENCE_0 = 1;
+    public static final int PRECEDENCE_0 = 10;
     /**
      * ',' ';'
      */
-    public static final int PRECEDENCE_1 = 10;
+    public static final int PRECEDENCE_1 = 100;
     /**
      * ' ' '='
      */
-    public static final int PRECEDENCE_2 = 20;
+    public static final int PRECEDENCE_2 = 200;
     /**
      * '&lt;' '&gt;' '#' '!'
      */
-    public static final int PRECEDENCE_3 = 30;
+    public static final int PRECEDENCE_3 = 300;
     /**
      * '&' '|' '~'
      */
-    public static final int PRECEDENCE_4 = 40;
+    public static final int PRECEDENCE_4 = 400;
     /**
      * '+' '-'
      */
-    public static final int PRECEDENCE_5 = 50;
+    public static final int PRECEDENCE_5 = 500;
     /**
      * '*' '/'
      */
-    public static final int PRECEDENCE_6 = 60;
+    public static final int PRECEDENCE_6 = 600;
     /**
      * '^' '$' ':'
      */
-    public static final int PRECEDENCE_7 = 70;
+    public static final int PRECEDENCE_7 = 700;
     /**
      * none
      */
-    public static final int PRECEDENCE_8 = 80;
+    public static final int PRECEDENCE_8 = 800;
     /**
      * none
      */
-    public static final int PRECEDENCE_9 = 90;
+    public static final int PRECEDENCE_9 = 900;
     /**
      * none
      */
-    public static final int PRECEDENCE_10 = 100;
-    public static final int PRECEDENCE_11 = 110;
-    public static final int PRECEDENCE_12 = 120;
-    public static final int PRECEDENCE_13 = 130;
-    public static final int PRECEDENCE_14 = 140;
-    public static final int PRECEDENCE_15 = 150;
-    public static final int PRECEDENCE_16 = 160;
-    public static final int PRECEDENCE_17 = 170;
-    public static final int PRECEDENCE_18 = 180;
-    public static final int PRECEDENCE_19 = 190;
-    public static final int PRECEDENCE_20 = 200;
-    public static final int PRECEDENCE_MAX = 102;
+    public static final int PRECEDENCE_10 = 1000;
+    public static final int PRECEDENCE_11 = 1100;
+    public static final int PRECEDENCE_12 = 1200;
+    public static final int PRECEDENCE_13 = 1300;
+    public static final int PRECEDENCE_14 = 1400;
+    public static final int PRECEDENCE_15 = 1500;
+    public static final int PRECEDENCE_16 = 1600;
+    public static final int PRECEDENCE_17 = 1700;
+    public static final int PRECEDENCE_18 = 1800;
+    public static final int PRECEDENCE_19 = 1900;
+    public static final int PRECEDENCE_20 = 2000;
+    public static final int PRECEDENCE_MAX = 2002;
     public static final Map<JOperator, Integer> defaultPrecedences = new HashMap<>();
 
     static {
@@ -110,7 +110,9 @@ public class JOperatorPrecedences {
         defaultPrecedences.put(JOperator.infix("*="), PRECEDENCE_1);
         defaultPrecedences.put(JOperator.infix("/="), PRECEDENCE_1);
         defaultPrecedences.put(JOperator.infix("%="), PRECEDENCE_1);
-        defaultPrecedences.put(JOperator.infix("->"), PRECEDENCE_0);
+        defaultPrecedences.put(JOperator.infix("->"), PRECEDENCE_0+20);
+        defaultPrecedences.put(JOperator.infix(","), PRECEDENCE_0+10);
+        defaultPrecedences.put(JOperator.infix(";"), PRECEDENCE_0);
     }
 
     public static int getDefaultPrecedenceOrNull(JOperator op) {

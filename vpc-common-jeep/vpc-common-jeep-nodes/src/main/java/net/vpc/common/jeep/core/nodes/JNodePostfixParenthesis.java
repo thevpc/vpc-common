@@ -5,27 +5,26 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 
 /**
  * @author vpc
  */
 public class JNodePostfixParenthesis extends JNodeStatement {
 
-    private JNode base;
+    private JDefaultNode base;
     private JNodePars items;
 
-    public JNodePostfixParenthesis(JNode base, JNodePars items) {
+    public JNodePostfixParenthesis(JDefaultNode base, JNodePars items) {
         super();
         this.base = base;
         this.items = items;
     }
 
-    public JNode getBase() {
+    public JDefaultNode getBase() {
         return base;
     }
 
-    public void setBase(JNode base) {
+    public void setBase(JDefaultNode base) {
         this.base = base;
     }
 
@@ -63,12 +62,12 @@ public class JNodePostfixParenthesis extends JNodeStatement {
             sb.append(base.toString());
         }
         sb.append("(");
-        JNode[] items = this.items.getItems();
+        JDefaultNode[] items = this.items.getItems();
         for (int i = 0; i < items.length; i++) {
             if (i > 0) {
                 sb.append(",");
             }
-            JNode item = items[i];
+            JDefaultNode item = items[i];
             sb.append(item.toString());
         }
         sb.append(")");

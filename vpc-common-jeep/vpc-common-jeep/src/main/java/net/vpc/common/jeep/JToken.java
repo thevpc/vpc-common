@@ -2,8 +2,10 @@ package net.vpc.common.jeep;
 
 import net.vpc.common.jeep.core.tokens.JTokenDef;
 import net.vpc.common.jeep.impl.JEnum;
+import net.vpc.common.textsource.JTextSourceToken;
+import net.vpc.common.textsource.JTextSource;
 
-public class JToken implements Cloneable, Comparable<JToken> {
+public class JToken implements Cloneable, Comparable<JToken>, JTextSourceToken {
 
     private static final char[] HEXARR = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
@@ -25,7 +27,7 @@ public class JToken implements Cloneable, Comparable<JToken> {
     public String image;
     public String sval;
     public Object oval;
-    public JCompilationUnit compilationUnit;
+    public JTextSource source;
 
     public JToken() {
         sval = null;
@@ -406,5 +408,52 @@ public class JToken implements Cloneable, Comparable<JToken> {
 
     public boolean isError(){
         return errorId!=0;
+    }
+
+    @Override
+    public JTextSource getSource(){
+        if(source!=null){
+            return source;
+        }
+        return null;
+    }
+
+    @Override
+    public int getStartLineNumber() {
+        return startLineNumber;
+    }
+
+    @Override
+    public int getStartColumnNumber() {
+        return startColumnNumber;
+    }
+
+    @Override
+    public int getStartCharacterNumber() {
+        return startCharacterNumber;
+    }
+
+    @Override
+    public int getEndLineNumber() {
+        return endLineNumber;
+    }
+
+    @Override
+    public int getEndColumnNumber() {
+        return endColumnNumber;
+    }
+
+    @Override
+    public int getEndCharacterNumber() {
+        return endCharacterNumber;
+    }
+
+    @Override
+    public long getTokenNumber() {
+        return tokenNumber;
+    }
+
+    public int id(){
+        return def.id;
     }
 }

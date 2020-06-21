@@ -16,6 +16,8 @@
         <module>vpc-common-classpath</module>
         <module>vpc-common-commandline</module>
         <module>vpc-common-fprint</module>
+        <module>vpc-common-text-source</module>
+        <module>vpc-common-text-source-log</module>
         <module>vpc-common-jeep</module>
         <module>vpc-common-log</module>
         <module>vpc-common-mvn</module>

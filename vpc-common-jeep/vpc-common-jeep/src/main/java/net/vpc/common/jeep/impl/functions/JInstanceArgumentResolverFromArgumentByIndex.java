@@ -18,4 +18,12 @@ public class JInstanceArgumentResolverFromArgumentByIndex implements JInstanceAr
     public JTypedValue getInstance(Object actualInstance, Object[] arguments) {
         return new DefaultJTypedValue(arguments[instanceArgumentIndex], instanceArgumentType);
     }
+
+    public int getInstanceArgumentIndex() {
+        return instanceArgumentIndex;
+    }
+
+    public JType getInstanceArgumentType() {
+        return instanceArgumentType;
+    }
 }

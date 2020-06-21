@@ -9,6 +9,8 @@ package net.vpc.common.jeep.impl.functions;
 
 import net.vpc.common.jeep.*;
 
+import java.util.Objects;
+
 ////        return JSharedContext.invokeSilentCallable(this, new JSilentCallable<Object>() {
 ////            @Override
 ////            public Object call() {
@@ -53,5 +55,23 @@ public class JFunctionFromVariable implements JFunction {
     public JSignature signature() {
         return signature;
     }
-    
+
+    @Override
+    public String toString() {
+        return signature.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JFunctionFromVariable that = (JFunctionFromVariable) o;
+        return Objects.equals(v, that.v) &&
+                Objects.equals(signature, that.signature);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(v, signature);
+    }
 }

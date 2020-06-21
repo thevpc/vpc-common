@@ -1,8 +1,10 @@
 package net.vpc.common.jeep;
 
+import net.vpc.common.jeep.core.tokens.JTokenPatternOrder;
+
 public interface JTokenMatcher {
 
-    int order();
+    JTokenPatternOrder order();
 
     JTokenMatcher reset();
 

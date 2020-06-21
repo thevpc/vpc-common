@@ -225,19 +225,52 @@ public class DefaultJeep extends AbstractJContext implements Jeep {
         }
     }
 
-    public void generateTokensClass(PrintStream out) {
-        String prefix = "    ";
+    public void generateTokensClass(PrintStream out, String className) {
         if (out == null) {
             out = System.out;
         }
+        String prefix = "    ";
+        String simpleClassName=null;
+        String simplePackage=null;
+        if(className!=null){
+            int i = className.lastIndexOf('.');
+            if(i>0){
+                simplePackage=className.substring(0,i);
+                simpleClassName=className.substring(i+1);
+            }else{
+                simpleClassName=className;
+            }
+        }
+        if(simplePackage!=null){
+            out.println("package "+simplePackage+";");
+            out.println();
+        }
+        if(simpleClassName!=null) {
+            out.println("public final class " + simpleClassName + " {");
+            out.println(prefix+"private " + simpleClassName + "() {");
+            out.println(prefix+"}");
+            out.println();
+        }
         Map<String, List<JTokenDef>> visited = new LinkedHashMap<>();
+
+        out.println(prefix + "/**");
+        out.println(prefix + " * End of File (no token to read)");
+        out.println(prefix + " * <pre>");
+        out.println(prefix + " * ID         : EOF" );
+        out.println(prefix + " * ID_NAME    : EOF");
+        out.println(prefix + " * TYPE_ID    : EOF");
+        out.println(prefix + " * TYPE_NAME  : EOF");
+        out.println(prefix + " * STATE_ID   : <ANY>");
+        out.println(prefix + " * STATE_NAME : N/A");
+        out.println(prefix + " * LAYOUT     : <ANY>");
+        out.println(prefix + " * </pre>");
+        out.println(prefix + " */");
+        out.println(prefix + "public static final int EOF = -1;");
 
         for (JTokenDef tokenDefinition : tokens().tokenDefinitions()) {
             List<JTokenDef> list = visited.computeIfAbsent(tokenDefinition.idName, k -> new ArrayList<>());
             list.add(tokenDefinition);
         }
-        boolean first = true;
-
         for (List<JTokenDef> value : visited.values()) {
             Set<Integer> ids = value.stream().map(x -> x.id).collect(Collectors.toCollection(LinkedHashSet::new));
             Set<String> idNames = value.stream().map(x -> x.idName).collect(Collectors.toCollection(LinkedHashSet::new));
@@ -246,11 +279,7 @@ public class DefaultJeep extends AbstractJContext implements Jeep {
             Set<Integer> stateIds = value.stream().map(x -> x.stateId).collect(Collectors.toCollection(LinkedHashSet::new));
             Set<String> stateNames = value.stream().map(x -> x.stateName).collect(Collectors.toCollection(LinkedHashSet::new));
             Set<String> layouts = value.stream().map(x -> escapeComments(x.imageLayout)).collect(Collectors.toCollection(LinkedHashSet::new));
-            if (first) {
-                first = false;
-            } else {
-                out.println(prefix);
-            }
+            out.println();
             out.println(prefix + "/**");
             out.println(prefix + " * Token Id for " + elemStr(idNames));
             out.println(prefix + " * <pre>");
@@ -264,6 +293,17 @@ public class DefaultJeep extends AbstractJContext implements Jeep {
             out.println(prefix + " * </pre>");
             out.println(prefix + " */");
             out.println(prefix + "public static final int " + elemStr(idNames) + " = " + elemStr(ids) + ";");
+            if(ids.size()>1) {
+                for (JTokenDef tokenDefinition : tokens().tokenDefinitions()) {
+                    if(ids.contains(tokenDefinition.id)){
+                        System.out.println("#### "+tokenDefinition);
+                    }
+                }
+                throw new IllegalArgumentException("ERROR IDS");
+            }
+        }
+        if(simpleClassName!=null) {
+            out.println("}");
         }
     }
 

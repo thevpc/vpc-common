@@ -24,7 +24,7 @@ public class LineCommentsPattern extends AbstractTokenPattern {
     }
 
     public LineCommentsPattern(JTokenDef tokenDef, String start) {
-        super(ORDER_LINE_COMMENTS, tokenDef == null ? "LineComments" : tokenDef.idName);
+        super(JTokenPatternOrder.ORDER_LINE_COMMENTS, tokenDef == null ? "LineComments" : tokenDef.idName);
         this.tokenDef = tokenDef == null ? DEFAULT : tokenDef;
         this.start = start;
     }

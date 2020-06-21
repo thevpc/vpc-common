@@ -42,7 +42,7 @@ public class JReader {
                 if(f!=-1){
                     safe.append((char)f);
                 }
-                break;
+                return f;
             }
             case NORMAL:{
                 if(safe.length()>0){
@@ -56,7 +56,7 @@ public class JReader {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                break;
+                return f;
             }
         }
         throw new RuntimeException("Unsupported");

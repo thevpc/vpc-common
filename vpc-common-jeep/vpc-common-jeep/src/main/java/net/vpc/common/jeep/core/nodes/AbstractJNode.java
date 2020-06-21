@@ -20,6 +20,7 @@ public abstract class AbstractJNode implements JNode {
     /**
      * information on this node when bound to Parent
      */
+    private JToken[] separators;
     private Object childInfo;
     private Object exitContextObject;
     private JNode parentNode;
@@ -181,6 +182,7 @@ public abstract class AbstractJNode implements JNode {
         if (other != null) {
             setStartToken(other.startToken());
             setEndToken(other.endToken());
+            setSeparators(other.getSeparators());
             childInfo(other.childInfo());
         }
     }
@@ -264,5 +266,14 @@ public abstract class AbstractJNode implements JNode {
 
     public static boolean containsCaret(JNode root, int caretOffset) {
         return (root != null && root.containsCaret(caretOffset));
+    }
+
+    public JToken[] getSeparators() {
+        return separators;
+    }
+
+    public AbstractJNode setSeparators(JToken[] separators) {
+        this.separators = separators;
+        return this;
     }
 }

@@ -6,7 +6,9 @@
 package net.vpc.common.jeep.core;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.nodes.JNodeTokens;
 import net.vpc.common.jeep.impl.tokens.JTokenId;
+import net.vpc.common.textsource.log.JSourceMessage;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -24,18 +26,13 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
     private Stack<T> declarationContexts = new Stack<>();
     private JExpressionOptions defaultExpressionOptions;
 
-    public DefaultJParser(JTokenizer tokenizer, JCompilationUnit compilationUnit, JContext context) {
+    public DefaultJParser(JTokenizer tokenizer, JCompilationUnit compilationUnit, JContext context, JParserNodeFactory<T> nodeFactory) {
         this.context = context;
         this.compilationUnit = compilationUnit;
-//        if (context.tokens().config().isSkipComments()
-//                && context.tokens().config().isSkipSpaces()) {
-//            //ok
-            this.tokenizer = tokenizer;
-//        } else {
-//            this.tokenizer = new NoCommentsNoSpacesJTokenizer(tokenizer);
-//        }
-//        nodeFactory = new DefaultJParserNodeFactory(compilationUnit, context);
+        this.tokenizer = tokenizer;
+        this.nodeFactory = nodeFactory;
     }
+
 
     public JExpressionOptions getDefaultExpressionOptions() {
         return defaultExpressionOptions;
@@ -108,26 +105,27 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         ucontext.unary = unary;
 
         T middle = null;
-        if ((unary == null || unary.excludedPrefixUnaryOperators == null
-                || !unary.excludedPrefixUnaryOperators.contains(token.image))
-                && context().operators().isPrefixUnaryOperator(token.image)) {
+        if (isSupportedPrefixUnaryOperator(token, unary)) {
             JToken t = token.copy();
-            T o = parseExpressionBinary(Integer.MAX_VALUE, options);
+            int prefixOpPrecedence = context.operators().getOperatorPrecedence(JOperator.prefix(token.image));
+            T o = parseExpressionBinary(prefixOpPrecedence, options);
             if (o == null) {
                 //this was an expression not a prefix
                 log().error("X001", null, "expected expression", peek());
             } else {
-                return getNodeFactory().createPrefixUnaryOperatorNode(t, o, t, o.endToken());
+                return getNodeFactory().createPrefixUnaryOperatorNode(t, o
+                        , new JNodeTokens()
+                                .setStart(t)
+                                .setEnd(o.endToken())
+                );
             }
-        } else if ((unary == null || !unary.excludedPrefixParenthesis)
-                && token.isImage("(")) {
+        } else if (isSupportedPrefixPars(token, unary)) {
             pushBack(token);
             T n = parsePrefixParsNode(options);
             if (n != null) {
                 return n;
             }
-        } else if ((unary == null || !unary.excludedPrefixBrackets)
-                && token.isImage("[")) {
+        } else if (isSupportedPrefixBrackets(token, unary)) {
             JToken t = token.copy();
             pushBack(token);
             T o1 = parseBrackets();
@@ -135,10 +133,12 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
             if (arg == null) {
                 middle = o1;
             } else {
-                return getNodeFactory().createPrefixBracketsNode(o1, arg, t, arg.endToken());
+                return getNodeFactory().createPrefixBracketsNode(o1, arg,
+                        new JNodeTokens()
+                                .setStart(t).setEnd(arg.endToken())
+                );
             }
-        } else if ((unary == null || !unary.excludedPrefixBraces)
-                && token.isImage("{")) {
+        } else if (isSupportedPrefixBraces(token, unary)) {
             JToken t = token.copy();
             pushBack(token);
             T o1 = parseBraces();
@@ -146,7 +146,8 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
             if (o == null) {
                 middle = o1;
             } else {
-                return getNodeFactory().createPrefixBracesNode(o, o1, t, o.endToken());
+                return getNodeFactory().createPrefixBracesNode(o, o1,
+                        new JNodeTokens().setStart(t).setEnd(o.endToken()));
             }
         } else if (token.isImage(")") || token.isImage("]") || token.isImage("}")) {
             pushBack(token);
@@ -157,16 +158,7 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
 
         //Now middle!
         if (middle == null) {
-            token = peek();
-            if (token.isImage("(")) {
-                middle = parseExpressionPars();
-            } else if (token.isImage("[")) {
-                middle = parseBrackets();
-            } else if (token.isImage("{")) {
-                middle = parseBraces();
-            } else {
-                middle = parseExpressionTerminal(options);
-            }
+            middle = parseExpressionUnaryTerminal(options);
             if (middle == null) {
                 return null;
             }
@@ -185,6 +177,42 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         return middle;
     }
 
+    private boolean isSupportedPrefixBraces(JToken token, JExpressionUnaryOptions unary) {
+        return (unary == null || !unary.excludedPrefixBraces)
+                && token.isImage("{");
+    }
+
+    private boolean isSupportedTerminalBraces(JToken token, JExpressionUnaryOptions unary) {
+        return (unary == null || !unary.excludedTerminalBraces)
+                && token.isImage("{");
+    }
+
+    private boolean isSupportedTerminalBrackets(JToken token, JExpressionUnaryOptions unary) {
+        return (unary == null || !unary.excludedTerminalBrackets)
+                && token.isImage("[");
+    }
+
+    private boolean isSupportedTerminalPars(JToken token, JExpressionUnaryOptions unary) {
+        return (unary == null || !unary.excludedTerminalParenthesis)
+                && token.isImage("(");
+    }
+
+    private boolean isSupportedPrefixBrackets(JToken token, JExpressionUnaryOptions unary) {
+        return (unary == null || !unary.excludedPrefixBrackets)
+                && token.isImage("[");
+    }
+
+    private boolean isSupportedPrefixPars(JToken token, JExpressionUnaryOptions unary) {
+        return (unary == null || !unary.excludedPrefixParenthesis)
+                && token.isImage("(");
+    }
+
+    private boolean isSupportedPrefixUnaryOperator(JToken token, JExpressionUnaryOptions unary) {
+        return (unary == null || unary.excludedPrefixUnaryOperators == null
+                || !unary.excludedPrefixUnaryOperators.contains(token.image))
+                && context().operators().isPrefixUnaryOperator(token.image);
+    }
+
     protected T parseExpressionUnarySuffix(int opPrecedence, T middle, JExpressionOptions options, ParseExpressionUnaryContext ucontext) {
         JExpressionUnaryOptions unary = ucontext.unary;
         JToken token = next();
@@ -194,7 +222,9 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
             int binaryOpPrecedence = context().operators().getOperatorPrecedence(JOperator.infix(token.image));
             if (binaryOpPrecedence > opPrecedence) {
                 ucontext.doBreak = true;
-                return getNodeFactory().createPostfixUnaryOperatorNode(token, middle, null, middle.endToken(), token);
+                return getNodeFactory().createPostfixUnaryOperatorNode(token, middle
+                        , new JNodeTokens().setStart(middle.endToken()).setEnd(token)
+                );
             } else {
                 pushBack(token);
                 return null;
@@ -236,7 +266,12 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
             if (o1 != null && o1.childrenNodes().size() == 1) {
                 T arg = parseExpressionBinary(Integer.MAX_VALUE, options);
                 if (arg != null) {
-                    return getNodeFactory().createPrefixParenthesisNode(o1, arg, o1.endToken(), t, arg.endToken());
+                    return getNodeFactory().createPrefixParenthesisNode(o1, arg,
+                            new JNodeTokens()
+                                    .addSeparator(o1.endToken())
+                                    .setStart(t).setEnd(arg.endToken())
+
+                    );
                 }
             }
             snapshot.rollback();
@@ -250,29 +285,42 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
 
     public T parsePostfixParsNode(T middle, JToken copy) {
         T p = parsePostfixParsNodePars();
-        return getNodeFactory().createPostfixParenthesisNode(middle, p, middle.startToken(), p.endToken());
+        return getNodeFactory().createPostfixParenthesisNode(middle, p,
+                new JNodeTokens().setStart(middle.startToken()).setEnd(p.endToken()));
     }
 
     public T parsePostfixBracketsNode(T middle, JToken copy) {
         T p = parseBrackets();
-        return getNodeFactory().createPostfixBracketsNode(middle, p, middle.startToken(), p.endToken());
+        return getNodeFactory().createPostfixBracketsNode(middle, p,
+                new JNodeTokens()
+                        .setStart(middle.startToken())
+                        .setEnd(p.endToken())
+        );
     }
 
     public T parsePostfixBracesNode(T middle, JToken copy) {
         T p = parseBraces();
-        return getNodeFactory().createPostfixBracesNode(middle, p, middle.startToken(), p.endToken());
+        return getNodeFactory().createPostfixBracesNode(middle, p,
+                new JNodeTokens().setStart(middle.startToken()).setEnd(p.endToken())
+        );
     }
 
     protected T parseBrackets() {
         JToken startToken = peek().copy();
-        JListWithSeparators<T> elements = parseGroupedList("brackets", "brackets element", this::parseExpression, "[", ",", "]",null);
-        return getNodeFactory().createBracketsNode(elements.getItems(), elements.getStartToken(), elements.getSeparatorTokens(), elements.getEndToken());
+        JListWithSeparators<T> elements = parseGroupedList("brackets", "brackets element", this::parseExpression, "[", ",", "]", null);
+        return getNodeFactory().createBracketsNode(elements.getItems()
+                , new JNodeTokens().setStart(elements.getStartToken()).setEnd(elements.getEndToken())
+                        .setSeparators(elements.getSeparatorTokens())
+        );
     }
 
     public T parseBraces() {
         JToken startToken = peek().copy();
-        JListWithSeparators<T> elements = parseGroupedList("braces", "braces element", this::parseExpression, "{", ",", "}",null);
-        return getNodeFactory().createBracesNode(elements.getItems(), elements.getStartToken(), elements.getEndToken());
+        JListWithSeparators<T> elements = parseGroupedList("braces", "braces element", this::parseExpression, "{", ",", "}", null);
+        return getNodeFactory().createBracesNode(elements.getItems()
+                , new JNodeTokens().setStart(elements.getStartToken()).setEnd(elements.getEndToken())
+                        .setSeparators(elements.getSeparatorTokens())
+        );
     }
 
     protected T parseAndBuildExpressionBinary(JToken op, T o1, int opPrecedence, JExpressionOptions options) {
@@ -286,7 +334,9 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         }
         JToken s = o1.startToken();
         JToken e = o2 != null ? o2.endToken() : op;
-        return getNodeFactory().createBinaryOperatorNode(op, o1, o2, s, e);
+        return getNodeFactory().createBinaryOperatorNode(op, o1, o2,
+                new JNodeTokens().setStart(s).setEnd(e).addSeparator(op)
+        );
     }
 
     protected T parseExpressionBinary(int opPrecedence, JExpressionOptions options) {
@@ -343,22 +393,22 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
 ////                tokenizer.pushBack(token);
 ////                return o1;
             /*} else */
-            if ((binary == null || binary.excludedBinaryOperators == null || !binary.excludedBinaryOperators.contains(token.image))
-                    && context.operators().isBinaryOperator(token.image)) {
-                int binaryOpPrecedence = context.operators().getOperatorPrecedence(JOperator.infix(token.image));
+            Integer binaryPrecedence;
+            if (isEnabledBinaryOperator(binary, token) && (binaryPrecedence = resolveBinaryOperatorPrecedence(token)) != null) {
+                int binaryOpPrecedence = binaryPrecedence;
                 if (binaryOpPrecedence > opPrecedence) {
                     o1 = parseAndBuildExpressionBinary(token, o1, binaryOpPrecedence, options);
                 } else {
                     pushBack(token);
                     return o1;
                 }
-            } else if ((binary == null || !binary.excludedListOperator)
-                    && context.operators().isListSeparator(token.image)) {
+            } else if (isEnabledBinaryListOperator(binary) && isListSeparator(token)) {
                 o1 = parseAndBuildListOpNodeElement(o1, opPrecedence, token, options);
-            } else if ((binary == null || !binary.excludedImplicitOperator)
-                    && isSupportedImplicitOperator()) {
+            } else if (isEnabledBinaryImplicitOperator(binary)
+                    && (binaryPrecedence = resolveBinaryImplicitOperatorPrecedence()) != null
+            ) {
                 //inject implicit op
-                int binaryOpPrecedence = context.operators().getOperatorPrecedence(JOperator.infix(""));
+                int binaryOpPrecedence = binaryPrecedence;
                 if (binaryOpPrecedence > opPrecedence) {
                     pushBack(token);
                     JToken s = o1 != null && o1.startToken() != null ? o1.startToken() : token;
@@ -366,7 +416,9 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
                     if (o2 == null) {
                         log().error("S004", null, "missing second operand for implicit operator", s);
                     }
-                    o1 = getNodeFactory().createImplicitOperatorNode(o1, o2, s, o2 == null ? s : o2.endToken());
+                    o1 = getNodeFactory().createImplicitOperatorNode(o1, o2,
+                            new JNodeTokens().setStart(s).setEnd(o2 == null ? s : o2.endToken())
+                    );
                 } else {
                     pushBack(token);
                     return o1;
@@ -378,30 +430,80 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         }
     }
 
+    private boolean isEnabledBinaryImplicitOperator(JExpressionBinaryOptions binary) {
+        return binary == null || !binary.excludedImplicitOperator;
+    }
+
+    private boolean isListSeparator(JToken token) {
+        return context.operators().isListSeparator(token.image);
+    }
+
+    private boolean isEnabledBinaryListOperator(JExpressionBinaryOptions binary) {
+        return binary == null || !binary.excludedListOperator;
+    }
+
+    protected boolean isEnabledBinaryOperator(JExpressionBinaryOptions binary, JToken token) {
+        if ((binary == null || binary.excludedBinaryOperators == null || !binary.excludedBinaryOperators.contains(token.image))) {
+            return true;
+        }
+        return false;
+    }
+
+    protected Integer resolveBinaryImplicitOperatorPrecedence() {
+        if (!isSupportedImplicitOperator()) {
+            return null;
+        }
+        return context.operators().getOperatorPrecedence(JOperator.implicitList());
+    }
+
+    /**
+     * resolve To Binary Operator And Return Precedence.
+     * If not a Binary operator return null;
+     *
+     * @param token
+     * @return
+     */
+    protected Integer resolveBinaryOperatorPrecedence(JToken token) {
+        if (context.operators().isBinaryOperator(token.image)) {
+            return context.operators().getOperatorPrecedence(JOperator.infix(token.image));
+        }
+        return null;
+    }
+
     protected T parseAndBuildListOpNodeElement(T o1, int opPrecedence, JToken token, JExpressionOptions options) {
         token = token.copy();
         T o2 = parseExpressionBinary(opPrecedence, options);
         JToken s = o1 != null && o1.startToken() != null ? o1.startToken() : token;
         JToken e = o1 != null && o1.endToken() != null ? o1.endToken() : token;
-        o1 = getNodeFactory().createListOperatorNode(token, Arrays.asList(o1, o2), s, e);
+        o1 = getNodeFactory().createListOperatorNode(token, Arrays.asList(o1, o2)
+                , new JNodeTokens().setStart(s).setEnd(e).addSeparator(token)
+        );
         return o1;
     }
 
     protected boolean isSupportedImplicitOperator() {
         //TODO how to check
-        return false;
+        return context.operators().isListSeparator("");
     }
 
     public T parseExpression() {
-        return parseExpressionBinary(-1, defaultExpressionOptions);
+        return parseExpression(defaultExpressionOptions);
+    }
+
+    public T parseExpression(JExpressionOptions options) {
+        return parseExpression(-1, options);
+    }
+
+    public T parseExpression(int opPrecedence, JExpressionOptions options) {
+        return parseExpressionBinary(opPrecedence, options);
     }
 
     protected <T1 extends T> JListWithSeparators<T1> parseParsList(String groupName, String elementName, Supplier<T1> elementParser) {
-        return parseGroupedList(groupName, elementName, elementParser, "(", ",", ")",null);
+        return parseGroupedList(groupName, elementName, elementParser, "(", ",", ")", null);
     }
 
     protected <T1 extends T> JListWithSeparators<T1> parseBracketsList(String groupName, String elementName, Supplier<T1> elementParser) {
-        return parseGroupedList(groupName, elementName, elementParser, "[", ",", "]",null);
+        return parseGroupedList(groupName, elementName, elementParser, "[", ",", "]", null);
     }
 
 //    protected JToken requireOp(int ttype, String sval) {
@@ -446,15 +548,18 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         if (name == null) {
             name = "parenthesis";
         }
-        JListWithSeparators<T> expression = parseGroupedList(name, "expression", () -> parseExpression(), "(", ",", ")",null);
-        if (expression == null) {
+        JListWithSeparators<T> elements = parseGroupedList(name, "expression", () -> parseExpression(), "(", ",", ")", null);
+        if (elements == null) {
             return null;
         }
-        return getNodeFactory().createParsNode(expression.getItems(), expression.getStartToken(), expression.getSeparatorTokens(), expression.getEndToken());
+        return getNodeFactory().createParsNode(elements.getItems()
+                , new JNodeTokens().setStart(elements.getStartToken()).setEnd(elements.getEndToken())
+                        .setSeparators(elements.getSeparatorTokens())
+        );
     }
 
     /**
-     *
+     * @param <T1>
      * @param groupName
      * @param elementName
      * @param elementParser
@@ -462,10 +567,16 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
      * @param separator
      * @param end
      * @param silencedMessages when not null, errors are tracked into this list rather than into log()
-     * @param <T1>
      * @return
      */
-    protected <T1 extends T> JListWithSeparators<T1> parseGroupedList(String groupName, String elementName, Supplier<T1> elementParser, String start, String separator, String end,List<JCompilerMessage> silencedMessages) {
+    protected <T1 extends T> JListWithSeparators<T1> parseGroupedList(
+            String groupName,
+            String elementName,
+            Supplier<T1> elementParser,
+            String start,
+            String separator,
+            String end,
+            List<JSourceMessage> silencedMessages) {
         if (start != null && start.length() == 0) {
             start = null;
         }
@@ -491,18 +602,18 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
                 JToken n1 = next();
                 if (n1.isEOF()) {
                     if (end != null) {
-                        if(silencedMessages!=null){
-                            silencedMessages.add(JCompilerMessage.error("X005", groupName, "expected '" + end + "'", n1));
-                        }else {
-                            log().error("X005", groupName,  "expected '" + end + "'", n1);
+                        if (silencedMessages != null) {
+                            silencedMessages.add(JSourceMessage.error("X005", groupName, "expected '" + end + "'", n1));
+                        } else {
+                            log().error("X005", groupName, "expected '" + end + "'", n1);
                         }
                     }
                     break;
                 } else if (n1.image.equals(separator)) {
                     if (wasComma) {
-                        if(silencedMessages!=null) {
-                            silencedMessages.add(JCompilerMessage.error("X005", groupName,  "expected " + elementName, n1));
-                        }else {
+                        if (silencedMessages != null) {
+                            silencedMessages.add(JSourceMessage.error("X005", groupName, "expected " + elementName, n1));
+                        } else {
                             log().error("X005", groupName, "expected " + elementName, n1);
                         }
                     } else {
@@ -521,10 +632,10 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
                             //cannot read more without error
                             break;
                         }
-                        if(silencedMessages!=null) {
-                            silencedMessages.add(JCompilerMessage.error("X005", groupName, "expected '" + separator + "'", n1));
-                        }else {
-                            log().error("X005", groupName,  "expected '" + separator + "'", n1);
+                        if (silencedMessages != null) {
+                            silencedMessages.add(JSourceMessage.error("X005", groupName, "expected '" + separator + "'", n1));
+                        } else {
+                            log().error("X005", groupName, "expected '" + separator + "'", n1);
                         }
                     }
                     wasComma = false;
@@ -539,10 +650,10 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
 //                        t = elementParser.get();
                         JToken toSkip = next();
                         if (!errorReported) {
-                            if(silencedMessages!=null) {
-                                silencedMessages.add(JCompilerMessage.error("X005", groupName, "expected " + elementName, toSkip));
-                            }else {
-                                log().error("X005", groupName,  "expected " + elementName, toSkip);
+                            if (silencedMessages != null) {
+                                silencedMessages.add(JSourceMessage.error("X005", groupName, "expected " + elementName, toSkip));
+                            } else {
+                                log().error("X005", groupName, "expected " + elementName, toSkip);
                             }
                             errorReported = true;
                         }
@@ -565,9 +676,9 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
                 JToken n1 = next();
                 if (n1.isEOF()) {
                     if (end != null) {
-                        if(silencedMessages!=null) {
-                            silencedMessages.add(JCompilerMessage.error("X005", groupName, "expected '" + end + "'", n1));
-                        }else {
+                        if (silencedMessages != null) {
+                            silencedMessages.add(JSourceMessage.error("X005", groupName, "expected '" + end + "'", n1));
+                        } else {
                             log().error("X005", groupName, "expected '" + end + "'", n1);
                         }
                     }
@@ -585,10 +696,10 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
                         }
                         t = elementParser.get();
                         JToken toSkip = next();
-                        if(silencedMessages!=null) {
-                            silencedMessages.add(JCompilerMessage.error("X005", groupName,  "expected " + elementName, toSkip));
-                        }else {
-                            log().error("X005", groupName,"expected " + elementName, toSkip);
+                        if (silencedMessages != null) {
+                            silencedMessages.add(JSourceMessage.error("X005", groupName, "expected " + elementName, toSkip));
+                        } else {
+                            log().error("X005", groupName, "expected " + elementName, toSkip);
                         }
                         if (toSkip.isEOF()) {
                             break;
@@ -604,55 +715,79 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         return new DefaultJListWithSeparators<>(list, startToken, separators, endToken);
     }
 
-    public T parseExpressionTerminal(JExpressionOptions options) {
+    public T parseExpressionUnaryTerminal(JExpressionOptions options) {
         JToken token = next();
         if (token.isEOF()) {
             return null;
+        }
+        JExpressionUnaryOptions unary = options == null ? null : options.unary;
+        if (isSupportedTerminalPars(token, unary)) {
+            return parseExpressionPars();
+        } else if (isSupportedTerminalBrackets(token, unary)) {
+            return parseBrackets();
+        } else if (isSupportedTerminalBraces(token, unary)) {
+            return parseBraces();
         }
         switch (token.def.ttype) {
             case JTokenType.TT_KEYWORD: {
                 switch (token.image) {
                     case "null":
-                        return getNodeFactory().createLiteralNode(null, token);
+                        return getNodeFactory().createLiteralNode(null,
+                                new JNodeTokens().setStart(token).setEnd(token)
+                        );
                     case "true":
-                        return getNodeFactory().createLiteralNode(true, token);
+                        return getNodeFactory().createLiteralNode(true,
+                                new JNodeTokens().setStart(token).setEnd(token)
+                        );
                     case "false":
-                        return getNodeFactory().createLiteralNode(false, token);
+                        return getNodeFactory().createLiteralNode(false,
+                                new JNodeTokens().setStart(token).setEnd(token)
+                        );
                 }
                 pushBack(token);
                 return null;
             }
             case JTokenType.TT_IDENTIFIER: {
-                return getNodeFactory().createVarNameNode(token);
+                return getNodeFactory().createIdentifierNode(token.sval, new JNodeTokens().setStart(token).setEnd(token));
             }
             case JTokenType.TT_STRING: {
-                return getNodeFactory().createLiteralNode(token.sval, token);
+                return getNodeFactory().createLiteralNode(token.sval, new JNodeTokens().setStart(token).setEnd(token));
             }
             case JTokenType.TT_NUMBER: {
-                switch (token.def.id){
-                    case JTokenId.NUMBER_INFINITY:{
-                        return getNodeFactory().createLiteralNode(Double.POSITIVE_INFINITY, token);
+                switch (token.def.id) {
+                    case JTokenId.NUMBER_INFINITY: {
+                        return getNodeFactory().createLiteralNode(Double.POSITIVE_INFINITY,
+                                new JNodeTokens().setStart(token).setEnd(token)
+                        );
                     }
-                    case JTokenId.NUMBER_FLOAT:{
+                    case JTokenId.NUMBER_FLOAT: {
                         //should i test if int ?
                         switch (token.image.charAt(token.image.length() - 1)) {
                             case 'f':
                             case 'F': {
-                                return getNodeFactory().createLiteralNode(Float.parseFloat(token.image), token);
+                                return getNodeFactory().createLiteralNode(Float.parseFloat(token.image),
+                                        new JNodeTokens().setStart(token).setEnd(token)
+                                );
                             }
                         }
-                        return getNodeFactory().createLiteralNode(Double.parseDouble(token.image), token);
+                        return getNodeFactory().createLiteralNode(Double.parseDouble(token.image),
+                                new JNodeTokens().setStart(token).setEnd(token)
+                        );
                     }
-                    case JTokenId.NUMBER_INT:{
+                    case JTokenId.NUMBER_INT: {
                         switch (token.image.charAt(token.image.length() - 1)) {
                             case 'l':
                             case 'L': {
-                                T i = getNodeFactory().createLiteralNode(Long.parseLong(token.image), token);
+                                T i = getNodeFactory().createLiteralNode(Long.parseLong(token.image),
+                                        new JNodeTokens().setStart(token).setEnd(token)
+                                );
                             }
                         }
-                        return getNodeFactory().createLiteralNode(Integer.parseInt(token.image), token);
+                        return getNodeFactory().createLiteralNode(Integer.parseInt(token.image),
+                                new JNodeTokens().setStart(token).setEnd(token)
+                        );
                     }
-                    default:{
+                    default: {
                         throw new JShouldNeverHappenException();
                     }
                 }
@@ -694,8 +829,8 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
 
     private JToken prepare(JToken t) {
         if (t != null) {
-            if (t.compilationUnit == null) {
-                t.compilationUnit = compilationUnit();
+            if (t.source == null) {
+                t.source = compilationUnit().getSource();
             }
         }
         return t;
@@ -707,6 +842,26 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
 
     public JToken[] peek(int n) {
         return prepare(tokenizer.peek(n));
+    }
+
+    public JToken[] peekIds(int... ids) {
+        JToken[] res = new JToken[ids.length];
+        for (int i = 0; i < ids.length; i++) {
+            JToken[] a = peek(i + 1);
+            if (a.length < (i + 1) || a[i].id() != ids[i]) {
+                return null;
+            }
+            res[i] = a[i];
+        }
+        return res;
+    }
+
+    public JToken[] nextIds(int... ids) {
+        JToken[] r = peekIds(ids);
+        if (r != null) {
+            skip(ids.length);
+        }
+        return r;
     }
 
     public JToken peek() {

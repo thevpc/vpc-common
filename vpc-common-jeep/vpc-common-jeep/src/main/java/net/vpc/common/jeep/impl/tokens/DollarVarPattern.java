@@ -3,6 +3,7 @@ package net.vpc.common.jeep.impl.tokens;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.tokens.AbstractJTokenMatcher;
 import net.vpc.common.jeep.core.tokens.JTokenDef;
+import net.vpc.common.jeep.core.tokens.JTokenPatternOrder;
 
 public class DollarVarPattern extends AbstractTokenPattern {
 
@@ -35,7 +36,7 @@ public class DollarVarPattern extends AbstractTokenPattern {
     }
 
     public DollarVarPattern(JTokenDef shortInfo, JTokenDef longInfo, boolean escape, boolean cstyleEscape, String name) {
-        super(ORDER_STRING, name == null ? "DollarVar" : name);
+        super(JTokenPatternOrder.ORDER_STRING, name == null ? "DollarVar" : name);
         this.shortInfo = shortInfo == null ? SHORT : shortInfo;
         this.longInfo = longInfo == null ? LONG : longInfo;
         this.escape = escape;
@@ -76,7 +77,7 @@ public class DollarVarPattern extends AbstractTokenPattern {
         int status = READ_DOLLAR;
         private StringBuilder value = new StringBuilder();
 
-        public StringJMatcherLong(int order, boolean escape, boolean cstyleEscape) {
+        public StringJMatcherLong(JTokenPatternOrder order, boolean escape, boolean cstyleEscape) {
             super(order);
             this.escape = escape;
             this.cstyleEscape = cstyleEscape;

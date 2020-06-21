@@ -22,4 +22,12 @@ public class JArgumentConverterByIndex implements JArgumentConverter {
     public Object getArgument(int index, Object[] allArguments, JContext context) {
         return allArguments[newIndex];
     }
+
+    public int getNewIndex() {
+        return newIndex;
+    }
+
+    public JType getNewType() {
+        return newType;
+    }
 }

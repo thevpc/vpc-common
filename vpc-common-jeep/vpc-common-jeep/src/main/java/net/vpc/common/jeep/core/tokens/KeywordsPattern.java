@@ -7,7 +7,7 @@ import net.vpc.common.jeep.impl.tokens.JTypedImage;
 public class KeywordsPattern extends WordListPattern {
 
     public KeywordsPattern(String... words) {
-        super(JTokenId.OFFSET_KEYWORDS, ORDER_KEYWORD, "Keywords",
+        super("Keywords", JTokenId.OFFSET_KEYWORDS, JTokenPatternOrder.ORDER_KEYWORD,
                 toJTypedImages2(JTokenId.OFFSET_KEYWORDS, JTokenType.TT_KEYWORD, "TT_KEYWORD", words)
         );
     }

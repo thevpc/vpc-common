@@ -5,7 +5,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.util.JeepUtils;
 
 /**
@@ -14,10 +13,10 @@ import net.vpc.common.jeep.util.JeepUtils;
 public class JNodeFor extends JNodeStatement {
 
     private String name;
-    private JNode from;
-    private JNode to;
-    private JNode by;
-    private JNode block;
+    private JDefaultNode from;
+    private JDefaultNode to;
+    private JDefaultNode by;
+    private JDefaultNode block;
 
     @Override
     public int id() {
@@ -28,11 +27,11 @@ public class JNodeFor extends JNodeStatement {
         super();
     }
 
-    public JNode getBlock() {
+    public JDefaultNode getBlock() {
         return block;
     }
 
-    public void setBlock(JNode block) {
+    public void setBlock(JDefaultNode block) {
         this.block = block;
     }
 
@@ -44,27 +43,27 @@ public class JNodeFor extends JNodeStatement {
         this.name = name;
     }
 
-    public JNode getFrom() {
+    public JDefaultNode getFrom() {
         return from;
     }
 
-    public void setFrom(JNode from) {
+    public void setFrom(JDefaultNode from) {
         this.from = from;
     }
 
-    public JNode getTo() {
+    public JDefaultNode getTo() {
         return to;
     }
 
-    public void setTo(JNode to) {
+    public void setTo(JDefaultNode to) {
         this.to = to;
     }
 
-    public JNode getBy() {
+    public JDefaultNode getBy() {
         return by;
     }
 
-    public void setBy(JNode by) {
+    public void setBy(JDefaultNode by) {
         this.by = by;
     }
 

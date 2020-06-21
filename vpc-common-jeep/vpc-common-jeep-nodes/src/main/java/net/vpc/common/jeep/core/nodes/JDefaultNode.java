@@ -14,7 +14,7 @@ public abstract class JDefaultNode extends AbstractJNode{
     }
 
     @Deprecated
-    public JNode setType(JType type) {
+    public JDefaultNode setType(JType type) {
         this.type = type;
         return this;
     }

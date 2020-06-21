@@ -6,7 +6,6 @@
 package net.vpc.common.jeep.core.nodes;
 
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JNode;
 
 /**
  *
@@ -16,9 +15,9 @@ public class JNodeImport extends JNodeStatement {
 
     private final String name;
     private JType type;
-    private final JNode value;
+    private final JDefaultNode value;
 
-    public JNodeImport(String name, JNode val) {
+    public JNodeImport(String name, JDefaultNode val) {
         super();
         this.name = name;
         this.value = val;
@@ -33,7 +32,7 @@ public class JNodeImport extends JNodeStatement {
         return name;
     }
 
-    public JNode getValue() {
+    public JDefaultNode getValue() {
         return value;
     }
 

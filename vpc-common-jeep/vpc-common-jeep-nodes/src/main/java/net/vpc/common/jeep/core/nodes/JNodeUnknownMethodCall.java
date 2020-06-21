@@ -4,7 +4,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.util.JNodeUtils;
 import net.vpc.common.jeep.util.JeepUtils;
 
@@ -14,10 +13,10 @@ import net.vpc.common.jeep.util.JeepUtils;
 public class JNodeUnknownMethodCall extends JNodeStatement {
 
     private String name;
-    private JNode parent;
-    private JNode[] args;
+    private JDefaultNode parent;
+    private JDefaultNode[] args;
 
-    public JNodeUnknownMethodCall(JNode parent,String name,JNode[] args) {
+    public JNodeUnknownMethodCall(JDefaultNode parent,String name,JDefaultNode[] args) {
         super();
         this.name = name;
         this.parent = parent;
@@ -29,21 +28,21 @@ public class JNodeUnknownMethodCall extends JNodeStatement {
         return this;
     }
 
-    public JNodeUnknownMethodCall setParent(JNode parent) {
+    public JNodeUnknownMethodCall setParent(JDefaultNode parent) {
         this.parent = parent;
         return this;
     }
 
-    public JNodeUnknownMethodCall setArgs(JNode[] args) {
+    public JNodeUnknownMethodCall setArgs(JDefaultNode[] args) {
         this.args = args;
         return this;
     }
 
-    public JNode[] getArgs() {
+    public JDefaultNode[] getArgs() {
         return args;
     }
 
-    public JNode getParent() {
+    public JDefaultNode getParent() {
         return parent;
     }
 

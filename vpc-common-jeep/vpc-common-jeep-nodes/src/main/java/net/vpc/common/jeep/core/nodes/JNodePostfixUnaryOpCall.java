@@ -5,7 +5,6 @@
 package net.vpc.common.jeep.core.nodes;
 
 import net.vpc.common.jeep.JInvokablePrefilled;
-import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.util.JNodeUtils;
 
 /**
@@ -14,10 +13,10 @@ import net.vpc.common.jeep.util.JNodeUtils;
 public class JNodePostfixUnaryOpCall extends JNodeStatement {
 
     private String name;
-    private JNode arg;
+    private JDefaultNode arg;
     private JInvokablePrefilled implFunction;
 
-    public JNodePostfixUnaryOpCall(String name, JNode arg) {
+    public JNodePostfixUnaryOpCall(String name, JDefaultNode arg) {
         super();
         this.name = name;
         this.arg = arg;
@@ -31,11 +30,11 @@ public class JNodePostfixUnaryOpCall extends JNodeStatement {
         return this;
     }
 
-    public JNode getArg() {
+    public JDefaultNode getArg() {
         return arg;
     }
 
-    public JNodePostfixUnaryOpCall setArg(JNode arg) {
+    public JNodePostfixUnaryOpCall setArg(JDefaultNode arg) {
         this.arg = arg;
         return this;
     }

@@ -35,6 +35,14 @@ public class JArgumentTypes {
         return i==0?null: argType(i -1);
     }
 
+    public boolean acceptArgsCount(int callArgumentsCount) {
+        if(callArgumentsCount<0){
+            return true;
+        }
+        int ac = argsCount();
+        return (ac == callArgumentsCount)
+                || (ac>0 && isVarArgs() && callArgumentsCount>=(ac-1));
+    }
     public int argsCount() {
         return argTypes.length;
     }

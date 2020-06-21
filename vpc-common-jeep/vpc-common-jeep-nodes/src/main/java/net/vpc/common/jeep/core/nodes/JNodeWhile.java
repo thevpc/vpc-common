@@ -5,7 +5,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.util.JeepUtils;
 
 /**
@@ -13,8 +12,8 @@ import net.vpc.common.jeep.util.JeepUtils;
  */
 public class JNodeWhile extends JNodeStatement {
 
-    private JNode condition;
-    private JNode block;
+    private JDefaultNode condition;
+    private JDefaultNode block;
 
     public JNodeWhile() {
         super();
@@ -26,19 +25,19 @@ public class JNodeWhile extends JNodeStatement {
         return JNodeDefaultIds.NODE_WHILE;
     }
 
-    public JNode getCondition() {
+    public JDefaultNode getCondition() {
         return condition;
     }
 
-    public void setCondition(JNode condition) {
+    public void setCondition(JDefaultNode condition) {
         this.condition = condition;
     }
 
-    public JNode getBlock() {
+    public JDefaultNode getBlock() {
         return block;
     }
 
-    public void setBlock(JNode block) {
+    public void setBlock(JDefaultNode block) {
         this.block = block;
     }
 

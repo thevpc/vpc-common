@@ -55,6 +55,16 @@
         <!--</dependency>-->
         <dependency>
             <groupId>net.vpc.common</groupId>
+            <artifactId>vpc-common-text-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.vpc.common</groupId>
+            <artifactId>vpc-common-text-source-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.vpc.common</groupId>
             <artifactId>vpc-common-classpath</artifactId>
             <version>1.3.2</version>
         </dependency>

@@ -15,10 +15,10 @@ import java.util.Arrays;
 public class JNodeInstanceMethodCall extends JNodeStatement {
 
     private final String name;
-    private final JNode object;
-    private final JNode[] args;
+    private final JDefaultNode object;
+    private final JDefaultNode[] args;
 
-    public JNodeInstanceMethodCall(String name, JNode object, JNode[] args) {
+    public JNodeInstanceMethodCall(String name, JDefaultNode object, JDefaultNode[] args) {
         super();
         this.name = name;
         this.args = args;
@@ -54,11 +54,11 @@ public class JNodeInstanceMethodCall extends JNodeStatement {
         return name;
     }
 
-    public JNode[] getArgs() {
+    public JDefaultNode[] getArgs() {
         return Arrays.copyOf(args, args.length);
     }
 
-    private String toPar(JNode e) {
+    private String toPar(JDefaultNode e) {
         if (e instanceof JNodeLiteral
                 || e instanceof JNodeArray
                 || e instanceof JNodeConst
@@ -94,11 +94,11 @@ public class JNodeInstanceMethodCall extends JNodeStatement {
         return sb.toString();
     }
 
-    public JNode get(int index) {
+    public JDefaultNode get(int index) {
         return args[index];
     }
 
-    public JNode getOperand(int index) {
+    public JDefaultNode getOperand(int index) {
         return args[index];
     }
 
@@ -126,7 +126,7 @@ public class JNodeInstanceMethodCall extends JNodeStatement {
         return args.length;
     }
 
-    public JNode[] getOperands() {
+    public JDefaultNode[] getOperands() {
         return Arrays.copyOf(args, args.length);
     }
 

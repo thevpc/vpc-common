@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public abstract class AbstractJContext implements JContext {
     private final Map<String, Object> userProperties = new HashMap<>();
-    private JCompilerLog log=new JCompilerLogImpl();
+    private JCompilerLog log=new DefaultJCompilerLog();
 
     @Override
     public JCompilerLog log() {
@@ -25,7 +25,7 @@ public abstract class AbstractJContext implements JContext {
 
     @Override
     public JContext log(JCompilerLog log) {
-        this.log = log==null?new JCompilerLogImpl() : log;
+        this.log = log==null?new DefaultJCompilerLog() : log;
         return this;
     }
 

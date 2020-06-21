@@ -40,7 +40,7 @@ public final class JTokenConfigBuilder implements Cloneable, JTokenConfig {
     }
 
     public static Set<String> _defaultOperators() {
-        return new HashSet<>(Arrays.asList("+", "-", "*", "/", "^", "=", "<", ">", "!", "&", "|", ":"));
+        return new HashSet<>(Arrays.asList("+", "-", "*", "/", "^", "=", "<", ">", "!", "&", "|"));
     }
 
     public JTokenConfigBuilder copy() {

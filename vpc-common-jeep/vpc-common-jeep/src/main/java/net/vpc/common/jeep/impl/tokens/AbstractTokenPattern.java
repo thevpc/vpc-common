@@ -4,16 +4,17 @@ import net.vpc.common.jeep.JToken;
 import net.vpc.common.jeep.JTokenPattern;
 import net.vpc.common.jeep.JTokenizerState;
 import net.vpc.common.jeep.core.tokens.JTokenDef;
+import net.vpc.common.jeep.core.tokens.JTokenPatternOrder;
 import net.vpc.common.jeep.util.JTokenUtils;
 
 public abstract class AbstractTokenPattern implements JTokenPattern {
 
-    private final int order;
+    private JTokenPatternOrder order;
     private final String name;
     private String stateName;
     private int stateId;
 
-    public AbstractTokenPattern(int order, String name) {
+    public AbstractTokenPattern(JTokenPatternOrder order, String name) {
         this.order = order;
         this.name = name;
     }
@@ -40,7 +41,7 @@ public abstract class AbstractTokenPattern implements JTokenPattern {
     }
 
     @Override
-    public int order() {
+    public JTokenPatternOrder order() {
         return order;
     }
 

@@ -132,4 +132,16 @@ public class JTokenDef implements Comparable<JTokenDef>{
         return ttype == JTokenType.TT_KEYWORD;
     }
 
+    @Override
+    public String toString() {
+        return "JTokenDef{" +
+                "id=" + id +
+                ", idName='" + idName + '\'' +
+                ", ttype=" + ttype +
+                ", ttypeName='" + ttypeName + '\'' +
+                ", stateId=" + stateId +
+                ", stateName='" + stateName + '\'' +
+                ", imageLayout='" + imageLayout + '\'' +
+                '}';
+    }
 }

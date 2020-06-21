@@ -252,11 +252,7 @@ public abstract class AbstractJType implements JType {
         for (JMethod jMethod : declaredMethods()) {
             if (namesSet.contains(jMethod.name())) {
                 JSignature sig = jMethod.signature();
-                if (
-                        callArgumentsCount < 0
-                                || sig.argsCount() == callArgumentsCount
-                                || sig.isVarArgs() && sig.argsCount() < callArgumentsCount
-                ) {
+                if (sig.acceptArgsCount(callArgumentsCount)) {
                     all.put(sig, jMethod);
                 }
             }

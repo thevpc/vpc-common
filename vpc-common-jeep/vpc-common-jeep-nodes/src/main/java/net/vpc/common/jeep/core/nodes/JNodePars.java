@@ -5,22 +5,20 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
-
 /**
  *
  * @author vpc
  */
 public class JNodePars extends JNodeStatement {
 
-    private JNode[] items;
+    private JDefaultNode[] items;
 
-    public JNodePars(JNode[] items) {
+    public JNodePars(JDefaultNode[] items) {
         super();
         this.items = items;
     }
 
-    public JNode[] getItems() {
+    public JDefaultNode[] getItems() {
         return items;
     }
 
@@ -46,7 +44,7 @@ public class JNodePars extends JNodeStatement {
     public String toString() {
         StringBuilder sb = new StringBuilder().append("(");
         for (int i = 0; i < items.length; i++) {
-            JNode item = items[i];
+            JDefaultNode item = items[i];
             if(i>0) {
                 sb.append(",");
             }

@@ -5,7 +5,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 
 /**
  *
@@ -13,14 +12,14 @@ import net.vpc.common.jeep.JNode;
  */
 public class JNodeBraces extends JNodeStatement {
 
-    private JNode[] items;
+    private JDefaultNode[] items;
 
-    public JNodeBraces(JNode[] items) {
+    public JNodeBraces(JDefaultNode[] items) {
         super();
         this.items = items;
     }
 
-    public JNode[] getItems() {
+    public JDefaultNode[] getItems() {
         return items;
     }
 
@@ -46,7 +45,7 @@ public class JNodeBraces extends JNodeStatement {
             if(i>0){
                 sb.append(",");
             }
-            JNode item = items[i];
+            JDefaultNode item = items[i];
             sb.append(item);
         }
         sb.append("\t}");

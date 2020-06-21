@@ -18,16 +18,17 @@ public interface JOperators {
 
     JOperators declareBinaryOperator(String operator, int precedence);
 
-    JOperators declareBinaryOperators(int precedence,String... operator);
+    JOperators declareBinaryOperators(int precedence, String... operator);
+
     JOperators declareBinaryOperators(String... operator);
 
-    JOperators declareListOperator(final String name);
+    JOperators declareListOperator(final String name, int operatorPrecedence);
 
-    JOperators declareListOperator(final String name, Class argType);
+    JOperators declareListOperator(final String name, Class argType, int operatorPrecedence);
 
-    JOperators declareListOperator(final String name, String argType);
+    JOperators declareListOperator(final String name, String argType, int operatorPrecedence);
 
-    JOperators declareListOperator(final String name, JType argType);
+    JOperators declareListOperator(final String name, JType argType, int operatorPrecedence);
 
     boolean isOperator(JOperator operator);
 
@@ -41,11 +42,12 @@ public interface JOperators {
 
     JOperators declareOperator(JFunction fct);
 
-    JOperators declareListOperator(String name, String returnType, String argType, JInvoke operator);
+    JOperators declareListOperator(String name, String returnType, String argType, int operatorPrecedence);
 
-    JOperators declareListOperator(String name, Class returnType, Class argType, JInvoke operator);
 
-    JOperators declareListOperator(String name, JType returnType, JType argType, JInvoke operator);
+    JOperators declareListOperator(String name, Class returnType, Class argType, int operatorPrecedence);
+
+    JOperators declareListOperator(String name, JType returnType, JType argType, int operatorPrecedence);
 
     boolean isPrefixUnaryOperator(String op);
 
@@ -56,8 +58,8 @@ public interface JOperators {
     JOperators declarePrefixUnaryOperator(String operator, int precedence);
 
     JOperators declarePrefixUnaryOperators(String... operator);
-    
-    JOperators declarePrefixUnaryOperators(int precedence,String... operator);
+
+    JOperators declarePrefixUnaryOperators(int precedence, String... operator);
 
     JOperators undeclarePrefixUnaryOperator(String operator);
 
@@ -87,5 +89,16 @@ public interface JOperators {
 
     boolean isBinaryOperator(String operator);
 
-    JOperators declarePostfixUnaryOperators(int precedence, String ...operators);
+    JOperators declarePostfixUnaryOperators(int precedence, String... operators);
+
+
+//    @Deprecated
+//    JOperators declareListOperator(String name, String returnType, String argType, int operatorPrecedence, JInvoke operator);
+//
+//    @Deprecated
+//    JOperators declareListOperator(String name, Class returnType, Class argType, int operatorPrecedence, JInvoke operator);
+//
+//    @Deprecated
+//    JOperators declareListOperator(String name, JType returnType, JType argType, int operatorPrecedence, JInvoke operator);
+
 }

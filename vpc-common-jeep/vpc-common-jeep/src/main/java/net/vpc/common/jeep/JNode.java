@@ -62,4 +62,5 @@ public interface JNode {
     JNode findAndReplace(JNodeFindAndReplace findAndReplace);
 
     boolean containsCaret(int caretOffset);
+    JToken[] getSeparators();
 }

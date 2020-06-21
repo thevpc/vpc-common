@@ -4,7 +4,6 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.util.JeepUtils;
 
@@ -17,9 +16,9 @@ public class JNodeStaticMethodCall extends JNodeStatement {
 
     private final String name;
     private final JType objectType;
-    private final JNode[] args;
+    private final JDefaultNode[] args;
 
-    public JNodeStaticMethodCall(String name, JType objectType, JNode[] args) {
+    public JNodeStaticMethodCall(String name, JType objectType, JDefaultNode[] args) {
         super();
         this.name = name;
         this.args = args;
@@ -51,11 +50,11 @@ public class JNodeStaticMethodCall extends JNodeStatement {
         return name;
     }
 
-    public JNode[] getArgs() {
+    public JDefaultNode[] getArgs() {
         return Arrays.copyOf(args, args.length);
     }
 
-    private String toPar(JNode e) {
+    private String toPar(JDefaultNode e) {
         if (e instanceof JNodeLiteral
                 || e instanceof JNodeArray
                 || e instanceof JNodeConst
@@ -91,7 +90,7 @@ public class JNodeStaticMethodCall extends JNodeStatement {
         return sb.toString();
     }
 
-    public JNode get(int index) {
+    public JDefaultNode get(int index) {
         return args[index];
     }
 
@@ -99,7 +98,7 @@ public class JNodeStaticMethodCall extends JNodeStatement {
         return getName().equals(name);
     }
 
-    public JNode[] getOperands() {
+    public JDefaultNode[] getOperands() {
         return Arrays.copyOf(args, args.length);
     }
 

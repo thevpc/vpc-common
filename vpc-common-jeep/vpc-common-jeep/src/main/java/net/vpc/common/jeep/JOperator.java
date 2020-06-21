@@ -18,9 +18,16 @@ public final class JOperator {
     public static JOperator special(String name) {
         return new JOperator(name, JOperatorType.SPECIAL);
     }
+    public static JOperator list(String name) {
+        return new JOperator(name, JOperatorType.LIST);
+    }
 
     public static JOperator postfix(String name) {
         return new JOperator(name, JOperatorType.POSTFIX_UNARY);
+    }
+
+    public static JOperator implicitList() {
+        return new JOperator("", JOperatorType.LIST);
     }
 
     public static JOperator infix(String name) {

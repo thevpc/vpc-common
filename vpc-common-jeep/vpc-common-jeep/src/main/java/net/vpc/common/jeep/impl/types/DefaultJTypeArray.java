@@ -14,7 +14,7 @@ import java.lang.reflect.Modifier;
 import java.lang.reflect.Type;
 import java.util.Arrays;
 
-public class DefaultJTypeArray extends AbstractJType implements JTypeArray{
+public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
     private JType root;
     private int dim;
     private String name;
@@ -26,7 +26,7 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray{
         super(root.types());
         this.root = root;
         this.dim = dim;
-        if (root.isArray() || dim==0) {
+        if (root.isArray() || dim == 0) {
             throw new IllegalStateException("Invalid Array with dimension ==0");
         }
         StringBuilder fb = new StringBuilder(root.name().length() + 2 * dim);
@@ -39,11 +39,11 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray{
         }
         this.name = fb.toString();
         this.sname = sb.toString();
-        this.lengthField = new ArrFieldLength(this,types());
-        this.componentType= dim==1?root:
-                JTypesSPI.getRegisteredOrRegister(types2().createArrayType0(root,dim-1),
+        this.lengthField = new ArrFieldLength(this, types());
+        this.componentType = dim == 1 ? root :
+                JTypesSPI.getRegisteredOrRegister(types2().createArrayType0(root, dim - 1),
                         types()
-        );
+                );
     }
 
 
@@ -185,16 +185,16 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray{
 
     @Override
     public Object newArray(int... len) {
-        if(rootComponentType() instanceof HostJRawType){
+        if (rootComponentType() instanceof HostJRawType) {
             HostJRawType hjt = (HostJRawType) rootComponentType().rawType();
-            Type ht= hjt.hostType();
+            Type ht = hjt.hostType();
             return Array.newInstance((Class<?>) ht, len);
-        }else{
+        } else {
             int len0 = len[0];
             JType jType = componentType();
             DefaultJArray aa = new DefaultJArray(new Object[len0], jType);
             if (len.length > 1) {
-                JTypeArray jTypea=(JTypeArray) jType;
+                JTypeArray jTypea = (JTypeArray) jType;
                 int[] len2 = Arrays.copyOfRange(len, 0, len.length - 1);
                 for (int i = 0; i < len0; i++) {
                     aa.set(i, jTypea.newArray(len2));
@@ -206,25 +206,25 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray{
 
     @Override
     public JArray asArray(Object o) {
-        if(o instanceof JArray){
+        if (o instanceof JArray) {
             return (JArray) o;
         }
         return new HostJArray(o, componentType());
     }
+
     @Override
     public JType replaceParameter(String name, JType param) {
         JType r = rootComponentType().replaceParameter(name, param);
-        if(r.name().equals(rootComponentType().name())){
+        if (r.name().equals(rootComponentType().name())) {
             return this;
         }
-        return types2().createArrayType0(r,arrayDimension());
+        return types2().createArrayType0(r, arrayDimension());
     }
 
     @Override
     public boolean isArray() {
         return true;
     }
-    
 
 
     private static class ArrFieldLength extends AbstractJField {
@@ -288,6 +288,16 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray{
 
     @Override
     public boolean isInterface() {
+        return false;
+    }
+
+    public boolean isAssignableFrom(JType other) {
+        if(other.isArray()){
+            JTypeArray otherArray=(JTypeArray) other;
+            if(arrayDimension()==otherArray.arrayDimension()){
+                return rootComponentType().isAssignableFrom(otherArray.rootComponentType());
+            }
+        }
         return false;
     }
 }

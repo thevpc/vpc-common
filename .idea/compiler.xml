@@ -6,58 +6,91 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="vpc-common-config" />
-        <module name="vpc-common-mvn" />
-        <module name="vpc-common-log" />
-        <module name="vpc-common-fprint" />
-        <module name="vpc-common-xfile" />
-        <module name="vpc-common-classpath" />
-        <module name="vpc-common-strings" />
-        <module name="vpc-common-utils" />
-        <module name="vpc-common-prs" />
-        <module name="vpc-common-lanterna" />
-        <module name="vpc-common-diff-jar" />
-        <module name="vpc-common-io-compress" />
-        <module name="vpc-common-sql" />
-        <module name="vpc-common-swings" />
-        <module name="vfs" />
-        <module name="vpc-common-web-jsf" />
-        <module name="vpc-common-monitor" />
-        <module name="vpc-common-web-xml" />
-        <module name="vpc-common-desktop-automation" />
-        <module name="vpc-common-swings-prs" />
-        <module name="vpc-common-commandline" />
+        <module name="vpc-common-app-swing-dock-mydoggy" />
+        <module name="vpc-common-jeep-editor-swing" />
         <module name="vpc-common-io" />
-        <module name="vpc-common-cron" />
-        <module name="vpc-common-ssh" />
+        <module name="vpc-common-desktop-automation" />
+        <module name="vpc-common-config" />
+        <module name="vpc-common-xfile" />
+        <module name="vfs" />
+        <module name="vpc-common-text-source" />
         <module name="java-shell" />
+        <module name="vpc-common-sql" />
+        <module name="vpc-common-web-xml" />
+        <module name="vpc-common-web-jsf" />
+        <module name="vpc-common-props" />
+        <module name="vpc-common-swings-plaf" />
+        <module name="vpc-common-msg" />
+        <module name="vpc-common-app-swingx" />
+        <module name="vpc-common-fprint" />
+        <module name="vpc-common-text-source-log" />
+        <module name="tson" />
+        <module name="vpc-common-diff-jar" />
+        <module name="vpc-common-classpath" />
+        <module name="vpc-common-cron" />
+        <module name="vpc-common-jeep-nodes" />
+        <module name="vpc-common-io-compress" />
+        <module name="vpc-common-swings-prs" />
+        <module name="vpc-common-mvn" />
+        <module name="vpc-common-prs" />
+        <module name="vpc-common-commandline" />
         <module name="vpc-common-jeep" />
+        <module name="vpc-common-strings" />
+        <module name="vpc-common-swings" />
+        <module name="vpc-common-app-swing-plaf" />
+        <module name="vpc-common-iconset" />
+        <module name="vpc-common-ssh" />
+        <module name="vpc-common-jshell" />
+        <module name="vpc-common-app-swing" />
+        <module name="vpc-common-app" />
+        <module name="vpc-common-utils" />
+        <module name="vpc-common-monitor" />
+        <module name="vpc-common-lanterna" />
+        <module name="vpc-common-log" />
+        <module name="vpc-common-i18n" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="common" target="1.5" />
       <module name="java-shell" target="1.7" />
+      <module name="jeep-build" target="1.5" />
+      <module name="tson" target="1.8" />
       <module name="vfs" target="1.8" />
-      <module name="vpc-common-classpath" target="1.7" />
+      <module name="vpc-common-app" target="1.8" />
+      <module name="vpc-common-app-swing" target="1.8" />
+      <module name="vpc-common-app-swing-dock-mydoggy" target="1.8" />
+      <module name="vpc-common-app-swing-plaf" target="1.8" />
+      <module name="vpc-common-app-swingx" target="1.8" />
+      <module name="vpc-common-classpath" target="1.8" />
       <module name="vpc-common-commandline" target="1.7" />
       <module name="vpc-common-config" target="1.8" />
       <module name="vpc-common-cron" target="1.8" />
       <module name="vpc-common-desktop-automation" target="1.7" />
       <module name="vpc-common-diff-jar" target="1.8" />
       <module name="vpc-common-fprint" target="1.7" />
+      <module name="vpc-common-i18n" target="1.8" />
+      <module name="vpc-common-iconset" target="1.8" />
       <module name="vpc-common-io" target="1.7" />
       <module name="vpc-common-io-compress" target="1.7" />
-      <module name="vpc-common-jeep" target="1.7" />
+      <module name="vpc-common-jeep" target="1.8" />
+      <module name="vpc-common-jeep-editor-swing" target="1.8" />
+      <module name="vpc-common-jeep-nodes" target="1.8" />
+      <module name="vpc-common-jshell" target="1.7" />
       <module name="vpc-common-lanterna" target="1.7" />
       <module name="vpc-common-log" target="1.8" />
-      <module name="vpc-common-monitor" target="1.7" />
+      <module name="vpc-common-monitor" target="1.8" />
+      <module name="vpc-common-msg" target="1.8" />
       <module name="vpc-common-mvn" target="1.7" />
+      <module name="vpc-common-props" target="1.8" />
       <module name="vpc-common-prs" target="1.8" />
       <module name="vpc-common-sql" target="1.7" />
       <module name="vpc-common-ssh" target="1.7" />
       <module name="vpc-common-strings" target="1.7" />
       <module name="vpc-common-swings" target="1.8" />
+      <module name="vpc-common-swings-plaf" target="1.8" />
       <module name="vpc-common-swings-prs" target="1.8" />
+      <module name="vpc-common-text-source" target="1.8" />
+      <module name="vpc-common-text-source-log" target="1.8" />
       <module name="vpc-common-utils" target="1.8" />
       <module name="vpc-common-web-jsf" target="1.7" />
       <module name="vpc-common-web-xml" target="1.7" />

@@ -37,4 +37,9 @@ public class DefaultJListWithSeparators<T> implements JListWithSeparators<T> {
     public List<JToken> getSeparatorTokens() {
         return separatorTokens;
     }
+
+    @Override
+    public JToken[] getSeparatorTokensArray() {
+        return separatorTokens==null?null:separatorTokens.toArray(new JToken[0]);
+    }
 }

@@ -17,7 +17,7 @@ public class WhitespacePattern extends AbstractTokenPattern {
         this(null);
     }
     public WhitespacePattern(JTokenDef info) {
-        super(ORDER_WHITESPACE, info==null?"Whitespaces":info.idName);
+        super(JTokenPatternOrder.ORDER_WHITESPACE, info==null?"Whitespaces":info.idName);
         this.info=info==null?DEFAULT:info;
     }
 

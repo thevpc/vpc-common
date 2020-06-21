@@ -15,4 +15,5 @@ public interface JListWithSeparators<T> {
     JToken getEndToken();
 
     List<JToken> getSeparatorTokens();
+    JToken[] getSeparatorTokensArray();
 }

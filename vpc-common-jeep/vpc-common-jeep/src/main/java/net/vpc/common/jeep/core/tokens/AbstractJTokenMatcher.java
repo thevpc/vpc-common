@@ -7,14 +7,14 @@ import net.vpc.common.jeep.JTokenizerReader;
 public abstract class AbstractJTokenMatcher implements JTokenMatcher {
 
     protected StringBuilder image = new StringBuilder();
-    protected int order;
+    protected JTokenPatternOrder order;
 
-    public AbstractJTokenMatcher(int order) {
+    public AbstractJTokenMatcher(JTokenPatternOrder order) {
         this.order = order;
     }
 
     @Override
-    public int order() {
+    public JTokenPatternOrder order() {
         return order;
     }
 

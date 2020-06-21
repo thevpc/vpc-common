@@ -1,6 +1,6 @@
 package net.vpc.common.jeep.editor;
 
-import net.vpc.common.jeep.JSource;
+import net.vpc.common.textsource.JTextSource;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -20,7 +20,7 @@ public class JSyntaxUtils {
         component.putClientProperty(SOURCE_NAME,sourceName);
     }
 
-    public static void setText(JTextComponent component, JSource source){
+    public static void setText(JTextComponent component, JTextSource source){
         component.putClientProperty(SOURCE_NAME,source.name());
         component.setText(source.text());
     }

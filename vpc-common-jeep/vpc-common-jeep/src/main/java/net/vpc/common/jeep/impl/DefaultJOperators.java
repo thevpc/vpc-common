@@ -97,23 +97,23 @@ public class DefaultJOperators implements JOperators {
     }
 
     @Override
-    public JOperators declareListOperator(final String name) {
-        return declareListOperator(name, JTypeUtils.forObject(context.types()));
+    public JOperators declareListOperator(final String name, int operatorPrecedence) {
+        return declareListOperator(name, JTypeUtils.forObject(context.types()), operatorPrecedence);
     }
 
     @Override
-    public JOperators declareListOperator(String name, Class argType) {
-        return declareListOperator(name, context.types().forName(argType.getName()));
+    public JOperators declareListOperator(String name, Class argType, int operatorPrecedence) {
+        return declareListOperator(name, context.types().forName(argType.getName()), operatorPrecedence);
     }
 
     @Override
-    public JOperators declareListOperator(String name, String argType) {
-        return declareListOperator(name, context.types().forName(argType));
+    public JOperators declareListOperator(String name, String argType, int operatorPrecedence) {
+        return declareListOperator(name, context.types().forName(argType), operatorPrecedence);
     }
 
     @Override
-    public JOperators declareListOperator(final String name, JType argType) {
-        return declareListOperator(name, argType, argType, new JInvoke() {
+    public JOperators declareListOperator(final String name, JType argType, int operatorPrecedence) {
+        return declareListOperator(name, argType, argType, operatorPrecedence/*, new JInvoke() {
             @Override
             public Object invoke(JInvokeContext context) {
                 JEvaluable[] arguments = context.arguments();
@@ -132,7 +132,7 @@ public class DefaultJOperators implements JOperators {
                     return new JUplet(name, ll, new JType[]{argType.toArray()});
                 }
             }
-        });
+        }*/);
     }
 
     @Override
@@ -193,35 +193,63 @@ public class DefaultJOperators implements JOperators {
     public JOperators declareOperator(JFunction fct) {
         String opName = fct.name();
         if (opName.length() > 0) {
-            context.tokens().config().getOperators().add(opName);
+            JTokenConfigBuilder config = new JTokenConfigBuilder(context.tokens().config());
+            config.addOperator(opName);
+            context.tokens().setConfig(config);
         }
         functions.declare(fct);
         return this;
     }
 
+//    @Override
+//    public JOperators declareListOperator(String name, String returnType, String argType, int operatorPrecedence, JInvoke operator) {
+//        return declareListOperator(name,
+//                context.types().forName(returnType),
+//                context.types().forName(argType),
+//                operatorPrecedence, operator
+//        );
+//    }
+
     @Override
-    public JOperators declareListOperator(String name, String returnType, String argType, JInvoke operator) {
+    public JOperators declareListOperator(String name, String returnType, String argType, int operatorPrecedence) {
         return declareListOperator(name,
                 context.types().forName(returnType),
                 context.types().forName(argType),
-                operator
+                operatorPrecedence
         );
     }
 
+//    @Override
+//    public JOperators declareListOperator(String name, Class returnType, Class argType, int operatorPrecedence, JInvoke operator) {
+//        return declareListOperator(name,
+//                context.types().forName(returnType.getName()),
+//                context.types().forName(argType.getName()),
+//                operatorPrecedence, operator
+//        );
+//    }
+
     @Override
-    public JOperators declareListOperator(String name, Class returnType, Class argType, JInvoke operator) {
+    public JOperators declareListOperator(String name, Class returnType, Class argType, int operatorPrecedence) {
         return declareListOperator(name,
                 context.types().forName(returnType.getName()),
                 context.types().forName(argType.getName()),
-                operator
+                operatorPrecedence
         );
     }
 
+//    @Override
+//    public JOperators declareListOperator(String name, JType returnType, JType argType, int operatorPrecedence, JInvoke operator) {
+//        JOperators e = declareOperator(new JListOperator(operator, name, returnType, argType));
+//        declareOperator(JOperator.list(name),operatorPrecedence);
+//        abstractListOpNames.add(name);
+//        return e;
+//    }
     @Override
-    public JOperators declareListOperator(String name, JType returnType, JType argType, JInvoke operator) {
-        JOperators e = declareOperator(new JListOperator(operator, name, returnType, argType));
+    public JOperators declareListOperator(String name, JType returnType, JType argType, int operatorPrecedence) {
+        //JOperators e = declareOperator(new JListOperator(operator, name, returnType, argType));
+        declareOperator(JOperator.list(name),operatorPrecedence);
         abstractListOpNames.add(name);
-        return e;
+        return this;
     }
 
     @Override

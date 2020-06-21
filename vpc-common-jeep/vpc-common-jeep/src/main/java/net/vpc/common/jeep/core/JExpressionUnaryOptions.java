@@ -10,6 +10,11 @@ public class JExpressionUnaryOptions implements Cloneable{
     public boolean excludedPrefixParenthesis;
     public boolean excludedPrefixBrackets;
     public boolean excludedPrefixBraces;
+
+    public boolean excludedTerminalParenthesis;
+    public boolean excludedTerminalBrackets;
+    public boolean excludedTerminalBraces;
+
     public boolean excludedTerminal;
     public Set<String> excludedPostfixUnaryOperators;
     public boolean excludedPostfixParenthesis;

@@ -18,6 +18,9 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     private JSignature genericSignature;
     private int modifiers;
 
+    public DefaultJRawMethod() {
+    }
+
     @Override
     public JType[] argTypes() {
         JSignature s = signature();

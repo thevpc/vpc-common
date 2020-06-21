@@ -16,9 +16,9 @@ import java.util.Arrays;
 public class JNodeArray extends JDefaultNode {
 
     private final String arrayType;
-    private final JNode[] values;
+    private final JDefaultNode[] values;
 
-    public JNodeArray(String arrayType, JNode[] values) {
+    public JNodeArray(String arrayType, JDefaultNode[] values) {
         super();
         this.values = values;
         this.arrayType= arrayType;
@@ -36,7 +36,7 @@ public class JNodeArray extends JDefaultNode {
 //    @Override
 //    public JType getType(JContext context) {
 //        JType o = null;
-//        for (JNode value : values) {
+//        for (JDefaultNode value : values) {
 //            if (value != null) {
 //                o = o == null ? value.getType(context) : o.firstCommonSuperType(value.getType(context));
 //            }
@@ -48,11 +48,11 @@ public class JNodeArray extends JDefaultNode {
 //        }
 //    }
 
-    public JNode get(int i) {
+    public JDefaultNode get(int i) {
         return values[i];
     }
     
-    public JNode[] getValues() {
+    public JDefaultNode[] getValues() {
         return values;
     }
 

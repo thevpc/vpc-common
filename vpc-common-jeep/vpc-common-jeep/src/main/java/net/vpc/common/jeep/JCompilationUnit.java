@@ -1,7 +1,9 @@
 package net.vpc.common.jeep;
 
+import net.vpc.common.textsource.JTextSource;
+
 public interface JCompilationUnit {
-    JSource getSource();
+    JTextSource getSource();
 
     JNode getAst();
 

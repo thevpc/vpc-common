@@ -5,27 +5,26 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
 
 /**
  * @author vpc
  */
 public class JNodePostfixBraces extends JNodeStatement {
 
-    private JNode base;
-    private JNode items;
+    private JDefaultNode base;
+    private JDefaultNode items;
 
-    public JNodePostfixBraces(JNode base, JNode items) {
+    public JNodePostfixBraces(JDefaultNode base, JDefaultNode items) {
         super();
         this.base = base;
         this.items = items;
     }
 
-    public JNode getBase() {
+    public JDefaultNode getBase() {
         return base;
     }
 
-    public void setBase(JNode base) {
+    public void setBase(JDefaultNode base) {
         this.base = base;
     }
 
@@ -33,7 +32,7 @@ public class JNodePostfixBraces extends JNodeStatement {
         this.items = items;
     }
 
-    public JNode getItems() {
+    public JDefaultNode getItems() {
         return items;
     }
 

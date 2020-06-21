@@ -10,7 +10,10 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 public class DefaultJEvaluator implements JEvaluator {
-    public static final JEvaluator INSTANCE = new DefaultJEvaluator();
+    private JContext jcontext;
+    public DefaultJEvaluator(JContext jcontext) {
+        this.jcontext=jcontext;
+    }
 
     @Override
     public Object evaluate(JNode node, JInvokeContext context) {
@@ -118,8 +121,8 @@ public class DefaultJEvaluator implements JEvaluator {
             }
             case JNodeDefaultIds.NODE_OP_BINARY_INFIX: {
                 JNodeInfixBinaryOperatorCall c = (JNodeInfixBinaryOperatorCall) node;
-                JNode[] nargs = {c.getArg1(), c.getArg2()};
-                JType[] ntypes = JNodeUtils2.getTypes((JDefaultNode[]) nargs);
+                JDefaultNode[] nargs = {c.getArg1(), c.getArg2()};
+                JType[] ntypes = JNodeUtils2.getTypes(nargs);
                 JEvaluable[] eargs = JNodeUtils2.getEvaluatables((JDefaultNode[])nargs);
                 JSignature sig = JSignature.of(c.getName(), ntypes);
                 JFunction f = context.context().functions().findFunctionMatch(sig);

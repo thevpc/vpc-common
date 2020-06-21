@@ -153,9 +153,7 @@ public class JFunctionsImpl implements JFunctions {
         }
         for (JFunction f : functionsBySigCache.values()) {
             JSignature sig = f.signature();
-            if (callArgumentsCount < 0
-                    || (sig.argsCount() == callArgumentsCount)
-                    || (sig.isVarArgs() && sig.argsCount() < callArgumentsCount)) {
+            if (sig.acceptArgsCount(callArgumentsCount)) {
                 applicables.add(f);
             }
         }
@@ -325,7 +323,7 @@ public class JFunctionsImpl implements JFunctions {
             JInvokable invocation = matchingMethod.getMethod().invocation;
             if (invocation.signature().argsCount() != argTypes.length) {
                 //this is the case where we are using ellipse vararg (...)  arguments
-                if (invocation.signature().argsCount() <= argTypes.length && invocation.signature().isVarArgs()) {
+                if (invocation.signature().acceptArgsCount(argTypes.length)) {
                     if (invocation instanceof JMethod) {
                         invocation = new JMethodWithVarArg((JMethod) invocation);
                     } else if (invocation instanceof JFunction) {

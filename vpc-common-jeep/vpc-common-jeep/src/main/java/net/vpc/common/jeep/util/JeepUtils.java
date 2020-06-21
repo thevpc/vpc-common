@@ -20,6 +20,15 @@ public class JeepUtils {
     public static final String TAB = "\t";
     public static final String NEWLINE = "\n";
 
+    public static <T> T coalesce(T ... a){
+        for (T t : a) {
+            if(t!=null){
+                return t;
+            }
+        }
+        return null;
+    }
+
     public static boolean isDefaultOp(String c) {
         return (c.length() > 0 && JOperatorPrecedences.OPERATORS.indexOf(c.charAt(0)) >= 0);
     }

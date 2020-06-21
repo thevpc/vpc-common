@@ -25,8 +25,10 @@ public abstract class AbstractJMethod implements JMethod {
             sb.append(returnType().name());
             sb.append(" ");
         }
-        sb.append(declaringType().name());
-        sb.append(".");
+        if(declaringType()!=null) {
+            sb.append(declaringType().name());
+            sb.append(".");
+        }
         sb.append(signature());
         return sb.toString();
 

@@ -12,9 +12,9 @@ import net.vpc.common.jeep.*;
 public class JNodeInstanceFieldInvoke extends JNodeStatement {
 
     private final String name;
-    private final JNode object;
+    private final JDefaultNode object;
 
-    public JNodeInstanceFieldInvoke(String name, JNode object) {
+    public JNodeInstanceFieldInvoke(String name, JDefaultNode object) {
         super();
         this.name = name;
         this.object = object;
@@ -48,7 +48,7 @@ public class JNodeInstanceFieldInvoke extends JNodeStatement {
         return name;
     }
 
-    public JNode getObject() {
+    public JDefaultNode getObject() {
         return object;
     }
 

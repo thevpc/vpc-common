@@ -20,7 +20,7 @@ public abstract class SimpleTokenPattern extends AbstractTokenPattern {
         this(null);
     }
     public SimpleTokenPattern(JTokenDef info) {
-        super(ORDER_IDENTIFIER,(info==null?DEFAULT:info).idName);
+        super(JTokenPatternOrder.ORDER_IDENTIFIER,(info==null?DEFAULT:info).idName);
         this.info=info==null?DEFAULT:info;
     }
 

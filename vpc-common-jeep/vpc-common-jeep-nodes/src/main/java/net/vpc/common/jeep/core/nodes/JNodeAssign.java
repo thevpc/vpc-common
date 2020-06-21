@@ -5,30 +5,27 @@
  */
 package net.vpc.common.jeep.core.nodes;
 
-import net.vpc.common.jeep.JNode;
-import net.vpc.common.jeep.JToken;
-
 /**
  *
  * @author vpc
  */
 public class JNodeAssign extends JNodeStatement {
 
-    private JNode name;
-    private JNode value;
+    private JDefaultNode name;
+    private JDefaultNode value;
 
-    public JNodeAssign(JNode name, JNode val) {
+    public JNodeAssign(JDefaultNode name, JDefaultNode val) {
         super();
         this.name = name;
         this.value = val;
     }
 
-    public JNodeAssign setName(JNode name) {
+    public JNodeAssign setName(JDefaultNode name) {
         this.name = name;
         return this;
     }
 
-    public JNodeAssign setValue(JNode value) {
+    public JNodeAssign setValue(JDefaultNode value) {
         this.value = value;
         return this;
     }
@@ -38,11 +35,11 @@ public class JNodeAssign extends JNodeStatement {
         return JNodeDefaultIds.NODE_ASSIGN;
     }
 
-    public JNode getName() {
+    public JDefaultNode getName() {
         return name;
     }
 
-    public JNode getValue() {
+    public JDefaultNode getValue() {
         return value;
     }
 

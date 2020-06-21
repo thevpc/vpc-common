@@ -9,17 +9,21 @@ import net.vpc.common.jeep.core.tokens.*;
 import net.vpc.common.jeep.impl.io.JTokenizerReaderEscape;
 
 import java.util.*;
+import java.util.function.Predicate;
+
 import net.vpc.common.jeep.core.JTokenState;
+import net.vpc.common.textsource.JTextSourcePositionTracker;
 
 /**
  * @author vpc
  */
 public class JTokenizerImpl extends AbstractJTokenizer {
 
-    private int currentRowNumber = 0;
-    private int currentColumnNumber = 0;
-    private int currentCharNumber = 0;
-    private int currentTokenNumber = 0;
+    private JTextSourcePositionTracker positionTracker = new JTextSourcePositionTracker();
+//    private int currentRowNumber = 0;
+//    private int currentColumnNumber = 0;
+//    private int currentCharNumber = 0;
+//    private int currentTokenNumber = 0;
     private final LinkedList<JToken> back = new LinkedList<>();
     private final List<JTokenizerSnapshotImpl> snapshots = new ArrayList<>();
     private JTokenizerReader reader;
@@ -268,7 +272,7 @@ public class JTokenizerImpl extends AbstractJTokenizer {
 
     @Override
     public JTokenizerSnapshot snapshot() {
-        JTokenizerSnapshotImpl s = new JTokenizerSnapshotImpl(this, currentTokenNumber);
+        JTokenizerSnapshotImpl s = new JTokenizerSnapshotImpl(this, positionTracker.getCurrentTokenNumber());
         snapshots.add(s);
         for (JToken jToken : back) {
             s.save(jToken);
@@ -293,6 +297,31 @@ public class JTokenizerImpl extends AbstractJTokenizer {
             tokens.addAll(Arrays.asList(value.tokenDefinitions()));
         }
         return tokens.toArray(new JTokenDef[0]);
+    }
+
+    @Override
+    public JTokenDef[] getTokenDefinitions(Predicate<JTokenDef> filter) {
+        List<JTokenDef> tokens = new ArrayList<>();
+        for (JTokenizerState value : states.values()) {
+            for (JTokenDef jTokenDef : value.tokenDefinitions()) {
+                if(filter==null|| filter.test(jTokenDef)){
+                    tokens.add(jTokenDef);
+                }
+            }
+        }
+        return tokens.toArray(new JTokenDef[0]);
+    }
+
+    @Override
+    public JTokenDef getFirstTokenDefinition(Predicate<JTokenDef> filter) {
+        for (JTokenizerState value : states.values()) {
+            for (JTokenDef jTokenDef : value.tokenDefinitions()) {
+                if(filter==null|| filter.test(jTokenDef)){
+                    return jTokenDef;
+                }
+            }
+        }
+        throw new NoSuchElementException("No Matching Token Definition for "+filter);
     }
 
     protected JTokenizerStateImpl peekState0() {
@@ -324,10 +353,7 @@ public class JTokenizerImpl extends AbstractJTokenizer {
             JTokenizerStateImpl s = peekState0();
             state = "s=" + s.getId() + ":" + s.getName();
         }
-        return "JTokenizer{" + state + "," + "currentRowNumber=" + currentRowNumber
-                + ", currentColumnNumber=" + currentColumnNumber
-                + ", currentCharNumber=" + currentCharNumber
-                + ", currentTokensNumber=" + currentTokenNumber
+        return "JTokenizer{" + state + "," + positionTracker
                 + ", back=" + back
                 + ", snapshotsCount=" + snapshots.size()
                 + "}";
@@ -335,41 +361,17 @@ public class JTokenizerImpl extends AbstractJTokenizer {
 
     JToken updatePositions(JToken token, JTokenizerState state) {
         String image = token.image;
-        token.startLineNumber = currentRowNumber;
-        token.startColumnNumber = currentColumnNumber;
-        token.startCharacterNumber = currentCharNumber;
-        token.tokenNumber = currentTokenNumber;
+        token.startLineNumber = positionTracker.getCurrentRowNumber();
+        token.startColumnNumber = positionTracker.getCurrentColumnNumber();
+        token.startCharacterNumber = positionTracker.getCurrentCharNumber();
+        token.tokenNumber = positionTracker.getCurrentTokenNumber();
         if (!token.isEOF()) {
             char[] chars = image.toCharArray();
-            currentTokenNumber++;
-            currentCharNumber += chars.length;
-            for (int i = 0; i < chars.length; i++) {
-                switch (chars[i]) {
-                    case '\r': {
-                        if (i + 1 < chars.length && chars[i + 1] == '\n') {
-                            i++;
-                            currentRowNumber++;
-                            currentColumnNumber = 0;
-                        } else {
-                            currentRowNumber++;
-                            currentColumnNumber = 0;
-                        }
-                        break;
-                    }
-                    case '\n': {
-                        currentRowNumber++;
-                        currentColumnNumber = 0;
-                        break;
-                    }
-                    default: {
-                        currentColumnNumber++;
-                    }
-                }
-            }
+            positionTracker.onReadChars(chars);
         }
-        token.endLineNumber = currentRowNumber;
-        token.endColumnNumber = currentColumnNumber;
-        token.endCharacterNumber = currentCharNumber;
+        token.endLineNumber = positionTracker.getCurrentRowNumber();
+        token.endColumnNumber = positionTracker.getCurrentColumnNumber();
+        token.endCharacterNumber = positionTracker.getCurrentCharNumber();
         for (JTokenizerSnapshotImpl snapshot : snapshots) {
             snapshot.save(token);
         }

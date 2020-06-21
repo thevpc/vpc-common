@@ -1,28 +1,21 @@
 package net.vpc.common.jeep;
 
-import net.vpc.common.jeep.impl.io.SimpleFileCharSupplier;
-import net.vpc.common.jeep.impl.io.TextCharSupplier;
-import net.vpc.common.jeep.impl.io.URLCharSupplier;
-
-import java.io.File;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.function.Supplier;
+import net.vpc.common.textsource.JTextSource;
 
 public class DefaultJCompilationUnit implements JCompilationUnit {
-    private JSource source;
+    private JTextSource source;
     private JNode ast;
 
-    public DefaultJCompilationUnit(JSource source) {
+    public DefaultJCompilationUnit(JTextSource source) {
         this.source = source;
     }
 
-    public DefaultJCompilationUnit(JSource source, JNode ast) {
+    public DefaultJCompilationUnit(JTextSource source, JNode ast) {
         this.source = source;
         this.ast = ast;
     }
     
-    public DefaultJCompilationUnit(JSource source, JContext languageContext) {
+    public DefaultJCompilationUnit(JTextSource source, JContext languageContext) {
         this.source=source;
         this.setAst(languageContext.parsers().of(source.reader(), this).parse());
     }
@@ -49,7 +42,7 @@ public class DefaultJCompilationUnit implements JCompilationUnit {
 //    }
 
     @Override
-    public JSource getSource() {
+    public JTextSource getSource() {
         return source;
     }
 
