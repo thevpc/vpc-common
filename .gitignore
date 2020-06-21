@@ -50,3 +50,5 @@
 /vpc-common-msg/target/
 /vpc-common-jeep/vpc-common-jeep-nodes/target/
 /vpc-common-swings-iconset-default/target/
+/.idea/libraries/
+/vpc-common-text-source-log/target/classes/net/vpc/common/textsource/log/
