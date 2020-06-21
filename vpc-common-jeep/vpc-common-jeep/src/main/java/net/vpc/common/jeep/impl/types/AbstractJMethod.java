@@ -22,11 +22,11 @@ public abstract class AbstractJMethod implements JMethod {
         }
         //type if not anonymous!
         if (returnType() != null) {
-            sb.append(returnType().name());
+            sb.append(returnType().getName());
             sb.append(" ");
         }
         if(declaringType()!=null) {
-            sb.append(declaringType().name());
+            sb.append(declaringType().getName());
             sb.append(".");
         }
         sb.append(signature());
@@ -50,7 +50,7 @@ public abstract class AbstractJMethod implements JMethod {
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return declaringType();
     }
 

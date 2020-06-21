@@ -36,7 +36,7 @@ public class JeepUtilsFactory {
     }
 
     public static JVar createStaticFieldVar(JType type, String fieldName) {
-        JField field = type.declaredFieldOrNull(fieldName);
+        JField field = type.findDeclaredFieldOrNull(fieldName);
         return field==null?null:createStaticFieldVar(field);
     }
 
@@ -49,7 +49,7 @@ public class JeepUtilsFactory {
             JType cls = types.typeOf(instance);
             JField found = null;
             while (cls != null) {
-                found = cls.declaredFieldOrNull(fieldName);
+                found = cls.findDeclaredFieldOrNull(fieldName);
                 if (found != null) {
                     break;
                 }

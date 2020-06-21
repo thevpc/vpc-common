@@ -12,10 +12,10 @@ public class TestTypes {
     public void test1() {
         Jeep j = new DefaultJeep();
         JType a = j.types().forName("java.util.Map<String,Integer>");
-        String name = a.name();
+        String name = a.getName();
         Assertions.assertEquals("java.util.Map<java.lang.String,java.lang.Integer>", name);
         JType b = j.types().forName("java.util.Map<String,int>");
-        String name2 = b.name();
+        String name2 = b.getName();
         Assertions.assertEquals("java.util.Map<java.lang.String,int>", name2);
     }
 
@@ -24,7 +24,7 @@ public class TestTypes {
         Jeep j = new DefaultJeep();
 
         JType a = j.types().forName("java.util.HashMap<String,Integer>");
-        String name = a.name();
+        String name = a.getName();
         Assertions.assertEquals("java.util.HashMap<java.lang.String,java.lang.Integer>", name);
         Assertions.assertArrayEquals(
                 new String[]{
@@ -32,12 +32,12 @@ public class TestTypes {
                         "java.util.Map<java.lang.String,java.lang.Integer>",
                         "java.lang.Cloneable",
                         "java.io.Serializable"},
-                Arrays.stream(a.parents()).map(JType::name).toArray(String[]::new)
+                Arrays.stream(a.getParents()).map(JType::getName).toArray(String[]::new)
         );
 
 
         a = j.types().forName("java.util.HashMap");
-        name = a.name();
+        name = a.getName();
         Assertions.assertEquals("java.util.HashMap", name);
         Assertions.assertArrayEquals(
                 new String[]{
@@ -45,7 +45,7 @@ public class TestTypes {
                         "java.util.Map",
                         "java.lang.Cloneable",
                         "java.io.Serializable"},
-                Arrays.stream(a.parents()).map(JType::name).toArray(String[]::new)
+                Arrays.stream(a.getParents()).map(JType::getName).toArray(String[]::new)
         );
 
 

@@ -51,7 +51,7 @@ public class JTypesHostHelper {
             return typesSPI().createParameterizedType0(
                     rootRaw,
                     forNameOrVar(pt.getActualTypeArguments(), declaration),
-                    rootRaw.declaringType()
+                    rootRaw.getDeclaringType()
             );
         } else if (ctype instanceof TypeVariable) {
             TypeVariable tv = (TypeVariable) ctype;

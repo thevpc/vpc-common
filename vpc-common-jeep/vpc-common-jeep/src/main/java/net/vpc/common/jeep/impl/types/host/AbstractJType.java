@@ -17,7 +17,7 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public JTypeName typeName() {
-        return types().parseName(name());
+        return types().parseName(getName());
     }
 
 
@@ -36,11 +36,11 @@ public abstract class AbstractJType implements JType {
      */
     @Override
     public String dname(){
-        JType d = declaringType();
+        JType d = getDeclaringType();
         if(d==null){
-            return name();
+            return getName();
         }else{
-            return d.dname()+'.'+name();
+            return d.dname()+'.'+ getName();
         }
     }
 
@@ -81,15 +81,15 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public boolean isAssignableFrom(JType other) {
-        if (name().equals(other.name())) {
+        if (getName().equals(other.getName())) {
             return true;
         }
         if (isPrimitive() || other.isPrimitive()) {
-            if(name().equals("void") || other.name().equals("void")){
+            if(getName().equals("void") || other.getName().equals("void")){
                 return false;
             }
         }
-        if(rawType().name().equals(other.rawType().name())){
+        if(getRawType().getName().equals(other.getRawType().getName())){
             if(isRawType() || other.isRawType()) {
                 return true;
             }else if(this instanceof JParameterizedType && other instanceof JParameterizedType) {
@@ -109,7 +109,7 @@ public abstract class AbstractJType implements JType {
                 throw new JFixMeLaterException();
             }
         }
-        for (JType parent : other.parents()) {
+        for (JType parent : other.getParents()) {
             if (isAssignableFrom(parent)) {
                 return true;
             }
@@ -141,14 +141,14 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JConstructor declaredConstructor(JType... parameterTypes) {
-        return declaredConstructor(JSignature.of(name(), parameterTypes));
+    public JConstructor getDeclaredConstructor(JType... parameterTypes) {
+        return getDeclaredConstructor(JSignature.of(getName(), parameterTypes));
     }
 
     @Override
-    public JConstructor[] publicConstructors() {
+    public JConstructor[] getPublicConstructors() {
         List<JConstructor> m = new ArrayList<>();
-        for (JConstructor value : declaredConstructors()) {
+        for (JConstructor value : getDeclaredConstructors()) {
             if (value.isPublic()) {
                 m.add(value);
             }
@@ -157,14 +157,14 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JField matchedField(String fieldName) {
-        JField f = declaredFieldOrNull(fieldName);
+    public JField findMatchedField(String fieldName) {
+        JField f = findDeclaredFieldOrNull(fieldName);
         if (f != null) {
             return f;
         }
         JType s = getSuperType();
         if (s != null) {
-            f = s.matchedField(fieldName);
+            f = s.findMatchedField(fieldName);
             if (f != null) {
                 return f;
             }
@@ -173,17 +173,17 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public synchronized JField declaredField(String fieldName) {
-        JField f = declaredFieldOrNull(fieldName);
+    public synchronized JField getDeclaredField(String fieldName) {
+        JField f = findDeclaredFieldOrNull(fieldName);
         if (f == null) {
-            throw new JEvalException("Field " + name() + "." + fieldName + " not found");
+            throw new JEvalException("Field " + getName() + "." + fieldName + " not found");
         }
         return f;
     }
 
     @Override
-    public JField publicField(String name) {
-        JField f = declaredFieldOrNull(name);
+    public JField getPublicField(String name) {
+        JField f = findDeclaredFieldOrNull(name);
         if (f != null && f.isPublic()) {
             return f;
         }
@@ -191,9 +191,9 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JMethod[] publicMethods() {
+    public JMethod[] getPublicMethods() {
         List<JMethod> m = new ArrayList<>();
-        for (JMethod value : declaredMethods()) {
+        for (JMethod value : getDeclaredMethods()) {
             if (value.isPublic()) {
                 m.add(value);
             }
@@ -202,11 +202,11 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JMethod[] declaredMethods(String name) {
+    public JMethod[] getDeclaredMethods(String name) {
         JMethod[] jMethods = methodsByName.get(name);
         if (jMethods == null) {
             List<JMethod> n = new ArrayList<>();
-            for (JMethod value : declaredMethods()) {
+            for (JMethod value : getDeclaredMethods()) {
                 if (value.name().equals(name)) {
                     n.add(value);
                 }
@@ -217,23 +217,23 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JMethod declaredMethodOrNull(String sig) {
-        return declaredMethodOrNull(JSignature.of(types(), sig));
+    public JMethod findDeclaredMethodOrNull(String sig) {
+        return findDeclaredMethodOrNull(JSignature.of(types(), sig));
     }
 
     @Override
-    public JMethod[] declaredMethods(boolean includeParents) {
+    public JMethod[] getDeclaredMethods(boolean includeParents) {
         if(!includeParents){
-            return declaredMethods();
+            return getDeclaredMethods();
         }
         LinkedHashMap<JSignature, JMethod> all = new LinkedHashMap<>();
-        for (JMethod jMethod : declaredMethods()) {
+        for (JMethod jMethod : getDeclaredMethods()) {
             JSignature sig = jMethod.signature();
             all.put(sig, jMethod);
         }
         if (includeParents) {
-            for (JType parent : parents()) {
-                JMethod[] jMethods = parent.declaredMethods(true);
+            for (JType parent : getParents()) {
+                JMethod[] jMethods = parent.getDeclaredMethods(true);
                 for (JMethod jMethod : jMethods) {
                     JSignature sig = jMethod.signature();
                     if (!all.containsKey(sig)) {
@@ -246,10 +246,10 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JMethod[] declaredMethods(String[] names, int callArgumentsCount, boolean includeParents) {
+    public JMethod[] getDeclaredMethods(String[] names, int callArgumentsCount, boolean includeParents) {
         Set<String> namesSet = new HashSet<>(Arrays.asList(names));
         LinkedHashMap<JSignature, JMethod> all = new LinkedHashMap<>();
-        for (JMethod jMethod : declaredMethods()) {
+        for (JMethod jMethod : getDeclaredMethods()) {
             if (namesSet.contains(jMethod.name())) {
                 JSignature sig = jMethod.signature();
                 if (sig.acceptArgsCount(callArgumentsCount)) {
@@ -258,8 +258,8 @@ public abstract class AbstractJType implements JType {
             }
         }
         if (includeParents) {
-            for (JType parent : parents()) {
-                JMethod[] jMethods = parent.declaredMethods(names, callArgumentsCount, true);
+            for (JType parent : getParents()) {
+                JMethod[] jMethods = parent.getDeclaredMethods(names, callArgumentsCount, true);
                 for (JMethod jMethod : jMethods) {
                     JSignature sig = jMethod.signature();
                     if (!all.containsKey(sig)) {
@@ -305,32 +305,32 @@ public abstract class AbstractJType implements JType {
 
 
     @Override
-    public JMethod declaredMethod(String sig) {
-        return declaredMethod(JSignature.of(types(), sig));
+    public JMethod getDeclaredMethod(String sig) {
+        return getDeclaredMethod(JSignature.of(types(), sig));
     }
 
     @Override
-    public JMethod declaredMethod(JSignature sig) {
-        JMethod m = declaredMethodOrNull(sig);
+    public JMethod getDeclaredMethod(JSignature sig) {
+        JMethod m = findDeclaredMethodOrNull(sig);
         if (m == null) {
-            throw new JEvalException("Method " + name() + "." + sig + " not found");
+            throw new JEvalException("Method " + getName() + "." + sig + " not found");
         }
         return m;
     }
 
     @Override
-    public JConstructor declaredConstructorOrNull(String sig) {
-        return declaredConstructorOrNull(JSignature.of(types(), sig));
+    public JConstructor findDeclaredConstructorOrNull(String sig) {
+        return findDeclaredConstructorOrNull(JSignature.of(types(), sig));
     }
 
     @Override
-    public JConstructor declaredConstructor(String sig) {
-        return declaredConstructor(JSignature.of(types(), sig));
+    public JConstructor getDeclaredConstructor(String sig) {
+        return getDeclaredConstructor(JSignature.of(types(), sig));
     }
 
     @Override
-    public JConstructor declaredConstructor(JSignature sig) {
-        JConstructor c = declaredConstructorOrNull(sig);
+    public JConstructor getDeclaredConstructor(JSignature sig) {
+        JConstructor c = findDeclaredConstructorOrNull(sig);
         if (c == null) {
             throw new JEvalException("Constructor " + sig + " not found");
         }
@@ -338,13 +338,13 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JType[] parents() {
+    public JType[] getParents() {
         List<JType> parents = new ArrayList<>();
         JType s = getSuperType();
         if (s != null) {
             parents.add(s);
         }
-        for (JType i : interfaces()) {
+        for (JType i : getInterfaces()) {
             parents.add(i);
         }
         return parents.toArray(new JType[0]);
@@ -352,7 +352,7 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public int hashCode() {
-        return name().hashCode();
+        return getName().hashCode();
     }
 
     @Override
@@ -360,28 +360,28 @@ public abstract class AbstractJType implements JType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         AbstractJType that = (AbstractJType) o;
-        return Objects.equals(name(), that.name());
+        return Objects.equals(getName(), that.getName());
     }
 
     @Override
     public String toString() {
         if (isPrimitive()) {
-            return name();
+            return getName();
         }
-        return "class " + name();
+        return "class " + getName();
     }
 
     @Override
     public boolean isRawType(){
-        return rawType()==this;
+        return getRawType()==this;
     }
 
     @Override
-    public JField[] declaredFieldsWithParents() {
+    public JField[] getDeclaredFieldsWithParents() {
         LinkedHashSet<JField> fields=new LinkedHashSet<>();
-        fields.addAll(Arrays.asList(declaredFields()));
-        for (JType parent : parents()) {
-            fields.addAll(Arrays.asList(parent.declaredFieldsWithParents()));
+        fields.addAll(Arrays.asList(getDeclaredFields()));
+        for (JType parent : getParents()) {
+            fields.addAll(Arrays.asList(parent.getDeclaredFieldsWithParents()));
         }
         return  fields.toArray(new JField[0]);
     }
@@ -398,17 +398,17 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JConstructor defaultConstructor() {
-        JConstructor d = defaultConstructorOrNull();
+    public JConstructor getDefaultConstructor() {
+        JConstructor d = findDefaultConstructorOrNull();
         if (d == null) {
-            throw new JEvalException("Default Constructor not found for " + name());
+            throw new JEvalException("Default Constructor not found for " + getName());
         }
         return d;
     }
 
     @Override
-    public JMethod declaredMethodOrNull(JSignature sig) {
-        for (JMethod s : declaredMethods(sig.name())) {
+    public JMethod findDeclaredMethodOrNull(JSignature sig) {
+        for (JMethod s : getDeclaredMethods(sig.name())) {
             if(s.signature().equals(sig)){
                 return s;
             }
@@ -417,8 +417,8 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JField declaredFieldOrNull(String fieldName) {
-        for (JField jField : declaredFields()) {
+    public JField findDeclaredFieldOrNull(String fieldName) {
+        for (JField jField : getDeclaredFields()) {
             if(jField.name().equals(fieldName)){
                 return jField;
             }
@@ -427,8 +427,8 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JConstructor declaredConstructorOrNull(JSignature sig) {
-        for (JConstructor s : declaredConstructors()) {
+    public JConstructor findDeclaredConstructorOrNull(JSignature sig) {
+        for (JConstructor s : getDeclaredConstructors()) {
             if(s.signature().equals(sig)){
                 return s;
             }
@@ -461,13 +461,13 @@ public abstract class AbstractJType implements JType {
 
 
     @Override
-    public JDeclaration declaration() {
-        return declaringType();
+    public JDeclaration getDeclaration() {
+        return getDeclaringType();
     }
 
     @Override
-    public JConstructor defaultConstructorOrNull() {
-        JConstructor defaultConstructor = declaredConstructor(JSignature.of(name(), new JType[0]));
+    public JConstructor findDefaultConstructorOrNull() {
+        JConstructor defaultConstructor = getDeclaredConstructor(JSignature.of(getName(), new JType[0]));
         if (defaultConstructor.isPublic()) {
             return defaultConstructor;
         }
@@ -475,18 +475,18 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
-    public JType declaredInnerType(String name) {
-        JType d = declaredInnerTypeOrNull(name);
+    public JType getDeclaredInnerType(String name) {
+        JType d = findDeclaredInnerTypeOrNull(name);
         if (d == null) {
-            throw new JEvalException("inner type not found : " + name()+"."+name);
+            throw new JEvalException("inner type not found : " + getName()+"."+name);
         }
         return d;
     }
 
     @Override
-    public JType declaredInnerTypeOrNull(String name) {
-        for (JType jType : declaredInnerTypes()) {
-            if(jType.rawType().name().equals(name)){
+    public JType findDeclaredInnerTypeOrNull(String name) {
+        for (JType jType : getDeclaredInnerTypes()) {
+            if(jType.getRawType().getName().equals(name)){
                 return jType;
             }
         }

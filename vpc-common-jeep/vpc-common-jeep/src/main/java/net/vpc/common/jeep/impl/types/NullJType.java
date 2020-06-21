@@ -21,12 +21,12 @@ public class NullJType extends AbstractJType {
 //    }
 
     @Override
-    public JType rawType() {
+    public JType getRawType() {
         return this;
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return new JTypeVariable[0];
     }
 
@@ -36,13 +36,13 @@ public class NullJType extends AbstractJType {
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
     @Override
     public String simpleName() {
-        return name();
+        return getName();
     }
 
 //    @Override
@@ -68,7 +68,7 @@ public class NullJType extends AbstractJType {
     }
 
     @Override
-    public JType[] interfaces() {
+    public JType[] getInterfaces() {
         return new JType[0];
     }
     @Override
@@ -77,22 +77,22 @@ public class NullJType extends AbstractJType {
     }
 
     @Override
-    public JConstructor defaultConstructorOrNull() {
+    public JConstructor findDefaultConstructorOrNull() {
         return null;
     }
 
     @Override
-    public JConstructor defaultConstructor() {
+    public JConstructor getDefaultConstructor() {
         return null;
     }
 
     @Override
-    public JConstructor[] declaredConstructors() {
+    public JConstructor[] getDeclaredConstructors() {
         return new JConstructor[0];
     }
 
     @Override
-    public JField declaredFieldOrNull(String fieldName) {
+    public JField findDeclaredFieldOrNull(String fieldName) {
         return null;
     }
 
@@ -102,33 +102,33 @@ public class NullJType extends AbstractJType {
 //    }
 
     @Override
-    public JMethod[] declaredMethods() {
+    public JMethod[] getDeclaredMethods() {
         return new JMethod[0];
     }
 
     @Override
-    public JMethod declaredMethodOrNull(JSignature sig) {
+    public JMethod findDeclaredMethodOrNull(JSignature sig) {
         return null;
     }
 
     @Override
-    public JConstructor declaredConstructorOrNull(JSignature sig) {
+    public JConstructor findDeclaredConstructorOrNull(JSignature sig) {
         return null;
     }
 
 
     @Override
-    public Object defaultValue() {
+    public Object getDefaultValue() {
         return null;
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return null;
     }
 
     @Override
-    public String packageName() {
+    public String getPackageName() {
         return null;
     }
 
@@ -138,17 +138,17 @@ public class NullJType extends AbstractJType {
     }
 
     @Override
-    public JField[] declaredFields() {
+    public JField[] getDeclaredFields() {
         return new JField[0];
     }
 
     @Override
-    public JType[] declaredInnerTypes() {
+    public JType[] getDeclaredInnerTypes() {
         return new JType[0];
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return null;
     }
 

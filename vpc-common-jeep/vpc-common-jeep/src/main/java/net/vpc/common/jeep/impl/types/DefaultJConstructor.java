@@ -105,7 +105,7 @@ public class DefaultJConstructor extends AbstractJConstructor implements JRawCon
         DefaultJObject newInstance=new DefaultJObject(declaringType);
         context=context.builder()
                 .instance(new DefaultJTypedValue(newInstance,declaringType))
-                .name(declaringType.name())
+                .name(declaringType.getName())
                 .build();
         Object invokeResult = handler.invoke(context);
         return newInstance;
@@ -118,11 +118,11 @@ public class DefaultJConstructor extends AbstractJConstructor implements JRawCon
 
     @Override
     public String name() {
-        return declaringType.name();
+        return declaringType.getName();
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return declaringType();
     }
 

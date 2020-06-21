@@ -78,7 +78,7 @@ public class JNodeStaticMethodCall extends JNodeStatement {
                 }
             }
         }
-        StringBuilder sb = new StringBuilder().append(objectType.name()).append(".").append(n).append("(");
+        StringBuilder sb = new StringBuilder().append(objectType.getName()).append(".").append(n).append("(");
         for (int i = 0; i < args.length; i++) {
             if (i > 0) {
                 sb.append(",");

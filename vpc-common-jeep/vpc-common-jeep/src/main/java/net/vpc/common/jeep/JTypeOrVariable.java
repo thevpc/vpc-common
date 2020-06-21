@@ -1,7 +1,7 @@
 package net.vpc.common.jeep;
 
 public interface JTypeOrVariable {
-    String name();
+    String getName();
     boolean isVar();
     JTypeVariable toVar();
 }

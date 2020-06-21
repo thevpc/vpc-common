@@ -36,15 +36,15 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
             }else{
                 pn.append(",");
             }
-            pn.append(parameters[i].name());
+            pn.append(parameters[i].getName());
             if(i==parameters.length-1){
                 pn.append(">");
             }
         }
         if(declaringType==null) {
-            this.name = rootRaw.name() + pn.toString();
+            this.name = rootRaw.getName() + pn.toString();
         }else{
-            this.name=declaringType.name()+"."+rootRaw.simpleName()+pn;
+            this.name=declaringType.getName()+"."+rootRaw.simpleName()+pn;
         }
         this.sname=rootRaw.simpleName()+pn;
         JType sType = rootRaw.getSuperType();
@@ -79,48 +79,48 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
         boolean modified = false;
         for (int i = 0; i < y.length; i++) {
             y[i] = jTypes[i].replaceParameter(name, param);
-            modified |= (!y[i].name().equals(jTypes[i].name()));
+            modified |= (!y[i].getName().equals(jTypes[i].getName()));
         }
         if (modified) {
-            return types2().createParameterizedType0(rawType(),y,this);
+            return types2().createParameterizedType0(getRawType(),y,this);
         } else {
             return this;
         }
     }
 
     @Override
-    public String packageName() {
-        return rawType().packageName();
+    public String getPackageName() {
+        return getRawType().getPackageName();
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return declaringType;
     }
 
     @Override
     public boolean isNullable() {
-        return rawType().isNullable();
+        return getRawType().isNullable();
     }
 
     @Override
-    public JType rawType() {
+    public JType getRawType() {
         return rootRaw;
     }
 
     @Override
-    public Object defaultValue() {
-        return rawType().defaultValue();
+    public Object getDefaultValue() {
+        return getRawType().getDefaultValue();
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return new JTypeVariable[0];
     }
 
     @Override
-    public JDeclaration declaration() {
-        return rawType().declaringType();
+    public JDeclaration getDeclaration() {
+        return getRawType().getDeclaringType();
     }
 
 //    @Override
@@ -138,7 +138,7 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
 //    }
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -148,16 +148,16 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
     }
 
     @Override
-    public JType[] interfaces() {
+    public JType[] getInterfaces() {
         if(_interfaces==null){
-            _interfaces= JTypeUtils.buildParentType(rawType().interfaces(),this);
+            _interfaces= JTypeUtils.buildParentType(getRawType().getInterfaces(),this);
         }
         return _interfaces;
     }
     private synchronized Map<String, JType> _innerTypes() {
         if (innerTypes == null) {
             innerTypes = new LinkedHashMap<>();
-            for (JType item : rootRaw.declaredInnerTypes()) {
+            for (JType item : rootRaw.getDeclaredInnerTypes()) {
                 if(item.isStatic()){
                     innerTypes.put(item.simpleName(), item);
                 }else {
@@ -172,10 +172,10 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
     }
 
     @Override
-    public JMethod[] declaredMethods() {
+    public JMethod[] getDeclaredMethods() {
         if(_methods==null){
             LinkedHashMap<JSignature, JMethod> _methods=new LinkedHashMap<>();
-            for (JMethod jMethod : rawType().declaredMethods()) {
+            for (JMethod jMethod : getRawType().getDeclaredMethods()) {
                 JParameterizedMethodImpl m=new JParameterizedMethodImpl(jMethod,new JType[0], this);
                 _methods.put(m.signature(),m);
             }
@@ -185,10 +185,10 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
     }
 
     @Override
-    public JConstructor[] declaredConstructors() {
+    public JConstructor[] getDeclaredConstructors() {
         if(_constructors==null){
             LinkedHashMap<JSignature, JConstructor> _constructors=new LinkedHashMap<>();
-            for (JConstructor i : rawType().declaredConstructors()) {
+            for (JConstructor i : getRawType().getDeclaredConstructors()) {
                 JParameterizedConstructorImpl m=new JParameterizedConstructorImpl(i,new JType[0], this);
                 _constructors.put(m.signature(),m);
             }
@@ -199,10 +199,10 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
 
 
     @Override
-    public JField[] declaredFields() {
+    public JField[] getDeclaredFields() {
         if(_fields==null){
             LinkedHashMap<String, JField> _fields=new LinkedHashMap<>();
-            for (JField i : rawType().declaredFields()) {
+            for (JField i : getRawType().getDeclaredFields()) {
                 JParameterizedFieldImpl m=new JParameterizedFieldImpl((JRawField) i,this);
                 _fields.put(m.name(),m);
             }
@@ -212,12 +212,12 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
     }
 
     @Override
-    public JType[] declaredInnerTypes() {
+    public JType[] getDeclaredInnerTypes() {
         return _innerTypes().values().toArray(new JType[0]);
     }
 
     @Override
-    public JType declaredInnerTypeOrNull(String name) {
+    public JType findDeclaredInnerTypeOrNull(String name) {
         return _innerTypes().get(name);
     }
 

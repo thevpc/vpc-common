@@ -4,18 +4,18 @@ import net.vpc.common.jeep.core.JStaticObject;
 import net.vpc.common.jeep.impl.functions.JSignature;
 
 public interface JType extends JDeclaration, JTypeOrVariable {
-    JDeclaration declaration();
+    JDeclaration getDeclaration();
 
 
-    JTypeVariable[] typeParameters();
+    JTypeVariable[] getTypeParameters();
 
-    JType rawType();
+    JType getRawType();
 
 //    JAnnotation annotations();
 
     JStaticObject staticObject();
 
-    String name();
+    String getName();
 
     JTypeName typeName();
 
@@ -61,7 +61,7 @@ public interface JType extends JDeclaration, JTypeOrVariable {
     JType toPrimitive();
 
 
-    JField matchedField(String fieldName);
+    JField findMatchedField(String fieldName);
 
 
     //<editor-fold desc="Match">
@@ -81,57 +81,57 @@ public interface JType extends JDeclaration, JTypeOrVariable {
 
     //<editor-fold desc="Declarations">
 
-    JMethod declaredMethod(String sig);
+    JMethod getDeclaredMethod(String sig);
 
-    JMethod declaredMethod(JSignature sig);
+    JMethod getDeclaredMethod(JSignature sig);
 
-    JMethod declaredMethodOrNull(JSignature sig);
+    JMethod findDeclaredMethodOrNull(JSignature sig);
 
     //    JMethod declaredMethodOrNull(String methodName, JType... parameterTypes);
-    JConstructor declaredConstructorOrNull(String sig);
+    JConstructor findDeclaredConstructorOrNull(String sig);
 
-    JConstructor declaredConstructor(String sig);
+    JConstructor getDeclaredConstructor(String sig);
 
-    JType[] interfaces();
+    JType[] getInterfaces();
 
-    JConstructor declaredConstructor(JSignature sig);
+    JConstructor getDeclaredConstructor(JSignature sig);
 
-    JConstructor declaredConstructor(JType... parameterTypes);
+    JConstructor getDeclaredConstructor(JType... parameterTypes);
 
-    JConstructor[] publicConstructors();
+    JConstructor[] getPublicConstructors();
 
-    JConstructor defaultConstructorOrNull();
+    JConstructor findDefaultConstructorOrNull();
 
-    JConstructor defaultConstructor();
+    JConstructor getDefaultConstructor();
 
-    JConstructor[] declaredConstructors();
+    JConstructor[] getDeclaredConstructors();
 
-    JField declaredField(String fieldName);
+    JField getDeclaredField(String fieldName);
 
-    JField[] declaredFields();
+    JField[] getDeclaredFields();
 
-    JField declaredFieldOrNull(String fieldName);
+    JField findDeclaredFieldOrNull(String fieldName);
 
-    JField publicField(String name);
-
-
-    JMethod[] publicMethods();
-
-    JMethod[] declaredMethods();
+    JField getPublicField(String name);
 
 
-    JMethod[] declaredMethods(String name);
+    JMethod[] getPublicMethods();
+
+    JMethod[] getDeclaredMethods();
 
 
-    JField[] declaredFieldsWithParents();
+    JMethod[] getDeclaredMethods(String name);
 
-    JType[] declaredInnerTypes();
 
-    JType declaredInnerType(String name);
+    JField[] getDeclaredFieldsWithParents();
 
-    JType declaredInnerTypeOrNull(String name);
+    JType[] getDeclaredInnerTypes();
 
-    JMethod declaredMethodOrNull(String sig);
+    JType getDeclaredInnerType(String name);
+
+    JType findDeclaredInnerTypeOrNull(String name);
+
+    JMethod findDeclaredMethodOrNull(String sig);
 
     /**
      * all methods of the given names and that can be called with {@code callArgumentsCount}
@@ -144,20 +144,20 @@ public interface JType extends JDeclaration, JTypeOrVariable {
      * @param includeParents     include super classes/interfaces
      * @return array of all applicable methods
      */
-    JMethod[] declaredMethods(String[] names, int callArgumentsCount, boolean includeParents);
+    JMethod[] getDeclaredMethods(String[] names, int callArgumentsCount, boolean includeParents);
 
-    JMethod[] declaredMethods(boolean includeParents);
+    JMethod[] getDeclaredMethods(boolean includeParents);
 
-    JType[] parents();
+    JType[] getParents();
 
-    JConstructor declaredConstructorOrNull(JSignature sig);
+    JConstructor findDeclaredConstructorOrNull(JSignature sig);
     //</editor-fold>
 
-    Object defaultValue();
+    Object getDefaultValue();
 
-    JType declaringType();
+    JType getDeclaringType();
 
-    String packageName();
+    String getPackageName();
 
     /**
      * exports are a list of "import" statement that should be processed each time

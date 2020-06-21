@@ -11,6 +11,10 @@ public class JTypeOrLambda {
         return new JTypeOrLambda(args);
     }
 
+    public static JTypeOrLambda ofTypeOrNull(JType type) {
+        return type==null?null:new JTypeOrLambda(type);
+    }
+
     public static JTypeOrLambda of(JType type) {
         return new JTypeOrLambda(type);
     }
@@ -125,14 +129,14 @@ public class JTypeOrLambda {
     @Override
     public String toString() {
         if(isType()){
-            return type==null?"null":type.name();
+            return type==null?"null":type.getName();
         }
         StringBuilder sb=new StringBuilder("(");
         for (int i = 0; i < lambdaArgTypes.length; i++) {
             if(i>0){
                 sb.append(",");
             }
-            sb.append(lambdaArgTypes[i]==null?"?":lambdaArgTypes[i].name());
+            sb.append(lambdaArgTypes[i]==null?"?":lambdaArgTypes[i].getName());
         }
         sb.append(")->...");
         return sb.toString();

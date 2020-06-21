@@ -79,9 +79,9 @@ public class JTypeUtils {
                 for (int i = 0; i < jTypes2.length; i++) {
                     if (jTypes2[i] != jTypes[i]) {
                         return JTypesSPI.getRegisteredOrRegister(typesSPI.createParameterizedType0(
-                                jpt.rawType(),
+                                jpt.getRawType(),
                                 jTypes2,
-                                jpt.declaringType()), type.types());
+                                jpt.getDeclaringType()), type.types());
                     }
                 }
             }
@@ -93,7 +93,7 @@ public class JTypeUtils {
             while (d != null) {
                 if (d instanceof JMethod) {
                     for (JTypeVariable jTypeVariable : ((JMethod) d).typeParameters()) {
-                        if (jTypeVariable.name().equals(type.name())) {
+                        if (jTypeVariable.getName().equals(type.getName())) {
                             JType c = firstCommonSuperType(jTypeVariable.upperBounds());
                             if (c == null) {
                                 c = forObject(type.types());
@@ -103,7 +103,7 @@ public class JTypeUtils {
                     }
                 } else if (d instanceof JConstructor) {
                     for (JTypeVariable jTypeVariable : ((JConstructor) d).typeParameters()) {
-                        if (jTypeVariable.name().equals(type.name())) {
+                        if (jTypeVariable.getName().equals(type.getName())) {
                             JType c = firstCommonSuperType(jTypeVariable.upperBounds());
                             if (c == null) {
                                 c = forObject(type.types());
@@ -112,8 +112,8 @@ public class JTypeUtils {
                         }
                     }
                 } else if (d instanceof JType) {
-                    for (JTypeVariable jTypeVariable : ((JType) d).typeParameters()) {
-                        if (jTypeVariable.name().equals(type.name())) {
+                    for (JTypeVariable jTypeVariable : ((JType) d).getTypeParameters()) {
+                        if (jTypeVariable.getName().equals(type.getName())) {
                             JType c = firstCommonSuperType(jTypeVariable.upperBounds());
                             if (c == null) {
                                 c = forObject(type.types());
@@ -124,7 +124,7 @@ public class JTypeUtils {
                 } else {
                     throw new JShouldNeverHappenException();
                 }
-                d = d.declaration();
+                d = d.getDeclaration();
             }
             return type;
         } else if (type instanceof JTypeArray) {
@@ -157,8 +157,8 @@ public class JTypeUtils {
                     if (jTypes2[i] != jTypes[i]) {
                         return JTypesSPI.getRegisteredOrRegister(
                                 ((JTypesSPI) type.types()).createParameterizedType0(
-                                        jpt.rawType(),
-                                        jTypes2, jpt.declaringType()), type.types())
+                                        jpt.getRawType(),
+                                        jTypes2, jpt.getDeclaringType()), type.types())
                                 ;
                     }
                 }
@@ -181,7 +181,7 @@ public class JTypeUtils {
                             JTypeVariable[] typeParameters = rm.typeParameters();
                             for (int i = 0; i < typeParameters.length; i++) {
                                 JTypeVariable jTypeVariable = typeParameters[i];
-                                if (jTypeVariable.name().equals(type.name())) {
+                                if (jTypeVariable.getName().equals(type.getName())) {
                                     if (i >= aTypes.length) {
                                         throw new ArrayIndexOutOfBoundsException(i);
                                     }
@@ -197,7 +197,7 @@ public class JTypeUtils {
                         JTypeVariable[] typeParameters = rm.typeParameters();
                         for (int i = 0; i < typeParameters.length; i++) {
                             JTypeVariable jTypeVariable = typeParameters[i];
-                            if (jTypeVariable.name().equals(type.name())) {
+                            if (jTypeVariable.getName().equals(type.getName())) {
                                 return pt.actualParameters()[i];
                             }
                         }
@@ -205,11 +205,11 @@ public class JTypeUtils {
                 } else if (d instanceof JType) {
                     if (d instanceof JParameterizedType) {
                         JParameterizedType tt = (JParameterizedType) d;
-                        JType rawType = tt.rawType();
-                        JTypeVariable[] jTypeVariables = rawType.typeParameters();
+                        JType rawType = tt.getRawType();
+                        JTypeVariable[] jTypeVariables = rawType.getTypeParameters();
                         for (int i = 0; i < jTypeVariables.length; i++) {
                             JTypeVariable jTypeVariable = jTypeVariables[i];
-                            if (jTypeVariable.name().equals(type.name())) {
+                            if (jTypeVariable.getName().equals(type.getName())) {
                                 return tt.actualTypeArguments()[i];
                             }
                         }
@@ -217,7 +217,7 @@ public class JTypeUtils {
                 } else {
                     throw new JShouldNeverHappenException();
                 }
-                d = d.declaration();
+                d = d.getDeclaration();
             }
             return type;
         } else if (type instanceof JTypeArray) {
@@ -242,15 +242,15 @@ public class JTypeUtils {
                     if (jTypes2[i] != jTypes[i]) {
                         return JTypesSPI.getRegisteredOrRegister(
                                 typesSPI.createParameterizedType0(
-                                        jpt.rawType(),
-                                        jTypes2, jpt.declaringType()), types);
+                                        jpt.getRawType(),
+                                        jTypes2, jpt.getDeclaringType()), types);
                     }
                 }
             }
             return type;
         } else if (type instanceof JRawType) {
             //example : List<X>
-            JTypeVariable[] jTypeVariables = type.typeParameters();
+            JTypeVariable[] jTypeVariables = type.getTypeParameters();
             if(jTypeVariables.length>0) {
                 //example ArrayList<Y>
                 if (declaration instanceof JParameterizedType) {
@@ -263,13 +263,13 @@ public class JTypeUtils {
                             if (jTypes2[i] != jTypes[i]) {
                                 return JTypesSPI.getRegisteredOrRegister(
                                         typesSPI.createParameterizedType0(
-                                                jpt.rawType(),
-                                                jTypes2, jpt.declaringType()), types);
+                                                jpt.getRawType(),
+                                                jTypes2, jpt.getDeclaringType()), types);
                             }
                         }
                         return typesSPI.createParameterizedType0(
                                 type,
-                                jTypes2, jpt.declaringType());
+                                jTypes2, jpt.getDeclaringType());
                     }
 //                    JType[] jTypes = jpt.actualTypeArguments();
 //                    if (jTypes.length > 0) {
@@ -288,7 +288,7 @@ public class JTypeUtils {
                         JTypeVariable[] typeParameters = rm.typeParameters();
                         for (int i = 0; i < typeParameters.length; i++) {
                             JTypeVariable jTypeVariable = typeParameters[i];
-                            if (jTypeVariable.name().equals(type.name())) {
+                            if (jTypeVariable.getName().equals(type.getName())) {
                                 return pt.actualParameters()[i];
                             }
                         }
@@ -300,7 +300,7 @@ public class JTypeUtils {
                         JTypeVariable[] typeParameters = rm.typeParameters();
                         for (int i = 0; i < typeParameters.length; i++) {
                             JTypeVariable jTypeVariable = typeParameters[i];
-                            if (jTypeVariable.name().equals(type.name())) {
+                            if (jTypeVariable.getName().equals(type.getName())) {
                                 return pt.actualParameters()[i];
                             }
                         }
@@ -308,11 +308,11 @@ public class JTypeUtils {
                 } else if (d instanceof JType) {
                     if (d instanceof JParameterizedType) {
                         JParameterizedType tt = (JParameterizedType) d;
-                        JType rawType = tt.rawType();
-                        JTypeVariable[] jTypeVariables = rawType.typeParameters();
+                        JType rawType = tt.getRawType();
+                        JTypeVariable[] jTypeVariables = rawType.getTypeParameters();
                         for (int i = 0; i < jTypeVariables.length; i++) {
                             JTypeVariable jTypeVariable = jTypeVariables[i];
-                            if (jTypeVariable.name().equals(type.name())) {
+                            if (jTypeVariable.getName().equals(type.getName())) {
                                 return tt.actualTypeArguments()[i];
                             }
                         }
@@ -320,7 +320,7 @@ public class JTypeUtils {
                 } else {
                     throw new JShouldNeverHappenException();
                 }
-                d = d.declaration();
+                d = d.getDeclaration();
             }
             return type;
         } else if (type instanceof JTypeArray) {
@@ -398,7 +398,7 @@ public class JTypeUtils {
             return JTypeOrLambda.of(firstCommonSuperType(type1, type2, types));
         } else if (typeOrLambda1.isLambda() && typeOrLambda2.isType()) {
             JType type2 = typeOrLambda1.getType();
-            JMethod[] m = type2.declaredMethods();
+            JMethod[] m = type2.getDeclaredMethods();
             if (m.length == 1) {
                 int modifiers = m[0].modifiers();
                 if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
@@ -419,7 +419,7 @@ public class JTypeUtils {
             return JTypeOrLambda.of(tobj);
         } else if (typeOrLambda1.isType() && typeOrLambda2.isLambda()) {
             JType type1 = typeOrLambda1.getType();
-            JMethod[] m = type1.declaredMethods();
+            JMethod[] m = type1.getDeclaredMethods();
             if (m.length == 1) {
                 int modifiers = m[0].modifiers();
                 if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
@@ -478,8 +478,8 @@ public class JTypeUtils {
 
     public static boolean isBooleanResolvableType(JType type) {
         return
-                type.name().equals("boolean")
-                ||type.name().equals("java.lang.Boolean")
+                type.getName().equals("boolean")
+                ||type.getName().equals("java.lang.Boolean")
                 ;
     }
 
@@ -488,17 +488,17 @@ public class JTypeUtils {
     }
     
     public static boolean isVoid(JTypeOrLambda type) {
-        return type.isType() && type.getType().name().equals("void");
+        return type.isType() && type.getType().getName().equals("void");
     }
 
     public static boolean isVoid(JType type) {
-        return type.name().equals("void");
+        return type.getName().equals("void");
     }
 
     public static boolean isIntResolvableType(JType type) {
         return
-                type.name().equals("int")
-                ||type.name().equals("java.lang.Integer")
+                type.getName().equals("int")
+                ||type.getName().equals("java.lang.Integer")
                 ;
     }
 
@@ -632,11 +632,11 @@ public class JTypeUtils {
     }
 
     public static boolean isNullType(JType other) {
-        return other.name().equals("null");
+        return other.getName().equals("null");
     }
 
     public static boolean isObjectType(JType type) {
-        return type.name().equals("java.lang.Object");
+        return type.getName().equals("java.lang.Object");
     }
 
     public static String getSimpleClassName(JType[] cls) {
@@ -682,13 +682,13 @@ public class JTypeUtils {
 
     public static String getFullClassName(JType cls) {
         if (cls instanceof JTypeVariable) {
-            return cls.name();
+            return cls.getName();
         }
         if (cls.isArray()) {
             JTypeArray ta = (JTypeArray) cls;
             return getFullClassName(ta.componentType()) + "[]";
         }
-        return cls.name();
+        return cls.getName();
     }
 
     public static String getFullClassName(JTypeNameOrVariable cls) {
@@ -842,7 +842,7 @@ public class JTypeUtils {
         } else if (types.forName(Double.class.getName()).equals(cls)) {
             all.add(createTypeImplicitConversions(cls, Double.TYPE));
         }
-        for (JType cls2 : cls.interfaces()) {
+        for (JType cls2 : cls.getInterfaces()) {
             all.add(createTypeImplicitConversions(typeOrLambda, JTypeOrLambda.of(cls2)));
         }
         JType s = cls.getSuperType();

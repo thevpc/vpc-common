@@ -80,11 +80,11 @@ public class JParameterizedConstructorImpl extends AbstractJConstructor implemen
 
     @Override
     public String name() {
-        return declaringType.rawType().simpleName();
+        return declaringType.getRawType().simpleName();
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return declaringType;
     }
 }

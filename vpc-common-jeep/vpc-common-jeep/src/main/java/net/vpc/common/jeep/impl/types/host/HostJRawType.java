@@ -41,9 +41,9 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
                 JeepPlatformUtils.setAccessibleWorkaround(field);
                 return field.get(null);
             } catch (IllegalAccessException e) {
-                throw new IllegalArgumentException("Field not accessible " + name() + "." + name);
+                throw new IllegalArgumentException("Field not accessible " + getName() + "." + name);
             } catch (NoSuchFieldException e) {
-                throw new IllegalArgumentException("Field not found " + name() + "." + name);
+                throw new IllegalArgumentException("Field not found " + getName() + "." + name);
             }
         }
 
@@ -54,9 +54,9 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
                 JeepPlatformUtils.setAccessibleWorkaround(field);
                 field.set(null, o);
             } catch (IllegalAccessException e) {
-                throw new IllegalArgumentException("Field not accessible " + name() + "." + name);
+                throw new IllegalArgumentException("Field not accessible " + getName() + "." + name);
             } catch (NoSuchFieldException e) {
-                throw new IllegalArgumentException("Field not found " + name() + "." + name);
+                throw new IllegalArgumentException("Field not found " + getName() + "." + name);
             }
         }
     };
@@ -73,9 +73,9 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
         for (int i = 0; i < r.length; i++) {
             r[i] = (JTypeVariable) htypes().forNameOrVar(typeParameters[i], this);
             if (i == 0) {
-                gname += "<" + r[i].name();
+                gname += "<" + r[i].getName();
             } else {
-                gname += "," + r[i].name();
+                gname += "," + r[i].getName();
             }
             if (i == r.length - 1) {
                 gname += ">";
@@ -241,7 +241,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public JMethod declaredMethodOrNull(JSignature sig) {
+    public JMethod findDeclaredMethodOrNull(JSignature sig) {
         return _methods().get(sig.toNoVarArgs());
     }
 
@@ -255,13 +255,13 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
 //    }
 
     @Override
-    public synchronized JField declaredFieldOrNull(String fieldName) {
+    public synchronized JField findDeclaredFieldOrNull(String fieldName) {
         return _fields().get(fieldName);
     }
 
     @Override
-    public JConstructor declaredConstructorOrNull(JSignature sig) {
-        sig = sig.setName(name());
+    public JConstructor findDeclaredConstructorOrNull(JSignature sig) {
+        sig = sig.setName(getName());
         JConstructor f = _constructors().get(sig.toNoVarArgs());
         if (f != null) {
             return f;
@@ -270,9 +270,9 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public JConstructor defaultConstructorOrNull() {
+    public JConstructor findDefaultConstructorOrNull() {
         if (defaultConstructor == null) {
-            JConstructor defaultConstructor = declaredConstructor(JSignature.of(name(), new JType[0]));
+            JConstructor defaultConstructor = getDeclaredConstructor(JSignature.of(getName(), new JType[0]));
             if (defaultConstructor.isPublic()) {
                 this.defaultConstructor = defaultConstructor;
             }
@@ -281,17 +281,17 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public JType declaredInnerTypeOrNull(String name) {
+    public JType findDeclaredInnerTypeOrNull(String name) {
         return _innerTypes().get(name);
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return typeParameters;
     }
 
     @Override
-    public JType rawType() {
+    public JType getRawType() {
         return this;
     }
 
@@ -301,7 +301,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -325,7 +325,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
             return s == null ? null : htypes().forName(s, this);
 
         } else {
-            JType rc = rawType();
+            JType rc = getRawType();
             JType superclass = rc.getSuperType();
             if (superclass == null) {
                 return superclass;
@@ -362,7 +362,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
 //    }
 
     @Override
-    public JType[] interfaces() {
+    public JType[] getInterfaces() {
         if (hostType instanceof Class) {
 //            Type[] interfaces = ((Class) hostType).getGenericInterfaces();
 //            JType[] ii = new JType[interfaces.length];
@@ -377,36 +377,36 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
             }
             return ii;
         } else {
-            JType rc = rawType();
-            JType[] superInterfaces = rc.interfaces();
+            JType rc = getRawType();
+            JType[] superInterfaces = rc.getInterfaces();
             //should i update vars?
             return superInterfaces;
         }
     }
 
     @Override
-    public JConstructor[] declaredConstructors() {
+    public JConstructor[] getDeclaredConstructors() {
         return _constructors().values().toArray(new JConstructor[0]);
     }
 
     @Override
-    public JField[] declaredFields() {
+    public JField[] getDeclaredFields() {
         return _fields().values().toArray(new JField[0]);
     }
 
     @Override
-    public JMethod[] declaredMethods() {
+    public JMethod[] getDeclaredMethods() {
         return _methods().values().toArray(new JMethod[0]);
     }
 
     @Override
-    public JType[] declaredInnerTypes() {
+    public JType[] getDeclaredInnerTypes() {
         return _innerTypes().values().toArray(new JType[0]);
     }
 
     @Override
-    public Object defaultValue() {
-        switch (name()) {
+    public Object getDefaultValue() {
+        switch (getName()) {
             case "char":
                 return '\0';
             case "boolean":
@@ -428,7 +428,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         Class dc = this.hostType.getDeclaringClass();
         if (dc == null) {
             return null;
@@ -441,7 +441,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public String packageName() {
+    public String getPackageName() {
         Package p = this.hostType.getPackage();
         if (p == null) {
             return null;

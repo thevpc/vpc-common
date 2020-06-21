@@ -26,18 +26,18 @@ public class JRawTypeDelegate implements JRawType {
     }
 
     @Override
-    public JDeclaration declaration() {
-        return base.declaration();
+    public JDeclaration getDeclaration() {
+        return base.getDeclaration();
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
-        return base.typeParameters();
+    public JTypeVariable[] getTypeParameters() {
+        return base.getTypeParameters();
     }
 
     @Override
-    public JType rawType() {
-        return base.rawType();
+    public JType getRawType() {
+        return base.getRawType();
     }
 
     @Override
@@ -46,8 +46,8 @@ public class JRawTypeDelegate implements JRawType {
     }
 
     @Override
-    public String name() {
-        return base.name();
+    public String getName() {
+        return base.getName();
     }
 
     @Override
@@ -111,7 +111,7 @@ public class JRawTypeDelegate implements JRawType {
 
     @Override
     public boolean isAssignableFrom(JType other) {
-        if(other.name().equals("null")){
+        if(other.getName().equals("null")){
             if(isNullable()){
                 return true;
             }
@@ -150,7 +150,7 @@ public class JRawTypeDelegate implements JRawType {
     }
 
     @Override
-    public JField matchedField(String fieldName) {
+    public JField findMatchedField(String fieldName) {
         return null;
     }
 
@@ -190,157 +190,157 @@ public class JRawTypeDelegate implements JRawType {
     }
 
     @Override
-    public JMethod declaredMethod(String sig) {
+    public JMethod getDeclaredMethod(String sig) {
         return null;
     }
 
     @Override
-    public JMethod declaredMethod(JSignature sig) {
+    public JMethod getDeclaredMethod(JSignature sig) {
         return null;
     }
 
     @Override
-    public JMethod declaredMethodOrNull(JSignature sig) {
+    public JMethod findDeclaredMethodOrNull(JSignature sig) {
         return null;
     }
 
     @Override
-    public JConstructor declaredConstructorOrNull(String sig) {
+    public JConstructor findDeclaredConstructorOrNull(String sig) {
         return null;
     }
 
     @Override
-    public JConstructor declaredConstructor(String sig) {
+    public JConstructor getDeclaredConstructor(String sig) {
         return null;
     }
 
     @Override
-    public JType[] interfaces() {
+    public JType[] getInterfaces() {
         return new JType[0];
     }
 
     @Override
-    public JConstructor declaredConstructor(JSignature sig) {
+    public JConstructor getDeclaredConstructor(JSignature sig) {
         return null;
     }
 
     @Override
-    public JConstructor declaredConstructor(JType... parameterTypes) {
+    public JConstructor getDeclaredConstructor(JType... parameterTypes) {
         return null;
     }
 
     @Override
-    public JConstructor[] publicConstructors() {
+    public JConstructor[] getPublicConstructors() {
         return new JConstructor[0];
     }
 
     @Override
-    public JConstructor defaultConstructorOrNull() {
+    public JConstructor findDefaultConstructorOrNull() {
         return null;
     }
 
     @Override
-    public JConstructor defaultConstructor() {
+    public JConstructor getDefaultConstructor() {
         return null;
     }
 
     @Override
-    public JConstructor[] declaredConstructors() {
+    public JConstructor[] getDeclaredConstructors() {
         return new JConstructor[0];
     }
 
     @Override
-    public JField declaredField(String fieldName) {
+    public JField getDeclaredField(String fieldName) {
         return null;
     }
 
     @Override
-    public JField[] declaredFields() {
+    public JField[] getDeclaredFields() {
         return new JField[0];
     }
 
     @Override
-    public JField declaredFieldOrNull(String fieldName) {
+    public JField findDeclaredFieldOrNull(String fieldName) {
         return null;
     }
 
     @Override
-    public JField publicField(String name) {
+    public JField getPublicField(String name) {
         return null;
     }
 
     @Override
-    public JMethod[] publicMethods() {
+    public JMethod[] getPublicMethods() {
         return new JMethod[0];
     }
 
     @Override
-    public JMethod[] declaredMethods() {
+    public JMethod[] getDeclaredMethods() {
         return new JMethod[0];
     }
 
     @Override
-    public JMethod[] declaredMethods(String name) {
+    public JMethod[] getDeclaredMethods(String name) {
         return new JMethod[0];
     }
 
     @Override
-    public JField[] declaredFieldsWithParents() {
+    public JField[] getDeclaredFieldsWithParents() {
         return new JField[0];
     }
 
     @Override
-    public JType[] declaredInnerTypes() {
+    public JType[] getDeclaredInnerTypes() {
         return new JType[0];
     }
 
     @Override
-    public JType declaredInnerType(String name) {
+    public JType getDeclaredInnerType(String name) {
         return null;
     }
 
     @Override
-    public JType declaredInnerTypeOrNull(String name) {
+    public JType findDeclaredInnerTypeOrNull(String name) {
         return null;
     }
 
     @Override
-    public JMethod declaredMethodOrNull(String sig) {
+    public JMethod findDeclaredMethodOrNull(String sig) {
         return null;
     }
 
     @Override
-    public JMethod[] declaredMethods(String[] names, int callArgumentsCount, boolean includeParents) {
+    public JMethod[] getDeclaredMethods(String[] names, int callArgumentsCount, boolean includeParents) {
         return new JMethod[0];
     }
 
     @Override
-    public JMethod[] declaredMethods(boolean includeParents) {
+    public JMethod[] getDeclaredMethods(boolean includeParents) {
         return new JMethod[0];
     }
 
     @Override
-    public JType[] parents() {
+    public JType[] getParents() {
         return new JType[0];
     }
 
     @Override
-    public JConstructor declaredConstructorOrNull(JSignature sig) {
+    public JConstructor findDeclaredConstructorOrNull(JSignature sig) {
         return null;
     }
 
     @Override
-    public Object defaultValue() {
+    public Object getDefaultValue() {
         return null;
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return null;
     }
 
     @Override
-    public String packageName() {
+    public String getPackageName() {
         return null;
     }
 

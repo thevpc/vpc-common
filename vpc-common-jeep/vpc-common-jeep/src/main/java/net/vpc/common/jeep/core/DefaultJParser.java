@@ -722,10 +722,13 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         }
         JExpressionUnaryOptions unary = options == null ? null : options.unary;
         if (isSupportedTerminalPars(token, unary)) {
+            pushBack(token);
             return parseExpressionPars();
         } else if (isSupportedTerminalBrackets(token, unary)) {
+            pushBack(token);
             return parseBrackets();
         } else if (isSupportedTerminalBraces(token, unary)) {
+            pushBack(token);
             return parseBraces();
         }
         switch (token.def.ttype) {

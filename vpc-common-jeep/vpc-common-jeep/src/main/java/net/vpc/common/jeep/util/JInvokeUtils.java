@@ -7,8 +7,6 @@ import net.vpc.common.jeep.impl.functions.JSignature;
 import java.util.*;
 import net.vpc.common.jeep.impl.functions.ConvertedJMethod;
 import net.vpc.common.jeep.impl.functions.JFunctionConverted;
-import net.vpc.common.jeep.impl.functions.JFunctionConverted3;
-import net.vpc.common.jeep.impl.functions.JInvokableCostImpl;
 
 public class JInvokeUtils {
 
@@ -38,13 +36,13 @@ public class JInvokeUtils {
         if (ttypes == null) {
             return null;
         }
-        JMethod method = ctype.declaredMethodOrNull(JSignature.of(methodName, ttypes));
+        JMethod method = ctype.findDeclaredMethodOrNull(JSignature.of(methodName, ttypes));
         if (method != null) {
             cached_getMatchingMethod.put(k, method);
             return method;
         }
         // search through all methods
-        JMethod[] methods = accessibleOnly ? ctype.publicMethods() : ctype.declaredMethods();//cls.getMethods();
+        JMethod[] methods = accessibleOnly ? ctype.getPublicMethods() : ctype.getDeclaredMethods();//cls.getMethods();
         List<JMethodObject<JMethod>> m = new ArrayList<>();
         for (JMethod mm : methods) {
             if (mm.name().equals(methodName)) {

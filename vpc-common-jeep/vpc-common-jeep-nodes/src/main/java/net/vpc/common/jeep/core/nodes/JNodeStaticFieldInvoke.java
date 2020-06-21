@@ -50,7 +50,7 @@ public class JNodeStaticFieldInvoke extends JNodeStatement {
 
     @Override
     public String toString() {
-        return otype.name()+"."+name;
+        return otype.getName()+"."+name;
     }
 
     public boolean is(String name) {

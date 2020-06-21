@@ -245,7 +245,7 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
         if (object == null) {
             return null;
         }
-        return typeOf(object).name();
+        return typeOf(object).getName();
     }
 
 //    private String classCanonicalName(Class clazz){
@@ -375,7 +375,7 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
                 String sn = name.substring(endIndex + 1);
                 JType ptype = forNameOrNull(dec);
                 if (ptype != null) {
-                    JType[] dit = ptype.declaredInnerTypes();
+                    JType[] dit = ptype.getDeclaredInnerTypes();
                     for (JType cc : dit) {
                         if (cc.simpleName().equals(sn)) {
                             return cc;
@@ -406,7 +406,7 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
     @Override
     public void registerType(JType jt) {
         JTypeName jTypeName = jt.typeName();
-        String fn0 = jt.name();
+        String fn0 = jt.getName();
 //        String implClassName = jt.getClass().getSimpleName();
 //        while (implClassName.length() < 14) {
 //            implClassName += " ";

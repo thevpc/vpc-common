@@ -17,7 +17,7 @@ public class DefaultJTypeVariable extends AbstractJTypeVariable {
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return declaration;
     }
 
@@ -32,7 +32,7 @@ public class DefaultJTypeVariable extends AbstractJTypeVariable {
 
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 

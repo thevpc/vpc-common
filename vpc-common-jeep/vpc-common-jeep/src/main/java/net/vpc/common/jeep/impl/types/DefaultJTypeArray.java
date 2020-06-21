@@ -29,9 +29,9 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
         if (root.isArray() || dim == 0) {
             throw new IllegalStateException("Invalid Array with dimension ==0");
         }
-        StringBuilder fb = new StringBuilder(root.name().length() + 2 * dim);
+        StringBuilder fb = new StringBuilder(root.getName().length() + 2 * dim);
         StringBuilder sb = new StringBuilder(root.simpleName().length() + 2 * dim);
-        fb.append(root.name());
+        fb.append(root.getName());
         sb.append(root.simpleName());
         for (int i = 0; i < dim; i++) {
             fb.append("[]");
@@ -48,7 +48,7 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
 
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return null;
     }
 
@@ -58,13 +58,13 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
 //    }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return new JTypeVariable[0];
     }
 
     @Override
-    public JType rawType() {
-        return root.isRawType() ? this : root.rawType().toArray(arrayDimension());
+    public JType getRawType() {
+        return root.isRawType() ? this : root.getRawType().toArray(arrayDimension());
     }
 
     @Override
@@ -73,7 +73,7 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
@@ -110,42 +110,42 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
     }
 
     @Override
-    public JType[] interfaces() {
+    public JType[] getInterfaces() {
         return new JType[0];
     }
 
     @Override
-    public JConstructor defaultConstructorOrNull() {
+    public JConstructor findDefaultConstructorOrNull() {
         return null;
     }
 
     @Override
-    public JConstructor[] declaredConstructors() {
+    public JConstructor[] getDeclaredConstructors() {
         return new JConstructor[0];
     }
 
     @Override
-    public JField[] declaredFields() {
+    public JField[] getDeclaredFields() {
         return new JField[]{lengthField};
     }
 
     @Override
-    public JMethod[] declaredMethods() {
+    public JMethod[] getDeclaredMethods() {
         return new JMethod[0];
     }
 
     @Override
-    public JType[] declaredInnerTypes() {
+    public JType[] getDeclaredInnerTypes() {
         return new JType[0];
     }
 
     @Override
-    public Object defaultValue() {
+    public Object getDefaultValue() {
         return null;
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return null;
     }
 
@@ -165,7 +165,7 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
     }
 
     @Override
-    public String packageName() {
+    public String getPackageName() {
         return null;
     }
 
@@ -186,7 +186,7 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
     @Override
     public Object newArray(int... len) {
         if (rootComponentType() instanceof HostJRawType) {
-            HostJRawType hjt = (HostJRawType) rootComponentType().rawType();
+            HostJRawType hjt = (HostJRawType) rootComponentType().getRawType();
             Type ht = hjt.hostType();
             return Array.newInstance((Class<?>) ht, len);
         } else {
@@ -215,7 +215,7 @@ public class DefaultJTypeArray extends AbstractJType implements JTypeArray {
     @Override
     public JType replaceParameter(String name, JType param) {
         JType r = rootComponentType().replaceParameter(name, param);
-        if (r.name().equals(rootComponentType().name())) {
+        if (r.getName().equals(rootComponentType().getName())) {
             return this;
         }
         return types2().createArrayType0(r, arrayDimension());

@@ -72,7 +72,7 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
                 throw new IllegalArgumentException("Method parameters mismatch");
             }
             for (int i = 0; i < jeepParameterTypes.length; i++) {
-                if(!jeepParameterTypes[i].typeName().name().equals(genericSig.argType(i).name())){
+                if(!jeepParameterTypes[i].typeName().name().equals(genericSig.argType(i).getName())){
                     throw new IllegalArgumentException("Method parameters mismatch");
                 }
             }

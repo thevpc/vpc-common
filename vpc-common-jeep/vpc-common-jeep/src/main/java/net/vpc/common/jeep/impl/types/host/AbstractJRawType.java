@@ -4,7 +4,6 @@ import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypeVariable;
 import net.vpc.common.jeep.JTypes;
 import net.vpc.common.jeep.impl.JTypesSPI;
-import net.vpc.common.jeep.impl.types.DefaultJTypeArray;
 import net.vpc.common.jeep.JRawType;
 
 public abstract class AbstractJRawType extends AbstractJType implements JRawType {
@@ -24,12 +23,12 @@ public abstract class AbstractJRawType extends AbstractJType implements JRawType
         if (parameters.length == 0) {
             throw new IllegalArgumentException("Invalid zero parameters count");
         }
-        JTypeVariable[] vars = typeParameters();
+        JTypeVariable[] vars = getTypeParameters();
         if (vars.length != parameters.length) {
             throw new IllegalArgumentException("Invalid parameters count. expected "+vars.length+" but got "+parameters.length);
         }
         return JTypesSPI.getRegisteredOrRegister(
                 types2().createParameterizedType0(this, parameters,
-                declaringType()),types());
+                getDeclaringType()),types());
     }
 }

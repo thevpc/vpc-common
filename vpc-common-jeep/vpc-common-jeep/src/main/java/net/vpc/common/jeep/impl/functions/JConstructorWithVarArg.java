@@ -102,7 +102,7 @@ public class JConstructorWithVarArg extends AbstractJConstructor {
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return declaringType();
     }
 

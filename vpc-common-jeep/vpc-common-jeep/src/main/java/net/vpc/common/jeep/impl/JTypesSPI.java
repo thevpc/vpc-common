@@ -4,7 +4,6 @@ import net.vpc.common.jeep.JDeclaration;
 import net.vpc.common.jeep.JParameterizedType;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypes;
-import net.vpc.common.jeep.impl.types.DefaultJTypes;
 
 public interface JTypesSPI {
     static JType getAlreadyRegistered(String name, JTypes jtypes){
@@ -16,7 +15,7 @@ public interface JTypesSPI {
     }
 
     static JType getRegisteredOrRegister(JType type, JTypes jtypes){
-        JType old = getAlreadyRegistered(type.name(),jtypes);
+        JType old = getAlreadyRegistered(type.getName(),jtypes);
         if(old!=null){
             return old;
         }

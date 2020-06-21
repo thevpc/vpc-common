@@ -75,7 +75,7 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
                 throw new IllegalArgumentException("Method parameters mismatch");
             }
             for (int i = 0; i < jeepParameterTypes.length; i++) {
-                if (!jeepParameterTypes[i].typeName().name().equals(genericSig.argType(i).name())) {
+                if (!jeepParameterTypes[i].typeName().name().equals(genericSig.argType(i).getName())) {
                     throw new IllegalArgumentException("Method parameters mismatch");
                 }
             }
@@ -142,11 +142,11 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
 
     @Override
     public String name() {
-        return declaringType.name();
+        return declaringType.getName();
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return declaringType();
     }
 

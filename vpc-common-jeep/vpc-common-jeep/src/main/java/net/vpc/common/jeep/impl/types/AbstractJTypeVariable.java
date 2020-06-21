@@ -16,12 +16,12 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return new JTypeVariable[0];
     }
 
     @Override
-    public JType rawType() {
+    public JType getRawType() {
         return this;
     }
 
@@ -32,7 +32,7 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
 
     @Override
     public String simpleName() {
-        return name();
+        return getName();
     }
 
     @Override
@@ -56,71 +56,71 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
     }
 
     @Override
-    public JType[] interfaces() {
+    public JType[] getInterfaces() {
         LinkedHashSet<JType> infs = new LinkedHashSet<>();
         for (JType ub : upperBounds()) {
-            infs.addAll(Arrays.asList(ub.interfaces()));
+            infs.addAll(Arrays.asList(ub.getInterfaces()));
         }
         return infs.toArray(new JType[0]);
     }
 
     @Override
-    public JConstructor[] declaredConstructors() {
+    public JConstructor[] getDeclaredConstructors() {
         //how to do this by overcoming Java spec?
         return new JConstructor[0];
     }
 
     @Override
-    public JField[] declaredFields() {
+    public JField[] getDeclaredFields() {
         List<JField> a = new ArrayList<>();
         for (JType jType : upperBounds()) {
-            a.addAll(Arrays.asList(jType.declaredFields()));
+            a.addAll(Arrays.asList(jType.getDeclaredFields()));
         }
         return a.toArray(new JField[0]);
     }
 
     @Override
-    public JMethod[] declaredMethods() {
+    public JMethod[] getDeclaredMethods() {
         List<JMethod> a = new ArrayList<>();
         for (JType jType : upperBounds()) {
-            a.addAll(Arrays.asList(jType.declaredMethods()));
+            a.addAll(Arrays.asList(jType.getDeclaredMethods()));
         }
         return a.toArray(new JMethod[0]);
     }
 
     @Override
-    public JType[] declaredInnerTypes() {
+    public JType[] getDeclaredInnerTypes() {
         return new JType[0];
     }
 
     @Override
-    public Object defaultValue() {
+    public Object getDefaultValue() {
         JType[] upperBounds = upperBounds();
         for (int i = 1, upperBoundsLength = upperBounds.length; i < upperBoundsLength; i++) {
-            if (!Objects.equals(upperBounds[i].defaultValue(), upperBounds[i - 1].defaultValue())) {
+            if (!Objects.equals(upperBounds[i].getDefaultValue(), upperBounds[i - 1].getDefaultValue())) {
                 return null;
             }
         }
         if (upperBounds.length >= 1) {
-            return upperBounds[0].defaultValue();
+            return upperBounds[0].getDefaultValue();
         }
         return null;
     }
 
     @Override
-    public JType declaringType() {
-        JDeclaration d = declaration();
+    public JType getDeclaringType() {
+        JDeclaration d = getDeclaration();
         while (d != null) {
             if (d instanceof JType) {
                 return (JType) d;
             }
-            d = d.declaration();
+            d = d.getDeclaration();
         }
         return null;
     }
 
     @Override
-    public String packageName() {
+    public String getPackageName() {
         return null;
     }
 
@@ -151,12 +151,12 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
     }
 
     @Override
-    public JConstructor defaultConstructor() {
+    public JConstructor getDefaultConstructor() {
         return null;
     }
 
     @Override
-    public JConstructor declaredConstructorOrNull(JSignature sig) {
+    public JConstructor findDeclaredConstructorOrNull(JSignature sig) {
         return null;
     }
 
@@ -171,18 +171,18 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
 //    }
 
     @Override
-    public JConstructor defaultConstructorOrNull() {
+    public JConstructor findDefaultConstructorOrNull() {
         return null;
     }
 
     @Override
     public boolean isWildcard() {
-        return name().equalsIgnoreCase("?");
+        return getName().equalsIgnoreCase("?");
     }
 
     @Override
     public String toString() {
-        return name();
+        return getName();
     }
 
     @Override
@@ -209,7 +209,7 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
 
     @Override
     public String getVName() {
-        JDeclaration d = declaration();
-        return name()+":"+d;
+        JDeclaration d = getDeclaration();
+        return getName()+":"+d;
     }
 }

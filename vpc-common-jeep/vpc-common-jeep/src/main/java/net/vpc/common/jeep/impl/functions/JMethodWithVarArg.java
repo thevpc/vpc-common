@@ -126,7 +126,7 @@ public class JMethodWithVarArg implements JMethod {
     }
 
     @Override
-    public JDeclaration declaration() {
+    public JDeclaration getDeclaration() {
         return declaringType();
     }
 

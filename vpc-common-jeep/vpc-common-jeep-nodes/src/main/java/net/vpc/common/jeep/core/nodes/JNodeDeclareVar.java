@@ -58,7 +58,7 @@ public class JNodeDeclareVar extends JNodeStatement {
     public String toString() {
         StringBuilder sb=new StringBuilder();
         if(getType()!=null){
-            sb.append(getType().name()).append(" ");
+            sb.append(getType().getName()).append(" ");
         }else{
             sb.append("var").append(" ");
         }

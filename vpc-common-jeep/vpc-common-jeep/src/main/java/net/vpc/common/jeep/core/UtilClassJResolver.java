@@ -65,7 +65,7 @@ public class UtilClassJResolver implements JResolver {
         t.addAll(importedFields);
         //check for fields
         for (JType type : t) {
-            JField field = type.declaredFieldOrNull(name);
+            JField field = type.findDeclaredFieldOrNull(name);
             if (field != null) {
                 return JeepUtilsFactory.createStaticFieldVar(field);
             }
@@ -107,7 +107,7 @@ public class UtilClassJResolver implements JResolver {
         List<JFunction> all = new ArrayList<>();
         for (JType type : importedTypes) {
             all.addAll(
-                    Arrays.stream(type.declaredMethods(new String[]{name}, argsCount, true))
+                    Arrays.stream(type.getDeclaredMethods(new String[]{name}, argsCount, true))
                             .filter(x -> x.isStatic() && x.isPublic())
                             .map(x -> new JFunctionFromStaticMethod(x))
                             .collect(Collectors.toList())
@@ -115,7 +115,7 @@ public class UtilClassJResolver implements JResolver {
         }
         for (JType type : importedMethods) {
             all.addAll(
-                    Arrays.stream(type.declaredMethods(new String[]{name}, argsCount, true))
+                    Arrays.stream(type.getDeclaredMethods(new String[]{name}, argsCount, true))
                             .filter(x -> x.isStatic() && x.isPublic())
                             .map(x -> new JFunctionFromStaticMethod(x))
                             .collect(Collectors.toList())
