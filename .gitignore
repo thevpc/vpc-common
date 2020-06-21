@@ -52,3 +52,6 @@
 /vpc-common-swings-iconset-default/target/
 /.idea/libraries/
 /vpc-common-text-source-log/target/classes/net/vpc/common/textsource/log/
+/vpc-common-text-source/target/
+/vpc-common-text-source-log/target/
+/lsp/
