@@ -8,14 +8,17 @@ public class DefaultJInvokeContextBuilder implements JInvokeContextBuilder {
     private JContext context;
     private JEvaluable[] arguments;
     private String name;
+    private JCallerInfo callerInfo;
+
     public DefaultJInvokeContextBuilder() {
     }
-    public DefaultJInvokeContextBuilder(JContext context, JEvaluator evaluator, JTypedValue instance, JEvaluable[] arguments, String name) {
+    public DefaultJInvokeContextBuilder(JContext context, JEvaluator evaluator, JTypedValue instance, JEvaluable[] arguments, String name,JCallerInfo callerInfo) {
         this.context = context;
         this.instance = instance;
         this.evaluator = evaluator;
         this.arguments = arguments;
         this.name = name;
+        this.callerInfo = callerInfo;
     }
 
     public DefaultJInvokeContextBuilder(JInvokeContextBuilder other) {
@@ -28,79 +31,91 @@ public class DefaultJInvokeContextBuilder implements JInvokeContextBuilder {
 
     public JInvokeContextBuilder set(JInvokeContextBuilder other){
         if(other!=null){
-            evaluator(other.evaluator());
-            context(other.context());
-            instance(other.instance());
-            arguments(other.arguments());
-            name(other.name());
+            setEvaluator(other.getEvaluator());
+            setContext(other.getContext());
+            setInstance(other.getInstance());
+            setArguments(other.getArguments());
+            setName(other.getName());
+            setCallerInfo(other.getCallerInfo());
         }
         return this;
     }
     public JInvokeContextBuilder set(JInvokeContext other){
         if(other!=null){
-            evaluator(other.evaluator());
-            context(other.context());
-            instance(other.instance());
-            arguments(other.arguments());
-            name(other.name());
+            setEvaluator(other.getEvaluator());
+            setContext(other.getContext());
+            setInstance(other.getInstance());
+            setArguments(other.getArguments());
+            setName(other.getName());
         }
         return this;
     }
 
 
     @Override
-    public JTypedValue instance() {
+    public JTypedValue getInstance() {
         return instance;
     }
 
     @Override
-    public JEvaluator evaluator() {
+    public JEvaluator getEvaluator() {
         return evaluator;
     }
 
     @Override
-    public JContext context() {
+    public JContext getContext() {
         return context;
     }
 
     @Override
-    public JEvaluable[] arguments() {
+    public JEvaluable[] getArguments() {
         return arguments;
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public DefaultJInvokeContextBuilder evaluator(JEvaluator evaluator) {
+    public DefaultJInvokeContextBuilder setEvaluator(JEvaluator evaluator) {
         this.evaluator = evaluator;
         return this;
     }
 
-    public DefaultJInvokeContextBuilder instance(JTypedValue instance) {
+    public DefaultJInvokeContextBuilder setInstance(JTypedValue instance) {
         this.instance = instance;
         return this;
     }
 
-    public DefaultJInvokeContextBuilder context(JContext context) {
+    public DefaultJInvokeContextBuilder setContext(JContext context) {
         this.context = context;
         return this;
     }
 
-    public DefaultJInvokeContextBuilder arguments(JEvaluable[] arguments) {
+    public DefaultJInvokeContextBuilder setArguments(JEvaluable[] arguments) {
         this.arguments = arguments;
         return this;
     }
 
-    public DefaultJInvokeContextBuilder name(String name) {
+    public DefaultJInvokeContextBuilder setName(String name) {
         this.name = name;
         return this;
     }
 
     @Override
+    public JCallerInfo getCallerInfo() {
+        return callerInfo;
+    }
+
+    @Override
+    public JInvokeContextBuilder setCallerInfo(JCallerInfo callerInfo) {
+        this.callerInfo = callerInfo;
+        return this;
+    }
+
+    @Override
     public JInvokeContext build() {
-        return new DefaultJInvokeContext(context, evaluator, instance, arguments, name);
+        return new DefaultJInvokeContext(context, evaluator, instance, arguments, name,callerInfo);
     }
 }

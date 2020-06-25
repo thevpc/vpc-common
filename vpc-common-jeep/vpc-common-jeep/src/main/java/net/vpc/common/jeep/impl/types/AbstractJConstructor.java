@@ -10,8 +10,8 @@ public abstract class AbstractJConstructor implements JConstructor {
         if(isPublic()){
             sb.append("public ");
         }
-        sb.append(declaringType().getName());
-        sb.append(new JArgumentTypes(signature().argTypes(),signature().isVarArgs()));
+        sb.append(getDeclaringType().getName());
+        sb.append(new JArgumentTypes(getSignature().argTypes(), getSignature().isVarArgs()));
         return sb.toString();
 
     }

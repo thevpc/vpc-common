@@ -1,9 +1,11 @@
 package net.vpc.common.jeep;
 
 public interface JInvokeContext {
-    JEvaluator evaluator();
+    JEvaluator getEvaluator();
 
-    JTypedValue instance();
+    JCallerInfo  getCallerInfo();
+
+    JTypedValue getInstance();
 
     Object evaluateArg(int index);
 
@@ -13,13 +15,13 @@ public interface JInvokeContext {
 
     Object[] evaluate(JEvaluable[] node);
 
-    JContext context();
+    JContext getContext();
 
-    JEvaluable[] arguments();
+    JEvaluable[] getArguments();
 
-    String name();
+    String getName();
 
-    JType[] argumentTypes();
+    JType[] getArgumentTypes();
 
     JInvokeContextBuilder builder();
 }

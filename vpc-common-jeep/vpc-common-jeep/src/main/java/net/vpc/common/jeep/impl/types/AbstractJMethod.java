@@ -7,8 +7,8 @@ import java.lang.reflect.Modifier;
 
 public abstract class AbstractJMethod implements JMethod {
     @Override
-    public String name() {
-        return signature().name();
+    public String getName() {
+        return getSignature().name();
     }
 
     @Override
@@ -21,41 +21,41 @@ public abstract class AbstractJMethod implements JMethod {
             sb.append("static ");
         }
         //type if not anonymous!
-        if (returnType() != null) {
-            sb.append(returnType().getName());
+        if (getReturnType() != null) {
+            sb.append(getReturnType().getName());
             sb.append(" ");
         }
-        if(declaringType()!=null) {
-            sb.append(declaringType().getName());
+        if(getDeclaringType()!=null) {
+            sb.append(getDeclaringType().getName());
             sb.append(".");
         }
-        sb.append(signature());
+        sb.append(getSignature());
         return sb.toString();
 
     }
 
     @Override
     public boolean isAbstract() {
-        return Modifier.isAbstract(modifiers());
+        return Modifier.isAbstract(getModifiers());
     }
 
     @Override
     public boolean isStatic() {
-        return Modifier.isStatic(modifiers());
+        return Modifier.isStatic(getModifiers());
     }
 
     @Override
     public boolean isPublic() {
-        return Modifier.isPublic(modifiers());
+        return Modifier.isPublic(getModifiers());
     }
 
     @Override
     public JDeclaration getDeclaration() {
-        return declaringType();
+        return getDeclaringType();
     }
 
     @Override
     public int hashCode() {
-        return signature().hashCode();
+        return getSignature().hashCode();
     }
 }

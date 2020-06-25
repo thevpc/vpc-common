@@ -5,6 +5,6 @@ import net.vpc.common.jeep.JMethod;
 import net.vpc.common.jeep.JType;
 
 public interface JParameterizedConstructor extends JConstructor {
-    JConstructor rawConstructor();
-    JType[] actualParameters();
+    JConstructor getRawConstructor();
+    JType[] getActualParameters();
 }

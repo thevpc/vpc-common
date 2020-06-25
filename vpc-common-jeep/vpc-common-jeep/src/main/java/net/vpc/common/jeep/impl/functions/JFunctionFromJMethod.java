@@ -9,9 +9,9 @@ import net.vpc.common.jeep.util.JTypeUtils;
 public class JFunctionFromJMethod extends JFunctionBase {
     private final JMethod method;
 
-    public JFunctionFromJMethod(String name, JMethod method, JTypeOrLambda[] argTypes) {
+    public JFunctionFromJMethod(String name, JMethod method, JTypePattern[] argTypes) {
         //TODO fix me later
-        super(name, method.returnType(), JTypeUtils.typesOrError(argTypes), method.signature().isVarArgs());
+        super(name, method.getReturnType(), JTypeUtils.typesOrError(argTypes), method.getSignature().isVarArgs());
         this.method = method;
     }
 
@@ -21,11 +21,11 @@ public class JFunctionFromJMethod extends JFunctionBase {
 
     @Override
     public Object invoke(JInvokeContext icontext) {
-        JType[] mTypes = method.signature().argTypes();
+        JType[] mTypes = method.getSignature().argTypes();
         JEvaluable[] all = new JEvaluable[mTypes.length];
-        JEvaluable[] args = icontext.arguments();
+        JEvaluable[] args = icontext.getArguments();
         for (int i = 0; i < all.length - 1; i++) {
-            if (icontext.context().types().forName(JEvaluable.class.getName()).isAssignableFrom(mTypes[i])) {
+            if (icontext.getContext().types().forName(JEvaluable.class.getName()).isAssignableFrom(mTypes[i])) {
                 all[i] = new JEvaluableValue((args[i]),mTypes[i]);
             } else {
                 all[i] = args[i];
@@ -36,7 +36,7 @@ public class JFunctionFromJMethod extends JFunctionBase {
         all[all.length - 1] = new JEvaluable() {
             @Override
             public JType type() {
-                return icontext.argumentTypes()[icontext.argumentTypes().length-1];
+                return icontext.getArgumentTypes()[icontext.getArgumentTypes().length-1];
             }
 
             @Override
@@ -47,7 +47,7 @@ public class JFunctionFromJMethod extends JFunctionBase {
                 anArray.value();
                 for (int i = 0; i < varArgCount; i++) {
                     JEvaluable aaa = args[all.length - 1 + i];
-                    if (icontext.context().types().forName(JEvaluable.class.getName()).isAssignableFrom(jType)) {
+                    if (icontext.getContext().types().forName(JEvaluable.class.getName()).isAssignableFrom(jType)) {
                         anArray.set(i, aaa);
                     } else {
                         anArray.set(i, icontext.evaluate(aaa));
@@ -58,10 +58,15 @@ public class JFunctionFromJMethod extends JFunctionBase {
         };
         return method.invoke(
                 icontext.builder()
-                        .instance(null)
-                        .name(method.name())
-                        .arguments(all)
+                        .setInstance(null)
+                        .setName(method.getName())
+                        .setArguments(all)
                         .build()
         );
+    }
+
+    @Override
+    public String getSourceName() {
+        return method.getSourceName();
     }
 }

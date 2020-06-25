@@ -2,7 +2,7 @@ package net.vpc.common.jeep.util;
 
 import net.vpc.common.jeep.JConverter;
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +10,9 @@ import java.util.List;
 public class JConverterList2 {
     private List<JConverter> elements =new ArrayList<>();
     private boolean shrinkHierarchy;
-    private JTypeOrLambda from;
+    private JTypePattern from;
 
-    public JConverterList2(JTypeOrLambda from, boolean shrinkHierarchy) {
+    public JConverterList2(JTypePattern from, boolean shrinkHierarchy) {
         this.shrinkHierarchy = shrinkHierarchy;
         this.from = from;
     }

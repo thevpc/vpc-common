@@ -12,18 +12,18 @@ public class JFunctionWithVarArg implements JFunction {
     }
 
     @Override
-    public String name() {
-        return fct.name();
+    public String getName() {
+        return fct.getName();
     }
 
     @Override
-    public JSignature signature() {
-        return fct.signature();
+    public JSignature getSignature() {
+        return fct.getSignature();
     }
 
     @Override
-    public JType returnType() {
-        return fct.returnType();
+    public JType getReturnType() {
+        return fct.getReturnType();
     }
 
     public JFunction getFunction() {
@@ -32,11 +32,11 @@ public class JFunctionWithVarArg implements JFunction {
 
     @Override
     public Object invoke(JInvokeContext icontext) {
-        JType[] mTypes = fct.signature().argTypes();
+        JType[] mTypes = fct.getSignature().argTypes();
         JEvaluable[] all = new JEvaluable[mTypes.length];
-        JEvaluable[] args = icontext.arguments();
+        JEvaluable[] args = icontext.getArguments();
         for (int i = 0; i < all.length - 1; i++) {
-            if (icontext.context().types().forName(JEvaluable.class.getName()).isAssignableFrom(mTypes[i])) {
+            if (icontext.getContext().types().forName(JEvaluable.class.getName()).isAssignableFrom(mTypes[i])) {
                 all[i] = new JEvaluableValue((args[i]),mTypes[i]);
             } else {
                 all[i] = args[i];
@@ -47,7 +47,7 @@ public class JFunctionWithVarArg implements JFunction {
         all[all.length - 1] = new JEvaluable() {
             @Override
             public JType type() {
-                return icontext.argumentTypes()[icontext.argumentTypes().length-1];
+                return icontext.getArgumentTypes()[icontext.getArgumentTypes().length-1];
             }
 
             @Override
@@ -58,7 +58,7 @@ public class JFunctionWithVarArg implements JFunction {
                 anArray.value();
                 for (int i = 0; i < varArgCount; i++) {
                     JEvaluable aaa = args[all.length - 1 + i];
-                    if (icontext.context().types().forName(JEvaluable.class.getName()).isAssignableFrom(jType)) {
+                    if (icontext.getContext().types().forName(JEvaluable.class.getName()).isAssignableFrom(jType)) {
                         anArray.set(i, aaa);
                     } else {
                         anArray.set(i, icontext.evaluate(aaa));
@@ -69,10 +69,15 @@ public class JFunctionWithVarArg implements JFunction {
         };
         return fct.invoke(
                 icontext.builder()
-                        .instance(null)
-                        .name(fct.name())
-                        .arguments(all)
+                        .setInstance(null)
+                        .setName(fct.getName())
+                        .setArguments(all)
                         .build()
         );
+    }
+
+    @Override
+    public String getSourceName() {
+        return fct.getSourceName();
     }
 }

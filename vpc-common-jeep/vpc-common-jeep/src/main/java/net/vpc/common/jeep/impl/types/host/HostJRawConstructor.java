@@ -43,7 +43,7 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
                 genericSig = JSignature.of(declaringType.types(), sigAnn.value());
             }
         }
-        JType[] jeepParameterTypes = htypes().forName(constructor.getGenericParameterTypes(), this);
+        JType[] jeepParameterTypes = getTypesHelper().forName(constructor.getGenericParameterTypes(), this);
         List<String> argNamesList = new ArrayList<>();
         try {
             for (Parameter parameter : constructor.getParameters()) {
@@ -68,7 +68,7 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
         }
 //        genericReturnType=declaringType.types().forName(constructor.getGenericReturnType());
 //        rawReturnType=declaringType.types().forName(constructor.getReturnType());
-        typeParameters = Arrays.stream(htypes().forName(constructor.getTypeParameters(), this)).toArray(JTypeVariable[]::new);
+        typeParameters = Arrays.stream(getTypesHelper().forName(constructor.getTypeParameters(), this)).toArray(JTypeVariable[]::new);
         if (genericSig != null) {
             //add some match checking
             if (genericSig.argTypes().length != jeepParameterTypes.length) {
@@ -88,25 +88,25 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
     }
 
     @Override
-    public JType[] argTypes() {
+    public JType[] getArgTypes() {
         return argTypes;
     }
 
     @Override
-    public String[] argNames() {
+    public String[] getArgNames() {
         return argNames;
     }
 
-    protected JTypesHostHelper htypes() {
-        return new JTypesHostHelper(types());
+    protected JTypesHostHelper getTypesHelper() {
+        return new JTypesHostHelper(getTypes());
     }
 
-    protected JTypes types() {
+    protected JTypes getTypes() {
         return declaringType.types();
     }
 
     @Override
-    public JSignature genericSignature() {
+    public JSignature getGenericSignature() {
         return genericSig;
     }
 
@@ -116,12 +116,12 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return declaringType;
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return rawSig;
     }
 
@@ -131,27 +131,32 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
     }
 
     @Override
-    public int modifiers() {
+    public int getModifiers() {
         return constructor.getModifiers();
     }
 
     @Override
-    public JType returnType() {
-        return declaringType();
+    public JType getReturnType() {
+        return getDeclaringType();
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return declaringType.getName();
     }
 
     @Override
     public JDeclaration getDeclaration() {
-        return declaringType();
+        return getDeclaringType();
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return typeParameters;
+    }
+
+    @Override
+    public String getSourceName() {
+        return "<library>";
     }
 }

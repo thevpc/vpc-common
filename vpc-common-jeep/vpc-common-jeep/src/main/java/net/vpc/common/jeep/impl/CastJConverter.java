@@ -4,10 +4,10 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JTypeUtils;
 
 public class CastJConverter implements JConverter {
-    private JTypeOrLambda from;
+    private JTypePattern from;
     private JType to;
 
-    public CastJConverter(JTypeOrLambda from, JType to) {
+    public CastJConverter(JTypePattern from, JType to) {
         this.from = from;
         this.to = to;
     }
@@ -18,13 +18,13 @@ public class CastJConverter implements JConverter {
     }
 
     @Override
-    public JTypeOrLambda originalType() {
+    public JTypePattern originalType() {
         return from;
     }
 
     @Override
-    public JTypeOrLambda targetType() {
-        return JTypeOrLambda.of(to);
+    public JTypePattern targetType() {
+        return JTypePattern.of(to);
     }
 
     @Override

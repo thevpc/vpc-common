@@ -13,9 +13,9 @@ public class JFunctionConverted3 extends JFunctionBase {
                                JConverter[] argConverters,
                                JConverter resultConverter,
                                JType returnType) {
-        super(other.name(),
+        super(other.getName(),
                 returnType,
-                convArgTypes(other.signature().argTypes(), argConverters)
+                convArgTypes(other.getSignature().argTypes(), argConverters)
                 ,false
         );
         this.other = other;
@@ -36,8 +36,8 @@ public class JFunctionConverted3 extends JFunctionBase {
     }
 
     @Override
-    public JType returnType() {
-        return resultConverter!=null?resultConverter.targetType().getType():other.returnType();
+    public JType getReturnType() {
+        return resultConverter!=null?resultConverter.targetType().getType():other.getReturnType();
     }
 
     private static JType[] convArgTypes(JType[] argTypes, JConverter[] converters){
@@ -57,9 +57,9 @@ public class JFunctionConverted3 extends JFunctionBase {
 
     @Override
     public Object invoke(JInvokeContext icontext) {
-        JEvaluable[] args = icontext.arguments();
+        JEvaluable[] args = icontext.getArguments();
         JEvaluable[] args2=new JEvaluable[args.length];
-        JType[] oldTypes=icontext.argumentTypes();
+        JType[] oldTypes=icontext.getArgumentTypes();
         JType[] types2=new JType[args.length];
         for (int i = 0; i < args.length; i++) {
             if(argConverters!=null && argConverters[i]!=null){
@@ -72,11 +72,16 @@ public class JFunctionConverted3 extends JFunctionBase {
         }
         Object v = other.invoke(
                 icontext.builder()
-                        .arguments(args2)
+                        .setArguments(args2)
                         .build());
         if(resultConverter!=null){
             v=resultConverter.convert(v, icontext);
         }
         return v;
+    }
+
+    @Override
+    public String getSourceName() {
+        return other.getSourceName();
     }
 }

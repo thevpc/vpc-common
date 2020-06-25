@@ -36,6 +36,6 @@ public interface JResolvers {
 
     JResolver[] getResolvers();
 
-    JConverter[] getConverters(JTypeOrLambda operandType);
+    JConverter[] getConverters(JTypePattern operandType);
 
 }

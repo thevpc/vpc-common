@@ -85,12 +85,12 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
     }
 
     @Override
-    public JType[] argTypes() {
+    public JType[] getArgTypes() {
         return argTypes;
     }
 
     @Override
-    public String[] argNames() {
+    public String[] getArgNames() {
         return argNames;
     }
 
@@ -103,7 +103,7 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
     }
 
     @Override
-    public JSignature genericSignature() {
+    public JSignature getGenericSignature() {
         return genericSig;
     }
 
@@ -125,34 +125,34 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return declaringType;
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         return rawReturnType;
     }
 
     @Override
-    public JType genericReturnType() {
+    public JType getGenericReturnType() {
         return genericReturnType;
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return rawSig;
     }
 
     @Override
     public Object invoke(JInvokeContext context) {
         try {
-            JEvaluable[] rargs = context.arguments();
+            JEvaluable[] rargs = context.getArguments();
             Object[] eargs = new Object[rargs.length];
             for (int i = 0; i < eargs.length; i++) {
                 eargs[i]=rargs[i].evaluate(context);
             }
-            return method.invoke(context.instance(),eargs);
+            return method.invoke(context.getInstance(),eargs);
         } catch (IllegalAccessException ex) {
             throw new IllegalArgumentException(ex);
         } catch (InvocationTargetException e) {
@@ -174,24 +174,29 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
 
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return typeParameters;
     }
 
     @Override
     public JMethod parametrize(JType... parameters) {
         return new JParameterizedMethodImpl(
-                this,parameters,declaringType()
+                this,parameters, getDeclaringType()
         );
     }
 
     @Override
-    public int modifiers() {
+    public int getModifiers() {
         return method.getModifiers();
     }
 
     @Override
     public boolean isDefault() {
         return method.isDefault();
+    }
+
+    @Override
+    public String getSourceName() {
+        return "<library>";
     }
 }

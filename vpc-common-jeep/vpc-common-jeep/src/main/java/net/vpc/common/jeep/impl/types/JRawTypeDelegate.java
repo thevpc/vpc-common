@@ -3,6 +3,7 @@ package net.vpc.common.jeep.impl.types;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.JStaticObject;
 import net.vpc.common.jeep.impl.functions.JSignature;
+import net.vpc.common.jeep.util.JTypeUtils;
 
 public class JRawTypeDelegate implements JRawType {
     private JRawType base;
@@ -374,4 +375,8 @@ public class JRawTypeDelegate implements JRawType {
         return base.isInterface();
     }
 
+    @Override
+    public boolean isAssignableFrom(JTypePattern other) {
+        return base.isAssignableFrom(other);
+    }
 }

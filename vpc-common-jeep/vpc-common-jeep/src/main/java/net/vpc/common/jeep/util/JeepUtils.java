@@ -165,7 +165,7 @@ public class JeepUtils {
 
     public static <T> T[] arrayAppend(Class arrayElementType, T[] one, T other) {
         Class<? extends Object[]> arrayType = one.getClass();
-        T[] two = (T[]) Array.newInstance(arrayType, 1);
+        T[] two = (T[]) Array.newInstance(arrayElementType, 1);
         two[0] = other;
         return arrayConcat(arrayElementType, one, two);
     }

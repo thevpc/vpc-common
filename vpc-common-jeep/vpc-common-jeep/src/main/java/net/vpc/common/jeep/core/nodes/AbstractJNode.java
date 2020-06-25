@@ -200,7 +200,7 @@ public abstract class AbstractJNode implements JNode {
             dc.setAccessible(true);
             n = dc.newInstance();
         } catch (Exception e) {
-            throw new JShouldNeverHappenException();
+            throw new JShouldNeverHappenException("Cannot coy without a default constructor for "+getClass().getName());
         }
         n.copyFrom(this,copyFactory);
         return n;
@@ -228,20 +228,20 @@ public abstract class AbstractJNode implements JNode {
         return this;
     }
 
-    public <T extends JNode> T bind(T child) {
-        if (child != null) {
-            ((AbstractJNode) child).parentNode(this);
-        }
-        return child;
-    }
+//    public <T extends JNode> T bind(T child) {
+//        if (child != null) {
+//            ((AbstractJNode) child).parentNode(this);
+//        }
+//        return child;
+//    }
 
-    public <T extends JNode> T bind(T child, String asName) {
-        if (child != null) {
-            ((AbstractJNode) child).parentNode(this);
-            ((AbstractJNode) child).childInfo(asName);
-        }
-        return child;
-    }
+//    public <T extends JNode> T bind(T child, String asName) {
+//        if (child != null) {
+//            ((AbstractJNode) child).parentNode(this);
+//            ((AbstractJNode) child).childInfo(asName);
+//        }
+//        return child;
+//    }
 
     protected void findAndReplaceChildren(JNodeFindAndReplace findAndReplace) {
         //should implement me

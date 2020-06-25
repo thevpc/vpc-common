@@ -32,6 +32,7 @@ public class JTokenUtils {
         JToken t = new JToken();
         t.image=image;
         t.sval=image;
+        t.tokenNumber=-2;
         t.startCharacterNumber=-2;
         t.endCharacterNumber=-2;
         t.startColumnNumber=-2;

@@ -6,7 +6,6 @@
 package net.vpc.common.jeep.impl.functions;
 
 import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.DefaultJeep;
 import net.vpc.common.jeep.impl.ArgsPossibility;
 import net.vpc.common.jeep.util.*;
 
@@ -47,16 +46,16 @@ public class JFunctionsImpl implements JFunctions {
     }
 
     public void declare(JFunction fct) {
-        JeepUtils.validateFunctionName(fct.name());
-        JSignature fsig = fct.signature();
-        String canonicalName = getCanonicalName(fct.name());
+        JeepUtils.validateFunctionName(fct.getName());
+        JSignature fsig = fct.getSignature();
+        String canonicalName = getCanonicalName(fct.getName());
         JSignature sig = new JSignature(canonicalName, fsig.argTypes(), fsig.isVarArgs());
         functionsBySigCache.clear();
         functionsBySig.put(sig, fct);
-        List<JSignature> list = sigsByOpCount.get(fct.signature().argsCount());
+        List<JSignature> list = sigsByOpCount.get(fct.getSignature().argsCount());
         if (list == null) {
             list = new ArrayList<>();
-            sigsByOpCount.put(fct.signature().argsCount(), list);
+            sigsByOpCount.put(fct.getSignature().argsCount(), list);
         }
         list.add(sig);
         invalidateFunctionsCache(sig);
@@ -79,20 +78,20 @@ public class JFunctionsImpl implements JFunctions {
         return fct;
     }
 
-    public Object evaluate(String name, JEvaluable... args) {
+    public Object evaluate(JCallerInfo callerInfo, String name, JEvaluable... args) {
         JType[] argVals = new JType[args.length];
         for (int i = 0; i < args.length; i++) {
             argVals[i] = args[i].type();
         }
         JSignature sig = JSignature.of(name, argVals);
-        JFunction f = findFunctionMatchOrNull(sig);
+        JFunction f = findFunctionMatchOrNull(sig, callerInfo);
         if (f != null) {
             //a=args.map(x->EvaluableNode(x))
             return f.invoke(new DefaultJInvokeContext(
                     context,
                     context.evaluators().newEvaluator(),
                     null, args,
-                    name));
+                    name,callerInfo));
         }
         if (name == null || name.isEmpty()) {
             name = "<IMPLICIT>";
@@ -152,7 +151,7 @@ public class JFunctionsImpl implements JFunctions {
             }
         }
         for (JFunction f : functionsBySigCache.values()) {
-            JSignature sig = f.signature();
+            JSignature sig = f.getSignature();
             if (sig.acceptArgsCount(callArgumentsCount)) {
                 applicables.add(f);
             }
@@ -173,18 +172,18 @@ public class JFunctionsImpl implements JFunctions {
         return applicables.toArray(new JFunction[0]);
     }
 
-    public JFunction findFunctionMatchOrNull(JSignature signature) {
+    public JFunction findFunctionMatchOrNull(JSignature signature, JCallerInfo callerInfo) {
         JFunction[] functions = findFunctions(signature.name(), signature.argsCount());
         JType[] tt = signature.argTypes();
-        JTypeOrLambda[] aa = new JTypeOrLambda[tt.length];
+        JTypePattern[] aa = new JTypePattern[tt.length];
         for (int i = 0; i < aa.length; i++) {
-            aa[i] = JTypeOrLambda.of(tt[i]);
+            aa[i] = JTypePattern.of(tt[i]);
         }
-        return (JFunction) resolveBestMatch(functions, null, aa);
+        return (JFunction) resolveBestMatch(callerInfo, functions, null, aa, null);
     }
 
-    public JFunction findFunctionMatch(JSignature signature) {
-        JFunction f = findFunctionMatchOrNull(signature);
+    public JFunction findFunctionMatch(JSignature signature, JCallerInfo callerInfo) {
+        JFunction f = findFunctionMatchOrNull(signature, callerInfo);
         if (f == null) {
             if (signature.name().isEmpty()) {
                 throw new JParseException("Implicit Function not found " + signature);
@@ -207,13 +206,13 @@ public class JFunctionsImpl implements JFunctions {
     }
 
     @Override
-    public JFunction findFunctionMatchOrNull(JNameSignature signature) {
-        return findFunctionMatchOrNull(JSignature.of(context.types(), signature));
+    public JFunction findFunctionMatchOrNull(JNameSignature signature, JCallerInfo callerInfo) {
+        return findFunctionMatchOrNull(JSignature.of(context.types(), signature), callerInfo);
     }
 
     @Override
-    public JFunction findFunctionMatchOrNull(String name) {
-        return findFunctionMatchOrNull(JSignature.of(name, new JType[0]));
+    public JFunction findFunctionMatchOrNull(String name, JCallerInfo callerInfo) {
+        return findFunctionMatchOrNull(JSignature.of(name, new JType[0]), callerInfo);
     }
 
     @Override
@@ -235,7 +234,7 @@ public class JFunctionsImpl implements JFunctions {
         JFunction[] functions = findFunctions(signature.name(), signature.argsCount());
         List<JFunction> ok = new ArrayList<>();
         for (JFunction function : functions) {
-            if (function.signature().equals(signature)) {
+            if (function.getSignature().equals(signature)) {
                 ok.add(function);
             }
         }
@@ -253,8 +252,8 @@ public class JFunctionsImpl implements JFunctions {
     }
 
     @Override
-    public JInvokable resolveBestMatch(JInvokable[] invokables, Function<JTypeOrLambda, JConverter[]> convertersSupplier, JTypeOrLambda... argTypes) {
-        JInvokableCost[] result = resolveMatches(true, invokables, convertersSupplier, argTypes);
+    public JInvokable resolveBestMatch(JCallerInfo callerInfo, JInvokable[] invokables, Function<JTypePattern, JConverter[]> convertersSupplier, JTypePattern[] argTypes, JTypePattern returnType) {
+        JInvokableCost[] result = resolveMatches(true, invokables, convertersSupplier, argTypes, returnType);
         if (result.length == 0) {
             return null;
         }
@@ -264,7 +263,7 @@ public class JFunctionsImpl implements JFunctions {
                 error[i] = result[i].getInvokable();
             }
             throw new JMultipleInvokableMatchFound(
-                    JTypeUtils.sig(invokables[0].signature().name(), argTypes, false, true),
+                    JTypeUtils.sig(invokables[0].getSignature().name(), argTypes, false, true),
                     error);
         }
         return result[0].getInvokable();
@@ -272,7 +271,7 @@ public class JFunctionsImpl implements JFunctions {
 
 //    @Override
     @Override
-    public JInvokableCost[] resolveMatches(boolean bestMatchOnly, JInvokable[] invokables, Function<JTypeOrLambda, JConverter[]> convertersSupplier, JTypeOrLambda... argTypes) {
+    public JInvokableCost[] resolveMatches(boolean bestMatchOnly, JInvokable[] invokables, Function<JTypePattern, JConverter[]> convertersSupplier, JTypePattern[] argTypes, JTypePattern returnType) {
         if (invokables.length == 0) {
             return new JInvokableCost[0];
         }
@@ -299,7 +298,7 @@ public class JFunctionsImpl implements JFunctions {
             for (JInvokable possibleMethod : noDuplicatesInvokables) {
                 ArgsPossibilityApplication a = new ArgsPossibilityApplication(argsPossibility, possibleMethod);
                 JMethodObject<ArgsPossibilityApplication> mm = new JMethodObject<ArgsPossibilityApplication>(
-                        possibleMethod.signature(),
+                        possibleMethod.getSignature(),
                         null,
                         a,
                         a.possibility.weight()
@@ -321,9 +320,9 @@ public class JFunctionsImpl implements JFunctions {
         List<JInvokableCost> all = new ArrayList<>();
         for (JMethodObject<ArgsPossibilityApplication> matchingMethod : matchingMethods) {
             JInvokable invocation = matchingMethod.getMethod().invocation;
-            if (invocation.signature().argsCount() != argTypes.length) {
+            if (invocation.getSignature().argsCount() != argTypes.length) {
                 //this is the case where we are using ellipse vararg (...)  arguments
-                if (invocation.signature().acceptArgsCount(argTypes.length)) {
+                if (invocation.getSignature().acceptArgsCount(argTypes.length)) {
                     if (invocation instanceof JMethod) {
                         invocation = new JMethodWithVarArg((JMethod) invocation);
                     } else if (invocation instanceof JFunction) {

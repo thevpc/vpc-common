@@ -1,25 +1,29 @@
 package net.vpc.common.jeep;
 
 public interface JInvokeContextBuilder {
-    JTypedValue instance();
+    JTypedValue getInstance();
 
-    JEvaluator evaluator();
+    JEvaluator getEvaluator();
 
-    JInvokeContextBuilder evaluator(JEvaluator value);
+    JInvokeContextBuilder setEvaluator(JEvaluator value);
 
-    JInvokeContextBuilder instance(JTypedValue instance);
+    JInvokeContextBuilder setInstance(JTypedValue instance);
 
-    JContext context();
+    JContext getContext();
 
-    JInvokeContextBuilder context(JContext context);
+    JInvokeContextBuilder setContext(JContext context);
 
-    JEvaluable[] arguments();
+    JEvaluable[] getArguments();
 
-    JInvokeContextBuilder arguments(JEvaluable[] args);
+    JInvokeContextBuilder setArguments(JEvaluable[] args);
 
-    String name();
+    String getName();
 
-    JInvokeContextBuilder name(String name);
+    JInvokeContextBuilder setName(String name);
+
+    JCallerInfo getCallerInfo();
+
+    JInvokeContextBuilder setCallerInfo(JCallerInfo callerInfo);
 
     JInvokeContext build();
 }

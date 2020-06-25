@@ -1,8 +1,8 @@
 package net.vpc.common.jeep;
 
 public interface JConverter {
-    JTypeOrLambda originalType();
-    JTypeOrLambda targetType();
+    JTypePattern originalType();
+    JTypePattern targetType();
 
     double weight();
     Object convert(Object value, JInvokeContext context);

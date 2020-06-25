@@ -11,8 +11,11 @@ public class JIdentFunction extends JFunctionBase {
 
     @Override
     public Object invoke(JInvokeContext icontext) {
-        return icontext.evaluate(icontext.arguments()[0]);
+        return icontext.evaluate(icontext.getArguments()[0]);
     }
-    
 
+    @Override
+    public String getSourceName() {
+        return "<runtime>";
+    }
 }

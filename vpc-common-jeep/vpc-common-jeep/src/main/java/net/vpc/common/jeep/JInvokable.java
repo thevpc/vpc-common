@@ -3,11 +3,12 @@ package net.vpc.common.jeep;
 import net.vpc.common.jeep.impl.functions.JSignature;
 
 public interface JInvokable{
+    String getSourceName();
     Object invoke(JInvokeContext context);
-    JSignature signature();
-    JType returnType();
-    default JType genericReturnType(){
-        return returnType();
+    JSignature getSignature();
+    JType getReturnType();
+    default JType getGenericReturnType(){
+        return getReturnType();
     }
-    String name();
+    String getName();
 }

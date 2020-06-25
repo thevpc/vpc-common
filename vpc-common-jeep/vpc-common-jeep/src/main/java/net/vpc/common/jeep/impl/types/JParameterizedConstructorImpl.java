@@ -16,40 +16,40 @@ public class JParameterizedConstructorImpl extends AbstractJConstructor implemen
         this.actualTypes = actualTypes;
         if (rawConstructor instanceof JRawConstructor) {
             JRawConstructor rawMethod1 = (JRawConstructor) rawConstructor;
-            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawMethod1.genericSignature().argTypes(), this);
-            this.sig = JSignature.of(rawConstructor.name(), jeepParameterTypes);
+            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawMethod1.getGenericSignature().argTypes(), this);
+            this.sig = JSignature.of(rawConstructor.getName(), jeepParameterTypes);
         } else {
-            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawConstructor.signature().argTypes(), this);
-            this.sig = JSignature.of(rawConstructor.name(), jeepParameterTypes);
+            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawConstructor.getSignature().argTypes(), this);
+            this.sig = JSignature.of(rawConstructor.getName(), jeepParameterTypes);
         }
     }
 
     @Override
-    public JType[] argTypes() {
+    public JType[] getArgTypes() {
         return sig.argTypes();
     }
 
     @Override
-    public String[] argNames() {
-        return rawConstructor.argNames();
+    public String[] getArgNames() {
+        return rawConstructor.getArgNames();
     }
     @Override
-    public JConstructor rawConstructor() {
+    public JConstructor getRawConstructor() {
         return rawConstructor;
     }
 
     @Override
-    public JType[] actualParameters() {
+    public JType[] getActualParameters() {
         return actualTypes;
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return new JTypeVariable[0];
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return declaringType;
     }
 
@@ -59,8 +59,8 @@ public class JParameterizedConstructorImpl extends AbstractJConstructor implemen
     }
 
     @Override
-    public int modifiers() {
-        return rawConstructor.modifiers();
+    public int getModifiers() {
+        return rawConstructor.getModifiers();
     }
 
     @Override
@@ -69,22 +69,27 @@ public class JParameterizedConstructorImpl extends AbstractJConstructor implemen
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return sig;
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         return declaringType;
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return declaringType.getRawType().simpleName();
     }
 
     @Override
     public JDeclaration getDeclaration() {
         return declaringType;
+    }
+
+    @Override
+    public String getSourceName() {
+        return rawConstructor.getSourceName();
     }
 }

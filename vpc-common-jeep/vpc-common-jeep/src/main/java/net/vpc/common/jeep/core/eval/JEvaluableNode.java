@@ -25,6 +25,6 @@ public class JEvaluableNode implements JEvaluable {
 
     @Override
     public Object evaluate(JInvokeContext context) {
-        return context.evaluator().evaluate(node,context);
+        return context.getEvaluator().evaluate(node,context);
     }
 }

@@ -17,33 +17,33 @@ public class JParameterizedMethodImpl extends AbstractJMethod implements JParame
         this.actualParameters=actualParameters;
         if(rawMethod instanceof JRawMethod) {
             JRawMethod rawMethod1 = (JRawMethod) rawMethod;
-            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawMethod1.genericSignature().argTypes(), this);
-            this.returnType = JTypeUtils.buildActualType(rawMethod1.genericReturnType(), this);
-            this.sig=JSignature.of(rawMethod.name(),jeepParameterTypes);
+            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawMethod1.getGenericSignature().argTypes(), this);
+            this.returnType = JTypeUtils.buildActualType(rawMethod1.getGenericReturnType(), this);
+            this.sig=JSignature.of(rawMethod.getName(),jeepParameterTypes);
         }else{
-            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawMethod.signature().argTypes(), this);
-            this.returnType = JTypeUtils.buildActualType(rawMethod.returnType(), this);
-            this.sig=JSignature.of(rawMethod.name(),jeepParameterTypes);
+            JType[] jeepParameterTypes = JTypeUtils.buildActualType(rawMethod.getSignature().argTypes(), this);
+            this.returnType = JTypeUtils.buildActualType(rawMethod.getReturnType(), this);
+            this.sig=JSignature.of(rawMethod.getName(),jeepParameterTypes);
         }
     }
 
     @Override
-    public JType[] argTypes() {
+    public JType[] getArgTypes() {
         return sig.argTypes();
     }
 
     @Override
-    public String[] argNames() {
-        return rawMethod.argNames();
+    public String[] getArgNames() {
+        return rawMethod.getArgNames();
     }
 
     @Override
-    public JType[] actualParameters() {
+    public JType[] getActualParameters() {
         return actualParameters;
     }
 
     @Override
-    public JMethod rawMethod() {
+    public JMethod getRawMethod() {
         return rawMethod;
     }
 
@@ -68,34 +68,34 @@ public class JParameterizedMethodImpl extends AbstractJMethod implements JParame
     }
 
     @Override
-    public int modifiers() {
-        return rawMethod.modifiers();
+    public int getModifiers() {
+        return rawMethod.getModifiers();
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return new JTypeVariable[0];
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return declaringType;
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         return returnType;
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return sig;
     }
 
     @Override
     public JMethod parametrize(JType... parameters) {
         return new JParameterizedMethodImpl(
-                this,parameters,declaringType()
+                this,parameters, getDeclaringType()
         );
     }
 
@@ -103,4 +103,10 @@ public class JParameterizedMethodImpl extends AbstractJMethod implements JParame
     public boolean isDefault() {
         return rawMethod.isDefault();
     }
+
+    @Override
+    public String getSourceName() {
+        return rawMethod.getSourceName();
+    }
+
 }

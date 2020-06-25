@@ -185,7 +185,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
             methods = new LinkedHashMap<>();
             for (Method item : hostType.getDeclaredMethods()) {
                 HostJRawMethod f = new HostJRawMethod(item, this);
-                methods.put(f.signature().toNoVarArgs(), f);
+                methods.put(f.getSignature().toNoVarArgs(), f);
             }
         }
         return methods;
@@ -209,7 +209,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
 //            if (hostType instanceof Class) {
             for (Constructor item : hostType.getDeclaredConstructors()) {
                 HostJRawConstructor f = new HostJRawConstructor(item, this);
-                constructors.put(f.signature().toNoVarArgs(), f);
+                constructors.put(f.getSignature().toNoVarArgs(), f);
             }
 //            }
         }

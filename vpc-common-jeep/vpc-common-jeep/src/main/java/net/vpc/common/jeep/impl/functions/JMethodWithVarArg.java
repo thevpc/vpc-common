@@ -14,13 +14,13 @@ public class JMethodWithVarArg implements JMethod {
     }
 
     @Override
-    public String name() {
-        return method.name();
+    public String getName() {
+        return method.getName();
     }
 
     @Override
-    public JType declaringType() {
-        return method.declaringType();
+    public JType getDeclaringType() {
+        return method.getDeclaringType();
     }
 
     @Override
@@ -39,28 +39,28 @@ public class JMethodWithVarArg implements JMethod {
     }
 
     @Override
-    public JSignature signature() {
-        return method.signature();
+    public JSignature getSignature() {
+        return method.getSignature();
     }
 
     @Override
-    public JType returnType() {
-        return method.returnType();
+    public JType getReturnType() {
+        return method.getReturnType();
     }
 
     @Override
-    public int modifiers() {
-        return method.modifiers();
+    public int getModifiers() {
+        return method.getModifiers();
     }
 
     @Override
-    public JType[] argTypes() {
-        return method.argTypes();
+    public JType[] getArgTypes() {
+        return method.getArgTypes();
     }
 
     @Override
-    public String[] argNames() {
-        return method.argNames();
+    public String[] getArgNames() {
+        return method.getArgNames();
     }
 
     public JMethod getMethod() {
@@ -69,11 +69,11 @@ public class JMethodWithVarArg implements JMethod {
 
     @Override
     public Object invoke(JInvokeContext icontext) {
-        JType[] mTypes = method.signature().argTypes();
+        JType[] mTypes = method.getSignature().argTypes();
         JEvaluable[] all = new JEvaluable[mTypes.length];
-        JEvaluable[] args = icontext.arguments();
+        JEvaluable[] args = icontext.getArguments();
         for (int i = 0; i < all.length - 1; i++) {
-            if (icontext.context().types().forName(JEvaluable.class.getName()).isAssignableFrom(mTypes[i])) {
+            if (icontext.getContext().types().forName(JEvaluable.class.getName()).isAssignableFrom(mTypes[i])) {
                 all[i] = new JEvaluableValue((args[i]),mTypes[i]);
             } else {
                 all[i] = args[i];
@@ -84,7 +84,7 @@ public class JMethodWithVarArg implements JMethod {
         all[all.length - 1] = new JEvaluable() {
             @Override
             public JType type() {
-                return icontext.argumentTypes()[icontext.argumentTypes().length-1];
+                return icontext.getArgumentTypes()[icontext.getArgumentTypes().length-1];
             }
 
             @Override
@@ -95,7 +95,7 @@ public class JMethodWithVarArg implements JMethod {
                 anArray.value();
                 for (int i = 0; i < varArgCount; i++) {
                     JEvaluable aaa = args[all.length - 1 + i];
-                    if (icontext.context().types().forName(JEvaluable.class.getName()).isAssignableFrom(jType)) {
+                    if (icontext.getContext().types().forName(JEvaluable.class.getName()).isAssignableFrom(jType)) {
                         anArray.set(i, aaa);
                     } else {
                         anArray.set(i, icontext.evaluate(aaa));
@@ -106,8 +106,8 @@ public class JMethodWithVarArg implements JMethod {
         };
         return method.invoke(
                 icontext.builder()
-                        .name(method.name())
-                        .arguments(all)
+                        .setName(method.getName())
+                        .setArguments(all)
                         .build()
         );
     }
@@ -127,12 +127,12 @@ public class JMethodWithVarArg implements JMethod {
 
     @Override
     public JDeclaration getDeclaration() {
-        return declaringType();
+        return getDeclaringType();
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
-        return method.typeParameters();
+    public JTypeVariable[] getTypeParameters() {
+        return method.getTypeParameters();
     }
 
     @Override
@@ -145,4 +145,8 @@ public class JMethodWithVarArg implements JMethod {
         return method.isDefault();
     }
 
+    @Override
+    public String getSourceName() {
+        return method.getSourceName();
+    }
 }

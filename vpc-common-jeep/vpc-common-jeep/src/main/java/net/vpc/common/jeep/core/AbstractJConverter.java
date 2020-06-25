@@ -4,26 +4,26 @@ import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.util.JTypeUtils;
 
 public abstract class AbstractJConverter implements JConverter {
-    private JTypeOrLambda from;
-    private JTypeOrLambda to;
+    private JTypePattern from;
+    private JTypePattern to;
     private double weight;
 
     public AbstractJConverter(Class from, Class to, double weight, JTypes type) {
         this(
-                JTypeOrLambda.of(type.forName(from.getName()))
-                ,JTypeOrLambda.of(type.forName(to.getName())),
+                JTypePattern.of(type.forName(from.getName()))
+                , JTypePattern.of(type.forName(to.getName())),
                 weight
         );
     }
-    public AbstractJConverter(JTypeOrLambda from, JTypeOrLambda to, double weight) {
+    public AbstractJConverter(JTypePattern from, JTypePattern to, double weight) {
         this.from = from;
         this.to = to;
         this.weight = weight;
     }
 
     public AbstractJConverter(JType from, JType to, double weight) {
-        this.from = JTypeOrLambda.of(from);
-        this.to = JTypeOrLambda.of(to);
+        this.from = JTypePattern.of(from);
+        this.to = JTypePattern.of(to);
         this.weight = weight;
     }
 
@@ -33,12 +33,12 @@ public abstract class AbstractJConverter implements JConverter {
     }
 
     @Override
-    public JTypeOrLambda originalType() {
+    public JTypePattern originalType() {
         return from;
     }
 
     @Override
-    public JTypeOrLambda targetType() {
+    public JTypePattern targetType() {
         return to;
     }
 

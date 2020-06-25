@@ -177,7 +177,7 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
             LinkedHashMap<JSignature, JMethod> _methods=new LinkedHashMap<>();
             for (JMethod jMethod : getRawType().getDeclaredMethods()) {
                 JParameterizedMethodImpl m=new JParameterizedMethodImpl(jMethod,new JType[0], this);
-                _methods.put(m.signature(),m);
+                _methods.put(m.getSignature(),m);
             }
             this._methods=_methods;
         }
@@ -190,7 +190,7 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
             LinkedHashMap<JSignature, JConstructor> _constructors=new LinkedHashMap<>();
             for (JConstructor i : getRawType().getDeclaredConstructors()) {
                 JParameterizedConstructorImpl m=new JParameterizedConstructorImpl(i,new JType[0], this);
-                _constructors.put(m.signature(),m);
+                _constructors.put(m.getSignature(),m);
             }
             this._constructors=_constructors;
         }

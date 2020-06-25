@@ -44,7 +44,7 @@ public abstract class AbstractJContext implements JContext {
                 jEvaluator,
                 null,
                 new JEvaluable[0],
-                null
+                null,null
         ));
     }
 

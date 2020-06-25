@@ -10,7 +10,7 @@ public class JInvokablePrefilled {
     public JInvokablePrefilled(JInvokable invokable, JEvaluable[] evaluables) {
         this.invokable = invokable;
         this.evaluables = evaluables;
-        name=invokable.signature().name();
+        name=invokable.getSignature().name();
     }
 
 //    public JInvokablePrefilled(JInvokable invokable, JNode... nodes) {
@@ -22,7 +22,7 @@ public class JInvokablePrefilled {
 
 
     public JSignature signature(){
-        return getInvokable().signature();
+        return getInvokable().getSignature();
     }
 
     public JInvokable getInvokable() {
@@ -39,7 +39,7 @@ public class JInvokablePrefilled {
 
     public Object invoke(JInvokeContext context){
         return invokable.invoke(
-                context.builder().arguments(evaluables).name(name)
+                context.builder().setArguments(evaluables).setName(name)
                 .build()
         );
     }

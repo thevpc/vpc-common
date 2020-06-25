@@ -145,8 +145,8 @@ public class DefaultJParserNodeFactory implements JParserNodeFactory<JDefaultNod
         if (o1 instanceof JNodeFunctionCall) {
             JNodeFunctionCall o10 = (JNodeFunctionCall) o1;
             if (o10.getName().equals(op)) {
-                JFunction ff = context.functions().findFunctionMatchOrNull(o10.getName());
-                if (ff != null && ff.signature().isVarArgs()) {
+                JFunction ff = context.functions().findFunctionMatchOrNull(o10.getName(), JCallerInfo.NO_CALLER);
+                if (ff != null && ff.getSignature().isVarArgs()) {
                     if (o2 instanceof JNodeFunctionCall && ((JNodeFunctionCall) o2).getName().equals(op)) {
                         return new JNodeFunctionCall(op,
                                 (JDefaultNode[]) JeepUtils.joinArraysAsType(JDefaultNode.class, new Object[]{

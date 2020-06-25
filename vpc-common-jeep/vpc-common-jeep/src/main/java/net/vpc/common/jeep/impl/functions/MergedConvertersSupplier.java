@@ -7,17 +7,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
 
-public class MergedConvertersSupplier implements Function<JTypeOrLambda, JConverter[]> {
-    private final Function<JTypeOrLambda, JConverter[]> convertersSupplier;
+public class MergedConvertersSupplier implements Function<JTypePattern, JConverter[]> {
+    private final Function<JTypePattern, JConverter[]> convertersSupplier;
     private final JContext context;
 
-    public MergedConvertersSupplier(JContext context, Function<JTypeOrLambda, JConverter[]> convertersSupplier) {
+    public MergedConvertersSupplier(JContext context, Function<JTypePattern, JConverter[]> convertersSupplier) {
         this.context = context;
         this.convertersSupplier = convertersSupplier;
     }
 
     @Override
-    public JConverter[] apply(JTypeOrLambda jType) {
+    public JConverter[] apply(JTypePattern jType) {
         JConverter[] converters = context.resolvers().getConverters(jType);
         if(convertersSupplier ==null){
             return converters;

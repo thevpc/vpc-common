@@ -121,7 +121,7 @@ public class DefaultJResolvers implements JResolvers {
     }
 
     @Override
-    public JConverter[] getConverters(JTypeOrLambda type) {
+    public JConverter[] getConverters(JTypePattern type) {
         JConverterList2 allImplicitConverters = new JConverterList2(type, true);
         for (JConverter ic : JTypeUtils.getTypeImplicitConversions(type, false)) {
             if (ic != null) {

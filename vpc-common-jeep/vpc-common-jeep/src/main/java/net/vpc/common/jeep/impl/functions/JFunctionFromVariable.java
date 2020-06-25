@@ -37,22 +37,22 @@ public class JFunctionFromVariable implements JFunction {
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         return v.type();
     }
 
     @Override
     public Object invoke(JInvokeContext context) {
-        return v.getValue(context.context());
+        return v.getValue(context);
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return v.name();
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return signature;
     }
 
@@ -74,4 +74,10 @@ public class JFunctionFromVariable implements JFunction {
     public int hashCode() {
         return Objects.hash(v, signature);
     }
+
+    @Override
+    public String getSourceName() {
+        return "<runtime>";
+    }
+
 }

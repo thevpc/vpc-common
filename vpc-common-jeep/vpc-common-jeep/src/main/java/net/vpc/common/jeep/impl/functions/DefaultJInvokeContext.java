@@ -9,8 +9,9 @@ public class DefaultJInvokeContext implements JInvokeContext {
     private JEvaluable[] arguments;
     private String name;
     private JType[] argumentTypes;
+    private JCallerInfo callerInfo;
 
-    public DefaultJInvokeContext(JContext context, JEvaluator evaluator, JTypedValue instance, JEvaluable[] arguments, String name) {
+    public DefaultJInvokeContext(JContext context, JEvaluator evaluator, JTypedValue instance, JEvaluable[] arguments, String name,JCallerInfo callerInfo) {
         this.context = context;
         this.instance = instance;
         this.evaluator = evaluator;
@@ -20,6 +21,7 @@ public class DefaultJInvokeContext implements JInvokeContext {
         for (int i = 0; i < this.argumentTypes.length; i++) {
             this.argumentTypes[i]=arguments[i].type();
         }
+        this.callerInfo = callerInfo;
     }
 
     @Override
@@ -28,12 +30,12 @@ public class DefaultJInvokeContext implements JInvokeContext {
     }
 
     @Override
-    public JEvaluator evaluator() {
+    public JEvaluator getEvaluator() {
         return evaluator;
     }
 
     @Override
-    public JTypedValue instance() {
+    public JTypedValue getInstance() {
         return instance;
     }
 
@@ -44,7 +46,7 @@ public class DefaultJInvokeContext implements JInvokeContext {
 
     @Override
     public Object evaluate(JNode node) {
-        return evaluator().evaluate(node,this);
+        return getEvaluator().evaluate(node,this);
     }
 
     @Override
@@ -57,27 +59,32 @@ public class DefaultJInvokeContext implements JInvokeContext {
     }
 
     @Override
-    public JContext context() {
+    public JContext getContext() {
         return context;
     }
 
     @Override
-    public JEvaluable[] arguments() {
+    public JEvaluable[] getArguments() {
         return arguments;
     }
 
     @Override
-    public String name() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public JType[] argumentTypes() {
+    public JType[] getArgumentTypes() {
         return argumentTypes;
     }
 
     @Override
     public JInvokeContextBuilder builder() {
         return new DefaultJInvokeContextBuilder(this);
+    }
+
+    @Override
+    public JCallerInfo getCallerInfo() {
+        return callerInfo;
     }
 }

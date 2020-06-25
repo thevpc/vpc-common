@@ -1,7 +1,7 @@
 package net.vpc.common.jeep.impl.vars;
 
+import net.vpc.common.jeep.JInvokeContext;
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JContext;
 import net.vpc.common.jeep.JVar;
 
 public abstract class JVarReadOnly extends AbstractJVar {
@@ -34,7 +34,7 @@ public abstract class JVarReadOnly extends AbstractJVar {
 
 
     @Override
-    public JVar setValue(Object value, JContext context) {
+    public JVar setValue(Object value, JInvokeContext context) {
         throw new IllegalArgumentException("Read only var "+ name());
     }
 

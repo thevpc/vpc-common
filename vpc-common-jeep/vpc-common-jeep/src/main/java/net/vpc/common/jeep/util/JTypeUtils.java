@@ -5,12 +5,11 @@ import net.vpc.common.jeep.core.AbstractJConverter;
 import net.vpc.common.jeep.core.types.JTypeNameBounded;
 import net.vpc.common.jeep.impl.CastJConverter;
 import net.vpc.common.jeep.impl.JTypesSPI;
+import net.vpc.common.jeep.impl.functions.JSignature;
+import net.vpc.common.textsource.log.JMessageList;
 
 import java.lang.reflect.Modifier;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class JTypeUtils {
     private static final JConverter[] ARR02 = new JConverter[0];
@@ -92,7 +91,7 @@ public class JTypeUtils {
             JDeclaration d = declaration;
             while (d != null) {
                 if (d instanceof JMethod) {
-                    for (JTypeVariable jTypeVariable : ((JMethod) d).typeParameters()) {
+                    for (JTypeVariable jTypeVariable : ((JMethod) d).getTypeParameters()) {
                         if (jTypeVariable.getName().equals(type.getName())) {
                             JType c = firstCommonSuperType(jTypeVariable.upperBounds());
                             if (c == null) {
@@ -102,7 +101,7 @@ public class JTypeUtils {
                         }
                     }
                 } else if (d instanceof JConstructor) {
-                    for (JTypeVariable jTypeVariable : ((JConstructor) d).typeParameters()) {
+                    for (JTypeVariable jTypeVariable : ((JConstructor) d).getTypeParameters()) {
                         if (jTypeVariable.getName().equals(type.getName())) {
                             JType c = firstCommonSuperType(jTypeVariable.upperBounds());
                             if (c == null) {
@@ -172,13 +171,13 @@ public class JTypeUtils {
                 if (d instanceof JMethod) {
                     if (d instanceof JParameterizedMethod) {
                         JParameterizedMethod pt = (JParameterizedMethod) d;
-                        JType[] aTypes = pt.actualParameters();
+                        JType[] aTypes = pt.getActualParameters();
                         if (aTypes.length > 0) {
-                            JMethod rm = pt.rawMethod();
+                            JMethod rm = pt.getRawMethod();
                             while ((rm instanceof JParameterizedMethod)) {
-                                rm = ((JParameterizedMethod) rm).rawMethod();
+                                rm = ((JParameterizedMethod) rm).getRawMethod();
                             }
-                            JTypeVariable[] typeParameters = rm.typeParameters();
+                            JTypeVariable[] typeParameters = rm.getTypeParameters();
                             for (int i = 0; i < typeParameters.length; i++) {
                                 JTypeVariable jTypeVariable = typeParameters[i];
                                 if (jTypeVariable.getName().equals(type.getName())) {
@@ -193,12 +192,12 @@ public class JTypeUtils {
                 } else if (d instanceof JConstructor) {
                     if (d instanceof JParameterizedConstructor) {
                         JParameterizedConstructor pt = (JParameterizedConstructor) d;
-                        JConstructor rm = pt.rawConstructor();
-                        JTypeVariable[] typeParameters = rm.typeParameters();
+                        JConstructor rm = pt.getRawConstructor();
+                        JTypeVariable[] typeParameters = rm.getTypeParameters();
                         for (int i = 0; i < typeParameters.length; i++) {
                             JTypeVariable jTypeVariable = typeParameters[i];
                             if (jTypeVariable.getName().equals(type.getName())) {
-                                return pt.actualParameters()[i];
+                                return pt.getActualParameters()[i];
                             }
                         }
                     }
@@ -284,24 +283,24 @@ public class JTypeUtils {
                 if (d instanceof JMethod) {
                     if (d instanceof JParameterizedMethod) {
                         JParameterizedMethod pt = (JParameterizedMethod) d;
-                        JMethod rm = pt.rawMethod();
-                        JTypeVariable[] typeParameters = rm.typeParameters();
+                        JMethod rm = pt.getRawMethod();
+                        JTypeVariable[] typeParameters = rm.getTypeParameters();
                         for (int i = 0; i < typeParameters.length; i++) {
                             JTypeVariable jTypeVariable = typeParameters[i];
                             if (jTypeVariable.getName().equals(type.getName())) {
-                                return pt.actualParameters()[i];
+                                return pt.getActualParameters()[i];
                             }
                         }
                     }
                 } else if (d instanceof JConstructor) {
                     if (d instanceof JParameterizedConstructor) {
                         JParameterizedConstructor pt = (JParameterizedConstructor) d;
-                        JConstructor rm = pt.rawConstructor();
-                        JTypeVariable[] typeParameters = rm.typeParameters();
+                        JConstructor rm = pt.getRawConstructor();
+                        JTypeVariable[] typeParameters = rm.getTypeParameters();
                         for (int i = 0; i < typeParameters.length; i++) {
                             JTypeVariable jTypeVariable = typeParameters[i];
                             if (jTypeVariable.getName().equals(type.getName())) {
-                                return pt.actualParameters()[i];
+                                return pt.getActualParameters()[i];
                             }
                         }
                     }
@@ -384,75 +383,77 @@ public class JTypeUtils {
         return firstCommonSuperType(type1.getSuperType(), type2, types);
     }
 
-    public static JTypeOrLambda firstCommonSuperTypeOrLambda(JTypeOrLambda typeOrLambda1, JTypeOrLambda typeOrLambda2, JTypes types) {
-        if (typeOrLambda1 == null) {
-            return typeOrLambda2;
+    public static JTypePattern firstCommonSuperTypePattern(JTypePattern typePattern1, JTypePattern typePattern2, JTypes types) {
+        if (typePattern1 == null) {
+            return typePattern2;
         }
-        if (typeOrLambda2 == null) {
-            return typeOrLambda1;
+        if (typePattern2 == null) {
+            return typePattern1;
         }
         JType tobj = forObject(types);
-        if (typeOrLambda1.isType() && typeOrLambda2.isType()) {
-            JType type1 = typeOrLambda1.getType();
-            JType type2 = typeOrLambda1.getType();
-            return JTypeOrLambda.of(firstCommonSuperType(type1, type2, types));
-        } else if (typeOrLambda1.isLambda() && typeOrLambda2.isType()) {
-            JType type2 = typeOrLambda1.getType();
+        if (typePattern1.isType() && typePattern2.isType()) {
+            JType type1 = typePattern1.getType();
+            JType type2 = typePattern1.getType();
+            return JTypePattern.of(firstCommonSuperType(type1, type2, types));
+        } else if (typePattern1.isLambda() && typePattern2.isType()) {
+            JType type2 = typePattern1.getType();
             JMethod[] m = type2.getDeclaredMethods();
             if (m.length == 1) {
-                int modifiers = m[0].modifiers();
+                int modifiers = m[0].getModifiers();
                 if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
-                    JType[] type2ArgTypes = m[0].argTypes();
-                    JType[] type1ArgTypes = typeOrLambda1.getLambdaArgTypes();
+                    JType[] type2ArgTypes = m[0].getArgTypes();
+                    JType[] type1ArgTypes = typePattern1.getLambdaArgTypes();
                     if (type2ArgTypes.length == type1ArgTypes.length) {
                         for (int i = 0; i < type2ArgTypes.length; i++) {
                             if (type2ArgTypes[i].isAssignableFrom(type1ArgTypes[i])) {
                                 //ok
                             } else {
-                                return JTypeOrLambda.of(tobj);
+                                return JTypePattern.of(tobj);
                             }
                         }
-                        return JTypeOrLambda.of(type2);
+                        return JTypePattern.of(type2);
                     }
                 }
             }
-            return JTypeOrLambda.of(tobj);
-        } else if (typeOrLambda1.isType() && typeOrLambda2.isLambda()) {
-            JType type1 = typeOrLambda1.getType();
+            return JTypePattern.of(tobj);
+        } else if (typePattern1.isType() && typePattern2.isLambda()) {
+            JType type1 = typePattern1.getType();
             JMethod[] m = type1.getDeclaredMethods();
             if (m.length == 1) {
-                int modifiers = m[0].modifiers();
+                int modifiers = m[0].getModifiers();
                 if (Modifier.isPublic(modifiers) && !Modifier.isStatic(modifiers)) {
-                    JType[] type1ArgTypes = m[0].argTypes();
-                    JType[] type2ArgTypes = typeOrLambda2.getLambdaArgTypes();
+                    JType[] type1ArgTypes = m[0].getArgTypes();
+                    JType[] type2ArgTypes = typePattern2.getLambdaArgTypes();
                     if (type1ArgTypes.length == type2ArgTypes.length) {
                         for (int i = 0; i < type1ArgTypes.length; i++) {
                             if (type1ArgTypes[i].isAssignableFrom(type2ArgTypes[i])) {
                                 //ok
                             } else {
-                                return JTypeOrLambda.of(tobj);
+                                return JTypePattern.of(tobj);
                             }
                         }
-                        return JTypeOrLambda.of(type1);
+                        return JTypePattern.of(type1);
                     }
                 }
             }
-            return JTypeOrLambda.of(tobj);
+            return JTypePattern.of(tobj);
         } else {
             //both lambda
-            JType[] type1ArgTypes = typeOrLambda1.getLambdaArgTypes();
-            JType[] type2ArgTypes = typeOrLambda2.getLambdaArgTypes();
+            JType[] type1ArgTypes = typePattern1.getLambdaArgTypes();
+            JType[] type2ArgTypes = typePattern2.getLambdaArgTypes();
+            JType type1RetType = typePattern1.getType();
+            JType type2RetType = typePattern2.getType();
             if (type1ArgTypes.length == type2ArgTypes.length) {
                 if (type1ArgTypes.length == 0) {
-                    return typeOrLambda1;
+                    return typePattern1;
                 }
                 JType[] ret = new JType[type1ArgTypes.length];
                 for (int i = 0; i < type1ArgTypes.length; i++) {
                     ret[i] = firstCommonSuperType(type1ArgTypes[i], type2ArgTypes[i], types);
                 }
-                return JTypeOrLambda.of(ret);
+                return JTypePattern.of(ret,firstCommonSuperType(type1RetType,type2RetType,types));
             }
-            return JTypeOrLambda.of(tobj);
+            return JTypePattern.of(tobj);
         }
     }
 
@@ -483,11 +484,11 @@ public class JTypeUtils {
                 ;
     }
 
-    public static boolean isBooleanResolvableType(JTypeOrLambda type) {
+    public static boolean isBooleanResolvableType(JTypePattern type) {
         return type.isType() && isBooleanResolvableType(type.getType());
     }
     
-    public static boolean isVoid(JTypeOrLambda type) {
+    public static boolean isVoid(JTypePattern type) {
         return type.isType() && type.getType().getName().equals("void");
     }
 
@@ -502,7 +503,7 @@ public class JTypeUtils {
                 ;
     }
 
-    public static boolean isIntResolvableType(JTypeOrLambda type) {
+    public static boolean isIntResolvableType(JTypePattern type) {
         return type.isType() && isIntResolvableType(type.getType());
     }
 
@@ -542,8 +543,8 @@ public class JTypeUtils {
         return types.forName("null");
     }
 
-    public static int getAssignationCost(JType parent, JTypeOrLambda childOrLambda) {
-        if (childOrLambda == null) {
+    public static int getAssignationCost(JType parent, JTypePattern childOrLambda) {
+        if (childOrLambda == null || (childOrLambda.isType() && JTypeUtils.isNullType(childOrLambda.getType()))) {
             if (parent.isPrimitive()) {
                 return -1;
             }
@@ -626,7 +627,30 @@ public class JTypeUtils {
                 }
             }
         } else {
-            throw new JFixMeLaterException();
+            JType[] lambdaTypes = childOrLambda.getLambdaArgTypes();
+            JSignature i = JTypeUtils.extractLambdaArgTypesOrNull(parent, lambdaTypes.length);
+            if(i!=null){
+                JType[] b = i.acceptAndExpand(lambdaTypes);
+                int c=0;
+                for (int j = 0; j < b.length; j++) {
+                    int u = getAssignationCost(b[j], JTypePattern.of(lambdaTypes[j]));
+                    if(u<0){
+                        //should never happen
+                        return -1;
+                    }
+                    c+=u;
+                }
+                JMethod expectedMethod = extractLambdaMethod(parent);
+                JType expectedReturnType = expectedMethod.getReturnType();
+                JType lrt = childOrLambda.getLambdaReturnType();
+                int u = getAssignationCost(expectedReturnType, JTypePattern.ofTypeOrNull(lrt));
+                if(u<0){
+                    return -1;
+                }
+                c+=u;
+                return c;
+            }
+            return -1;
         }
         return -1;
     }
@@ -704,12 +728,12 @@ public class JTypeUtils {
 
     public static JConverter createTypeImplicitConversions(JType from, Class to) {
         return createTypeImplicitConversions(
-                JTypeOrLambda.of(from),
-                JTypeOrLambda.of(from.types().forName(to.getName()))
+                JTypePattern.of(from),
+                JTypePattern.of(from.types().forName(to.getName()))
         );
     }
 
-    public static JConverter createTypeImplicitConversions(JTypeOrLambda from, JTypeOrLambda to) {
+    public static JConverter createTypeImplicitConversions(JTypePattern from, JTypePattern to) {
         String k = str(from) + "/" + str(to);
         JConverter f = JInvokeUtils.cached_createTypeImplicitConversions.get(k);
         if (f != null) {
@@ -758,16 +782,16 @@ public class JTypeUtils {
         return f;
     }
 
-    public static JConverter[] getTypeImplicitConversions(JTypeOrLambda typeOrLambda, boolean acceptSuper) {
-        if (typeOrLambda == null) {
+    public static JConverter[] getTypeImplicitConversions(JTypePattern typePattern, boolean acceptSuper) {
+        if (typePattern == null) {
 //            cache_getTypeImplicitConversions.put(cls, ARR0);
             return ARR02;
         }
-        if (typeOrLambda.isLambda()) {
+        if (typePattern.isLambda()) {
             return ARR02;
         }
-        JType cls = typeOrLambda.getType();
-        TypeConvertersCacheKey2 ck = new TypeConvertersCacheKey2(typeOrLambda, acceptSuper);
+        JType cls = typePattern.getType();
+        TypeConvertersCacheKey2 ck = new TypeConvertersCacheKey2(typePattern, acceptSuper);
         JTypes types = cls.types();
         JType jobj = forObject(types);
         JConverter[] old = cache_getTypeImplicitConversions2.get(ck);
@@ -778,7 +802,7 @@ public class JTypeUtils {
             cache_getTypeImplicitConversions2.put(ck, ARR02);
             return ARR02;
         }
-        JConverterList2 all = new JConverterList2(typeOrLambda, !acceptSuper);
+        JConverterList2 all = new JConverterList2(typePattern, !acceptSuper);
 //        if(cls.isPrimitive()){
 //            all.add(new BoxConverter(cls));
 //        }
@@ -786,7 +810,7 @@ public class JTypeUtils {
             JTypeArray ta = (JTypeArray) cls;
             JType rct = ta.rootComponentType();
             if (!rct.isPrimitive() && !jobj.equals(rct)) {
-                all.add(new CastJConverter(typeOrLambda,
+                all.add(new CastJConverter(typePattern,
                         jobj.toArray(ta.arrayDimension())));
             }
         }
@@ -843,14 +867,14 @@ public class JTypeUtils {
             all.add(createTypeImplicitConversions(cls, Double.TYPE));
         }
         for (JType cls2 : cls.getInterfaces()) {
-            all.add(createTypeImplicitConversions(typeOrLambda, JTypeOrLambda.of(cls2)));
+            all.add(createTypeImplicitConversions(typePattern, JTypePattern.of(cls2)));
         }
         JType s = cls.getSuperType();
         if (s != null) {
             if (acceptSuper) {
-                all.add(new CastJConverter(typeOrLambda, cls.getSuperType()));
+                all.add(new CastJConverter(typePattern, cls.getSuperType()));
             }
-            JConverter superConversions = createTypeImplicitConversions(typeOrLambda, JTypeOrLambda.of(s));
+            JConverter superConversions = createTypeImplicitConversions(typePattern, JTypePattern.of(s));
             all.add(superConversions);
         }
         JConverter[] r = all.toArray();
@@ -858,7 +882,7 @@ public class JTypeUtils {
         return r;
     }
 
-    public static String str(JTypeOrLambda argType) {
+    public static String str(JTypePattern argType) {
         if (argType == null) {
             return "?";
         } else if (argType.isType()) {
@@ -877,7 +901,7 @@ public class JTypeUtils {
         }
     }
 
-    public static JType[] typesOrError(JTypeOrLambda[] argTypes) {
+    public static JType[] typesOrError(JTypePattern[] argTypes) {
         JType[] all = new JType[argTypes.length];
         for (int i = 0; i < argTypes.length; i++) {
             all[i] = argTypes[i].getType();
@@ -885,7 +909,7 @@ public class JTypeUtils {
         return all;
     }
 
-    public static JType[] typesOrNull(JTypeOrLambda[] argTypes) {
+    public static JType[] typesOrNull(JTypePattern[] argTypes) {
         JType[] all = new JType[argTypes.length];
         for (int i = 0; i < argTypes.length; i++) {
             if (argTypes[i].isType()) {
@@ -897,11 +921,11 @@ public class JTypeUtils {
         return all;
     }
 
-    public static String sig(String name, JTypeOrLambda[] argTypes, boolean varArgs) {
+    public static String sig(String name, JTypePattern[] argTypes, boolean varArgs) {
         return sig(name, argTypes, varArgs, true);
     }
 
-    public static String sig(String name, JTypeOrLambda[] argTypes, boolean varArgs, boolean withPars) {
+    public static String sig(String name, JTypePattern[] argTypes, boolean varArgs, boolean withPars) {
         StringBuilder sb = new StringBuilder();
         if (!JStringUtils.isBlank(name)) {
             withPars = true;
@@ -914,7 +938,7 @@ public class JTypeUtils {
             if (i > 0) {
                 sb.append(",");
             }
-            JTypeOrLambda ati = argTypes[i];
+            JTypePattern ati = argTypes[i];
             if (ati.isType()) {
                 if (i == argTypes.length - 1 && varArgs) {
                     JTypeArray argType = (JTypeArray) ati.getType();
@@ -933,19 +957,36 @@ public class JTypeUtils {
         return sb.toString();
     }
 
-    public static JTypeOrLambda[] typesOrLambdas(JType[] argumentTypes) {
-        JTypeOrLambda[] ret = new JTypeOrLambda[argumentTypes.length];
+    public static JTypePattern[] typesOrLambdas(JType[] argumentTypes) {
+        JTypePattern[] ret = new JTypePattern[argumentTypes.length];
         for (int i = 0; i < ret.length; i++) {
-            ret[i] = JTypeOrLambda.of(argumentTypes[i]);
+            ret[i] = JTypePattern.of(argumentTypes[i]);
         }
         return ret;
     }
 
+    public static JType classOf(JType tv) {
+        JRawType raw = (JRawType) tv.types().forName(Class.class.getName());
+        return raw.parametrize(tv);
+    }
+
+    public static JType forThrowable(JTypes types) {
+        return types.forName(Throwable.class.getName());
+    }
+
+    public static JType forException(JTypes types) {
+        return types.forName(Exception.class.getName());
+    }
+
+    public static JType forRuntimeException(JTypes types) {
+        return types.forName(RuntimeException.class.getName());
+    }
+
     private static class TypeConvertersCacheKey2 {
-        private JTypeOrLambda type;
+        private JTypePattern type;
         private boolean acceptSuper;
 
-        public TypeConvertersCacheKey2(JTypeOrLambda type, boolean acceptSuper) {
+        public TypeConvertersCacheKey2(JTypePattern type, boolean acceptSuper) {
             this.type = type;
             this.acceptSuper = acceptSuper;
         }
@@ -966,7 +1007,7 @@ public class JTypeUtils {
     }
 
     public static class NumberToByteJConverter extends AbstractJConverter {
-        public NumberToByteJConverter(JTypeOrLambda from, JTypeOrLambda to) {
+        public NumberToByteJConverter(JTypePattern from, JTypePattern to) {
             super(from, to, 2);
         }
 
@@ -980,7 +1021,7 @@ public class JTypeUtils {
     }
 
     public static class NumberToShortJConverter extends AbstractJConverter {
-        public NumberToShortJConverter(JTypeOrLambda from, JTypeOrLambda to) {
+        public NumberToShortJConverter(JTypePattern from, JTypePattern to) {
             super(from, to, 2);
         }
 
@@ -994,7 +1035,7 @@ public class JTypeUtils {
     }
 
     public static class NumberToIntJConverter extends AbstractJConverter {
-        public NumberToIntJConverter(JTypeOrLambda from, JTypeOrLambda to) {
+        public NumberToIntJConverter(JTypePattern from, JTypePattern to) {
             super(from, to, 2);
         }
 
@@ -1008,7 +1049,7 @@ public class JTypeUtils {
     }
 
     public static class NumberToLongJConverter extends AbstractJConverter {
-        public NumberToLongJConverter(JTypeOrLambda from, JTypeOrLambda to) {
+        public NumberToLongJConverter(JTypePattern from, JTypePattern to) {
             super(from, to, 2);
         }
 
@@ -1022,7 +1063,7 @@ public class JTypeUtils {
     }
 
     public static class NumberToFloatJConverter extends AbstractJConverter {
-        public NumberToFloatJConverter(JTypeOrLambda from, JTypeOrLambda to) {
+        public NumberToFloatJConverter(JTypePattern from, JTypePattern to) {
             super(from, to, 2);
         }
 
@@ -1036,7 +1077,7 @@ public class JTypeUtils {
     }
 
     public static class NumberToDoubleJConverter extends AbstractJConverter {
-        public NumberToDoubleJConverter(JTypeOrLambda from, JTypeOrLambda to) {
+        public NumberToDoubleJConverter(JTypePattern from, JTypePattern to) {
             super(from, to, 2);
         }
 
@@ -1053,4 +1094,52 @@ public class JTypeUtils {
         return (mod & SYNTHETIC) != 0;
     }
 
+
+    public static JSignature extractLambdaArgTypesOrNull(JType type, int expectedArgCount) {
+        return extractLambdaArgTypesOrError(type,expectedArgCount,null,null);
+    }
+
+    public static JMethod extractLambdaMethod(JType type) {
+        JMethod[] jMethods = type.getDeclaredMethods();
+        if (jMethods.length > 1) {
+            jMethods = Arrays.stream(type.getDeclaredMethods()).filter(x -> !x.isDefault()
+                    && x.isPublic()
+                    && !JTypeUtils.isSynthetic(x.getModifiers())
+            ).toArray(JMethod[]::new);
+        }
+        if (jMethods.length == 1) {
+            return jMethods[0];
+        }
+        return null;
+    }
+
+    public static JSignature extractLambdaArgTypesOrError(JType type, int expectedArgCount, JToken location, JMessageList log) {
+        JMethod jMethod = extractLambdaMethod(type);
+        if (jMethod!=null) {
+            JType[] jTypes = jMethod.getArgTypes();
+            if (expectedArgCount >= 0) {
+                if (jMethod.getSignature().isVarArgs()) {
+                    if (jTypes.length - 1 <= expectedArgCount) {
+                        if (log != null) {
+                            log.error("X000", null, "lambda expression arguments count mismatch " + jTypes.length + "!=" + expectedArgCount, location);
+                        }
+                        return null;
+                    }
+                } else {
+                    if (expectedArgCount != jTypes.length) {
+                        if (log != null) {
+                            log.error("X000", null, "lambda expression arguments count mismatch " + jTypes.length + "!=" + expectedArgCount, location);
+                        }
+                        return null;
+                    }
+                }
+            }
+            return jMethod.getSignature();
+        } else {
+            if (log != null) {
+                log.error("X000", null, "expected functional type as Lambda expression.", location);
+            }
+            return null;
+        }
+    }
 }

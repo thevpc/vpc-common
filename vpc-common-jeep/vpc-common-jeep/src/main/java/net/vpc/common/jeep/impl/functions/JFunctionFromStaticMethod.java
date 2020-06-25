@@ -16,13 +16,13 @@ public class JFunctionFromStaticMethod implements JFunction {
     }
 
     @Override
-    public JType returnType() {
-        return method.returnType();
+    public JType getReturnType() {
+        return method.getReturnType();
     }
 
     @Override
-    public String name() {
-        return method.name();
+    public String getName() {
+        return method.getName();
     }
 
     @Override
@@ -31,7 +31,12 @@ public class JFunctionFromStaticMethod implements JFunction {
     }
 
     @Override
-    public JSignature signature() {
-        return method.signature();
+    public JSignature getSignature() {
+        return method.getSignature();
+    }
+
+    @Override
+    public String getSourceName() {
+        return method.getSourceName();
     }
 }

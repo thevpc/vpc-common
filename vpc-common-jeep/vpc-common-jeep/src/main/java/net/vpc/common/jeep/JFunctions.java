@@ -25,7 +25,7 @@ public interface JFunctions {
     JFunction declare(String name, JType[] args, JType returnType, boolean varArgs, JInvoke function);
 
     //    @Override
-    Object evaluate(String name, JEvaluable... args);
+    Object evaluate(JCallerInfo callerInfo, String name, JEvaluable... args);
 
     void declareAlias(String alias, String referenceOp, boolean varArgs, JType... operands);
 
@@ -35,17 +35,17 @@ public interface JFunctions {
 
     JFunction[] findFunctions(String name, int callArgumentsCount);
 
-    JFunction findFunctionMatchOrNull(JSignature sig);
+    JFunction findFunctionMatchOrNull(JSignature sig, JCallerInfo callerInfo);
 
-    JFunction findFunctionMatch(JSignature sig);
+    JFunction findFunctionMatch(JSignature sig, JCallerInfo callerInfo);
 
     void undeclareAlias(String alias, String[] operands);
 
     void undeclareAlias(String alias);
 
-    JFunction findFunctionMatchOrNull(JNameSignature signature);
+    JFunction findFunctionMatchOrNull(JNameSignature signature, JCallerInfo callerInfo);
 
-    JFunction findFunctionMatchOrNull(String name);
+    JFunction findFunctionMatchOrNull(String name, JCallerInfo callerInfo);
 
     JFunction findFunctionExact(JNameSignature signature);
 
@@ -56,7 +56,7 @@ public interface JFunctions {
     JFunction[] findFunctionsByName(String name);
 
 
-    JInvokable resolveBestMatch(JInvokable[] invokables, Function<JTypeOrLambda, JConverter[]> convertersSupplier, JTypeOrLambda... argTypes) throws JMultipleInvokableMatchFound;
+    JInvokable resolveBestMatch(JCallerInfo callerInfo, JInvokable[] invokables, Function<JTypePattern, JConverter[]> convertersSupplier, JTypePattern[] argTypes, JTypePattern returnType) throws JMultipleInvokableMatchFound;
 
-    JInvokableCost[] resolveMatches(boolean bestMatchOnly, JInvokable[] invokables, Function<JTypeOrLambda, JConverter[]> convertersSupplier, JTypeOrLambda... argTypes);
+    JInvokableCost[] resolveMatches(boolean bestMatchOnly, JInvokable[] invokables, Function<JTypePattern, JConverter[]> convertersSupplier, JTypePattern[] argTypes, JTypePattern returnType);
 }

@@ -1,7 +1,6 @@
 package net.vpc.common.jeep.impl.functions;
 
 import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.JFunctionBase;
 import net.vpc.common.jeep.core.eval.JEvaluableValue;
 import net.vpc.common.jeep.impl.types.AbstractJMethod;
 
@@ -27,37 +26,37 @@ public class ConvertedJMethod2 extends AbstractJMethod {
 //                convArgTypes(other.signature().argTypes(), argConverters)
 //                ,false
 //        );
-        this.signature = JSignature.of(other.name(),argTypes);
+        this.signature = JSignature.of(other.getName(),argTypes);
         this.other = other;
         this.argTypes = argTypes;
-        this.returnType = resultConverter!=null?resultConverter.targetType().getType():other.returnType();
+        this.returnType = resultConverter!=null?resultConverter.targetType().getType():other.getReturnType();
         this.argConverters = argConverters;
         this.resultConverter = resultConverter;
         this.instanceArgumentResolver = instanceArgumentResolver;
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return signature;
     }
 
     @Override
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return null;
     }
 
     @Override
-    public JType[] argTypes() {
+    public JType[] getArgTypes() {
         return argTypes;
     }
 
     @Override
-    public String[] argNames() {
+    public String[] getArgNames() {
         return new String[0];
     }
 
     @Override
-    public int modifiers() {
+    public int getModifiers() {
         return Modifier.STATIC|Modifier.PUBLIC;
     }
 
@@ -67,7 +66,7 @@ public class ConvertedJMethod2 extends AbstractJMethod {
     }
 
     @Override
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return new JTypeVariable[0];
     }
 
@@ -88,10 +87,7 @@ public class ConvertedJMethod2 extends AbstractJMethod {
         return other;
     }
 
-    @Override
-    public JType returnType() {
-        return resultConverter!=null?resultConverter.targetType().getType():other.returnType();
-    }
+
 
     public static JType[] convArgTypes(JType[] argTypes, JArgumentConverter[] converters){
         JType[] newArgTypes=new JType[argTypes.length];
@@ -112,21 +108,14 @@ public class ConvertedJMethod2 extends AbstractJMethod {
         return instanceArgumentResolver;
     }
 
-    public JType[] getArgTypes() {
-        return argTypes;
-    }
-
+    @Override
     public JType getReturnType() {
         return returnType;
     }
 
-    public JSignature getSignature() {
-        return signature;
-    }
-
     @Override
     public Object invoke(JInvokeContext icontext) {
-        int otherArgsCount = other.signature().argsCount();
+        int otherArgsCount = other.getSignature().argsCount();
         Object[] argumentValues=new Object[otherArgsCount];
         for (int i = 0; i < argumentValues.length; i++) {
             argumentValues[i]=icontext.evaluateArg(i);
@@ -137,18 +126,18 @@ public class ConvertedJMethod2 extends AbstractJMethod {
             if(argConverters==null || argConverters[i]==null){
                 convertedArgs[i] = new JEvaluableValue(
                         argumentValues[i],
-                        other.signature().argType(i)
+                        other.getSignature().argType(i)
                         );
-                convertedTypes[i] = other.signature().argType(i);
+                convertedTypes[i] = other.getSignature().argType(i);
             }else {
                 convertedArgs[i] = new JEvaluableValue(
-                        argConverters[i].getArgument(i, argumentValues, icontext.context())
+                        argConverters[i].getArgument(i, argumentValues, icontext.getContext())
                         ,argConverters[i].argumentType()
                 );
                 convertedTypes[i] = argConverters[i].argumentType();
             }
         }
-        JTypedValue instanceValue=icontext.instance();
+        JTypedValue instanceValue=icontext.getInstance();
         if(instanceArgumentResolver!=null){
             JTypedValue tv = instanceArgumentResolver.getInstance(
                     instanceValue==null?null:instanceValue.getValue()
@@ -159,8 +148,8 @@ public class ConvertedJMethod2 extends AbstractJMethod {
         }
         Object v = other.invoke(
                 icontext.builder()
-                        .instance(instanceValue)
-                        .arguments(convertedArgs)
+                        .setInstance(instanceValue)
+                        .setArguments(convertedArgs)
                         .build());
         if(resultConverter!=null){
             v=resultConverter.convert(v, icontext);
@@ -168,4 +157,8 @@ public class ConvertedJMethod2 extends AbstractJMethod {
         return v;
     }
 
+    @Override
+    public String getSourceName() {
+        return other.getSourceName();
+    }
 }

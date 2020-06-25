@@ -23,9 +23,9 @@ public interface JVar {
 
     JType type();
 
-    Object getValue(JContext context);
+    Object getValue(JInvokeContext context);
 
-    JVar setValue(Object value, JContext context);
+    JVar setValue(Object value, JInvokeContext context);
 
     boolean isDefinedValue();
 

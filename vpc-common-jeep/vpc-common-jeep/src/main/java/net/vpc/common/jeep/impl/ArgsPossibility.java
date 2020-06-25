@@ -1,7 +1,7 @@
 package net.vpc.common.jeep.impl;
 
 import net.vpc.common.jeep.JConverter;
-import net.vpc.common.jeep.JTypeOrLambda;
+import net.vpc.common.jeep.JTypePattern;
 import net.vpc.common.jeep.util.IntIterator;
 import net.vpc.common.jeep.util.IntIteratorBuilder;
 
@@ -12,22 +12,22 @@ import java.util.function.Function;
 
 public class ArgsPossibility {
     private int size;
-    private JTypeOrLambda[] original;
-    private JTypeOrLambda[] converted;
+    private JTypePattern[] original;
+    private JTypePattern[] converted;
     private double[] weights;
     private JConverter[] converters;
 
-    public ArgsPossibility(JTypeOrLambda[] original, JTypeOrLambda[] converted, JConverter[] converters, double[] weights) {
+    public ArgsPossibility(JTypePattern[] original, JTypePattern[] converted, JConverter[] converters, double[] weights) {
         this.original = original;
         this.converted = converted;
         this.converters = converters;
         this.weights = weights;
     }
 
-    public static ArgsPossibility[] allOf(JTypeOrLambda[] original, Function<JTypeOrLambda, JConverter[]> supplier) {
+    public static ArgsPossibility[] allOf(JTypePattern[] original, Function<JTypePattern, JConverter[]> supplier) {
         if (original.length == 0) {
             return new ArgsPossibility[]{
-                    new ArgsPossibility(original, new JTypeOrLambda[0], new JConverter[0], new double[0])
+                    new ArgsPossibility(original, new JTypePattern[0], new JConverter[0], new double[0])
             };
         }
         class JConverterAndWeight {
@@ -64,7 +64,7 @@ public class ArgsPossibility {
         List<ArgsPossibility> possibilities = new ArrayList<>();
         while (it.hasNext()) {
             int[] c = it.next();
-            JTypeOrLambda[] converted = new JTypeOrLambda[original.length];
+            JTypePattern[] converted = new JTypePattern[original.length];
             JConverter[] convertersOk = new JConverter[original.length];
             double[] weights = new double[converted.length];
             for (int i = 0; i < converted.length; i++) {
@@ -82,18 +82,18 @@ public class ArgsPossibility {
         return weights[index];
     }
 
-    public JTypeOrLambda getOriginal(int index) {
+    public JTypePattern getOriginal(int index) {
         return original[index];
     }
 
-    public JTypeOrLambda[] getConverted() {
+    public JTypePattern[] getConverted() {
         return converted;
     }
-    public JTypeOrLambda[] getOriginal() {
+    public JTypePattern[] getOriginal() {
         return original;
     }
 
-    public JTypeOrLambda getConverted(int index) {
+    public JTypePattern getConverted(int index) {
         return converted[index];
     }
 

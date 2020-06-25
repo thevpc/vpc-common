@@ -7,7 +7,6 @@ package net.vpc.common.jeep.impl;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.functions.JFunctionsImpl;
-import net.vpc.common.jeep.impl.functions.JListOperator;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.util.JTypeUtils;
 import net.vpc.common.jeep.util.JeepUtils;
@@ -167,7 +166,7 @@ public class DefaultJOperators implements JOperators {
         String aliasCanonicalName = getCanonicalName(alias);
 //        JSignature aliasSig = new JSignature(aliasCanonicalName, operands);
         JeepUtils.validateFunctionName(alias);
-        JFunction u = functions.findFunctionMatchOrNull(sig);
+        JFunction u = functions.findFunctionMatchOrNull(sig, JCallerInfo.NO_CALLER);
         if (u == null
                 && !opNames().contains(canonicalName)
                 && !operatorsAliases.containsKey(canonicalName)) {
@@ -191,7 +190,7 @@ public class DefaultJOperators implements JOperators {
 
     @Override
     public JOperators declareOperator(JFunction fct) {
-        String opName = fct.name();
+        String opName = fct.getName();
         if (opName.length() > 0) {
             JTokenConfigBuilder config = new JTokenConfigBuilder(context.tokens().config());
             config.addOperator(opName);

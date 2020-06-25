@@ -71,7 +71,7 @@ public class UtilClassJResolver implements JResolver {
             }
         }
         if (checkEmptyArgMethods) {
-            JFunction f = resolveFunction(name, new JTypeOrLambda[0], context);
+            JFunction f = resolveFunction(name, new JTypePattern[0], context);
             if (f != null) {
                 return new JFunctionJVar(f, context);
             }
@@ -80,7 +80,7 @@ public class UtilClassJResolver implements JResolver {
     }
 
     @Override
-    public JFunction resolveFunction(String name, JTypeOrLambda[] argTypes, JContext context) {
+    public JFunction resolveFunction(String name, JTypePattern[] argTypes, JContext context) {
         JFunction r = resolveFunctionDef0(name, argTypes, context);
         if (r == null) {
             return null;
@@ -88,15 +88,15 @@ public class UtilClassJResolver implements JResolver {
         JConverter[] conv = new JConverter[argTypes.length];
         boolean someConv = false;
         for (int i = 0; i < conv.length; i++) {
-            JType to = r.signature().argType(i);
-            JTypeOrLambda from = argTypes[i];
+            JType to = r.getSignature().argType(i);
+            JTypePattern from = argTypes[i];
             if (!to.isAssignableFrom(from.getType())) {
-                conv[i] = JTypeUtils.createTypeImplicitConversions(from, JTypeOrLambda.of(to));
+                conv[i] = JTypeUtils.createTypeImplicitConversions(from, JTypePattern.of(to));
                 someConv = true;
             }
         }
         if (someConv) {
-            return new JFunctionConverted3(r, conv, null, r.returnType());
+            return new JFunctionConverted3(r, conv, null, r.getReturnType());
         } else {
             return r;
         }
@@ -124,7 +124,7 @@ public class UtilClassJResolver implements JResolver {
         return all.toArray(new JFunction[0]);
     }
 
-    protected JFunction resolveFunctionDef0(String name, JTypeOrLambda[] args, JContext context0) {
+    protected JFunction resolveFunctionDef0(String name, JTypePattern[] args, JContext context0) {
         JType aBoolean = JTypeUtils.forBoolean(context0.types());
         switch (name) {
             case "": {
@@ -326,12 +326,12 @@ public class UtilClassJResolver implements JResolver {
                 break;
             }
             default: {
-                JTypeOrLambda[] argTypes = null;
+                JTypePattern[] argTypes = null;
                 argTypes = args;
                 for (JType type : importedTypes) {
                     final JMethod m = JInvokeUtils.getMatchingMethod(type, name, argTypes);
                     if (m != null) {
-                        if (m.signature().isVarArgs()) {
+                        if (m.getSignature().isVarArgs()) {
                             return new JFunctionFromJMethod(name, m, argTypes);
                         }
                         int[] indices = new int[argTypes.length];
@@ -346,9 +346,9 @@ public class UtilClassJResolver implements JResolver {
         return null;
     }
 
-    private JFunction createBinaryOperatorFunction(String name, JTypeOrLambda[] args, String directName, String reverseName, String staticName, JContext context) {
-        JTypeOrLambda arg1 = null;
-        JTypeOrLambda arg2 = null;
+    private JFunction createBinaryOperatorFunction(String name, JTypePattern[] args, String directName, String reverseName, String staticName, JContext context) {
+        JTypePattern arg1 = null;
+        JTypePattern arg2 = null;
         arg1 = args[0];
         arg2 = args[1];
         int[] order = !(importsFirst) ? new int[]{1, 2} : new int[]{2, 1};
@@ -388,8 +388,8 @@ public class UtilClassJResolver implements JResolver {
         return null;
     }
 
-    private JFunction createUnaryOperatorFunction(String name, JTypeOrLambda[] args, String directName, String staticName, JContext context) {
-        JTypeOrLambda arg1Type = args[0];
+    private JFunction createUnaryOperatorFunction(String name, JTypePattern[] args, String directName, String staticName, JContext context) {
+        JTypePattern arg1Type = args[0];
         int[] order = !(importsFirst) ? new int[]{1, 2} : new int[]{2, 1};
         LinkedHashSet<JType> t = new LinkedHashSet<>(importedTypes);
         t.addAll(importedMethods);

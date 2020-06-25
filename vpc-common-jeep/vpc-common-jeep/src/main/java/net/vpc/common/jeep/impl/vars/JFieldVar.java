@@ -40,12 +40,12 @@ public class JFieldVar extends AbstractJVar {
     }
 
     @Override
-    public Object getValue(JContext context) {
+    public Object getValue(JInvokeContext context) {
         return field.get(instance);
     }
 
     @Override
-    public JVar setValue(Object value, JContext context) {
+    public JVar setValue(Object value, JInvokeContext context) {
         if (readOnly) {
             throw new UnsupportedOperationException("Not supported");
         }

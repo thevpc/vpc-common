@@ -17,11 +17,11 @@ public class ConvertedJMethod extends AbstractJMethod {
 
     //return type was Object.class, fix it!
     public ConvertedJMethod(JMethod other, JConverter[] argConverters, JConverter resultConverter) {
-        newTypes = convArgTypes(other.signature().argTypes(), argConverters);
+        newTypes = convArgTypes(other.getSignature().argTypes(), argConverters);
         this.other = other;
         this.argConverters = argConverters;
         this.resultConverter = resultConverter;
-        this.signature = JSignature.of(other.name() + System.identityHashCode(this), newTypes);
+        this.signature = JSignature.of(other.getName() + System.identityHashCode(this), newTypes);
     }
 
     private static JType[] convArgTypes(JType[] argTypes, JConverter[] converters) {
@@ -40,13 +40,13 @@ public class ConvertedJMethod extends AbstractJMethod {
     }
 
     @Override
-    public JType[] argTypes() {
+    public JType[] getArgTypes() {
         return newTypes;
     }
 
     @Override
-    public String[] argNames() {
-        return other.argNames();
+    public String[] getArgNames() {
+        return other.getArgNames();
     }
 
     @Override
@@ -56,9 +56,9 @@ public class ConvertedJMethod extends AbstractJMethod {
 
     @Override
     public Object invoke(JInvokeContext context) {
-        JEvaluable[] initialArgs = context.arguments();
+        JEvaluable[] initialArgs = context.getArguments();
         JEvaluable[] convertedArgs = new JEvaluable[initialArgs.length];
-        JType[] initialTypes = context.argumentTypes();
+        JType[] initialTypes = context.getArgumentTypes();
         JType[] convertedTypes = new JType[initialArgs.length];
         for (int i = 0; i < initialArgs.length; i++) {
             if (argConverters != null && argConverters[i] != null) {
@@ -72,7 +72,7 @@ public class ConvertedJMethod extends AbstractJMethod {
             }
         }
         JInvokeContext c2 = context.builder()
-                .arguments(convertedArgs)
+                .setArguments(convertedArgs)
                 .build();
         Object v = other.invoke(c2);
         if (resultConverter != null) {
@@ -82,20 +82,20 @@ public class ConvertedJMethod extends AbstractJMethod {
     }
 
     @Override
-    public JType declaringType() {
-        return other.declaringType();
+    public JType getDeclaringType() {
+        return other.getDeclaringType();
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         if (resultConverter == null) {
-            return other.returnType();
+            return other.getReturnType();
         }
         return resultConverter.targetType().getType();
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return signature;
     }
 
@@ -110,21 +110,21 @@ public class ConvertedJMethod extends AbstractJMethod {
     }
 
     @Override
-    public int modifiers() {
-        return other.modifiers();
+    public int getModifiers() {
+        return other.getModifiers();
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(other.name());
+        sb.append(other.getName());
         sb.append("(");
         for (int i = 0; i < argConverters.length; i++) {
             if (i > 0) {
                 sb.append(",");
             }
             if (argConverters[i] == null) {
-                sb.append(other.signature().nameSignature().argType(i).simpleName());
+                sb.append(other.getSignature().nameSignature().argType(i).simpleName());
             }
         }
         sb.append(")");
@@ -155,8 +155,8 @@ public class ConvertedJMethod extends AbstractJMethod {
 
 
     @Override
-    public JTypeVariable[] typeParameters() {
-        return other.typeParameters();
+    public JTypeVariable[] getTypeParameters() {
+        return other.getTypeParameters();
     }
 
     @Override
@@ -169,4 +169,8 @@ public class ConvertedJMethod extends AbstractJMethod {
         return other.isDefault();
     }
 
+    @Override
+    public String getSourceName() {
+        return other.getSourceName();
+    }
 }

@@ -6,7 +6,7 @@ public interface JResolver {
         return null;
     }
 
-    default JFunction resolveFunction(String name, JTypeOrLambda[] argTypes, JContext context){
+    default JFunction resolveFunction(String name, JTypePattern[] argTypes, JContext context){
         return null;
     }
     default JFunction[] resolveFunctionsByName(String name, int argsCount, JContext context){
@@ -18,7 +18,7 @@ public interface JResolver {
     }
 
 
-    default JConverter[] resolveImplicitConverters(JTypeOrLambda type){
+    default JConverter[] resolveImplicitConverters(JTypePattern type){
         return null;
     }
 

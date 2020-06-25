@@ -31,12 +31,12 @@ public class JFunctionJVar extends AbstractJVar {
 
     @Override
     public String name() {
-        return fct.name();
+        return fct.getName();
     }
 
     @Override
     public JType type() {
-        return fct.returnType();
+        return fct.getReturnType();
 //                context.types().forName(Object.class);
     }
 
@@ -46,20 +46,20 @@ public class JFunctionJVar extends AbstractJVar {
 //    }
 
     @Override
-    public Object getValue(JContext context) {
-        return fct.invoke(
-                new DefaultJInvokeContext(
-                        context,
-                        context.evaluators().newEvaluator(),//???
-                        null,
-                        new JEvaluable[0],
-                        null
-                )
+    public Object getValue(JInvokeContext context) {
+        return fct.invoke(context
+//                new DefaultJInvokeContext(
+//                        context.getContext(),
+//                        context.getContext().evaluators().newEvaluator(),//???
+//                        null,
+//                        new JEvaluable[0],
+//                        null,null
+//                )
         );
     }
 
     @Override
-    public JVar setValue(Object value, JContext context) {
+    public JVar setValue(Object value, JInvokeContext context) {
         throw new UnsupportedOperationException("Not supported");
     }
 

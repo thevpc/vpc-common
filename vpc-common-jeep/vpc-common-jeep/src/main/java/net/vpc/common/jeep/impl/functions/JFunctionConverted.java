@@ -13,10 +13,10 @@ public class JFunctionConverted extends JFunctionBase {
     public JFunctionConverted(JFunction other,
                               JConverter[] argConverters,
                               JConverter resultConverter) {
-        super(other.name(),
-                convRetType(JTypeOrLambda.of(other.returnType()), resultConverter).getType(),
+        super(other.getName(),
+                convRetType(JTypePattern.of(other.getReturnType()), resultConverter).getType(),
                 JTypeUtils.typesOrError(
-                        convArgTypes(JTypeUtils.typesOrLambdas(other.signature().argTypes()), argConverters)
+                        convArgTypes(JTypeUtils.typesOrLambdas(other.getSignature().argTypes()), argConverters)
                 )
                 ,false
         );
@@ -38,21 +38,21 @@ public class JFunctionConverted extends JFunctionBase {
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         return resultConverter!=null?
                 resultConverter.targetType().getType()
-                :other.returnType();
+                :other.getReturnType();
     }
 
-    private static JTypeOrLambda convRetType(JTypeOrLambda a, JConverter c){
+    private static JTypePattern convRetType(JTypePattern a, JConverter c){
         if(c==null){
             return a;
         }
         return c.targetType();
     }
     
-    private static JTypeOrLambda[] convArgTypes(JTypeOrLambda[] argTypes, JConverter[] converters){
-        JTypeOrLambda[] newArgTypes=new JTypeOrLambda[argTypes.length];
+    private static JTypePattern[] convArgTypes(JTypePattern[] argTypes, JConverter[] converters){
+        JTypePattern[] newArgTypes=new JTypePattern[argTypes.length];
         for (int i = 0; i < newArgTypes.length; i++) {
             if(converters!=null && converters[i]!=null){
                 newArgTypes[i]=converters[i].originalType();
@@ -68,10 +68,10 @@ public class JFunctionConverted extends JFunctionBase {
 
     @Override
     public Object invoke(JInvokeContext icontext) {
-        JEvaluable[] args = icontext.arguments();
+        JEvaluable[] args = icontext.getArguments();
         JEvaluable[] args2=new JEvaluable[args.length];
-        JTypeOrLambda[] oldTypes= JTypeUtils.typesOrLambdas(icontext.argumentTypes());
-        JTypeOrLambda[] types2=new JTypeOrLambda[args.length];
+        JTypePattern[] oldTypes= JTypeUtils.typesOrLambdas(icontext.getArgumentTypes());
+        JTypePattern[] types2=new JTypePattern[args.length];
         for (int i = 0; i < args.length; i++) {
             if(argConverters!=null && argConverters[i]!=null){
                 args2[i]=new JEvaluableConverter(argConverters[i],args[i]);
@@ -83,11 +83,16 @@ public class JFunctionConverted extends JFunctionBase {
         }
         Object v = other.invoke(
                 icontext.builder()
-                        .arguments(args2)
+                        .setArguments(args2)
                         .build());
         if(resultConverter!=null){
             v=resultConverter.convert(v, icontext);
         }
         return v;
+    }
+
+    @Override
+    public String getSourceName() {
+        return other.getSourceName();
     }
 }

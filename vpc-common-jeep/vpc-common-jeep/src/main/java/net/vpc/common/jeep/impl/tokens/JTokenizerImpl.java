@@ -211,8 +211,10 @@ public class JTokenizerImpl extends AbstractJTokenizer {
     @Override
     public void pushBack(JToken token) {
         //        System.out.println("PUSH "+token);
-        if (!back.isEmpty() && token.tokenNumber > back.getFirst().tokenNumber) {
-            throw new JParseException("Invalid Order Detected");
+        if (!back.isEmpty()
+                && back.getFirst().tokenNumber>=0 // not a synthetic token
+                && token.tokenNumber > back.getFirst().tokenNumber) {
+            throw new JParseException("Invalid Order Detected near : "+peek());
         }
         back.addFirst(token.copy());
     }

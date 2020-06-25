@@ -16,7 +16,7 @@ public class JMethodInvocationFunction extends JFunctionBase {
     private final int[] argIndices;
 
     public JMethodInvocationFunction(String name, JMethod method, int baseIndex, int... argIndices) {
-        super(name, method.returnType(), evalParameterTypes(method, baseIndex, argIndices), false);
+        super(name, method.getReturnType(), evalParameterTypes(method, baseIndex, argIndices), false);
         this.method = method;
         this.baseIndex = baseIndex;
         if (baseIndex < 0 && !method.isStatic()) {
@@ -41,10 +41,10 @@ public class JMethodInvocationFunction extends JFunctionBase {
     private static JType[] evalParameterTypes(JMethod m, int baseIndex, int[] argIndices) {
         List<JType> all = new ArrayList<>();
         if (baseIndex >= 0) {
-            all.add(m.declaringType());
+            all.add(m.getDeclaringType());
         }
         for (int i = 0; i < argIndices.length; i++) {
-            JType[] parameterTypes = m.signature().argTypes();
+            JType[] parameterTypes = m.getSignature().argTypes();
             all.add(parameterTypes[i]);
         }
         return all.toArray(new JType[0]);
@@ -52,15 +52,15 @@ public class JMethodInvocationFunction extends JFunctionBase {
 
     @Override
     public Object invoke(JInvokeContext icontext) {
-        JEvaluable[] baseArgs = icontext.arguments();
+        JEvaluable[] baseArgs = icontext.getArguments();
         JEvaluable[] argsv = null;
-        JType[] oldTypes = icontext.argumentTypes();
+        JType[] oldTypes = icontext.getArgumentTypes();
         JTypedValue newInstance=null;
 //        Object base = null;
 //        JType baseType = null;
         try {
             if(baseIndex < 0) {
-                newInstance = icontext.instance();
+                newInstance = icontext.getInstance();
             }else{
                 newInstance=new DefaultJTypedValue(
                         icontext.evaluate(baseArgs[baseIndex]),
@@ -75,9 +75,9 @@ public class JMethodInvocationFunction extends JFunctionBase {
             }
             return evaluateImpl(method,
                     icontext.builder()
-                            .instance(newInstance)
-                            .arguments(argsv)
-                            .name(method.name())
+                            .setInstance(newInstance)
+                            .setArguments(argsv)
+                            .setName(method.getName())
                     .build()
             );
         } catch (IllegalAccessException e) {
@@ -93,4 +93,8 @@ public class JMethodInvocationFunction extends JFunctionBase {
         return m.invoke(icontext);
     }
 
+    @Override
+    public String getSourceName() {
+        return method.getSourceName();
+    }
 }

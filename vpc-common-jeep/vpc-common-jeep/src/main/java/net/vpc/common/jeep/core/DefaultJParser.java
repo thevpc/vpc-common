@@ -101,7 +101,7 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         }
         ParseExpressionUnaryContext ucontext = new ParseExpressionUnaryContext();
 
-        JExpressionUnaryOptions unary = options == null ? null : options.unary;
+        JExpressionUnaryOptions unary = options == null ? null : options.getUnary();
         ucontext.unary = unary;
 
         T middle = null;
@@ -178,46 +178,46 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
     }
 
     private boolean isSupportedPrefixBraces(JToken token, JExpressionUnaryOptions unary) {
-        return (unary == null || !unary.excludedPrefixBraces)
+        return (unary == null || !unary.isExcludedPrefixBraces())
                 && token.isImage("{");
     }
 
     private boolean isSupportedTerminalBraces(JToken token, JExpressionUnaryOptions unary) {
-        return (unary == null || !unary.excludedTerminalBraces)
+        return (unary == null || !unary.isExcludedTerminalBraces())
                 && token.isImage("{");
     }
 
     private boolean isSupportedTerminalBrackets(JToken token, JExpressionUnaryOptions unary) {
-        return (unary == null || !unary.excludedTerminalBrackets)
+        return (unary == null || !unary.isExcludedTerminalBrackets())
                 && token.isImage("[");
     }
 
     private boolean isSupportedTerminalPars(JToken token, JExpressionUnaryOptions unary) {
-        return (unary == null || !unary.excludedTerminalParenthesis)
+        return (unary == null || !unary.isExcludedTerminalParenthesis())
                 && token.isImage("(");
     }
 
     private boolean isSupportedPrefixBrackets(JToken token, JExpressionUnaryOptions unary) {
-        return (unary == null || !unary.excludedPrefixBrackets)
+        return (unary == null || !unary.isExcludedPrefixBrackets())
                 && token.isImage("[");
     }
 
     private boolean isSupportedPrefixPars(JToken token, JExpressionUnaryOptions unary) {
-        return (unary == null || !unary.excludedPrefixParenthesis)
+        return (unary == null || !unary.isExcludedPrefixParenthesis())
                 && token.isImage("(");
     }
 
     private boolean isSupportedPrefixUnaryOperator(JToken token, JExpressionUnaryOptions unary) {
-        return (unary == null || unary.excludedPrefixUnaryOperators == null
-                || !unary.excludedPrefixUnaryOperators.contains(token.image))
+        return (unary == null || unary.getExcludedPrefixUnaryOperators() == null
+                || !unary.getExcludedPrefixUnaryOperators().contains(token.image))
                 && context().operators().isPrefixUnaryOperator(token.image);
     }
 
     protected T parseExpressionUnarySuffix(int opPrecedence, T middle, JExpressionOptions options, ParseExpressionUnaryContext ucontext) {
         JExpressionUnaryOptions unary = ucontext.unary;
         JToken token = next();
-        if ((unary == null || unary.excludedPostfixUnaryOperators == null
-                || !unary.excludedPostfixUnaryOperators.contains(token.image))
+        if ((unary == null || unary.getExcludedPostfixUnaryOperators() == null
+                || !unary.getExcludedPostfixUnaryOperators().contains(token.image))
                 && context().operators().isPostfixUnaryOperator(token.image)) {
             int binaryOpPrecedence = context().operators().getOperatorPrecedence(JOperator.infix(token.image));
             if (binaryOpPrecedence > opPrecedence) {
@@ -230,17 +230,17 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
                 return null;
             }
         } else {
-            if ((unary == null || !unary.excludedPostfixParenthesis)
+            if ((unary == null || !unary.isExcludedPostfixParenthesis())
                     && token.isImage("(")) {
                 JToken copy = token.copy();
                 pushBack(token);
                 return middle = parsePostfixParsNode(middle, copy);
-            } else if ((unary == null || !unary.excludedPostfixBrackets)
+            } else if ((unary == null || !unary.isExcludedPostfixBrackets())
                     && token.isImage("[")) {
                 JToken copy = token.copy();
                 pushBack(token);
                 return middle = parsePostfixBracketsNode(middle, copy);
-            } else if ((unary == null || !unary.excludedPostfixBraces)
+            } else if ((unary == null || !unary.isExcludedPostfixBraces())
                     && token.isImage("{")) {
                 JToken copy = token.copy();
                 pushBack(token);
@@ -344,7 +344,7 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         if (o1 == null) {
             return null;
         }
-        JExpressionBinaryOptions binary = options == null ? null : options.binary;
+        JExpressionBinaryOptions binary = options == null ? null : options.getBinary();
         while (true) {
             JToken token = next();
             if (token.isEOF()) {
@@ -431,7 +431,7 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
     }
 
     private boolean isEnabledBinaryImplicitOperator(JExpressionBinaryOptions binary) {
-        return binary == null || !binary.excludedImplicitOperator;
+        return binary == null || !binary.isExcludedImplicitOperator();
     }
 
     private boolean isListSeparator(JToken token) {
@@ -439,11 +439,11 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
     }
 
     private boolean isEnabledBinaryListOperator(JExpressionBinaryOptions binary) {
-        return binary == null || !binary.excludedListOperator;
+        return binary == null || !binary.isExcludedListOperator();
     }
 
     protected boolean isEnabledBinaryOperator(JExpressionBinaryOptions binary, JToken token) {
-        if ((binary == null || binary.excludedBinaryOperators == null || !binary.excludedBinaryOperators.contains(token.image))) {
+        if ((binary == null || binary.getExcludedBinaryOperators() == null || !binary.getExcludedBinaryOperators().contains(token.image))) {
             return true;
         }
         return false;
@@ -720,7 +720,7 @@ public class DefaultJParser<T extends JNode> implements JParser<T> {
         if (token.isEOF()) {
             return null;
         }
-        JExpressionUnaryOptions unary = options == null ? null : options.unary;
+        JExpressionUnaryOptions unary = options == null ? null : options.getUnary();
         if (isSupportedTerminalPars(token, unary)) {
             pushBack(token);
             return parseExpressionPars();

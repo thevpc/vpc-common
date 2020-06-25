@@ -16,7 +16,7 @@ public class TestGenerics {
         System.out.println("===============================");
         System.out.println(tList);
         for (JMethod jMethod : Arrays.stream(tList.getDeclaredMethods())
-                .filter(x -> x.name().equals("add"))
+                .filter(x -> x.getName().equals("add"))
                 .toArray(JMethod[]::new)) {
             System.out.println("\t" + jMethod);
         }
@@ -28,7 +28,7 @@ public class TestGenerics {
         }
         System.out.println(tListOfStrings);
         for (JMethod jMethod : Arrays.stream(tListOfStrings.getDeclaredMethods())
-                .filter(x -> x.name().equals("add"))
+                .filter(x -> x.getName().equals("add"))
                 .toArray(JMethod[]::new)) {
             System.out.println("\t" + jMethod);
         }

@@ -33,14 +33,18 @@ public class JListOperator extends JFunctionBase {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        String n = name();
+        String n = getName();
         if (n == null) {
             n = "<IMPLICIT>";
         }
         sb.append(n).append("(");
         sb.append(operandTypeArr.componentType().simpleName()).append("...");
         sb.append(")");
-        return "ExpressionListOperator{" + "operator=" + operator + ", resultType=" + returnType() + ", operandTypeArr=" + operandTypeArr + '}';
+        return "ExpressionListOperator{" + "operator=" + operator + ", resultType=" + getReturnType() + ", operandTypeArr=" + operandTypeArr + '}';
     }
-    
+
+    @Override
+    public String getSourceName() {
+        return "<unknown-source>";
+    }
 }

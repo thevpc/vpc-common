@@ -5,6 +5,7 @@
  */
 package net.vpc.common.jeep.core;
 
+import net.vpc.common.jeep.JInvokeContext;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.impl.vars.AbstractJVar;
 import net.vpc.common.jeep.JContext;
@@ -57,11 +58,11 @@ public class DefaultJVar extends AbstractJVar {
         return type;
     }
 
-    public Object getValue(JContext context) {
+    public Object getValue(JInvokeContext context) {
         return value;
     }
 
-    public DefaultJVar setValue(Object value, JContext context) {
+    public DefaultJVar setValue(Object value, JInvokeContext context) {
         this.value = value;
         defined = true;
         return this;

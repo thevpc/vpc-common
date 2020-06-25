@@ -3,15 +3,15 @@ package net.vpc.common.jeep;
 import net.vpc.common.jeep.impl.functions.JSignature;
 
 public interface JMethod extends JInvokable,JDeclaration{
-    String name();
+    String getName();
 
-    JType declaringType();
+    JType getDeclaringType();
 
-    JType[] argTypes();
+    JType[] getArgTypes();
 
-    String[] argNames();
+    String[] getArgNames();
 
-    int modifiers();
+    int getModifiers();
     boolean isAbstract();
     boolean isStatic();
 
@@ -19,6 +19,6 @@ public interface JMethod extends JInvokable,JDeclaration{
 
     boolean isDefault();
 
-    JTypeVariable[] typeParameters();
+    JTypeVariable[] getTypeParameters();
     JMethod parametrize(JType... parameters);
 }

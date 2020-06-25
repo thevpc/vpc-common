@@ -30,6 +30,7 @@ public interface JType extends JDeclaration, JTypeOrVariable {
     JType boxed();
 
     int modifiers();
+
     boolean isPublic();
 
     boolean isStatic();
@@ -39,6 +40,8 @@ public interface JType extends JDeclaration, JTypeOrVariable {
     boolean isPrimitive();
 
     boolean isAssignableFrom(JType other);
+
+    boolean isAssignableFrom(JTypePattern other);
 
     boolean isInstance(Object instance);
 

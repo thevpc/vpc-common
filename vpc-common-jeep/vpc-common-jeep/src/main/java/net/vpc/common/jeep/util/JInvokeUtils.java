@@ -13,11 +13,11 @@ public class JInvokeUtils {
     static Map<String, JConverter> cached_createTypeImplicitConversions = new HashMap<>();
     static Map<GetMatchingMethodKey2, JMethod> cached_getMatchingMethod = new HashMap<>();
 
-    public static JMethod getMatchingMethod(JType cls, String methodName, JTypeOrLambda... parameterTypes) {
+    public static JMethod getMatchingMethod(JType cls, String methodName, JTypePattern... parameterTypes) {
         return getMatchingMethod(true, cls, methodName, parameterTypes);
     }
 
-    public static JMethod getMatchingMethod(boolean accessibleOnly, JType ctype, String methodName, JTypeOrLambda... parameterTypes) {
+    public static JMethod getMatchingMethod(boolean accessibleOnly, JType ctype, String methodName, JTypePattern... parameterTypes) {
         GetMatchingMethodKey2 k = new GetMatchingMethodKey2(accessibleOnly, ctype, methodName, parameterTypes);
         JMethod old = cached_getMatchingMethod.get(k);
         if (old == null) {
@@ -45,8 +45,8 @@ public class JInvokeUtils {
         JMethod[] methods = accessibleOnly ? ctype.getPublicMethods() : ctype.getDeclaredMethods();//cls.getMethods();
         List<JMethodObject<JMethod>> m = new ArrayList<>();
         for (JMethod mm : methods) {
-            if (mm.name().equals(methodName)) {
-                JType[] jTypes = mm.signature().argTypes();
+            if (mm.getName().equals(methodName)) {
+                JType[] jTypes = mm.getSignature().argTypes();
                 boolean canMatch = true;
                 for (int j = 0; j < jTypes.length; j++) {
                     if (parameterTypes[j] == null) {
@@ -63,8 +63,8 @@ public class JInvokeUtils {
                 }
                 if (canMatch) {
                     m.add(new JMethodObject<>(
-                            mm.signature(),
-                            mm.signature(),
+                            mm.getSignature(),
+                            mm.getSignature(),
                             mm,
                             0
                     ));
@@ -80,7 +80,7 @@ public class JInvokeUtils {
         return rr.getMethod();
     }
 
-    public static <T> MCallCost2<T> getMatchingMethodCost(JMethodObject<T> current, JTypeOrLambda... parameterTypes) {
+    public static <T> MCallCost2<T> getMatchingMethodCost(JMethodObject<T> current, JTypePattern... parameterTypes) {
         JArgumentTypes signature = current.getSignature();
         Comparable initialComparable = current.getCostObject();
         JType[] availableTypes = signature.argTypes();
@@ -89,7 +89,7 @@ public class JInvokeUtils {
             double[] cost = new double[availableTypes.length];
             for (int j = 0; j < availableTypes.length; j++) {
                 JType c1 = availableTypes[j];
-                JTypeOrLambda c2 = parameterTypes[j];
+                JTypePattern c2 = parameterTypes[j];
                 int cc2 = JTypeUtils.getAssignationCost(c1, c2);
                 if (cc2 < 0) {
                     cost[j] = -1;
@@ -109,11 +109,11 @@ public class JInvokeUtils {
             }
         } else if ((availableTypes.length - 1) <= parameterTypes.length && signature.isVarArgs()) {
             boolean ok = true;
-            JTypeOrLambda[] r = new JTypeOrLambda[availableTypes.length];
+            JTypePattern[] r = new JTypePattern[availableTypes.length];
             double[] cost = new double[availableTypes.length];
             for (int j = 0; j < availableTypes.length - 1; j++) {
                 JType c1 = availableTypes[j];
-                JTypeOrLambda c2 = parameterTypes[j];
+                JTypePattern c2 = parameterTypes[j];
                 int cc2 = JTypeUtils.getAssignationCost(c1, c2);
                 if (cc2 < 0) {
                     cost[j] = -1;
@@ -132,7 +132,7 @@ public class JInvokeUtils {
                 int count = 0;
                 for (int j = availableTypes.length - 1; j < parameterTypes.length; j++) {
 //                    JType c1 = availableTypes[j];
-                    JTypeOrLambda c2 = parameterTypes[j];
+                    JTypePattern c2 = parameterTypes[j];
                     int cc1 = JTypeUtils.getAssignationCost(c3, c2);
 //                    int cc2 = getAssignationCost(c1, c2);
                     if (cc1 < 0 /*|| cc2 < 0*/) {
@@ -147,7 +147,7 @@ public class JInvokeUtils {
                 if (ok) {
                     y += 0.1 + count * 0.1;
                     cost[availableTypes.length - 1] = y;
-                    r[availableTypes.length - 1] = JTypeOrLambda.of(availableTypes[availableTypes.length - 1]);
+                    r[availableTypes.length - 1] = JTypePattern.of(availableTypes[availableTypes.length - 1]);
                 }
             }
             if (ok) {
@@ -160,7 +160,7 @@ public class JInvokeUtils {
     }
 
     @Deprecated
-    public static <T> JMethodObject<T> getMatchingMethod(JMethodObject<T>[] available, JTypeOrLambda... parameterTypes) {
+    public static <T> JMethodObject<T> getMatchingMethod(JMethodObject<T>[] available, JTypePattern... parameterTypes) {
         MCallCost2<T> best = null;
         for (int i = 0; i < available.length; i++) {
             JMethodObject<T> a = available[i];
@@ -176,12 +176,12 @@ public class JInvokeUtils {
 
     public static class MCallCost2<T> implements Comparable<MCallCost2> {
 
-        JTypeOrLambda[] input;
+        JTypePattern[] input;
         JMethodObject<T> av;
         double[] cost;
         Comparable startingCost;
 
-        public MCallCost2(JTypeOrLambda[] input, JMethodObject<T> av, double[] cost, Comparable startingCost) {
+        public MCallCost2(JTypePattern[] input, JMethodObject<T> av, double[] cost, Comparable startingCost) {
             this.input = input;
             this.av = av;
             this.cost = cost;
@@ -292,9 +292,9 @@ public class JInvokeUtils {
         boolean accessibleOnly;
         JType cls;
         String methodName;
-        JTypeOrLambda[] parameterTypes;
+        JTypePattern[] parameterTypes;
 
-        public GetMatchingMethodKey2(boolean accessibleOnly, JType cls, String methodName, JTypeOrLambda[] parameterTypes) {
+        public GetMatchingMethodKey2(boolean accessibleOnly, JType cls, String methodName, JTypePattern[] parameterTypes) {
             this.accessibleOnly = accessibleOnly;
             this.cls = cls;
             this.methodName = methodName;

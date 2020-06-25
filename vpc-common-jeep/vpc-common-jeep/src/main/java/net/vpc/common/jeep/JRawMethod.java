@@ -5,6 +5,6 @@ import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.impl.functions.JSignature;
 
 public interface JRawMethod extends JMethod {
-    JSignature genericSignature();
-    JType genericReturnType();
+    JSignature getGenericSignature();
+    JType getGenericReturnType();
 }

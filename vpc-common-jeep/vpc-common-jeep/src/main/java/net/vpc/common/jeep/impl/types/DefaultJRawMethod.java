@@ -17,19 +17,20 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     private String[] argNames;
     private JSignature genericSignature;
     private int modifiers;
+    private String sourceName;
 
     public DefaultJRawMethod() {
     }
 
     @Override
-    public JType[] argTypes() {
-        JSignature s = signature();
+    public JType[] getArgTypes() {
+        JSignature s = getSignature();
         return s==null?null:s.argTypes();
     }
 
 
     @Override
-    public String[] argNames() {
+    public String[] getArgNames() {
         return argNames;
     }
 
@@ -39,36 +40,36 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return signature;
     }
 
     @Override
-    public JSignature genericSignature() {
+    public JSignature getGenericSignature() {
         return genericSignature;
     }
 
     @Override
-    public JType genericReturnType() {
+    public JType getGenericReturnType() {
         return genericReturnType;
     }
 
     @Override
     public boolean isStatic() {
-        return Modifier.isStatic(modifiers());
+        return Modifier.isStatic(getModifiers());
     }
 
     @Override
     public boolean isPublic() {
-        return Modifier.isPublic(modifiers());
+        return Modifier.isPublic(getModifiers());
     }
 
     @Override
     public boolean isAbstract() {
-        return Modifier.isAbstract(modifiers());
+        return Modifier.isAbstract(getModifiers());
     }
 
-    public int modifiers() {
+    public int getModifiers() {
         return modifiers;
     }
 
@@ -86,7 +87,7 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
         return this;
     }
 
-    public JType declaringType() {
+    public JType getDeclaringType() {
         return declaringType;
     }
 
@@ -109,7 +110,7 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         return returnType;
     }
 
@@ -132,7 +133,7 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
         return Objects.hash(declaringType, signature);
     }
 
-    public JTypeVariable[] typeParameters() {
+    public JTypeVariable[] getTypeParameters() {
         return typeParameters;
     }
 
@@ -144,15 +145,24 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     @Override
     public JMethod parametrize(JType... parameters) {
         return new JParameterizedMethodImpl(
-                this,parameters,declaringType()
+                this,parameters, getDeclaringType()
         );
     }
 
     public boolean isDefault() {
         // Default methods are public non-abstract instance methods
         // declared in an interface.
-        return ((modifiers() & (Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC)) ==
-                Modifier.PUBLIC) && declaringType().isInterface();
+        return ((getModifiers() & (Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC)) ==
+                Modifier.PUBLIC) && getDeclaringType().isInterface();
     }
 
+    @Override
+    public String getSourceName() {
+        return sourceName;
+    }
+
+    public DefaultJRawMethod setSourceName(String sourceName) {
+        this.sourceName = sourceName;
+        return this;
+    }
 }

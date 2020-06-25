@@ -42,23 +42,23 @@ public abstract class JFunctionBase implements JFunction {
     }
 
     @Override
-    public JType returnType() {
+    public JType getReturnType() {
         return resultType;
     }
 
 
-    public String name() {
+    public String getName() {
         return name;
     }
 
     @Override
-    public JSignature signature() {
+    public JSignature getSignature() {
         return signature;
     }
 
     @Override
     public String toString() {
-        String n = name();
+        String n = getName();
         StringBuilder sb = new StringBuilder(n).append("(");
         for (int i = 0; i < argTypes.length; i++) {
             if (i > 0) {

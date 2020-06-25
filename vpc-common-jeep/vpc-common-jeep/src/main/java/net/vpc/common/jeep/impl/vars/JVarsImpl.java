@@ -211,12 +211,12 @@ public class JVarsImpl implements JVars {
     }
 
     @Override
-    public void setValue(String varName, Object value) {
+    public void setValue(String varName, Object value, JInvokeContext context) {
         get(varName).setValue(value, context);
     }
 
     @Override
-    public Object getValue(String varName) {
+    public Object getValue(String varName, JInvokeContext context) {
         return get(varName).getValue(context);
     }
 

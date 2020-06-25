@@ -80,6 +80,19 @@ public abstract class AbstractJType implements JType {
     }
 
     @Override
+    public boolean isAssignableFrom(JTypePattern other) {
+        if(other.isType()){
+            return isAssignableFrom(other.getType());
+        }
+        JType[] o = other.getLambdaArgTypes();
+        JSignature a = JTypeUtils.extractLambdaArgTypesOrNull(this, o.length);
+        if(a!=null){
+            return a.acceptAndExpand(o) !=null;
+        }
+        return false;
+    }
+
+    @Override
     public boolean isAssignableFrom(JType other) {
         if (getName().equals(other.getName())) {
             return true;
@@ -207,7 +220,7 @@ public abstract class AbstractJType implements JType {
         if (jMethods == null) {
             List<JMethod> n = new ArrayList<>();
             for (JMethod value : getDeclaredMethods()) {
-                if (value.name().equals(name)) {
+                if (value.getName().equals(name)) {
                     n.add(value);
                 }
             }
@@ -228,14 +241,14 @@ public abstract class AbstractJType implements JType {
         }
         LinkedHashMap<JSignature, JMethod> all = new LinkedHashMap<>();
         for (JMethod jMethod : getDeclaredMethods()) {
-            JSignature sig = jMethod.signature();
+            JSignature sig = jMethod.getSignature();
             all.put(sig, jMethod);
         }
         if (includeParents) {
             for (JType parent : getParents()) {
                 JMethod[] jMethods = parent.getDeclaredMethods(true);
                 for (JMethod jMethod : jMethods) {
-                    JSignature sig = jMethod.signature();
+                    JSignature sig = jMethod.getSignature();
                     if (!all.containsKey(sig)) {
                         all.put(sig, jMethod);
                     }
@@ -247,11 +260,12 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public JMethod[] getDeclaredMethods(String[] names, int callArgumentsCount, boolean includeParents) {
+//        System.out.println(getName()+".getDeclaredMethods("+Arrays.asList(names)+",...)");
         Set<String> namesSet = new HashSet<>(Arrays.asList(names));
         LinkedHashMap<JSignature, JMethod> all = new LinkedHashMap<>();
         for (JMethod jMethod : getDeclaredMethods()) {
-            if (namesSet.contains(jMethod.name())) {
-                JSignature sig = jMethod.signature();
+            if (namesSet.contains(jMethod.getName())) {
+                JSignature sig = jMethod.getSignature();
                 if (sig.acceptArgsCount(callArgumentsCount)) {
                     all.put(sig, jMethod);
                 }
@@ -261,7 +275,7 @@ public abstract class AbstractJType implements JType {
             for (JType parent : getParents()) {
                 JMethod[] jMethods = parent.getDeclaredMethods(names, callArgumentsCount, true);
                 for (JMethod jMethod : jMethods) {
-                    JSignature sig = jMethod.signature();
+                    JSignature sig = jMethod.getSignature();
                     if (!all.containsKey(sig)) {
                         all.put(sig, jMethod);
                     }
@@ -409,7 +423,7 @@ public abstract class AbstractJType implements JType {
     @Override
     public JMethod findDeclaredMethodOrNull(JSignature sig) {
         for (JMethod s : getDeclaredMethods(sig.name())) {
-            if(s.signature().equals(sig)){
+            if(s.getSignature().equals(sig)){
                 return s;
             }
         }
@@ -429,7 +443,7 @@ public abstract class AbstractJType implements JType {
     @Override
     public JConstructor findDeclaredConstructorOrNull(JSignature sig) {
         for (JConstructor s : getDeclaredConstructors()) {
-            if(s.signature().equals(sig)){
+            if(s.getSignature().equals(sig)){
                 return s;
             }
         }

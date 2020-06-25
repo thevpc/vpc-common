@@ -3,7 +3,6 @@ package net.vpc.common.jeep.core;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.eval.JEvaluableNode;
 import net.vpc.common.jeep.core.nodes.*;
-import net.vpc.common.jeep.util.JNodeUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,9 +29,9 @@ public class JNodeUtils2 {
     }
 
     public static JNodeFunctionCall createFunctionCall(JFunction f, JDefaultNode... nargs) {
-        JNodeFunctionCall jnf = new JNodeFunctionCall(f.name(), nargs);
+        JNodeFunctionCall jnf = new JNodeFunctionCall(f.getName(), nargs);
         jnf.setImpl(new JInvokablePrefilled(f, JNodeUtils2.getEvaluatables((JDefaultNode[])nargs)));
-        jnf.setType(f.returnType());
+        jnf.setType(f.getReturnType());
         return jnf;
     }
 

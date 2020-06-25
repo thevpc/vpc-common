@@ -137,7 +137,8 @@ public class DefaultJType extends AbstractJRawType implements JRawType {
                     return new DefaultJObject(DefaultJType.this);
                 }
             });
-            constructors.put(dc.signature(), dc);
+            dc.setSourceName("<generated>");
+            constructors.put(dc.getSignature(), dc);
             return dc;
         }
         return null;

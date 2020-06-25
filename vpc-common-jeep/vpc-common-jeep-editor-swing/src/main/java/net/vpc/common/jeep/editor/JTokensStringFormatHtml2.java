@@ -2,7 +2,7 @@
 //
 //import net.vpc.common.jeep.JToken;
 //import net.vpc.common.jeep.impl.tokens.JTokensStringFormatHtml;
-//import net.vpc.hadralang.compiler.HCompletionProposals;
+//import net.hl.compiler.HCompletionProposals;
 //
 //public class JTokensStringFormatHtml2 extends JTokensStringFormatHtml {
 //    public JTokensStringFormatHtml2() {

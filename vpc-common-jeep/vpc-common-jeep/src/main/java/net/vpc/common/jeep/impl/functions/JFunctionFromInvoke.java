@@ -15,4 +15,9 @@ public class JFunctionFromInvoke extends JFunctionBase {
     public Object invoke(JInvokeContext icontext) {
         return handler.invoke(icontext);
     }
+
+    @Override
+    public String getSourceName() {
+        return "<unknown-source>";
+    }
 }
