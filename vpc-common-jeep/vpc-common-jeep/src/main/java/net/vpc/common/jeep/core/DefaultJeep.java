@@ -294,12 +294,15 @@ public class DefaultJeep extends AbstractJContext implements Jeep {
             out.println(prefix + " */");
             out.println(prefix + "public static final int " + elemStr(idNames) + " = " + elemStr(ids) + ";");
             if(ids.size()>1) {
+                out.println("/// ***************************** ");
+                out.println("/// ERROR DETECTED :: ");
                 for (JTokenDef tokenDefinition : tokens().tokenDefinitions()) {
                     if(ids.contains(tokenDefinition.id)){
-                        System.out.println("#### "+tokenDefinition);
+                        out.println("/// "+tokenDefinition);
                     }
                 }
-                throw new IllegalArgumentException("ERROR IDS");
+                out.println("/// ***************************** ");
+//                throw new IllegalArgumentException("ERROR IDS");
             }
         }
         if(simpleClassName!=null) {

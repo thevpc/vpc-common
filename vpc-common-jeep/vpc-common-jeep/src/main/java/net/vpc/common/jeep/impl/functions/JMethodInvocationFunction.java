@@ -97,4 +97,10 @@ public class JMethodInvocationFunction extends JFunctionBase {
     public String getSourceName() {
         return method.getSourceName();
     }
+
+    @Override
+    public JTypes getTypes() {
+        return getReturnType().getTypes();
+    }
+
 }

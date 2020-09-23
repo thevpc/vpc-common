@@ -5,28 +5,28 @@ import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 public interface JCompilerContext {
-    JCompilerContext parent();
+    JCompilerContext getParent();
 
-    JCompilationUnit compilationUnit();
+    JCompilationUnit getCompilationUnit();
 
-    JCompilerContext parent(int index);
+    JCompilerContext setParent(int index);
 
-    JCompilerLog log();
-    String packageName();
+    JCompilerLog getLog();
+    String getPackageName();
 
-    JContext context();
+    JContext getContext();
 
     boolean isStage(int stageId);
 
-    int iteration();
+    int getIteration();
 
-    int stage();
+    int getStage();
 
-    JNodePath path();
+    JNodePath getPath();
 
-    JNode node();
+    JNode getNode();
 
-    JImportInfo[] imports();
+    JImportInfo[] getImports();
 
 //    JType typeForName(String name);
 
@@ -51,15 +51,15 @@ public interface JCompilerContext {
     JCompilerContext dropNode();
 
 
-    JCompilerContext packageName(String packageName);
+    JCompilerContext setPackageName(String packageName);
 
-    JCompilerContext log(JCompilerLog log);
+    JCompilerContext setLog(JCompilerLog log);
 
-    JCompilerContext stage(int stageId);
+    JCompilerContext setStage(int stageId);
 
-    JCompilerContext iteration(int iterationNumber);
+    JCompilerContext setIteration(int iterationNumber);
 
     JCompilerContext nextNode(JNode node);
 
-    JCompilerContext compilationUnit(JCompilationUnit compilationUnit);
+    JCompilerContext setCompilationUnit(JCompilationUnit compilationUnit);
 }

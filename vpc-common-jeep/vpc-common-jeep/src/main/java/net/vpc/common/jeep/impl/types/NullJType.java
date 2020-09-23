@@ -10,9 +10,12 @@ import java.lang.reflect.Modifier;
 
 public class NullJType extends AbstractJType {
     private String name;
+    private JAnnotationInstanceList annotations = new DefaultJAnnotationInstanceList();
+    private JModifierList modifiers = new DefaultJModifierList();
     public NullJType(JTypes types) {
         super(types);
         name="null";
+        ((DefaultJModifierList)modifiers).add(DefaultJModifierList.PUBLIC);
     }
 
 //    @Override
@@ -31,7 +34,7 @@ public class NullJType extends AbstractJType {
     }
 
     @Override
-    public JStaticObject staticObject() {
+    public JStaticObject getStaticObject() {
         return null;
     }
 
@@ -165,7 +168,7 @@ public class NullJType extends AbstractJType {
     @Override
     public JType toArray(int count) {
         return JTypesSPI.getRegisteredOrRegister(
-                types2().createArrayType0(this,count),types()
+                types2().createArrayType0(this,count), getTypes()
         );
     }
 
@@ -180,12 +183,22 @@ public class NullJType extends AbstractJType {
     }
 
     @Override
-    public int modifiers() {
-        return Modifier.PUBLIC;
+    public boolean isInterface() {
+        return false;
     }
 
     @Override
-    public boolean isInterface() {
-        return false;
+    public JAnnotationInstanceList getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public JModifierList getModifiers() {
+        return modifiers;
+    }
+
+    @Override
+    public String getSourceName() {
+        return "<runtime>";
     }
 }

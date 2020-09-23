@@ -3,6 +3,8 @@ package net.vpc.common.jeep.impl.functions;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.impl.eval.JEvaluableConverter;
 import net.vpc.common.jeep.impl.types.AbstractJMethod;
+import net.vpc.common.jeep.impl.types.JAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.JModifierList;
 import net.vpc.common.jeep.util.JTypeUtils;
 
 import java.util.Arrays;
@@ -110,7 +112,7 @@ public class ConvertedJMethod extends AbstractJMethod {
     }
 
     @Override
-    public int getModifiers() {
+    public JModifierList getModifiers() {
         return other.getModifiers();
     }
 
@@ -172,5 +174,20 @@ public class ConvertedJMethod extends AbstractJMethod {
     @Override
     public String getSourceName() {
         return other.getSourceName();
+    }
+
+    @Override
+    public JTypes getTypes() {
+        return other.getTypes();
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return other.getAnnotations();
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return other.getDefaultValue();
     }
 }

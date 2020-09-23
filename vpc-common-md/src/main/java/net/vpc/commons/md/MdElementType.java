@@ -23,6 +23,7 @@ public enum MdElementType {
     SEQ,
     TEXT,
     BOLD,
+    ITALIC,
     UNNUMBRED_ITEM1,
     UNNUMBRED_ITEM2,
     UNNUMBRED_ITEM3,
@@ -36,10 +37,12 @@ public enum MdElementType {
     NUMBRED_ITEM5,
     NUMBRED_ITEM6,
     CODE,
-    CODE_INLINE,
     ADMONITION,
     LINE_SEPARATOR,
     LINK,
+    CODE_LINK,
+    LINE_BREAK,
+    HORIZONTAL_RULE,
     IMAGE;
 
     public static MdElementType title(int depth) {

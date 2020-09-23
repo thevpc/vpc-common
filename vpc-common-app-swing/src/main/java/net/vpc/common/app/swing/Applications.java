@@ -105,7 +105,7 @@ public class Applications {
             AppTools tools = application.tools();
             tools.addFolder(path);
             runAfterStart(application, () -> {
-                AppWorkspace ws = application.mainWindow().get().getWorkspace().get();
+                AppWorkspace ws = application.mainWindow().get().workspace().get();
                 if (ws != null && ws instanceof AppDockingWorkspace) {
                     AppDockingWorkspace dws = (AppDockingWorkspace) ws;
                     PList<AppToolWindow> values = dws.toolWindows().values();

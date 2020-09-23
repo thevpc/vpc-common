@@ -67,6 +67,7 @@ public class LJSON {
     }
 
     public LJSON get(String name) {
+        name=name.replace('.', '/');
         if (this.value == null) {
             return NULL;
         }

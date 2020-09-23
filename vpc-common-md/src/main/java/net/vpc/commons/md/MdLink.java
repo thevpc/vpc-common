@@ -34,7 +34,7 @@ public class MdLink extends MdAbstractElement {
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.LINK;
     }
 

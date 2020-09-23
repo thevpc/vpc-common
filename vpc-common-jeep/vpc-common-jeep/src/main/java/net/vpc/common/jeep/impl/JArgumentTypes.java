@@ -1,7 +1,7 @@
 package net.vpc.common.jeep.impl;
 
+import net.vpc.common.jeep.JArrayType;
 import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypeArray;
 import net.vpc.common.jeep.util.JTypeUtils;
 
 import java.util.ArrayList;
@@ -105,7 +105,7 @@ public class JArgumentTypes {
                 sb.append(",");
             }
             if (i == argTypes.length - 1 && varArgs) {
-                JTypeArray argType = (JTypeArray) argTypes[i];
+                JArrayType argType = (JArrayType) argTypes[i];
                 sb.append(JTypeUtils.getFullClassName(argType.componentType()));
                 sb.append("...");
             } else {
@@ -130,7 +130,7 @@ public class JArgumentTypes {
                     t2.add(expectedArgTypes[i]);
                 }
                 int r= actualArgTypes.length-(expectedArgTypes.length - 1);
-                JTypeArray lastArgType = (JTypeArray) expectedArgTypes[expectedArgTypes.length - 1];
+                JArrayType lastArgType = (JArrayType) expectedArgTypes[expectedArgTypes.length - 1];
                 JType componentType = lastArgType.componentType();
                 if(r==0) {
                     //ok

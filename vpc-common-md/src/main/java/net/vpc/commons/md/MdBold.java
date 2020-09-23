@@ -14,6 +14,10 @@ public class MdBold extends MdAbstractElement {
     private String type;
     private MdElement content;
 
+    public MdBold(MdElement content) {
+        this("**",content);
+    }
+
     public MdBold(String type, MdElement content) {
         this.type = type;
         this.content = content;
@@ -28,8 +32,13 @@ public class MdBold extends MdAbstractElement {
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.BOLD;
+    }
+
+    @Override
+    public String toString() {
+        return "**" + content + "**";
     }
 
 }

@@ -4,6 +4,8 @@
  */
 package net.vpc.common.jeep;
 
+import net.vpc.common.jeep.core.JChildInfo;
+
 import java.util.List;
 import java.util.Map;
 
@@ -12,11 +14,11 @@ import java.util.Map;
  */
 public interface JNode {
 
-    JNode parentNode();
+    JNode getParentNode();
 
-    JToken startToken();
+    JToken getStartToken();
 
-    JToken endToken();
+    JToken getEndToken();
 
     void setStartToken(JToken startToken);
 
@@ -26,7 +28,7 @@ public interface JNode {
         return false;
     }
 
-    Map<String, Object> userObjects();
+    Map<String, Object> getUserObjects();
 
     void setUserObject(String name, Object value);
 
@@ -45,11 +47,11 @@ public interface JNode {
 
     void visit(JNodeVisitor visitor);
 
-    JNode childInfo(Object childInfo);
+    JNode setChildInfo(JChildInfo childInfo);
 
-    Object childInfo();
+    JChildInfo getChildInfo();
 
-    List<JNode> childrenNodes();
+    List<JNode> getChildrenNodes();
 
     void copyFrom(JNode other, JNodeCopyFactory copyFactory);
 

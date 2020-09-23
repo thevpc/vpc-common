@@ -11,15 +11,15 @@ public interface JType extends JDeclaration, JTypeOrVariable {
 
     JType getRawType();
 
-//    JAnnotation annotations();
+//    JAnnotationInstance annotations();
 
-    JStaticObject staticObject();
+    JStaticObject getStaticObject();
 
     String getName();
 
     JTypeName typeName();
 
-    JTypes types();
+    JTypes getTypes();
 
     String dname();
 
@@ -28,8 +28,6 @@ public interface JType extends JDeclaration, JTypeOrVariable {
     Object cast(Object o);
 
     JType boxed();
-
-    int modifiers();
 
     boolean isPublic();
 

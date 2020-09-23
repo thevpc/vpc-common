@@ -2,6 +2,7 @@ package net.vpc.common.jeep.impl.types;
 
 import net.vpc.common.jeep.JDeclaration;
 import net.vpc.common.jeep.JMethod;
+import net.vpc.common.jeep.impl.JTypesSPI;
 
 import java.lang.reflect.Modifier;
 
@@ -36,17 +37,21 @@ public abstract class AbstractJMethod implements JMethod {
 
     @Override
     public boolean isAbstract() {
-        return Modifier.isAbstract(getModifiers());
+        return ((JTypesSPI)getTypes()).isAbstractMethod(this);
     }
 
     @Override
     public boolean isStatic() {
-        return Modifier.isStatic(getModifiers());
+        return ((JTypesSPI)getTypes()).isStaticMethod(this);
     }
 
     @Override
     public boolean isPublic() {
-        return Modifier.isPublic(getModifiers());
+        return ((JTypesSPI)getTypes()).isPublicMethod(this);
+    }
+
+    public boolean isSynthetic() {
+        return ((JTypesSPI)getTypes()).isSyntheticMethod(this);
     }
 
     @Override

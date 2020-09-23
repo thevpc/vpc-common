@@ -10,8 +10,5 @@ package net.vpc.common.jeep;
  */
 public interface JFunction extends JInvokable{
 
-    default JDeclaration getDeclaration(){
-        return null;
-    }
 
 }

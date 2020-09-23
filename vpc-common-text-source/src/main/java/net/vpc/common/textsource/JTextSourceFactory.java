@@ -13,6 +13,7 @@ import net.vpc.common.textsource.impl.classpath.JTextSourceFolderURL;
 import net.vpc.common.textsource.impl.classpath.JTextSourceResourceFile;
 
 import java.io.File;
+import java.io.UncheckedIOException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -27,10 +28,21 @@ import java.nio.file.Paths;
 public class JTextSourceFactory {
 
     public static JTextSource fromString(String text, String sourceName) {
-        for (JTextSource s : rootString(text,sourceName)) {
+        for (JTextSource s : rootString(text, sourceName)) {
             return s;
         }
         return null;
+    }
+
+    public static JTextSource fromURI(URI url) {
+        try {
+            for (JTextSource s : rootURL(url.toURL())) {
+                return s;
+            }
+            return null;
+        } catch (MalformedURLException ex) {
+            throw new UncheckedIOException(ex);
+        }
     }
 
     public static JTextSource fromURL(URL url) {
@@ -39,6 +51,7 @@ public class JTextSourceFactory {
         }
         return null;
     }
+
     public static JTextSource fromFile(Path file) {
         for (JTextSource s : rootFile(file.toFile())) {
             return s;
@@ -58,7 +71,7 @@ public class JTextSourceFactory {
     }
 
     public static JTextSourceRoot rootString(String text, String sourceName) {
-        return new JTextSourceString(text,sourceName);
+        return new JTextSourceString(text, sourceName);
     }
 
     public static JTextSourceRoot rootURL(URL url) {
@@ -72,15 +85,17 @@ public class JTextSourceFactory {
     public static JTextSourceRoot rootResourceFolder(String url, String fileNameFilter) {
         return new JTextSourceResourcesFolder(url, fileNameFilter);
     }
+
     public static JTextSourceRoot rootResourceFile(String url) {
         return new JTextSourceResourceFile(url);
     }
+
     public static JTextSource fromURI(String file) {
-        JTextSource last=null;
+        JTextSource last = null;
         for (JTextSource s : rootURI(file)) {
-            if(last==null){
-                last=s;
-            }else{
+            if (last == null) {
+                last = s;
+            } else {
                 throw new IllegalArgumentException("Too Many files");
             }
         }
@@ -88,7 +103,7 @@ public class JTextSourceFactory {
     }
 
     public static JTextSourceRoot rootURI(String uri) {
-        if(uri.startsWith("file:")) {
+        if (uri.startsWith("file:")) {
             URI uri2 = null;
             try {
                 uri2 = new URL(uri).toURI();
@@ -100,39 +115,38 @@ public class JTextSourceFactory {
                 throw new IllegalArgumentException(e);
             }
             return rootFile(Paths.get(uri2).toFile());
-        }else if(uri.startsWith("string:")){
-            return rootString(uri.substring("string:".length()),"<Text>");
-        }else if(uri.startsWith("http:") || uri.startsWith("https:")
+        } else if (uri.startsWith("string:")) {
+            return rootString(uri.substring("string:".length()), "<Text>");
+        } else if (uri.startsWith("http:") || uri.startsWith("https:")
                 || uri.startsWith("jar:")
-                || uri.startsWith("zip:")
-        ){
-            if(uri.endsWith("/")){
+                || uri.startsWith("zip:")) {
+            if (uri.endsWith("/")) {
                 try {
-                    return rootURLFolder(new URL(uri),null);
+                    return rootURLFolder(new URL(uri), null);
                 } catch (MalformedURLException e) {
                     throw new IllegalArgumentException(e);
                 }
-            }else {
+            } else {
                 try {
                     return rootURL(new URL(uri));
                 } catch (MalformedURLException e) {
                     throw new IllegalArgumentException(e);
                 }
             }
-        }else if(uri.startsWith("resource:")){
-            if(uri.endsWith("/")){
-                return rootResourceFolder(uri.substring("resource:".length()),null);
-            }else{
+        } else if (uri.startsWith("resource:")) {
+            if (uri.endsWith("/")) {
+                return rootResourceFolder(uri.substring("resource:".length()), null);
+            } else {
                 return rootResourceFile(uri.substring("resource:".length()));
             }
-        }else if(uri.matches("[a-z]{2,}:.*")){
+        } else if (uri.matches("[a-z]{2,}:.*")) {
             //this is an url
             try {
                 return rootURL(new URL(uri));
             } catch (MalformedURLException e) {
                 throw new IllegalArgumentException(e);
             }
-        }else{
+        } else {
             //this is a file
             return rootFile(Paths.get(uri).toFile());
         }

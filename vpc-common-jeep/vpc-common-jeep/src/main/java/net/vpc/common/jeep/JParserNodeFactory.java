@@ -40,4 +40,6 @@ public interface JParserNodeFactory<T extends JNode> {
     T createBinaryOperatorNode(JToken op, T leftChild, T rightChild, JNodeTokens nodeTokens);
 
     T createImplicitOperatorNode(T leftChild, T rightChild, JNodeTokens nodeTokens);
+
+    T createAnnotatedNode(T node, T annotations, JNodeTokens nodeTokens);
 }

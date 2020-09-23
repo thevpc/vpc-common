@@ -2,21 +2,21 @@ package net.vpc.common.jeep.core;
 
 import net.vpc.common.jeep.JShouldNeverHappenException;
 
-public class JExpressionOptions implements Cloneable{
+public class JExpressionOptions<T extends JExpressionOptions> implements Cloneable{
     private JExpressionUnaryOptions unary;
     private JExpressionBinaryOptions binary;
 
     public JExpressionOptions() {
     }
 
-    public JExpressionOptions(JExpressionUnaryOptions unary, JExpressionBinaryOptions binary) {
-        this.setUnary(unary);
-        this.setBinary(binary);
-    }
+//    public JExpressionOptions(JExpressionUnaryOptions unary, JExpressionBinaryOptions binary) {
+//        this.setUnary(unary);
+//        this.setBinary(binary);
+//    }
 
-    public JExpressionOptions copy(){
+    public T copy(){
         try {
-            JExpressionOptions a=(JExpressionOptions) clone();
+            T a=(T) clone();
             if(a.getUnary() !=null){
                 a.setUnary(getUnary().copy());
             }
@@ -33,17 +33,17 @@ public class JExpressionOptions implements Cloneable{
         return unary;
     }
 
-    public JExpressionOptions setUnary(JExpressionUnaryOptions unary) {
+    public T setUnary(JExpressionUnaryOptions unary) {
         this.unary = unary;
-        return this;
+        return (T) this;
     }
 
     public JExpressionBinaryOptions getBinary() {
         return binary;
     }
 
-    public JExpressionOptions setBinary(JExpressionBinaryOptions binary) {
+    public T setBinary(JExpressionBinaryOptions binary) {
         this.binary = binary;
-        return this;
+        return (T) this;
     }
 }

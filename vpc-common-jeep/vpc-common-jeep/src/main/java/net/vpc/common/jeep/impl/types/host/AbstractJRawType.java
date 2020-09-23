@@ -15,7 +15,7 @@ public abstract class AbstractJRawType extends AbstractJType implements JRawType
     public JType toArray(int count) {
         return JTypesSPI.getRegisteredOrRegister(
                 types2().createArrayType0(this,count)
-                ,types());
+                , getTypes());
     }
 
     @Override
@@ -29,6 +29,21 @@ public abstract class AbstractJRawType extends AbstractJType implements JRawType
         }
         return JTypesSPI.getRegisteredOrRegister(
                 types2().createParameterizedType0(this, parameters,
-                getDeclaringType()),types());
+                getDeclaringType()), getTypes());
     }
+
+    @Override
+    public boolean isPublic() {
+        return ((JTypesSPI)getTypes()).isPublicType(this);
+    }
+
+    @Override
+    public boolean isStatic() {
+        return ((JTypesSPI)getTypes()).isStaticType(this);
+    }
+
+    public boolean isInterface() {
+        return ((JTypesSPI)getTypes()).isInterfaceType(this);
+    }
+
 }

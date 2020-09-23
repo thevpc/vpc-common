@@ -10,7 +10,7 @@ package net.vpc.commons.md;
  * @author vpc
  */
 public interface MdElement {
-    MdElementType getId();
+    MdElementType getElementType();
 
     MdAdmonition asAdmonition();
 
@@ -36,6 +36,8 @@ public interface MdElement {
 
     MdLink asLink();
 
+    MdCodeLink asCodeLink();
+
     MdXml asXml();
 
     boolean isColumn();
@@ -49,6 +51,8 @@ public interface MdElement {
     boolean isTable();
 
     boolean isText();
+
+    boolean isCodeLink();
 
     boolean isTitle();
 
@@ -65,4 +69,10 @@ public interface MdElement {
     boolean isAdmonition();
 
     boolean isNumberedItem();
+
+    MdItalic asItalic();
+
+    boolean isBold();
+
+    boolean isItalic();
 }

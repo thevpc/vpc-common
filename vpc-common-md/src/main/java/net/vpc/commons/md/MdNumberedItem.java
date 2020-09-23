@@ -16,12 +16,14 @@ public class MdNumberedItem extends MdAbstractElement {
     private MdElement value;
     private int depth;
     private MdElementType id;
+    private MdElement[] children;
 
-    public MdNumberedItem(int number, int depth, String sep, MdElement value) {
+    public MdNumberedItem(int number, int depth, String sep, MdElement value,MdElement[] children) {
         this.number = number;
         this.sep = sep;
         this.value = value;
         this.depth = depth;
+        this.children = children;
         switch (depth) {
             case 1: {
                 id = MdElementType.NUMBRED_ITEM1;
@@ -53,6 +55,10 @@ public class MdNumberedItem extends MdAbstractElement {
         }
     }
 
+    public MdElement[] getChildren() {
+        return children;
+    }
+
     public int getDepth() {
         return depth;
     }
@@ -70,7 +76,7 @@ public class MdNumberedItem extends MdAbstractElement {
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return id;
     }
 

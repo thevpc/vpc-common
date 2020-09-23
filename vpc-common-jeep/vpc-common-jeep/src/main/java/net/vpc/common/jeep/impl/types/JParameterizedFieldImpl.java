@@ -50,12 +50,22 @@ public class JParameterizedFieldImpl extends AbstractJField implements JParamete
     }
 
     @Override
-    public int modifiers() {
-        return rawField.modifiers();
+    public JType getDeclaringType() {
+        return declaringType;
     }
 
     @Override
-    public JType declaringType() {
-        return declaringType;
+    public JAnnotationInstanceList getAnnotations() {
+        return rawField.getAnnotations();
+    }
+
+    @Override
+    public JModifierList getModifiers() {
+        return rawField.getModifiers();
+    }
+
+    @Override
+    public JTypes getTypes() {
+        return rawField.getTypes();
     }
 }

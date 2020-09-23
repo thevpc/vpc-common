@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.vpc.common</groupId>
-    <artifactId>ljson</artifactId>
-    <version>1.0.0</version>
+    <artifactId>vpc-common-ljson</artifactId>
+    <version>1.0.1</version>
     <packaging>jar</packaging>
     <name>net.vpc.common.vpc-common-ljson</name>
     <url>https://github.com/thevpc/vpc-common</url>

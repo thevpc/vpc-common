@@ -31,16 +31,26 @@ public class DocusaurusMdParserTest {
 //        MdImage m = r.asSeq().get(2).asUnNumItem().getValue().asSeq().get(0).asImage();
 //        System.out.println(m);
 //        System.out.println(r);
+//        Assertions.assertTrue(true);
 //    }
 
+//    @Test
+//    public void test2() {
+//        DocusaurusMdParser p = new DocusaurusMdParser(new StringReader(""
+//                + "| Language       | Java        | Scala         | C#            | Go         | Python   | JavaScript |\n"
+//                + "| --------       | :----:      | :----:        | :----:        | :----:     | :----:   | :----:     |\n"
+//                + "| Supported Term | N/A         | N/A           | N/A           | function ```fun```  | function ```def```|```function```    | \n"
+//                + "| Alternatives    |```static``` method| ```object``` method | ```static``` method |            |          |            |\n"
+//                + ""));
+//        MdElement r = p.parse();
+//        System.out.println(r);
+//        Assertions.assertTrue(true);
+//    }
+    
     @Test
-    public void test2() {
+    public void test3() {
         DocusaurusMdParser p = new DocusaurusMdParser(new StringReader(""
-                + "| Language       | Java        | Scala         | C#            | Go         | Python   | JavaScript |\n"
-                + "| --------       | :----:      | :----:        | :----:        | :----:     | :----:   | :----:     |\n"
-                + "| Supported Term | N/A         | N/A           | N/A           | function ```fun```  | function ```def```|```function```    | \n"
-                + "| Alternatives    |```static``` method| ```object``` method | ```static``` method |            |          |            |\n"
-                + ""));
+                + "Documentation about ```docusaurus``` markdown syntax is available here: [docusaurus-markdown](https://v2.docusaurus.io/docs/markdown-features) ."));
         MdElement r = p.parse();
         System.out.println(r);
     }

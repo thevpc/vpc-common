@@ -21,7 +21,7 @@ public class MdText extends MdAbstractElement{
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.TEXT;
     }
 

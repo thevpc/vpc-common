@@ -1,9 +1,9 @@
 package net.vpc.common.jeep.impl.functions;
 
-import net.vpc.common.jeep.JFunction;
-import net.vpc.common.jeep.JInvokeContext;
-import net.vpc.common.jeep.JMethod;
-import net.vpc.common.jeep.JType;
+import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.AbstractJFunction;
+import net.vpc.common.jeep.impl.types.JAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.JModifierList;
 
 public class JFunctionFromStaticMethod implements JFunction {
     private JMethod method;
@@ -39,4 +39,29 @@ public class JFunctionFromStaticMethod implements JFunction {
     public String getSourceName() {
         return method.getSourceName();
     }
+
+    @Override
+    public boolean isPublic() {
+        return method.isPublic();
+    }
+
+    @Override
+    public JDeclaration getDeclaration() {
+        return method.getDeclaration();
+    }
+
+    @Override
+    public JModifierList getModifiers() {
+        return method.getModifiers();
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return method.getAnnotations();
+    }
+    @Override
+    public JTypes getTypes() {
+        return method.getTypes();
+    }
+
 }

@@ -13,7 +13,7 @@ import java.util.Map;
 public class JParameterizedTypeImpl extends AbstractJType implements JParameterizedType{
     private JType rootRaw;
     private JType superType;
-    private JType[] parameters;
+    private JType[] actualTypeArguments;
 
     private LinkedHashMap<String, JField> _fields;
     private LinkedHashMap<JSignature, JMethod> _methods;
@@ -23,21 +23,32 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
     private JType[] _interfaces;
     private JType declaringType;
     private LinkedHashMap<String, JType> innerTypes;
-    public JParameterizedTypeImpl(JType rootRaw, JType[] parameters, JType declaringType,JTypes types) {
+    public JParameterizedTypeImpl(JType rootRaw, JType[] actualTypeArguments, JType declaringType,JTypes types) {
         super(types);
         this.rootRaw=rootRaw;
-        this.parameters=parameters;
         this.declaringType=declaringType;
-        //should apply params
+        setActualTypeArguments(actualTypeArguments);
+        JType sType = rootRaw.getSuperType();
+        this.superType= sType ==null?null:JTypeUtils.buildParentType(sType,this);
+    }
+
+    @Override
+    public JType[] getActualTypeArguments() {
+        return actualTypeArguments;
+    }
+
+    public void setActualTypeArguments(JType[] actualTypeArguments) {
+        this.actualTypeArguments = actualTypeArguments;
+        
         StringBuilder pn=new StringBuilder();
-        for (int i = 0; i < parameters.length; i++) {
+        for (int i = 0; i < actualTypeArguments.length; i++) {
             if(i==0){
                 pn.append("<");
             }else{
                 pn.append(",");
             }
-            pn.append(parameters[i].getName());
-            if(i==parameters.length-1){
+            pn.append(actualTypeArguments[i].getName());
+            if(i==actualTypeArguments.length-1){
                 pn.append(">");
             }
         }
@@ -47,19 +58,13 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
             this.name=declaringType.getName()+"."+rootRaw.simpleName()+pn;
         }
         this.sname=rootRaw.simpleName()+pn;
-        JType sType = rootRaw.getSuperType();
-        this.superType= sType ==null?null:JTypeUtils.buildParentType(sType,this);
     }
+    
 
     @Override
-    public JType[] actualTypeArguments() {
-        return parameters;
-    }
-
-    @Override
-    public JStaticObject staticObject() {
+    public JStaticObject getStaticObject() {
         //shares static with root
-        return rootRaw.staticObject();
+        return rootRaw.getStaticObject();
     }
 
     @Override
@@ -74,7 +79,7 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
 
     @Override
     public JType replaceParameter(String name, JType param) {
-        JType[] jTypes = actualTypeArguments();
+        JType[] jTypes = getActualTypeArguments();
         JType[] y = new JType[jTypes.length];
         boolean modified = false;
         for (int i = 0; i < y.length; i++) {
@@ -232,14 +237,14 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
     }
 
     @Override
-    public int modifiers() {
-        return rootRaw.modifiers();
+    public JModifierList getModifiers() {
+        return rootRaw.getModifiers();
     }
 
     @Override
     public JType toArray(int count) {
         return JTypesSPI.getRegisteredOrRegister(
-                types2().createArrayType0(this,count),types()
+                types2().createArrayType0(this,count), getTypes()
         );
     }
 
@@ -248,4 +253,13 @@ public class JParameterizedTypeImpl extends AbstractJType implements JParameteri
         return rootRaw.isInterface();
     }
 
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return rootRaw.getAnnotations();
+    }
+
+    @Override
+    public String getSourceName() {
+        return rootRaw.getSourceName();
+    }
 }

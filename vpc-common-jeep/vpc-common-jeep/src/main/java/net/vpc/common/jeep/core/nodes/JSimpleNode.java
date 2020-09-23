@@ -26,7 +26,7 @@ public class JSimpleNode extends AbstractJNode{
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         List<JNode> li=new ArrayList<>();
         for (Object argument : arguments) {
             if(argument instanceof JNode){

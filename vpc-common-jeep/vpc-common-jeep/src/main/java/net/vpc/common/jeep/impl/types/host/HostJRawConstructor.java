@@ -1,20 +1,20 @@
 package net.vpc.common.jeep.impl.types.host;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.impl.JTypesSPI;
 import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.impl.types.AbstractJConstructor;
-import net.vpc.common.jeep.impl.types.JTypesHostHelper;
+import net.vpc.common.jeep.impl.types.*;
 import net.vpc.common.jeep.util.JTypeUtils;
 import net.vpc.common.jeep.util.JeepPlatformUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-class HostJRawConstructor extends AbstractJConstructor implements JRawConstructor {
+public class HostJRawConstructor extends AbstractJConstructor implements JRawConstructor {
     private Constructor constructor;
     private JType declaringType;
     private JSignature genericSig;
@@ -22,6 +22,8 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
     private JTypeVariable[] typeParameters;
     private String[] argNames;
     private JType[] argTypes;
+    private JAnnotationInstanceList annotations = new DefaultJAnnotationInstanceList();
+    private JModifierList modifiers = new DefaultJModifierList();
 
     public HostJRawConstructor(Constructor constructor, JType declaringType) {
         this.constructor = constructor;
@@ -30,20 +32,20 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
             throw new IllegalStateException("Error");
         }
         JeepPlatformUtils.setAccessibleWorkaround(constructor);
-        for (JTypesResolver resolver : declaringType.types().resolvers()) {
+        for (JTypesResolver resolver : declaringType.getTypes().resolvers()) {
             String s = resolver.resolveConstructorSignature(constructor);
             if (s != null) {
-                genericSig = JSignature.of(declaringType.types(), s);
+                genericSig = JSignature.of(declaringType.getTypes(), s);
                 break;
             }
         }
         if (genericSig == null) {
             JSig sigAnn = (JSig) constructor.getAnnotation(JSig.class);
             if (sigAnn != null) {
-                genericSig = JSignature.of(declaringType.types(), sigAnn.value());
+                genericSig = JSignature.of(declaringType.getTypes(), sigAnn.value());
             }
         }
-        JType[] jeepParameterTypes = getTypesHelper().forName(constructor.getGenericParameterTypes(), this);
+        JType[] jeepParameterTypes = ((JTypesSPI)getTypes()).forHostType(constructor.getGenericParameterTypes(), this);
         List<String> argNamesList = new ArrayList<>();
         try {
             for (Parameter parameter : constructor.getParameters()) {
@@ -68,7 +70,7 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
         }
 //        genericReturnType=declaringType.types().forName(constructor.getGenericReturnType());
 //        rawReturnType=declaringType.types().forName(constructor.getReturnType());
-        typeParameters = Arrays.stream(getTypesHelper().forName(constructor.getTypeParameters(), this)).toArray(JTypeVariable[]::new);
+        typeParameters = Arrays.stream(((JTypesSPI)getTypes()).forHostType(constructor.getTypeParameters(), this)).toArray(JTypeVariable[]::new);
         if (genericSig != null) {
             //add some match checking
             if (genericSig.argTypes().length != jeepParameterTypes.length) {
@@ -85,6 +87,20 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
             rawSig = JSignature.of(constructor.getName(), JTypeUtils.buildRawType(genericSig.argTypes(), this), constructor.isVarArgs());//just for test
 //            rawSig=new JSignature(method.getName(), declaringType.types().forName(method.getParameterTypes()), method.isVarArgs());
         }
+        applyAnnotations(constructor.getAnnotations());
+        applyModifiers(constructor.getModifiers());
+    }
+
+    protected void applyAnnotations(Annotation[] annotations) {
+        DefaultJAnnotationInstanceList list = (DefaultJAnnotationInstanceList) getAnnotations();
+        for (Annotation annotation : annotations) {
+            list.add(new HostJAnnotationInstance(annotation,getTypes().forName(annotation.getClass().getName())));
+        }
+    }
+
+    protected void applyModifiers(int modifiers) {
+        DefaultJModifierList modifiersList = (DefaultJModifierList) getModifiers();
+        modifiersList.addJavaModifiers(modifiers);
     }
 
     @Override
@@ -97,12 +113,8 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
         return argNames;
     }
 
-    protected JTypesHostHelper getTypesHelper() {
-        return new JTypesHostHelper(getTypes());
-    }
-
-    protected JTypes getTypes() {
-        return declaringType.types();
+    public JTypes getTypes() {
+        return declaringType.getTypes();
     }
 
     @Override
@@ -125,14 +137,15 @@ class HostJRawConstructor extends AbstractJConstructor implements JRawConstructo
         return rawSig;
     }
 
+
     @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(constructor.getModifiers());
+    public JAnnotationInstanceList getAnnotations() {
+        return annotations;
     }
 
     @Override
-    public int getModifiers() {
-        return constructor.getModifiers();
+    public JModifierList getModifiers() {
+        return modifiers;
     }
 
     @Override

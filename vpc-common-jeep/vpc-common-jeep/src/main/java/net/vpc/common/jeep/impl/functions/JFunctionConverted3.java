@@ -84,4 +84,9 @@ public class JFunctionConverted3 extends JFunctionBase {
     public String getSourceName() {
         return other.getSourceName();
     }
+
+    @Override
+    public JTypes getTypes() {
+        return getReturnType().getTypes();
+    }
 }

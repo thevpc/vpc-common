@@ -35,7 +35,7 @@ public class MdAdmonition extends MdAbstractElement{
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.ADMONITION;
     }
 

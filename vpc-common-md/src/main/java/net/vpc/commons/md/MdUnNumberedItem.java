@@ -15,11 +15,13 @@ public class MdUnNumberedItem extends MdAbstractElement {
     private MdElement value;
     private int depth;
     private MdElementType id;
+    private MdElement[] children;
 
-    public MdUnNumberedItem(String type, int depth, MdElement value) {
+    public MdUnNumberedItem(String type, int depth, MdElement value,MdElement[] children) {
         this.type = type;
         this.value = value;
         this.depth = depth;
+        this.children = children;
         switch (depth) {
             case 1: {
                 id = MdElementType.UNNUMBRED_ITEM1;
@@ -51,6 +53,10 @@ public class MdUnNumberedItem extends MdAbstractElement {
         }
     }
 
+    public MdElement[] getChildren() {
+        return children;
+    }
+
     public int getDepth() {
         return depth;
     }
@@ -64,7 +70,7 @@ public class MdUnNumberedItem extends MdAbstractElement {
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return id;
     }
 

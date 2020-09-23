@@ -147,7 +147,7 @@ public class JFunctionsImpl implements JFunctions {
         if (callArgumentsCount == 0) {
             JVar v = getContext().vars().find(name);
             if (v != null) {
-                applicables.add(new JFunctionFromVariable(v));
+                applicables.add(new JFunctionFromVariable(v,getContext().types()));
             }
         }
         for (JFunction f : functionsBySigCache.values()) {

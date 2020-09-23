@@ -1,5 +1,8 @@
 package net.vpc.common.jeep;
 
+import net.vpc.common.jeep.impl.types.JAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.JModifierList;
+
 public interface JField {
     String name();
 
@@ -9,13 +12,17 @@ public interface JField {
 
     void set(Object instance, Object value);
 
-    int modifiers();
-
     boolean isPublic();
 
     boolean isStatic();
 
     boolean isFinal();
 
-    JType declaringType();
+    JType getDeclaringType();
+    JAnnotationInstanceList getAnnotations() ;
+
+    JModifierList getModifiers();
+
+    JTypes getTypes();
+
 }

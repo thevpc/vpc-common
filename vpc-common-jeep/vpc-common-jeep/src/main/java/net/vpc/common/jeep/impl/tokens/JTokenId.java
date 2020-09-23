@@ -31,7 +31,12 @@ public class JTokenId {
 
     static {
         setDefaultSpecialName("", "EMPTY");
-//        setDefaultSpecialName("+", "PLUS");
+        setDefaultSpecialName("!in", "NOT_IN");
+        setDefaultSpecialName("!is", "NOT_IS");
+        setDefaultSpecialName("!=", "NOT_EQ");
+        setDefaultSpecialName("!==", "NOT_EQ2");
+        setDefaultSpecialName("!===", "NOT_EQ3");
+        setDefaultSpecialName("!", "NOT");
 //        setDefaultSpecialName("-", "MINUS");
 //        setDefaultSpecialName("*", "STAR");
 //        setDefaultSpecialName("/", "DIV");
@@ -130,6 +135,7 @@ public class JTokenId {
         char[] arr = image.toCharArray();
         boolean wasSimple = false;
         boolean someNoSimple = false;
+        boolean somMul=false;
         for (int i = 0; i < arr.length; i++) {
             char c = arr[i];
             if ((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9')) {
@@ -161,9 +167,13 @@ public class JTokenId {
                     i++;
                 }
                 if(cc>1){
+                    somMul=true;
                     sb.append(cc);
                 }
             }
+        }
+        if(arr.length>1 && !somMul){
+            sb.insert(0,"SEQ_");
         }
         if(!someNoSimple){
             return sb.toString().toUpperCase();//always uppercase words...

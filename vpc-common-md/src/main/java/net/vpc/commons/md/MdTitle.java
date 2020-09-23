@@ -64,7 +64,7 @@ public class MdTitle extends MdAbstractElement {
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return id;
     }
 

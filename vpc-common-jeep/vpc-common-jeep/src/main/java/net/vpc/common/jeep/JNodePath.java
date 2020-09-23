@@ -63,8 +63,8 @@ public class JNodePath implements Iterable<JNode>{
                 sb.append("/");
             }
             sb.append(jNode.getClass().getSimpleName());
-            if(jNode.childInfo()!=null) {
-                sb.append("(").append(jNode.childInfo()).append(")");
+            if(jNode.getChildInfo()!=null) {
+                sb.append("(").append(jNode.getChildInfo()).append(")");
             }
         }
         return sb.toString();

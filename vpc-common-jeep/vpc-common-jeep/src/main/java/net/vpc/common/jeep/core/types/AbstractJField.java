@@ -16,7 +16,7 @@ public abstract class AbstractJField implements JField {
         JType type = type();
         sb.append(type==null?"?":(type.getName()));
         sb.append(" ");
-        sb.append(declaringType().getName());
+        sb.append(getDeclaringType().getName());
         sb.append(".");
         sb.append(name());
         return sb.toString();

@@ -31,37 +31,37 @@ public abstract class JCompilerContextImpl implements JCompilerContext {
     }
 
     @Override
-    public JCompilationUnit compilationUnit() {
+    public JCompilationUnit getCompilationUnit() {
         return compilationUnit;
     }
 
     @Override
-    public JCompilerContext parent() {
+    public JCompilerContext getParent() {
         return parent;
     }
 
     @Override
-    public JCompilerContext parent(int index) {
+    public JCompilerContext setParent(int index) {
         if (index < 0) {
             return parent;
         } else if (parent != null) {
-            return parent(index - 1);
+            return setParent(index - 1);
         } else {
             return null;
         }
     }
 
-    public JCompilerLog log() {
+    public JCompilerLog getLog() {
         return log;
     }
 
     @Override
-    public String packageName() {
+    public String getPackageName() {
         return packageName;
     }
 
     @Override
-    public JContext context() {
+    public JContext getContext() {
         return context;
     }
 
@@ -71,28 +71,28 @@ public abstract class JCompilerContextImpl implements JCompilerContext {
     }
 
     @Override
-    public int iteration() {
+    public int getIteration() {
         return iteration;
     }
 
     @Override
-    public int stage() {
+    public int getStage() {
         return stage;
     }
 
     @Override
-    public JNodePath path() {
+    public JNodePath getPath() {
         return path;
     }
 
 
     @Override
-    public JNode node() {
-        return path().last();
+    public JNode getNode() {
+        return getPath().last();
     }
 
     @Override
-    public JImportInfo[] imports() {
+    public JImportInfo[] getImports() {
         return imports;
     }
 
@@ -160,7 +160,7 @@ public abstract class JCompilerContextImpl implements JCompilerContext {
     }
 
     @Override
-    public JCompilerContext packageName(String packageName) {
+    public JCompilerContext setPackageName(String packageName) {
         if (this.packageName != packageName) {
             return newInstance(
                     iteration, stage, path, imports, context, packageName, log,
@@ -170,7 +170,7 @@ public abstract class JCompilerContextImpl implements JCompilerContext {
     }
 
     @Override
-    public JCompilerContext log(JCompilerLog log) {
+    public JCompilerContext setLog(JCompilerLog log) {
         if (this.log != log) {
             return newInstance(
                     iteration, stage, path, imports, context, packageName, log,
@@ -180,7 +180,7 @@ public abstract class JCompilerContextImpl implements JCompilerContext {
     }
 
     @Override
-    public JCompilerContext stage(int stageId) {
+    public JCompilerContext setStage(int stageId) {
         if (this.stage != stageId) {
             return newInstance(
                     iteration, stageId, path,  imports, context, packageName, log,
@@ -190,7 +190,7 @@ public abstract class JCompilerContextImpl implements JCompilerContext {
     }
 
     @Override
-    public JCompilerContext compilationUnit(JCompilationUnit compilationUnit) {
+    public JCompilerContext setCompilationUnit(JCompilationUnit compilationUnit) {
         if (this.compilationUnit != compilationUnit) {
             return newInstance(
                     iteration, stage, path,  imports, context, packageName, log,
@@ -200,7 +200,7 @@ public abstract class JCompilerContextImpl implements JCompilerContext {
     }
 
     @Override
-    public JCompilerContext iteration(int iteration) {
+    public JCompilerContext setIteration(int iteration) {
         if (this.iteration != iteration) {
             return newInstance(
                     iteration, stage, path,  imports, context, packageName, log,

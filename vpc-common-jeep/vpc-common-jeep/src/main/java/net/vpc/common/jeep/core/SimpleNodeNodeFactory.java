@@ -124,4 +124,9 @@ public class SimpleNodeNodeFactory implements JParserNodeFactory<JSimpleNode> {
                 new ListBuilder<>().add(leftChild).add(rightChild).toObjectArray()
         );
     }
+
+    @Override
+    public JSimpleNode createAnnotatedNode(JSimpleNode node, JSimpleNode annotations, JNodeTokens nodeTokens) {
+        throw new IllegalArgumentException("Not supported");
+    }
 }

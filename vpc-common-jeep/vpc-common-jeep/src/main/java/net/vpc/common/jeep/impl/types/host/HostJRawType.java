@@ -2,18 +2,19 @@ package net.vpc.common.jeep.impl.types.host;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.JStaticObject;
+import net.vpc.common.jeep.impl.JTypesSPI;
 import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.JRawType;
-import net.vpc.common.jeep.impl.types.JTypesHostHelper;
+import net.vpc.common.jeep.impl.types.*;
 import net.vpc.common.jeep.util.JeepPlatformUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class HostJRawType extends AbstractJRawType implements JRawType {
+public abstract class HostJRawType extends AbstractJRawType implements JRawType {
     private Class hostType;
     //    private JType rawType;
     private String name;
@@ -26,6 +27,8 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     private LinkedHashMap<JSignature, JConstructor> constructors;
     private JTypeVariable[] typeParameters = new JTypeVariable[0];
     private String[] exports = new String[0];
+    private JAnnotationInstanceList annotations = new DefaultJAnnotationInstanceList();
+    private JModifierList modifiersList = new DefaultJModifierList();
     private int modifiers;
 
     private JStaticObject so = new JStaticObject() {
@@ -37,7 +40,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
         @Override
         public Object get(String name) {
             try {
-                Field field = ((Class) hostType).getField(name);
+                Field field = hostType.getField(name);
                 JeepPlatformUtils.setAccessibleWorkaround(field);
                 return field.get(null);
             } catch (IllegalAccessException e) {
@@ -64,14 +67,20 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     public HostJRawType(Class hostType, JTypes types) {
         super(types);
         this.hostType = hostType;
-        Class aclazz = (Class) hostType;
-        this.name = aclazz.getCanonicalName();
-        this.simpleName = aclazz.getSimpleName();
+        this.name = hostType.getCanonicalName();
+        this.simpleName = hostType.getSimpleName();
         this.gname = name;
-        TypeVariable[] typeParameters = aclazz.getTypeParameters();
-        JTypeVariable[] r = new JTypeVariable[typeParameters.length];
+        this.modifiers = hostType.getModifiers();
+        
+    }
+
+    @Override
+    public void onPostRegister() {
+        super.onPostRegister();
+        TypeVariable[] tp = getHostType().getTypeParameters();
+        JTypeVariable[] r = new JTypeVariable[tp.length];
         for (int i = 0; i < r.length; i++) {
-            r[i] = (JTypeVariable) htypes().forNameOrVar(typeParameters[i], this);
+            r[i] = (JTypeVariable) ((JTypesSPI)getTypes()).forHostType(tp[i], this);
             if (i == 0) {
                 gname += "<" + r[i].getName();
             } else {
@@ -83,8 +92,8 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
         }
         this.typeParameters = r;
         Set<String> exportsList = new LinkedHashSet<>();
-        for (JTypesResolver resolver : types.resolvers()) {
-            String[] strings = resolver.resolveTypeExports(aclazz);
+        for (JTypesResolver resolver : getTypes().resolvers()) {
+            String[] strings = resolver.resolveTypeExports(getHostType());
             if (strings != null) {
                 for (String string : strings) {
                     if (string != null) {
@@ -94,22 +103,36 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
             }
         }
         this.exports = exportsList.toArray(new String[0]);
-        this.modifiers = hostType.getModifiers();
+        applyModifiers(getHostType().getModifiers());
+        applyAnnotations(getHostType().getAnnotations());
+    }
+    
+    protected void applyAnnotations(Annotation[] annotations) {
+        DefaultJAnnotationInstanceList list = (DefaultJAnnotationInstanceList) getAnnotations();
+        for (Annotation annotation : annotations) {
+            JType jType = getTypes().forName(annotation.getClass().getName());
+            list.add(new HostJAnnotationInstance(annotation, jType));
+        }
+    }
+
+    protected void applyModifiers(int modifiers) {
+        DefaultJModifierList modifiersList = (DefaultJModifierList) getModifiers();
+        modifiersList.addJavaModifiers(modifiers);
     }
 
     @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(modifiers);
+    public JModifierList getModifiers() {
+        return modifiersList;
     }
 
     @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(modifiers);
+    public JAnnotationInstanceList getAnnotations() {
+        return annotations;
     }
 
     @Override
-    public int modifiers() {
-        return modifiers;
+    public String getSourceName() {
+        return null;
     }
 
     @Override
@@ -121,8 +144,9 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
         if (fields == null) {
             fields = new LinkedHashMap<>();
 //            if (hostType instanceof Class) {
-            for (Field declaredField : ((Class) hostType).getDeclaredFields()) {
-                HostJField f = new HostJField(declaredField, null, this);
+            JTypesSPI types = (JTypesSPI) getTypes();
+            for (Field declaredField : hostType.getDeclaredFields()) {
+                HostJField f = (HostJField) types.createHostField(declaredField);
                 fields.put(f.name(), f);
             }
 //            } else {
@@ -135,6 +159,17 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
 //            }
         }
         return fields;
+    }
+
+    private synchronized Map<JSignature, JMethod> _methods() {
+        if (methods == null) {
+            methods = new LinkedHashMap<>();
+            for (Method item : hostType.getDeclaredMethods()) {
+                HostJRawMethod f = new HostJRawMethod(item, this);
+                methods.put(f.getSignature().toNoVarArgs(), f);
+            }
+        }
+        return methods;
     }
 
 //    @Override
@@ -180,28 +215,16 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
 //        return null;
 //    }
 
-    private synchronized Map<JSignature, JMethod> _methods() {
-        if (methods == null) {
-            methods = new LinkedHashMap<>();
-            for (Method item : hostType.getDeclaredMethods()) {
-                HostJRawMethod f = new HostJRawMethod(item, this);
-                methods.put(f.getSignature().toNoVarArgs(), f);
-            }
-        }
-        return methods;
-    }
-
     private synchronized Map<String, JType> _innerTypes() {
         if (innerTypes == null) {
             innerTypes = new LinkedHashMap<>();
             for (Class item : hostType.getDeclaredClasses()) {
-                HostJRawType f = (HostJRawType) htypes().forName(item);
+                HostJRawType f = (HostJRawType) ((JTypesSPI)getTypes()).forHostType(item,this);
                 innerTypes.put(f.simpleName(), f);
             }
         }
         return innerTypes;
     }
-
 
     private synchronized LinkedHashMap<JSignature, JConstructor> _constructors() {
         if (constructors == null) {
@@ -223,7 +246,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
 
     @Override
     public JType boxed() {
-        return htypes().forName(JeepPlatformUtils.toBoxingType(hostType));
+        return ((JTypesSPI)getTypes()).forHostType(JeepPlatformUtils.toBoxingType(hostType),this);
     }
 
     @Override
@@ -237,12 +260,17 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
             return this;
         }
         Class p = JeepPlatformUtils.REF_TO_PRIMITIVE_TYPES.get((Class) hostType);
-        return p == null ? null : htypes().forName(p);
+        return p == null ? null : ((JTypesSPI)getTypes()).forHostType(p,this);
     }
 
     @Override
     public JMethod findDeclaredMethodOrNull(JSignature sig) {
         return _methods().get(sig.toNoVarArgs());
+    }
+
+    @Override
+    public synchronized JField findDeclaredFieldOrNull(String fieldName) {
+        return _fields().get(fieldName);
     }
 
 //    @Override
@@ -253,11 +281,6 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
 //        }
 //        return types.forName(t);
 //    }
-
-    @Override
-    public synchronized JField findDeclaredFieldOrNull(String fieldName) {
-        return _fields().get(fieldName);
-    }
 
     @Override
     public JConstructor findDeclaredConstructorOrNull(JSignature sig) {
@@ -296,7 +319,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public JStaticObject staticObject() {
+    public JStaticObject getStaticObject() {
         return so;
     }
 
@@ -310,6 +333,32 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
         return simpleName;
     }
 
+
+//    @Override
+//    public JConstructor addConstructor(JSignature signature, String[] argNames, JInvoke handler, JModifier[] modifiers, JAnnotationInstance[] annotations, boolean redefine) {
+//        throw new IllegalArgumentException("Not supported yet");
+//    }
+//
+//    @Override
+//    public JField addField(String name, JType type, int modifiers, boolean redefine) {
+//        throw new IllegalArgumentException("Not supported yet");
+//    }
+//
+//    @Override
+//    public JMethod addMethod(JSignature signature, String[] argNames, JType returnType, JInvoke handler, int modifiers, boolean redefine) {
+//        throw new IllegalArgumentException("Not supported yet");
+//    }
+
+//    @Override
+//    public boolean isAssignableFrom(JType other) {
+//        if (other instanceof HostJRawType) {
+//            if (clazz instanceof Class && ((HostJRawType) other).clazz instanceof Class) {
+//                return ((Class) clazz).isAssignableFrom((Class) ((HostJRawType) other).clazz);
+//            }
+//        }
+//        return false;
+//    }
+
     @Override
     public boolean isNullable() {
         return !isPrimitive();
@@ -321,8 +370,8 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
             //TODO FIX ME
 //            Type s = ((Class) hostType).getGenericSuperclass();
 //            return s == null ? null : htypes().forName(s, this);
-            Class s = ((Class) hostType).getSuperclass();
-            return s == null ? null : htypes().forName(s, this);
+            Class s = hostType.getSuperclass();
+            return s == null ? null : ((JTypesSPI)getTypes()).forHostType(s, this);
 
         } else {
             JType rc = getRawType();
@@ -337,31 +386,6 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
     }
 
     @Override
-    public JConstructor addConstructor(JSignature signature, String[] argNames, JInvoke handler, int modifiers, boolean redefine) {
-        throw new IllegalArgumentException("Not supported yet");
-    }
-
-    @Override
-    public JField addField(String name, JType type, int modifiers, boolean redefine) {
-        throw new IllegalArgumentException("Not supported yet");
-    }
-
-    @Override
-    public JMethod addMethod(JSignature signature, String[] argNames, JType returnType, JInvoke handler, int modifiers, boolean redefine) {
-        throw new IllegalArgumentException("Not supported yet");
-    }
-
-//    @Override
-//    public boolean isAssignableFrom(JType other) {
-//        if (other instanceof HostJRawType) {
-//            if (clazz instanceof Class && ((HostJRawType) other).clazz instanceof Class) {
-//                return ((Class) clazz).isAssignableFrom((Class) ((HostJRawType) other).clazz);
-//            }
-//        }
-//        return false;
-//    }
-
-    @Override
     public JType[] getInterfaces() {
         if (hostType instanceof Class) {
 //            Type[] interfaces = ((Class) hostType).getGenericInterfaces();
@@ -373,7 +397,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
             Class[] interfaces = hostType.getInterfaces();
             JType[] ii = new JType[interfaces.length];
             for (int i = 0; i < ii.length; i++) {
-                ii[i] = htypes().forName(interfaces[i], this);
+                ii[i] = ((JTypesSPI)getTypes()).forHostType(interfaces[i], this);
             }
             return ii;
         } else {
@@ -433,11 +457,7 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
         if (dc == null) {
             return null;
         }
-        return htypes().forName(dc, this);
-    }
-
-    protected JTypesHostHelper htypes(){
-        return new JTypesHostHelper(types());
+        return ((JTypesSPI)getTypes()).forHostType(dc, this);
     }
 
     @Override
@@ -454,12 +474,12 @@ public class HostJRawType extends AbstractJRawType implements JRawType {
         return exports;
     }
 
-    public Type hostType() {
-        return hostType;
-    }
-
     @Override
     public boolean isInterface() {
         return hostType.isInterface();
+    }
+
+    public Class getHostType() {
+        return hostType;
     }
 }

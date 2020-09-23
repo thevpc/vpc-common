@@ -136,6 +136,10 @@ public class DefaultJParserNodeFactory implements JParserNodeFactory<JDefaultNod
         return createOpNode("", leftChild, rightChild);
     }
 
+    @Override
+    public JDefaultNode createAnnotatedNode(JDefaultNode node, JDefaultNode annotations, JNodeTokens nodeTokens) {
+        throw new IllegalArgumentException("Not supported");
+    }
 
     protected JDefaultNode createOpNode(String op, JDefaultNode o1, JDefaultNode o2) {
 //        if (o2 == null) {

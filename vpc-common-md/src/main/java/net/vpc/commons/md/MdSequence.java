@@ -12,12 +12,19 @@ package net.vpc.commons.md;
 public class MdSequence extends MdAbstractElement {
 
     private String code;
-    private MdElement[] content;
+    private MdElement[] elements;
     private boolean inline;
 
     public MdSequence(String code, MdElement[] content, boolean inline) {
         this.code = code;
-        this.content = content;
+        this.elements = content;
+//        if (inline) {
+//            for (MdElement mdElement : content) {
+//                if (mdElement.toString().startsWith("##")) {
+//                    System.out.println("Why");
+//                }
+//            }
+//        }
         this.inline = inline;
     }
 
@@ -30,28 +37,32 @@ public class MdSequence extends MdAbstractElement {
     }
 
     public MdElement get(int i) {
-        return content[i];
+        return elements[i];
     }
-    
-    public MdElement[] getContent() {
-        return content;
+
+    public int size() {
+        return elements.length;
+    }
+
+    public MdElement[] getElements() {
+        return elements;
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.SEQ;
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < content.length; i++) {
+        for (int i = 0; i < elements.length; i++) {
             if (i > 0) {
                 if (!inline) {
                     sb.append("\n");
                 }
             }
-            sb.append(content[i]);
+            sb.append(elements[i]);
         }
         return sb.toString();
     }

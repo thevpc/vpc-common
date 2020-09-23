@@ -1,7 +1,7 @@
 package net.vpc.common.jeep;
 
 import net.vpc.common.jeep.impl.JEnum;
-import net.vpc.common.jeep.impl.JEnumType;
+import net.vpc.common.jeep.impl.JEnumDefinition;
 import net.vpc.common.jeep.impl.JEnumTypeRegistry;
 
 public final class JTokenType extends JEnum {
@@ -33,7 +33,7 @@ public final class JTokenType extends JEnum {
     public static final int TT_WHITESPACE = -98;
     public static final int TT_ERROR = -99;
     public static final int TT_NOTHING = -100;
-    public static final JEnumType<JTokenType> JTOKEN_TYPES = JEnumTypeRegistry.INSTANCE.register(JTokenType.class)
+    public static final JEnumDefinition<JTokenType> JTOKEN_TYPES = JEnumTypeRegistry.INSTANCE.register(JTokenType.class)
             .addConstIntFields(JTokenType.class, f -> f.getName().startsWith("TT_"));
 
     public static class Enums {
@@ -69,7 +69,7 @@ public final class JTokenType extends JEnum {
     }
 //    private static final Logger LOG = Logger.getLogger(JTokenType.class.getName());
 
-    private JTokenType(JEnumType type, String name, int value) {
+    private JTokenType(JEnumDefinition type, String name, int value) {
         super(type, name, value);
     }
 }

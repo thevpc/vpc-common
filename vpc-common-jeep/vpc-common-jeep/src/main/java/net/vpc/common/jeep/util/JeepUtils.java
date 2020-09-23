@@ -5,13 +5,15 @@
  */
 package net.vpc.common.jeep.util;
 
-import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.core.AbstractJConverter;
+import net.vpc.common.jeep.JOperatorPrecedences;
 
 import java.io.*;
 import java.lang.reflect.Array;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author vpc
@@ -20,9 +22,9 @@ public class JeepUtils {
     public static final String TAB = "\t";
     public static final String NEWLINE = "\n";
 
-    public static <T> T coalesce(T ... a){
+    public static <T> T coalesce(T... a) {
         for (T t : a) {
-            if(t!=null){
+            if (t != null) {
                 return t;
             }
         }
@@ -164,7 +166,6 @@ public class JeepUtils {
     }
 
     public static <T> T[] arrayAppend(Class arrayElementType, T[] one, T other) {
-        Class<? extends Object[]> arrayType = one.getClass();
         T[] two = (T[]) Array.newInstance(arrayElementType, 1);
         two[0] = other;
         return arrayConcat(arrayElementType, one, two);
@@ -195,6 +196,16 @@ public class JeepUtils {
             a.addAll(Arrays.asList(ts));
         }
         return a.toArray((T[]) Array.newInstance(arrayType, 0));
+    }
+
+    public static <T> T[] arrayConcatNonNull(Class arrayElementType, T[]... all) {
+        List<T> a = new ArrayList<>();
+        for (T[] ts : all) {
+            if (ts != null) {
+                a.addAll(Arrays.asList(ts));
+            }
+        }
+        return a.toArray((T[]) Array.newInstance(arrayElementType, 0));
     }
 
     public static char[] urlToCharArray(URL r) {
@@ -252,4 +263,21 @@ public class JeepUtils {
     }
 
 
+    public static boolean consumeModifier(int[] modifierRef, int mod) {
+        if ((modifierRef[0] & mod) != 0) {
+            modifierRef[0] = modifierRef[0] & (~mod);
+            return true;
+        }
+        return false;
+    }
+
+    public static String propertyToGetter(String property, boolean boolProperty) {
+        String prefix = boolProperty ? "is" : "get";
+        return prefix + JStringUtils.capitalize(property);
+    }
+
+    public static String propertyToSetter(String property) {
+        String prefix = "set";
+        return prefix + JStringUtils.capitalize(property);
+    }
 }

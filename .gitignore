@@ -55,3 +55,12 @@
 /vpc-common-text-source/target/
 /vpc-common-text-source-log/target/
 /lsp/
+/vpc-common-md/target/
+/vpc-common-md-docusaurus/target/
+/vpc-common-md-asciidoctor/target/
+/vpc-common-md-docusaurus-to-asciidoctor/target/
+/vpc-common-text-template/target/
+/vpc-common-docusaurus/target/
+/vpc-common-file-template/target/
+/vpc-common-ljson/target/
+/vpc-common-md-doc/target/

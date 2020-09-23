@@ -27,7 +27,7 @@ public class MdTable extends MdAbstractElement{
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.TABLE;
     }
     

@@ -34,7 +34,7 @@ public class MdCode extends MdAbstractElement {
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.CODE;
     }
 

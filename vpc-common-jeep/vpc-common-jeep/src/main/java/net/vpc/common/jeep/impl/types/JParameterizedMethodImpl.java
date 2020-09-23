@@ -68,8 +68,18 @@ public class JParameterizedMethodImpl extends AbstractJMethod implements JParame
     }
 
     @Override
-    public int getModifiers() {
+    public JModifierList getModifiers() {
         return rawMethod.getModifiers();
+    }
+
+    @Override
+    public JDeclaration getDeclaration() {
+        return rawMethod.getDeclaration();
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return rawMethod.getAnnotations();
     }
 
     @Override
@@ -109,4 +119,13 @@ public class JParameterizedMethodImpl extends AbstractJMethod implements JParame
         return rawMethod.getSourceName();
     }
 
+    @Override
+    public JTypes getTypes() {
+        return rawMethod.getTypes();
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return rawMethod.getDefaultValue();
+    }
 }

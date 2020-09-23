@@ -8,7 +8,7 @@ public class JEnum {
     private final String name;
     private final int value;
 
-    protected JEnum(JEnumType type, String name, int value) {
+    protected JEnum(JEnumDefinition type, String name, int value) {
         this.type = type.getName();
         this.name = name;
         this.value = value;

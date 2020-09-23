@@ -7,6 +7,8 @@ public class DefaultJTypeVariable extends AbstractJTypeVariable {
     private JType[] lowerBounds;
     private JType[] upperBounds;
     private JDeclaration declaration;
+    private JAnnotationInstanceList annotations=new DefaultJAnnotationInstanceList();
+    private JModifierList modifiers=new DefaultJModifierList();
 
     public DefaultJTypeVariable(String name, JType[] lowerBounds, JType[] upperBounds, JDeclaration declaration, JTypes types) {
         super(types);
@@ -47,5 +49,20 @@ public class DefaultJTypeVariable extends AbstractJTypeVariable {
     @Override
     public boolean isInterface() {
         return false;
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public JModifierList getModifiers() {
+        return modifiers;
+    }
+
+    @Override
+    public String getSourceName() {
+        return null;
     }
 }

@@ -5,272 +5,299 @@
  */
 package net.vpc.commons.md.asciidoctor;
 
-import net.vpc.commons.md.MdAdmonition;
-import net.vpc.commons.md.MdCode;
-import net.vpc.commons.md.MdElement;
-import net.vpc.commons.md.MdNumberedItem;
-import net.vpc.commons.md.MdTitle;
-import net.vpc.commons.md.MdUnNumberedItem;
-import net.vpc.commons.md.MdSequence;
-import net.vpc.commons.md.MdTable;
-import net.vpc.commons.md.MdText;
-import java.io.PrintStream;
-import net.vpc.commons.md.MdColumn;
-import net.vpc.commons.md.MdRow;
+import java.io.IOException;
+import java.io.UncheckedIOException;
+
+import net.vpc.commons.md.*;
+
+import java.io.Writer;
 
 /**
  *
  * @author vpc
  */
-public class AsciiDoctorWriter {
+public class AsciiDoctorWriter extends AbstractMdWriter {
 
-    PrintStream out;
 
-    public AsciiDoctorWriter(PrintStream out) {
-        this.out = out;
+    public AsciiDoctorWriter(Writer out) {
+        super(out);
     }
 
-    public void writeInline(MdElement node) {
-        switch (node.getId()) {
+    public void writeInline(MdElement element) {
+        switch (element.getElementType()) {
             case TEXT: {
-                out.print(node.asText().getText());
+                write(element.asText().getText());
                 return;
             }
             case BOLD: {
-                out.print("**");
-                writeInline(node.asBold().getContent());
-                out.print("**");
+                write("**");
+                writeInline(element.asBold().getContent());
+                write("**");
+                return;
+            }
+            case ITALIC: {
+                write("__");
+                writeInline(element.asBold().getContent());
+                write("__");
                 return;
             }
             case CODE: {
-                out.print("```");
-                out.print(node.asCode().getValue());
-                out.print("```");
+                write(" `");
+                String r = element.asCode().getValue();
+                StringBuilder sb = new StringBuilder();
+                for (char c : r.toCharArray()) {
+                    switch (c) {
+                        case '`': {
+                            sb.append("\\`");
+                            break;
+                        }
+//                        case '_': {
+//                            sb.append("\\_");
+//                            break;
+//                        }
+                        case '\\': {
+                            sb.append("\\\\");
+                            break;
+                        }
+                        default:{
+                            sb.append(c);
+                            break;
+                        }
+                    }
+                }
+                write(sb.toString());
+                write("` ");
                 return;
             }
+
             case LINK: {
-                out.print("link:");
-                out.print(node.asLink().getLinkUrl());
-                out.print("[");
-                out.print(node.asLink().getLinkTitle());
-                out.print("]");
+                write("link:");
+                write(element.asLink().getLinkUrl());
+                write("[");
+                write(element.asLink().getLinkTitle());
+                write("]");
                 return;
             }
             case IMAGE: {
-                out.print("image:");
-                out.print(node.asImage().getImageUrl());
-                out.print("[");
-                out.print(node.asImage().getImageTitle());
-                out.print("]");
+                write("image:");
+                write(element.asImage().getImageUrl());
+                write("[");
+                write(element.asImage().getImageTitle());
+                write("]");
                 return;
             }
             case SEQ: {
-                MdSequence t = node.asSeq();
-                for (MdElement mdElement : t.getContent()) {
+                MdSequence t = element.asSeq();
+                for (MdElement mdElement : t.getElements()) {
                     writeInline(mdElement);
                 }
                 return;
             }
         }
-        throw new IllegalArgumentException("Unable to inline");
+        throw new IllegalArgumentException("Unable to inline " + element.getElementType());
     }
 
-    public void write(MdElement node) {
-        switch (node.getId()) {
+    public void writeImpl(MdElement node) {
+        switch (node.getElementType()) {
             case TITLE1: {
                 MdTitle t = (MdTitle) node;
-                out.println();
-                out.println("= " + t.getValue());
+                writeln();
+                writeln("= " + t.getValue());
                 break;
             }
             case TITLE2: {
                 MdTitle t = (MdTitle) node;
-                out.println();
-                out.println("== " + t.getValue());
+                writeln();
+                writeln("== " + t.getValue());
                 break;
             }
             case TITLE3: {
                 MdTitle t = (MdTitle) node;
-                out.println();
-                out.println("=== " + t.getValue());
+                writeln();
+                writeln("=== " + t.getValue());
                 break;
             }
             case TITLE4: {
                 MdTitle t = (MdTitle) node;
-                out.println();
-                out.println("==== " + t.getValue());
+                writeln();
+                writeln("==== " + t.getValue());
                 break;
             }
             case TITLE5: {
                 MdTitle t = (MdTitle) node;
-                out.println();
-                out.println("===== " + t.getValue());
+                writeln();
+                writeln("===== " + t.getValue());
                 break;
             }
             case TITLE6: {
                 MdTitle t = (MdTitle) node;
-                out.println();
-                out.println("====== " + t.getValue());
+                writeln();
+                writeln("====== " + t.getValue());
                 break;
             }
             case UNNUMBRED_ITEM1: {
                 MdUnNumberedItem t = (MdUnNumberedItem) node;
-                out.println();
-                out.print("* ");
+                writeln();
+                write("* ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case UNNUMBRED_ITEM2: {
                 MdUnNumberedItem t = (MdUnNumberedItem) node;
-                out.println();
-                out.print("** ");
+                writeln();
+                write("** ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case UNNUMBRED_ITEM3: {
                 MdUnNumberedItem t = (MdUnNumberedItem) node;
-                out.println();
-                out.print("*** ");
+                writeln();
+                write("*** ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case UNNUMBRED_ITEM4: {
                 MdUnNumberedItem t = (MdUnNumberedItem) node;
-                out.println();
-                out.print("**** ");
+                writeln();
+                write("**** ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case UNNUMBRED_ITEM5: {
                 MdUnNumberedItem t = (MdUnNumberedItem) node;
-                out.println();
-                out.print("***** ");
+                writeln();
+                write("***** ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case UNNUMBRED_ITEM6: {
                 MdUnNumberedItem t = (MdUnNumberedItem) node;
-                out.println();
-                out.print("****** ");
+                writeln();
+                write("****** ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case NUMBRED_ITEM1: {
                 MdNumberedItem t = (MdNumberedItem) node;
-                out.println();
-                out.print(". ");
+                writeln();
+                write(". ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case NUMBRED_ITEM2: {
                 MdNumberedItem t = (MdNumberedItem) node;
-                out.println();
-                out.print(".. ");
+                writeln();
+                write(".. ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case NUMBRED_ITEM3: {
                 MdNumberedItem t = (MdNumberedItem) node;
-                out.println();
-                out.print("... ");
+                writeln();
+                write("... ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case NUMBRED_ITEM4: {
                 MdNumberedItem t = (MdNumberedItem) node;
-                out.println();
-                out.print(".... ");
+                writeln();
+                write(".... ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case NUMBRED_ITEM5: {
                 MdNumberedItem t = (MdNumberedItem) node;
-                out.println();
-                out.print("..... ");
+                writeln();
+                write("..... ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case NUMBRED_ITEM6: {
                 MdNumberedItem t = (MdNumberedItem) node;
-                out.println();
-                out.print("...... ");
+                writeln();
+                write("...... ");
                 writeInline(t.getValue());
-                out.println();
+                writeln();
                 break;
             }
             case LINE_SEPARATOR: {
-                out.println();
-                out.println();
-                out.println("'''");
-                out.println();
+                writeln();
+                writeln();
+                writeln("'''");
+                writeln();
                 break;
             }
 
             case ADMONITION: {
                 MdAdmonition t = (MdAdmonition) node;
-                out.println();
-                out.print(t.getType().toString() + ": ");
+                writeln();
+                write(t.getType().toString() + ": ");
                 write(t.getContent());
-                out.println();
+                writeln();
                 break;
             }
             case SEQ: {
                 MdSequence t = (MdSequence) node;
-                for (MdElement mdElement : t.getContent()) {
-                    write(mdElement);
+                if (t.isInline()) {
+                    for (MdElement mdElement : t.getElements()) {
+                        writeInline(mdElement);
+                    }
+                } else {
+                    for (MdElement mdElement : t.getElements()) {
+                        write(mdElement);
+                    }
                 }
                 break;
             }
             case CODE: {
                 MdCode c = (MdCode) node;
                 if (c.isInline()) {
-                    out.print("``" + c.getValue() + "``");
+                    writeInline(c);
                 } else {
-//                out.println(".app.rb");
-                    out.println();
-                    out.println("[source," + convertLanguage(c.getLanguage()) + "]");
-                    out.println("----");
-                    out.println(c.getValue());
-                    out.println("----");
+                    writeln();
+                    writeln("[source," + convertLanguage(c.getLanguage()) + "]");
+                    writeln("----");
+                    writeln(c.getValue());
+                    writeln("----");
                 }
                 break;
             }
             case TEXT: {
                 MdText c = (MdText) node;
-                out.println(c.getText());
+                writeln(c.getText());
                 break;
             }
             case TABLE: {
                 MdTable tab = (MdTable) node;
-                out.println();
-                out.println("|===");
+                writeln();
+                writeln("|===");
                 for (MdColumn cell : tab.getColumns()) {
-                    out.print("|");
+                    write("|");
                     writeInline(cell.getName());
-                    out.print(" ");
+                    write(" ");
                 }
-                out.println();
+                writeln();
                 for (MdRow row : tab.getRows()) {
-                    out.println();
+                    writeln();
                     for (MdElement cell : row.getCells()) {
-                        out.print("|");
+                        write("|");
                         writeInline(cell);
-                        out.print(" ");
+                        write(" ");
                     }
-                    out.println();
+                    writeln();
                 }
-                out.println("|===");
+                writeln("|===");
 
                 break;
             }
@@ -292,9 +319,8 @@ public class AsciiDoctorWriter {
                 return "javascript";
             }
             case "cs":
-            case "c#": 
-            case "csharp": 
-            {
+            case "c#":
+            case "csharp": {
                 return "csharp";
             }
         }

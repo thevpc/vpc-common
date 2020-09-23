@@ -25,9 +25,9 @@ public class ListBuilder<T> {
         return this;
     }
 
-    public ListBuilder<T> addAll(Collection<T> t) {
+    public ListBuilder<T> addAll(Collection<? extends T> t) {
         if (t != null) {
-            for (T value : values) {
+            for (T value : t) {
                 add(value);
             }
         }
@@ -36,7 +36,7 @@ public class ListBuilder<T> {
 
     public ListBuilder<T> addAll(T[] t) {
         if (t != null) {
-            for (T value : values) {
+            for (T value : t) {
                 add(value);
             }
         }
@@ -44,7 +44,7 @@ public class ListBuilder<T> {
     }
     public ListBuilder<T> addEach(T... t) {
         if (t != null) {
-            for (T value : values) {
+            for (T value : t) {
                 add(value);
             }
         }

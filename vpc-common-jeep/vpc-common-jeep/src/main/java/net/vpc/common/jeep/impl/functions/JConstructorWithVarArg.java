@@ -3,7 +3,9 @@ package net.vpc.common.jeep.impl.functions;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.eval.JEvaluableValue;
 import net.vpc.common.jeep.impl.types.AbstractJConstructor;
-import net.vpc.common.jeep.JTypeArray;
+import net.vpc.common.jeep.JArrayType;
+import net.vpc.common.jeep.impl.types.JAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.JModifierList;
 
 public class JConstructorWithVarArg extends AbstractJConstructor {
     private final JConstructor ctr;
@@ -47,7 +49,7 @@ public class JConstructorWithVarArg extends AbstractJConstructor {
     }
 
     @Override
-    public int getModifiers() {
+    public JModifierList getModifiers() {
         return ctr.getModifiers();
     }
 
@@ -78,9 +80,9 @@ public class JConstructorWithVarArg extends AbstractJConstructor {
 
             @Override
             public Object evaluate(JInvokeContext context) {
-                JTypeArray jType = (JTypeArray) ((JTypeArray)last).componentType();
+                JArrayType jType = (JArrayType) ((JArrayType)last).componentType();
                 Object anArray0 = jType.newArray(varArgCount);
-                JArray anArray = ((JTypeArray)jType.toArray(varArgCount)).asArray(anArray0);
+                JArray anArray = ((JArrayType)jType.toArray(varArgCount)).asArray(anArray0);
                 anArray.value();
                 for (int i = 0; i < varArgCount; i++) {
                     JEvaluable aaa = args[all.length - 1 + i];
@@ -114,5 +116,15 @@ public class JConstructorWithVarArg extends AbstractJConstructor {
     @Override
     public String getSourceName() {
         return ctr.getSourceName();
+    }
+
+    @Override
+    public JTypes getTypes() {
+        return ctr.getTypes();
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return ctr.getAnnotations();
     }
 }

@@ -34,7 +34,7 @@ public class MdImage extends MdAbstractElement {
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.IMAGE;
     }
 

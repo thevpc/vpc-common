@@ -6,7 +6,7 @@
 package net.vpc.common.jeep.core;
 
 import net.vpc.common.jeep.impl.JEnum;
-import net.vpc.common.jeep.impl.JEnumType;
+import net.vpc.common.jeep.impl.JEnumDefinition;
 
 /**
  *
@@ -14,7 +14,7 @@ import net.vpc.common.jeep.impl.JEnumType;
  */
 public abstract class JTokenState extends JEnum{
 
-    protected JTokenState(JEnumType type, String name, int value) {
+    protected JTokenState(JEnumDefinition type, String name, int value) {
         super(type, name, value);
     }
     

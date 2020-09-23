@@ -36,7 +36,7 @@ public class MdRow extends MdAbstractElement {
     }
     
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.ROW;
     }
 

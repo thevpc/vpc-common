@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class JTypePattern {
+    private String argName;
     private JType type;
     private JType[] lambdaArgTypes;
     private JType lambdaReturnType;
@@ -39,6 +40,15 @@ public class JTypePattern {
 
     public static JTypePattern of(JType type) {
         return new JTypePattern(type);
+    }
+
+    public String getArgName() {
+        return argName;
+    }
+
+    public JTypePattern setArgName(String argName) {
+        this.argName = argName;
+        return this;
     }
 
     public static String signatureStringNoPars(JTypePattern... all) {

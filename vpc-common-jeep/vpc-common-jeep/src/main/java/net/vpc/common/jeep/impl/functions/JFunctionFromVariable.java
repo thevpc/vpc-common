@@ -8,6 +8,7 @@ package net.vpc.common.jeep.impl.functions;
 //    public Object evaluate(String expression) {
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.AbstractJFunction;
 
 import java.util.Objects;
 
@@ -26,12 +27,13 @@ import java.util.Objects;
 //        return evaluate(n);
 //
 //    }
-public class JFunctionFromVariable implements JFunction {
+public class JFunctionFromVariable extends AbstractJFunction {
 
     private final JVar v;
     private final JSignature signature;
 
-    public JFunctionFromVariable(JVar v) {
+    public JFunctionFromVariable(JVar v,JTypes types) {
+        super(types);
         this.v = v;
         this.signature = new JSignature(v.name(), new JType[0], false);
     }

@@ -2,7 +2,7 @@ package net.vpc.common.jeep;
 
 import java.util.Objects;
 
-public class JPrimitiveModifier implements JAnnotation {
+public class JPrimitiveModifier implements JModifier {
     private String name;
     public JPrimitiveModifier(String name) {
         this.name = name;

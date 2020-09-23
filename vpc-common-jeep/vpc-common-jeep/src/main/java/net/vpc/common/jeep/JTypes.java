@@ -47,7 +47,7 @@ public interface JTypes {
 
     String typenameOf(Object object);
 
-    JType declareType(String fullName, boolean redefine);
+    JType declareType(String fullName, JTypeKind kind, boolean redefine);
 
     JType forName(JTypeName name);
     JType forNameOrNull(JTypeName name);
@@ -55,4 +55,6 @@ public interface JTypes {
     void addAlias(String name, JType type);
 
     JTypes parent();
+
+    boolean isAbstractType(JType c);
 }

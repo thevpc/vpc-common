@@ -22,6 +22,11 @@ public abstract class MdAbstractElement implements MdElement {
     }
 
     @Override
+    public MdItalic asItalic() {
+        return (MdItalic) this;
+    }
+
+    @Override
     public MdCode asCode() {
         return (MdCode) this;
     }
@@ -82,6 +87,11 @@ public abstract class MdAbstractElement implements MdElement {
     }
 
     @Override
+    public MdCodeLink asCodeLink() {
+        return (MdCodeLink) this;
+    }
+
+    @Override
     public MdXml asXml() {
         return (MdXml) this;
     }
@@ -102,6 +112,11 @@ public abstract class MdAbstractElement implements MdElement {
     }
 
     @Override
+    public boolean isCodeLink() {
+        return this instanceof MdCodeLink;
+    }
+
+    @Override
     public boolean isTitle() {
         return this instanceof MdTitle;
     }
@@ -109,6 +124,16 @@ public abstract class MdAbstractElement implements MdElement {
     @Override
     public boolean isTable() {
         return this instanceof MdTable;
+    }
+
+    @Override
+    public boolean isBold() {
+        return this instanceof MdBold;
+    }
+
+    @Override
+    public boolean isItalic() {
+        return this instanceof MdItalic;
     }
 
     @Override

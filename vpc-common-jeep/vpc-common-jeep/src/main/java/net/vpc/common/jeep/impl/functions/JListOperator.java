@@ -7,7 +7,9 @@ package net.vpc.common.jeep.impl.functions;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.JFunctionBase;
-import net.vpc.common.jeep.JTypeArray;
+import net.vpc.common.jeep.JArrayType;
+import net.vpc.common.jeep.impl.types.JAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.JModifierList;
 
 /**
  *
@@ -16,13 +18,13 @@ import net.vpc.common.jeep.JTypeArray;
 public class JListOperator extends JFunctionBase {
     
     private JInvoke operator;
-    private JTypeArray operandTypeArr;
+    private JArrayType operandTypeArr;
 
     public JListOperator(JInvoke operator, String name, JType resultType, JType operandType) {
         //            super(name, resultType, true, toArrayClass(operandType));
         super(name, resultType, new JType[]{operandType.toArray(1)}, true);
         this.operator = operator;
-        this.operandTypeArr = (JTypeArray) operandType.toArray(1);
+        this.operandTypeArr = (JArrayType) operandType.toArray(1);
     } //            super(name, resultType, true, toArrayClass(operandType));
 
     @Override
@@ -47,4 +49,12 @@ public class JListOperator extends JFunctionBase {
     public String getSourceName() {
         return "<unknown-source>";
     }
+
+    @Override
+    public JTypes getTypes() {
+        return operandTypeArr.getTypes();
+    }
+
+
+
 }

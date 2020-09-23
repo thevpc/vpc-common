@@ -17,17 +17,17 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public JTypeName typeName() {
-        return types().parseName(getName());
+        return getTypes().parseName(getName());
     }
 
 
     @Override
-    public JTypes types() {
+    public JTypes getTypes() {
         return types;
     }
 
     public JTypesSPI types2() {
-        return (JTypesSPI) types();
+        return (JTypesSPI) getTypes();
     }
 
     /**
@@ -49,7 +49,7 @@ public abstract class AbstractJType implements JType {
         if (o == null) {
             return o;
         }
-        JType y = types().typeOf(o);
+        JType y = getTypes().typeOf(o);
         if (isAssignableFrom(y)) {
             return o;
         }
@@ -76,7 +76,7 @@ public abstract class AbstractJType implements JType {
         if(instance==null){
             return !isPrimitive();
         }
-        return isAssignableFrom(types().typeOf(instance));
+        return isAssignableFrom(getTypes().typeOf(instance));
     }
 
     @Override
@@ -108,8 +108,8 @@ public abstract class AbstractJType implements JType {
             }else if(this instanceof JParameterizedType && other instanceof JParameterizedType) {
                 JParameterizedType t1 = (JParameterizedType) this;
                 JParameterizedType t2 = (JParameterizedType) other;
-                JType[] actualTypeArguments1 = t1.actualTypeArguments();
-                JType[] actualTypeArguments2 = t2.actualTypeArguments();
+                JType[] actualTypeArguments1 = t1.getActualTypeArguments();
+                JType[] actualTypeArguments2 = t2.getActualTypeArguments();
                 for (int i = 0; i < actualTypeArguments1.length; i++) {
                     JType s1 = actualTypeArguments1[i];
                     JType s2 = actualTypeArguments2[i];
@@ -145,7 +145,7 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public JType firstCommonSuperType(JType other) {
-        return JTypeUtils.firstCommonSuperType(this, other, types());
+        return JTypeUtils.firstCommonSuperType(this, other, getTypes());
     }
 
     @Override
@@ -231,7 +231,7 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public JMethod findDeclaredMethodOrNull(String sig) {
-        return findDeclaredMethodOrNull(JSignature.of(types(), sig));
+        return findDeclaredMethodOrNull(JSignature.of(getTypes(), sig));
     }
 
     @Override
@@ -320,7 +320,7 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public JMethod getDeclaredMethod(String sig) {
-        return getDeclaredMethod(JSignature.of(types(), sig));
+        return getDeclaredMethod(JSignature.of(getTypes(), sig));
     }
 
     @Override
@@ -334,12 +334,12 @@ public abstract class AbstractJType implements JType {
 
     @Override
     public JConstructor findDeclaredConstructorOrNull(String sig) {
-        return findDeclaredConstructorOrNull(JSignature.of(types(), sig));
+        return findDeclaredConstructorOrNull(JSignature.of(getTypes(), sig));
     }
 
     @Override
     public JConstructor getDeclaredConstructor(String sig) {
-        return getDeclaredConstructor(JSignature.of(types(), sig));
+        return getDeclaredConstructor(JSignature.of(getTypes(), sig));
     }
 
     @Override
@@ -505,5 +505,9 @@ public abstract class AbstractJType implements JType {
             }
         }
         return null;
+    }
+
+    public void onPostRegister(){
+
     }
 }

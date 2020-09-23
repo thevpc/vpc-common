@@ -1,29 +1,33 @@
 package net.vpc.common.jeep.impl;
 
-import net.vpc.common.jeep.JDeclaration;
-import net.vpc.common.jeep.JParameterizedType;
-import net.vpc.common.jeep.JType;
-import net.vpc.common.jeep.JTypes;
+import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.types.DefaultJField;
+import net.vpc.common.jeep.impl.types.host.HostJRawConstructor;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 
 public interface JTypesSPI {
-    static JType getAlreadyRegistered(String name, JTypes jtypes){
+    static JType getAlreadyRegistered(String name, JTypes jtypes) {
         JTypes types = jtypes;
-        while(types.parent()!=null){
-            types=types.parent();
+        while (types.parent() != null) {
+            types = types.parent();
         }
-        return ((JTypesSPI)types).getRegistered(name);
+        return ((JTypesSPI) types).getRegistered(name);
     }
 
-    static JType getRegisteredOrRegister(JType type, JTypes jtypes){
-        JType old = getAlreadyRegistered(type.getName(),jtypes);
-        if(old!=null){
+    static JType getRegisteredOrRegister(JType type, JTypes jtypes) {
+        JType old = getAlreadyRegistered(type.getName(), jtypes);
+        if (old != null) {
             return old;
         }
         JTypes types = jtypes;
-        while(types.parent()!=null){
-            types=types.parent();
+        while (types.parent() != null) {
+            types = types.parent();
         }
-        ((JTypesSPI)types).registerType(type);
+        ((JTypesSPI) types).registerType(type);
         return type;
     }
 
@@ -37,13 +41,43 @@ public interface JTypesSPI {
 
     JType createNullType0();
 
+    JMethod createHostMethod(Method declaredField);
+
+    JField createHostField(Field declaredField);
+
     JType createHostType0(String name);
 
-    JType createMutableType0(String name);
+    JType createMutableType0(String name, JTypeKind kind);
 
     JType createVarType0(String name, JType[] lowerBounds, JType[] upperBounds, JDeclaration declaration);
 
     JParameterizedType createParameterizedType0(JType rootRaw, JType[] parameters, JType declaringType);
 
+    HostJRawConstructor createHostConstructor(Constructor declaredField);
+
+    JType forHostType(Type ctype, JDeclaration declaration);
+
+    JType[] forHostType(Type[] names, JDeclaration declaration);
+
     ClassLoader hostClassLoader();
+
+    boolean isPublicType(JType c);
+
+    boolean isPublicConstructor(JConstructor c);
+
+    boolean isPublicMethod(JMethod c);
+    boolean isSyntheticMethod(JMethod c);
+
+    boolean isPublicField(JField c);
+
+    boolean isStaticType(JType c);
+    boolean isInterfaceType(JType c);
+
+    boolean isStaticMethod(JMethod c);
+
+    boolean isStaticField(JField c);
+
+    boolean isAbstractMethod(JMethod c);
+
+    boolean isFinalField(DefaultJField c);
 }

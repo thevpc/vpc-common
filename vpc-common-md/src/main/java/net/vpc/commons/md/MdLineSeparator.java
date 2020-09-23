@@ -27,7 +27,7 @@ public class MdLineSeparator extends MdAbstractElement{
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.LINE_SEPARATOR;
     }
     

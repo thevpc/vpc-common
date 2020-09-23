@@ -5,7 +5,7 @@
 package net.vpc.common.jeep.core.nodes;
 
 import net.vpc.common.jeep.*;
-import net.vpc.common.jeep.util.JNodeUtils;
+import net.vpc.common.jeep.core.JChildInfo;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -21,20 +21,21 @@ public abstract class AbstractJNode implements JNode {
      * information on this node when bound to Parent
      */
     private JToken[] separators;
-    private Object childInfo;
+    private JChildInfo childInfo;
     private Object exitContextObject;
     private JNode parentNode;
+    private Map<String, Object> userObjects = new LinkedHashMap<>();
 
     public AbstractJNode() {
     }
 
     @Override
-    public JToken startToken() {
+    public JToken getStartToken() {
         return startToken;
     }
 
     @Override
-    public JToken endToken() {
+    public JToken getEndToken() {
         return endToken;
     }
 
@@ -48,22 +49,22 @@ public abstract class AbstractJNode implements JNode {
         this.endToken = endToken == null ? null : endToken.copy();
     }
 
-    public Object exitContextObject() {
+    public Object getExitContextObject() {
         return exitContextObject;
     }
 
-    public AbstractJNode exitContextObject(Object exitContextObject) {
+    public AbstractJNode setExitContextObject(Object exitContextObject) {
         this.exitContextObject = exitContextObject;
         return this;
     }
 
     @Override
     public boolean isExitContext() {
-        return exitContextObject() != null;
+        return getExitContextObject() != null;
     }
 
     @Override
-    public JNode parentNode() {
+    public JNode getParentNode() {
         return parentNode;
     }
 
@@ -71,10 +72,9 @@ public abstract class AbstractJNode implements JNode {
         this.parentNode = parentNode;
         return this;
     }
-    private Map<String, Object> userObjects = new LinkedHashMap<>();
 
     @Override
-    public Map<String, Object> userObjects() {
+    public Map<String, Object> getUserObjects() {
         return userObjects;
     }
 
@@ -126,13 +126,13 @@ public abstract class AbstractJNode implements JNode {
     }
 
     public JPositionStyle getPosition(int caretOffset) {
-        if (caretOffset < this.startToken().startCharacterNumber) {
+        if (caretOffset < this.getStartToken().startCharacterNumber) {
             return JPositionStyle.BEFORE;
-        } else if (caretOffset == this.startToken().startCharacterNumber) {
+        } else if (caretOffset == this.getStartToken().startCharacterNumber) {
             return JPositionStyle.START;
-        } else if (caretOffset < this.endToken().endCharacterNumber) {
+        } else if (caretOffset < this.getEndToken().endCharacterNumber) {
             return JPositionStyle.MIDDLE;
-        } else if (caretOffset == this.endToken().endCharacterNumber) {
+        } else if (caretOffset == this.getEndToken().endCharacterNumber) {
             return JPositionStyle.END;
         } else {
             return JPositionStyle.AFTER;
@@ -141,7 +141,7 @@ public abstract class AbstractJNode implements JNode {
 
     public void visit(JNodeVisitor visitor) {
         visitor.startVisit(this);
-        visitNext(visitor, childrenNodes());
+        visitNext(visitor, getChildrenNodes());
         visitor.endVisit(this);
     }
 
@@ -168,7 +168,7 @@ public abstract class AbstractJNode implements JNode {
     }
 
     @Override
-    public List<JNode> childrenNodes() {
+    public List<JNode> getChildrenNodes() {
         return Collections.emptyList();
     }
 
@@ -180,10 +180,10 @@ public abstract class AbstractJNode implements JNode {
     @Override
     public void copyFrom(JNode other, JNodeCopyFactory copyFactory) {
         if (other != null) {
-            setStartToken(other.startToken());
-            setEndToken(other.endToken());
+            setStartToken(other.getStartToken());
+            setEndToken(other.getEndToken());
             setSeparators(other.getSeparators());
-            childInfo(other.childInfo());
+            setChildInfo(other.getChildInfo());
         }
     }
 
@@ -248,20 +248,20 @@ public abstract class AbstractJNode implements JNode {
     }
 
     @Override
-    public JNode childInfo(Object childInfo) {
+    public JNode setChildInfo(JChildInfo childInfo) {
         this.childInfo = childInfo;
         return this;
     }
 
     @Override
-    public Object childInfo() {
+    public JChildInfo getChildInfo() {
         return childInfo;
     }
 
     @Override
     public boolean containsCaret(int caretOffset) {
-        return caretOffset >= startToken().startCharacterNumber
-                && caretOffset <= endToken().endCharacterNumber;
+        return caretOffset >= getStartToken().startCharacterNumber
+                && caretOffset <= getEndToken().endCharacterNumber;
     }
 
     public static boolean containsCaret(JNode root, int caretOffset) {
@@ -274,6 +274,15 @@ public abstract class AbstractJNode implements JNode {
 
     public AbstractJNode setSeparators(JToken[] separators) {
         this.separators = separators;
+        return this;
+    }
+
+    public AbstractJNode setBounds(JTokenBounds bounds){
+        if(bounds!=null) {
+            setStartToken(bounds.getStartToken());
+            setSeparators(bounds.getSeparators());
+            setEndToken(bounds.getEndToken());
+        }
         return this;
     }
 }

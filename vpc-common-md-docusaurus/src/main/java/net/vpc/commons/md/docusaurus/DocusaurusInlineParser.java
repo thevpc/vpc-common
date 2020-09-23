@@ -42,43 +42,41 @@ public class DocusaurusInlineParser {
         try {
             while (true) {
                 String code;
-                while ((code = parseFramedText(pbr, "```", "```")) != null) {
-                    parseInlineText_helper(sb, a, (MdElement) new MdCode("", code, true));
-                }
-                if ((code = parseFramedText(pbr, "**", "**")) != null) {
-                    return (MdElement) new MdBold("**", parseInlineText(code));
-                }
-                if ((code = parseFramedText(pbr, "[", "]")) != null) {
+                if ((code = parseFramedText(pbr, "```", "```")) != null) {
+                    parseInlineText_helper(sb, a, new MdCode("", code, true));
+                } else if ((code = parseFramedText(pbr, "**", "**")) != null) {
+                    parseInlineText_helper(sb, a, new MdBold("**", parseInlineText(code)));
+                } else if ((code = parseFramedText(pbr, "[", "]")) != null) {
                     String linkTitle = code;
                     if ((code = parseFramedText(pbr, "(", ")")) != null) {
-                        parseInlineText_helper(sb, a, (MdElement) new MdLink("", linkTitle, code));
+                        parseInlineText_helper(sb, a, new MdLink("", linkTitle, code));
+                        continue;
+                    }
+                    parseInlineText_helper(sb, a, new MdText("["));
+                    parseInlineText_helper(sb, a, parseInlineText(linkTitle));
+                    parseInlineText_helper(sb, a, new MdText("["));
+                    continue;
+                } else if ((code = parseFramedText(pbr, "![", "]")) != null) {
+                    String linkTitle = code;
+                    if ((code = parseFramedText(pbr, "(", ")")) != null) {
+                        parseInlineText_helper(sb, a, new MdImage("", linkTitle, code));
                         continue;
                     }
                     parseInlineText_helper(sb, a, (MdElement) new MdText("["));
                     parseInlineText_helper(sb, a, parseInlineText(linkTitle));
-                    parseInlineText_helper(sb, a, (MdElement) new MdText("["));
+                    parseInlineText_helper(sb, a, new MdText("["));
                     continue;
-                }
-                if ((code = parseFramedText(pbr, "![", "]")) != null) {
-                    String linkTitle = code;
-                    if ((code = parseFramedText(pbr, "(", ")")) != null) {
-                        parseInlineText_helper(sb, a, (MdElement) new MdImage("", linkTitle, code));
+                } else {
+                    int c = pbr.read();
+                    if (c < 0) {
+                        break;
+                    }
+                    if (c == '|') {
+                        parseInlineText_helper(sb, a, new MdText("|"));
                         continue;
                     }
-                    parseInlineText_helper(sb, a, (MdElement) new MdText("["));
-                    parseInlineText_helper(sb, a, parseInlineText(linkTitle));
-                    parseInlineText_helper(sb, a, (MdElement) new MdText("["));
-                    continue;
+                    sb.append((char) c);
                 }
-                int c = pbr.read();
-                if (c < 0) {
-                    break;
-                }
-                if (c == '|') {
-                    parseInlineText_helper(sb, a, (MdElement) new MdText("|"));
-                    continue;
-                }
-                sb.append((char) c);
             }
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);

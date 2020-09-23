@@ -9,20 +9,20 @@ package net.vpc.commons.md;
  *
  * @author vpc
  */
-public class MdElementPath {
+public class MdElementPath<T extends MdElement>{
 
     public static final MdElementPath ROOT = new MdElementPath();
     private MdElementPath parent;
-    private MdElement element;
+    private T element;
 
-    private MdElementPath(MdElement element) {
+    private MdElementPath(T element) {
         this(element, null);
     }
 
     private MdElementPath() {
     }
 
-    private MdElementPath(MdElement element, MdElementPath parent) {
+    private MdElementPath(T element, MdElementPath parent) {
         if (element == null) {
             throw new NullPointerException();
         }
@@ -41,11 +41,11 @@ public class MdElementPath {
         return parent == null && parent!=null;
     }
 
-    public MdElementPath getParent() {
+    public MdElementPath getParentPath() {
         return parent;
     }
 
-    public MdElement getItem() {
+    public T getElement() {
         return element;
     }
 
@@ -56,4 +56,24 @@ public class MdElementPath {
         return new MdElementPath(e, this);
     }
 
+    @Override
+    public String toString() {
+        String prefix="";
+        if(parent!=null){
+            prefix=parent.toString()+"/";
+        }
+        switch(element.getElementType()){
+            case XML:{
+                return prefix+"<"+element.asXml().getTag()+">";
+            }
+            case SEQ:{
+                return prefix+String.valueOf(element.getElementType())+"[..."+element.asSeq().getElements().length+"]";
+            }
+            case CODE:{
+                return prefix+String.valueOf(element.getElementType())+"("+element.asCode().getLanguage()+")";
+            }
+        }
+        return prefix+String.valueOf(element.getElementType());
+    }
+    
 }

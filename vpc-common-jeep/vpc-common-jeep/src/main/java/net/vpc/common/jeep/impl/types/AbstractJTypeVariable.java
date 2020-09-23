@@ -7,7 +7,6 @@ import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.impl.types.host.AbstractJType;
 import net.vpc.common.jeep.util.JTypeUtils;
 
-import java.lang.reflect.Modifier;
 import java.util.*;
 
 public abstract class AbstractJTypeVariable extends AbstractJType implements JTypeVariable {
@@ -26,7 +25,7 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
     }
 
     @Override
-    public JStaticObject staticObject() {
+    public JStaticObject getStaticObject() {
         return null;
     }
 
@@ -50,7 +49,7 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
     public JType getSuperType() {
         JType jType = JTypeUtils.firstCommonSuperType(upperBounds());
         if (jType == null) {
-            jType = JTypeUtils.forObject(types());
+            jType = JTypeUtils.forObject(getTypes());
         }
         return jType;
     }
@@ -185,10 +184,10 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
         return getName();
     }
 
-    @Override
-    public int modifiers() {
-        return Modifier.PUBLIC;
-    }
+//    @Override
+//    public JModifierList getModifiers() {
+//        return Modifier.PUBLIC;
+//    }
 
     @Override
     public boolean isPublic() {
@@ -203,7 +202,7 @@ public abstract class AbstractJTypeVariable extends AbstractJType implements JTy
     public JType toArray(int count) {
         return JTypesSPI.getRegisteredOrRegister(
                 types2().createArrayType0(this,count),
-                types()
+                getTypes()
         );
     }
 

@@ -12,6 +12,7 @@ public class JExpressionUnaryOptions implements Cloneable {
     private boolean excludedPrefixParenthesis;
     private boolean excludedPrefixBrackets;
     private boolean excludedPrefixBraces;
+    private boolean excludedAnnotations;
 
     private boolean excludedTerminalParenthesis;
     private boolean excludedTerminalBrackets;
@@ -36,6 +37,15 @@ public class JExpressionUnaryOptions implements Cloneable {
         } catch (CloneNotSupportedException e) {
             throw new JShouldNeverHappenException();
         }
+    }
+
+    public boolean isExcludedAnnotations() {
+        return excludedAnnotations;
+    }
+
+    public JExpressionUnaryOptions setExcludedAnnotations(boolean excludedAnnotations) {
+        this.excludedAnnotations = excludedAnnotations;
+        return this;
     }
 
     public Set<String> getExcludedPrefixUnaryOperators() {

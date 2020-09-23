@@ -29,7 +29,7 @@ public class MdColumn extends MdAbstractElement{
     }
 
     @Override
-    public MdElementType getId() {
+    public MdElementType getElementType() {
         return MdElementType.COLUMN;
     }
 

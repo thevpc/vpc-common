@@ -2,7 +2,9 @@ package net.vpc.common.jeep.impl.functions;
 
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.eval.JEvaluableValue;
-import net.vpc.common.jeep.JTypeArray;
+import net.vpc.common.jeep.JArrayType;
+import net.vpc.common.jeep.impl.types.JAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.JModifierList;
 
 public class JFunctionWithVarArg implements JFunction {
     private final JFunction fct;
@@ -52,9 +54,9 @@ public class JFunctionWithVarArg implements JFunction {
 
             @Override
             public Object evaluate(JInvokeContext context) {
-                JTypeArray jType = (JTypeArray) ((JTypeArray)last).componentType();
+                JArrayType jType = (JArrayType) ((JArrayType)last).componentType();
                 Object anArray0 = jType.newArray(varArgCount);
-                JArray anArray = ((JTypeArray)jType.toArray(varArgCount)).asArray(anArray0);
+                JArray anArray = ((JArrayType)jType.toArray(varArgCount)).asArray(anArray0);
                 anArray.value();
                 for (int i = 0; i < varArgCount; i++) {
                     JEvaluable aaa = args[all.length - 1 + i];
@@ -80,4 +82,29 @@ public class JFunctionWithVarArg implements JFunction {
     public String getSourceName() {
         return fct.getSourceName();
     }
+
+    @Override
+    public boolean isPublic() {
+        return fct.isPublic();
+    }
+
+    @Override
+    public JDeclaration getDeclaration() {
+        return fct.getDeclaration();
+    }
+
+    @Override
+    public JModifierList getModifiers() {
+        return fct.getModifiers();
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return fct.getAnnotations();
+    }
+    @Override
+    public JTypes getTypes() {
+        return fct.getTypes();
+    }
+
 }

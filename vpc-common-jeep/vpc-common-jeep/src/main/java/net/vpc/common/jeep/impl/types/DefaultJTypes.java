@@ -1,10 +1,16 @@
 package net.vpc.common.jeep.impl.types;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.types.DefaultJField;
 import net.vpc.common.jeep.core.types.DefaultTypeName;
 import net.vpc.common.jeep.core.types.JTypeNameBounded;
 import net.vpc.common.jeep.impl.JTypesSPI;
+import net.vpc.common.jeep.impl.types.host.*;
 
+import java.lang.reflect.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 public class DefaultJTypes implements JTypes, JTypesSPI {
@@ -42,6 +48,7 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
         return hostClassLoader;
     }
 
+    @Override
     public JTypesResolver[] resolvers() {
         LinkedHashSet<JTypesResolver> all = new LinkedHashSet<>(resolvers);
         if (parent != null) {
@@ -256,7 +263,7 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
 //    }
 
     @Override
-    public JType declareType(String fullName, boolean redefine) {
+    public JType declareType(String fullName, JTypeKind kind, boolean redefine) {
         if (fullName.endsWith("[]")) {
             throw new JParseException("Cannot declare arrays");
         }
@@ -265,10 +272,10 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
             if (redefine) {
                 //old.dispose();
             } else {
-                throw new JParseException("Type " + fullName + " Declared Twice");
+                throw new JParseException("Type " + fullName + " declared Twice");
             }
         }
-        JType jt = createMutableType0(fullName);
+        JType jt = createMutableType0(fullName, kind);
         registerType(jt);
         return jt;
     }
@@ -318,6 +325,9 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
     }
 
     public JType forNameOrNull(JTypeNameOrVariable tnov, JDeclaration enclosingDeclaration) {
+        if(tnov==null){
+            return null;
+        }
         if (tnov instanceof JTypeNameBounded) {
             JTypeNameBounded b = (JTypeNameBounded) tnov;
             return createVarType0(
@@ -361,6 +371,7 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
             } else {
                 JType jType = createHostType0(tn.name());
                 if(jType!=null){
+                    registerType(jType);
                     JTypeNameOrVariable[] vars = tn.vars();
                     if (vars.length > 0) {
                         return ((JRawType)jType).parametrize(forNameOrNull(vars, jType));
@@ -395,24 +406,47 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
         if (jType != null) {
             return jType;
         }
-        return getRegistered(jt);
+        jType = typesMap.get(jt);
+        if(jType!=null){
+            return jType;
+        }
+        JTypes p = parent();
+        if(p instanceof JTypesSPI){
+            return ((JTypesSPI) p).getRegisteredOrAlias(jt);
+        }
+        return null;
     }
 
     @Override
     public JType getRegistered(String jt) {
-        return typesMap.get(jt);
+        final JType jType = typesMap.get(jt);
+        if(jType!=null){
+            return jType;
+        }
+        JTypes p = parent();
+        if(p instanceof JTypesSPI){
+            return ((JTypesSPI) p).getRegistered(jt);
+        }
+        return null;
     }
 
     @Override
     public void registerType(JType jt) {
+        JTypes p = parent();
+        if(p instanceof JTypesSPI){
+            ((JTypesSPI) p).registerType(jt);
+            return;
+        }
         JTypeName jTypeName = jt.typeName();
         String fn0 = jt.getName();
 //        String implClassName = jt.getClass().getSimpleName();
 //        while (implClassName.length() < 14) {
 //            implClassName += " ";
 //        }
+        boolean reg=false;
         if (!typesMap.containsKey(fn0)) {
             typesMap.put(fn0, jt);
+            reg=true;
 //            System.err.println(System.identityHashCode(this) + " : register type " + implClassName + " " + fn0);
         }
         String fn = jTypeName.fullName();
@@ -420,30 +454,138 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
             if (typesMap.containsKey(fn)) {
 //                System.err.println(System.identityHashCode(this) + " : register (again) type " + implClassName + " " + fn);
             } else {
+                reg=true;
                 typesMap.put(fn, jt);
 //                System.err.println(System.identityHashCode(this) + " : register type " + implClassName + " " + fn);
             }
+        }
+        if(reg){
+            ((AbstractJType)jt).onPostRegister();
         }
     }
 
 
     @Override
     public JType createArrayType0(JType root, int dim){
-        return new DefaultJTypeArray(root,dim);
+        return new DefaultJArrayType(root,dim);
     }
     @Override
     public JType createNullType0(){
         return new NullJType(this);
     }
 
-    @Override
-    public JType createHostType0(String name){
-        return new JTypesHostHelper(this).forName0(name);
+    protected JType createHostType0(Class name){
+        if(name.isEnum()){
+            return new HostJEnumType(name, this);
+        }
+        if(name.isAnnotation()){
+            return new HostJAnnotationType(name, this);
+        }
+        return new HostJClassType(name, this);
     }
 
     @Override
-    public JType createMutableType0(String name){
-        return new DefaultJType(name,this);
+    public JField createHostField(Field declaredField) {
+        return new HostJField(declaredField, null, forName(declaredField.getDeclaringClass().getName()));
+    }
+
+    @Override
+    public JMethod createHostMethod(Method declaredField) {
+        return new HostJRawMethod(declaredField, forName(declaredField.getDeclaringClass().getName()));
+    }
+
+    @Override
+    public HostJRawConstructor createHostConstructor(Constructor declaredField) {
+        return new HostJRawConstructor(declaredField, forName(declaredField.getDeclaringClass().getName()));
+    }
+
+    @Override
+    public JType createHostType0(String name){
+        switch (name) {
+            case "Object":
+            case "object":
+                return createHostType0(Object.class);
+            case "Date":
+                return createHostType0(java.util.Date.class);
+            case "Character":
+                return createHostType0(Character.class);
+            case "String":
+            case "string":
+                return createHostType0(String.class);
+            case "stringb":
+                return createHostType0(StringBuilder.class);
+            case "Int":
+            case "Integer":
+                return createHostType0(Integer.class);
+            case "Long":
+                return createHostType0(Long.class);
+            case "Double":
+                return createHostType0(Double.class);
+            case "Float":
+                return createHostType0(Float.class);
+            case "Short":
+                return createHostType0(Short.class);
+            case "Byte":
+                return createHostType0(Byte.class);
+            case "Boolean":
+                return createHostType0(Boolean.class);
+            case "Void":
+                return createHostType0(Void.class);
+
+            case "char":
+                return createHostType0(char.class);
+            case "int":
+                return createHostType0(int.class);
+            case "long":
+                return createHostType0(long.class);
+            case "double":
+                return createHostType0(double.class);
+            case "float":
+                return createHostType0(float.class);
+            case "short":
+                return createHostType0(short.class);
+            case "byte":
+                return createHostType0(byte.class);
+            case "bool":
+            case "boolean":
+                return createHostType0(boolean.class);
+            case "void":
+                return createHostType0(void.class);
+            case "date":
+                return createHostType0(LocalDate.class);
+            case "datetime":
+                return createHostType0(LocalDateTime.class);
+            case "time":
+                return createHostType0(LocalTime.class);
+        }
+        ClassLoader hostClassLoader=this.hostClassLoader();
+        Class<?> t = null;
+        try {
+            //i should replace this witch
+            if (hostClassLoader == null) {
+                return createHostType0(Class.forName(name));
+            } else {
+                return createHostType0(Class.forName(name, false, hostClassLoader));
+            }
+        } catch (ClassNotFoundException e) {
+            //
+        }
+        return null;
+    }
+
+    @Override
+    public JType createMutableType0(String name, JTypeKind kind){
+        switch (kind.getValue()){
+            case JTypeKind.Ids.ANNOTATION:{
+                return new DefaultJAnnotationType(name,kind,this);
+            }
+            case JTypeKind.Ids.ENUM:{
+                return new DefaultJEnumType(name,kind,this);
+            }
+            default:{
+                return new DefaultJType(name,kind,this);
+            }
+        }
     }
 
     @Override
@@ -456,4 +598,171 @@ public class DefaultJTypes implements JTypes, JTypesSPI {
         return new JParameterizedTypeImpl(rootRaw, parameters, declaringType, this);
     }
 
+    @Override
+    public JType forHostType(Type ctype, JDeclaration declaration) {
+        return forHostType(ctype, declaration,null);
+    }
+
+    public JType forHostType(Type ctype, JDeclaration declaration,Map<Type,JType> pending) {
+        if(pending==null){
+           pending=new HashMap<>();
+        }
+        final JType v = pending.get(ctype);
+        if(v!=null){
+            return v;
+        }
+        if (ctype instanceof Class) {
+            Class clazz = (Class) ctype;
+            if (clazz.isArray()) {
+                return forHostType(clazz.getComponentType(), declaration,pending).toArray();
+            }
+            JType found = getRegisteredOrAlias(getCanonicalTypeName(ctype));
+            if (found != null) {
+                return found;
+            }
+            //each context should have its proper types repository...
+            //so wont inherit parent's
+//            if (parent != null) {
+//                found = parent.forName(ctype, declaration);
+//                if (found != null) {
+//                    return found;
+//                }
+//            }
+            found = createHostType0((Class) ctype);
+            registerType(found);
+            return found;
+        } else if (ctype instanceof ParameterizedType) {
+            ParameterizedType pt = (ParameterizedType) ctype;
+            Type rawType = pt.getRawType();
+            JType rootRaw = forHostType(rawType, declaration,pending);
+
+            //need to handle loopback in parameters 
+            // examples: interface OfField<F extends OfField<F>> extends TypeDescriptor;
+            final JParameterizedType found = createParameterizedType0(
+                    rootRaw,
+                    new JType[0],//forHostType(pt.getActualTypeArguments(), declaration,pending)
+                    rootRaw.getDeclaringType()
+            );
+            pending.put(ctype, found);
+            ((JParameterizedTypeImpl)found).setActualTypeArguments(forHostType(pt.getActualTypeArguments(), declaration,pending));
+            registerType(found);
+            return found;
+        } else if (ctype instanceof TypeVariable) {
+            TypeVariable tv = (TypeVariable) ctype;
+            final JType found = createVarType0(
+                    tv.getName(),
+                    new JType[0],
+                    forHostType(tv.getBounds(),declaration,pending),
+                    declaration
+            );
+//            registerType(found);
+            return found;
+        } else if (ctype instanceof WildcardType) {
+            WildcardType tv = (WildcardType) ctype;
+            final JType found = createVarType0(
+                    "?",
+                    forHostType(tv.getLowerBounds(),declaration,pending),
+                    forHostType(tv.getUpperBounds(),declaration,pending),
+                    declaration
+            );
+//            registerType(found);
+            return found;
+        } else if (ctype instanceof GenericArrayType) {
+            Type c = ((GenericArrayType) ctype).getGenericComponentType();
+            return forHostType(c,declaration,pending).toArray();
+        } else {
+            throw new IllegalArgumentException("Unsupported");
+        }
+    }
+
+    public JType[] forHostType(Type[] clazz) {
+        return forHostType(clazz, null);
+    }
+
+    @Override
+    public JType[] forHostType(Type[] names, JDeclaration declaration) {
+        JType[] jTypes = new JType[names.length];
+        for (int i = 0; i < jTypes.length; i++) {
+            jTypes[i] = forHostType(names[i], declaration);
+        }
+        return jTypes;
+    }
+
+    public JType[] forHostType(Type[] names, JDeclaration declaration,Map<Type,JType> pending) {
+        JType[] jTypes = new JType[names.length];
+        for (int i = 0; i < jTypes.length; i++) {
+            jTypes[i] = forHostType(names[i], declaration,pending);
+        }
+        return jTypes;
+    }
+
+    public String getCanonicalTypeName(Type ctype) {
+        if (ctype instanceof Class) {
+            return ((Class) ctype).getCanonicalName();
+        }
+        return ctype.getTypeName();
+    }
+
+    @Override
+    public boolean isPublicType(JType c) {
+        return c.getModifiers().contains(DefaultJModifierList.PUBLIC);
+    }
+
+    @Override
+    public boolean isPublicConstructor(JConstructor c) {
+        return c.getModifiers().contains(DefaultJModifierList.PUBLIC);
+    }
+
+    @Override
+    public boolean isPublicMethod(JMethod c) {
+        return c.getModifiers().contains(DefaultJModifierList.PUBLIC);
+    }
+
+    public boolean isSyntheticMethod(JMethod c) {
+        return c.getModifiers().contains(DefaultJModifierList.SYNTHETIC);
+    }
+
+    public boolean isAbstractMethod(JMethod c) {
+        return c.getModifiers().contains(DefaultJModifierList.ABSTRACT);
+    }
+
+    @Override
+    public boolean isAbstractType(JType c) {
+        return c.getModifiers().contains(DefaultJModifierList.ABSTRACT);
+    }
+
+    @Override
+    public boolean isPublicField(JField c) {
+        return c.getModifiers().contains(DefaultJModifierList.PUBLIC);
+    }
+
+    @Override
+    public boolean isStaticType(JType c) {
+        return c.getModifiers().contains(DefaultJModifierList.STATIC);
+    }
+
+    @Override
+    public boolean isInterfaceType(JType c) {
+        if(c.isRawType()){
+            if(c instanceof HostJClassType){
+                return c.isInterface();
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean isStaticMethod(JMethod c) {
+        return c.getModifiers().contains(DefaultJModifierList.STATIC);
+    }
+
+    @Override
+    public boolean isStaticField(JField c) {
+        return c.getModifiers().contains(DefaultJModifierList.STATIC);
+    }
+
+    @Override
+    public boolean isFinalField(DefaultJField c) {
+        return c.getModifiers().contains(DefaultJModifierList.FINAL);
+    }
 }

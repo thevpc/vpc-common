@@ -1,11 +1,13 @@
 package net.vpc.common.jeep.impl.types.host;
 
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.impl.JTypesSPI;
 import net.vpc.common.jeep.impl.functions.JSignature;
 import net.vpc.common.jeep.impl.types.*;
 import net.vpc.common.jeep.util.JTypeUtils;
 import net.vpc.common.jeep.util.JeepPlatformUtils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.util.*;
 
@@ -19,6 +21,9 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
     private JTypeVariable[] typeParameters;
     private JType[] argTypes;
     private String[] argNames;
+    private Object defaultValue;
+    private JAnnotationInstanceList annotations = new DefaultJAnnotationInstanceList();
+    private JModifierList modifiers = new DefaultJModifierList();
 
     public HostJRawMethod(Method method, JType declaringType) {
         this.method = method;
@@ -27,20 +32,20 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
             throw new IllegalStateException("Error");
         }
         JeepPlatformUtils.setAccessibleWorkaround(method);
-        for (JTypesResolver resolver : declaringType.types().resolvers()) {
+        for (JTypesResolver resolver : declaringType.getTypes().resolvers()) {
             String s= resolver.resolveMethodSignature(method);
             if(s!=null){
-                genericSig= JSignature.of(declaringType.types(),s);
+                genericSig= JSignature.of(declaringType.getTypes(),s);
                 break;
             }
         }
         if(genericSig==null) {
             JSig sigAnn = method.getAnnotation(JSig.class);
             if(sigAnn!=null) {
-                genericSig = JSignature.of(declaringType.types(), sigAnn.value());
+                genericSig = JSignature.of(declaringType.getTypes(), sigAnn.value());
             }
         }
-        JType[] jeepParameterTypes = htypes().forName(method.getGenericParameterTypes(),this);
+        JType[] jeepParameterTypes = ((JTypesSPI)getTypes()).forHostType(method.getGenericParameterTypes(),this);
         List<String> argNamesList=new ArrayList<>();
         try {
             for (Parameter parameter : method.getParameters()) {
@@ -63,9 +68,9 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
                 this.argNames[i]="arg"+(i+1);
             }
         }
-        genericReturnType=htypes().forName(method.getGenericReturnType());
-        rawReturnType=htypes().forName(method.getReturnType());
-        typeParameters=Arrays.stream(htypes().forName(method.getTypeParameters(),this)).toArray(JTypeVariable[]::new);
+        genericReturnType=((JTypesSPI)getTypes()).forHostType(method.getGenericReturnType(),this);
+        rawReturnType=((JTypesSPI)getTypes()).forHostType(method.getReturnType(),this);
+        typeParameters=Arrays.stream(((JTypesSPI)getTypes()).forHostType(method.getTypeParameters(),this)).toArray(JTypeVariable[]::new);
         if(genericSig!=null){
             //add some match checking
             if(genericSig.argTypes().length!=jeepParameterTypes.length){
@@ -82,6 +87,21 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
             rawSig=JSignature.of(method.getName(),JTypeUtils.buildRawType(genericSig.argTypes(),this),method.isVarArgs());//just for test
 //            rawSig=new JSignature(method.getName(), declaringType.types().forName(method.getParameterTypes()), method.isVarArgs());
         }
+        this.defaultValue=method.getDefaultValue();
+        applyAnnotations(method.getAnnotations());
+        applyModifiers(method.getModifiers());
+    }
+
+    protected void applyAnnotations(Annotation[] annotations) {
+        DefaultJAnnotationInstanceList list = (DefaultJAnnotationInstanceList) getAnnotations();
+        for (Annotation annotation : annotations) {
+            list.add(new HostJAnnotationInstance(annotation, getTypes().forName(annotation.getClass().getName())));
+        }
+    }
+
+    protected void applyModifiers(int modifiers) {
+        DefaultJModifierList modifiersList = (DefaultJModifierList) getModifiers();
+        modifiersList.addJavaModifiers(modifiers);
     }
 
     @Override
@@ -94,12 +114,8 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
         return argNames;
     }
 
-    protected JTypesHostHelper htypes(){
-        return new JTypesHostHelper(types());
-    }
-
-    protected JTypes types(){
-        return declaringType.types();
+    public JTypes getTypes(){
+        return declaringType.getTypes();
     }
 
     @Override
@@ -186,11 +202,6 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
     }
 
     @Override
-    public int getModifiers() {
-        return method.getModifiers();
-    }
-
-    @Override
     public boolean isDefault() {
         return method.isDefault();
     }
@@ -198,5 +209,20 @@ public class HostJRawMethod extends AbstractJMethod implements JRawMethod {
     @Override
     public String getSourceName() {
         return "<library>";
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public JModifierList getModifiers() {
+        return modifiers;
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return defaultValue;
     }
 }

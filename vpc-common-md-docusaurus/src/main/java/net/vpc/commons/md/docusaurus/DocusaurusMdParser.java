@@ -6,29 +6,14 @@ import java.io.Reader;
 import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
-import net.vpc.commons.md.MdAdmonition;
-import net.vpc.commons.md.MdAdmonitionType;
-import net.vpc.commons.md.MdCode;
-import net.vpc.commons.md.MdColumn;
-import net.vpc.commons.md.MdElement;
-import net.vpc.commons.md.MdFactory;
-import net.vpc.commons.md.MdHorizontalAlign;
-import net.vpc.commons.md.MdLineSeparator;
-import net.vpc.commons.md.MdNumberedItem;
-import net.vpc.commons.md.MdRow;
-import net.vpc.commons.md.MdSequence;
-import net.vpc.commons.md.MdTable;
-import net.vpc.commons.md.MdText;
-import net.vpc.commons.md.MdTitle;
-import net.vpc.commons.md.MdUnNumberedItem;
-import net.vpc.commons.md.MdXml;
 
-public class DocusaurusMdParser {
+import net.vpc.commons.md.*;
 
-    BufferedReader reader;
+public class DocusaurusMdParser implements MdParser {
+
+    private BufferedReader reader;
 
     List<String> buffer = new ArrayList<>();
 
@@ -62,6 +47,12 @@ public class DocusaurusMdParser {
         if (line.startsWith("---") && line.trim().equals("---")) {
             return (MdElement) new MdLineSeparator("---", line.substring(3));
         }
+        if (line.startsWith(mul('\t', 5) + "-")) {
+            return (MdElement) MdFactory.ul(6, new DocusaurusInlineParser(line.substring(6).trim()).parse());
+        }
+        if (line.startsWith("\t-")) {
+            return (MdElement) MdFactory.ul(1, new DocusaurusInlineParser(line.substring(1).trim()).parse());
+        }
         for (int i = 6; i > 0; i--) {
             String id = mul('#', i);
             if (line.startsWith(id)) {
@@ -73,20 +64,26 @@ public class DocusaurusMdParser {
             }
             id = mul('+', i);
             if (line.startsWith(id)) {
-                return (MdElement) new MdUnNumberedItem(id, i, new DocusaurusInlineParser(line.substring(i).trim()).parse());
+                return (MdElement) MdFactory.ul(i, new DocusaurusInlineParser(line.substring(i).trim()).parse());
             }
             id = mul('-', i);
             if (line.startsWith(id)) {
-                return (MdElement) new MdUnNumberedItem(id, i, new DocusaurusInlineParser(line.substring(i).trim()).parse());
+                return (MdElement) MdFactory.ul(i, new DocusaurusInlineParser(line.substring(i).trim()).parse());
+            }
+            if (i > 1) {
+                id = mul('\t', i - 1) + "-";
+                if (line.startsWith(id)) {
+                    return (MdElement) MdFactory.ul(i, new DocusaurusInlineParser(line.substring(6).trim()).parse());
+                }
             }
         }
         if (line.matches("[0-9]+[.] .*")) {
             int x = line.indexOf('.');
-            return (MdElement) new MdNumberedItem(Integer.parseInt(line.substring(0, x)), 1, ".", new DocusaurusInlineParser(line.substring(x + 1)).parse());
+            return (MdElement) MdFactory.ol(Integer.parseInt(line.substring(0, x)), 1, new DocusaurusInlineParser(line.substring(x + 1)).parse());
         }
         if (line.startsWith("```")) {
             String id = line.substring(3).trim();
-            if (id.indexOf("```") < 0) {
+            if (!id.contains("```")) {
                 StringBuilder code = new StringBuilder();
                 boolean first = true;
                 while ((line = nextLine()) != null) {
@@ -219,13 +216,14 @@ public class DocusaurusMdParser {
             List<MdElement> cells = new ArrayList<>();
             List<MdElement> currentCol = new ArrayList<>();
             boolean firstItem = true;
-            for (MdElement elem : new ArrayList<MdElement>(Arrays.asList(seq.getContent()))) {
+            for (MdElement elem : new ArrayList<MdElement>(Arrays.asList(seq.getElements()))) {
                 if (elem.isText() && elem.asText().getText().equals("|")) {
                     if (!firstItem || !currentCol.isEmpty()) {
                         if (currentCol.isEmpty()) {
                             currentCol.add(new MdText(" "));
                         }
-                        cells.add(MdFactory.appendInline(currentCol));
+                        cells.add(MdFactory.seqInline(currentCol));
+                        currentCol.clear();
                     }
                 } else {
                     currentCol.add(elem);
@@ -235,10 +233,20 @@ public class DocusaurusMdParser {
                 }
             }
             if (!currentCol.isEmpty()) {
-                cells.add(MdFactory.appendInline(currentCol));
+                cells.add(MdFactory.seqInline(currentCol));
             }
             return new MdRow(cells.toArray(new MdElement[0]), false);
         }
         return null;
     }
+
+    @Override
+    public void close() {
+        try {
+            reader.close();
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
+        }
+    }
+    
 }

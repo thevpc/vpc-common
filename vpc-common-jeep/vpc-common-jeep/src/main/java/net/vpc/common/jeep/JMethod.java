@@ -1,9 +1,11 @@
 package net.vpc.common.jeep;
 
-import net.vpc.common.jeep.impl.functions.JSignature;
+public interface JMethod extends JInvokable {
+    JTypes getTypes();
 
-public interface JMethod extends JInvokable,JDeclaration{
     String getName();
+
+    boolean isPublic();
 
     JType getDeclaringType();
 
@@ -11,14 +13,21 @@ public interface JMethod extends JInvokable,JDeclaration{
 
     String[] getArgNames();
 
-    int getModifiers();
     boolean isAbstract();
+
     boolean isStatic();
 
-    boolean isPublic();
+    boolean isSynthetic();
 
     boolean isDefault();
 
+    /**
+     * annotation method default value
+     * @return
+     */
+    Object getDefaultValue();
+
     JTypeVariable[] getTypeParameters();
+
     JMethod parametrize(JType... parameters);
 }

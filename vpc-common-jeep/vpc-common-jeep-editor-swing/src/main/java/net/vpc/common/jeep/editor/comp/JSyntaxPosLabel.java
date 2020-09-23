@@ -69,9 +69,9 @@ public class JSyntaxPosLabel extends JLabel {
                 simpleName=simpleName.substring(2);
             }
             sb.append(simpleName);
-            if(jNode.childInfo()!=null) {
+            if(jNode.getChildInfo()!=null) {
                 sb.append("<font color=blue>(</font>");
-                sb.append(jNode.childInfo());
+                sb.append(jNode.getChildInfo());
                 sb.append("<font color=blue>)</font>");
             }
         }

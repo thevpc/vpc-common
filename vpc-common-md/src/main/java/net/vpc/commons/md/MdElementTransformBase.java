@@ -31,27 +31,27 @@ public class MdElementTransformBase {
     protected MdElement[] transformArray(MdElement[] e, MdElementPath parentPath) {
         List<MdElement> all = new ArrayList<>();
         for (MdElement mdElement : e) {
-            MdElement u = transformElement(mdElement, parentPath);
+            MdElement u = transformElement(parentPath.append(mdElement));
             if (u != null) {
                 all.add(u);
             }
         }
-        if (all.size() == 0) {
+        if (all.isEmpty()) {
             return null;
         }
         return all.toArray(new MdElement[0]);
     }
 
     protected MdColumn[] transformColumns(MdColumn[] e, MdElementPath parentPath) {
-        List<MdElement> all = new ArrayList<>();
+        List<MdColumn> all = new ArrayList<>();
         for (MdElement mdElement : e) {
-            MdElement c = transformElement(mdElement, parentPath);
+            MdElement c = transformElement(parentPath.append(mdElement));
             if (c != null) {
-                MdElement u = (MdColumn) c;
+                MdColumn u = (MdColumn) c;
                 all.add(u);
             }
         }
-        if (all.size() == 0) {
+        if (all.isEmpty()) {
             return null;
         }
         return all.toArray(new MdColumn[0]);
@@ -60,32 +60,33 @@ public class MdElementTransformBase {
     protected MdRow[] transformRows(MdRow[] e, MdElementPath parentPath) {
         List<MdRow> all = new ArrayList<>();
         for (MdElement mdElement : e) {
-            MdElement c = transformElement(mdElement, parentPath);
+            MdElement c = transformElement(parentPath.append(mdElement));
             if (c != null) {
                 MdRow u = (MdRow) c;
                 all.add(u);
             }
         }
-        if (all.size() == 0) {
+        if (all.isEmpty()) {
             return null;
         }
         return all.toArray(new MdRow[0]);
     }
 
     public MdElement transformDocument(MdElement e) {
-        return transformElement(e, MdElementPath.ROOT);
+        return transformElement(MdElementPath.ROOT.append(e));
     }
 
-    public MdElement transformElement(MdElement e, MdElementPath parentPath) {
+    public MdElement transformElement(MdElementPath path) {
+        MdElement e = path.getElement();
         if (e == null) {
             return null;
         }
-        switch (e.getId()) {
+        switch (e.getElementType()) {
             case SEQ: {
-                return transformSequence((MdSequence) e, parentPath);
+                return transformSequence((MdElementPath<MdSequence>) path);
             }
             case XML: {
-                return transformXml((MdXml) e, parentPath);
+                return transformXml((MdElementPath<MdXml>) path);
             }
             case TITLE1:
             case TITLE2:
@@ -93,7 +94,7 @@ public class MdElementTransformBase {
             case TITLE4:
             case TITLE5:
             case TITLE6: {
-                return transformTitle((MdTitle) e, parentPath);
+                return transformTitle((MdElementPath<MdTitle>) path);
             }
             case NUMBRED_ITEM1:
             case NUMBRED_ITEM2:
@@ -101,7 +102,7 @@ public class MdElementTransformBase {
             case NUMBRED_ITEM4:
             case NUMBRED_ITEM5:
             case NUMBRED_ITEM6: {
-                return transformNumberedItem((MdNumberedItem) e, parentPath);
+                return transformNumberedItem((MdElementPath<MdNumberedItem>) path);
             }
             case UNNUMBRED_ITEM1:
             case UNNUMBRED_ITEM2:
@@ -109,95 +110,96 @@ public class MdElementTransformBase {
             case UNNUMBRED_ITEM4:
             case UNNUMBRED_ITEM5:
             case UNNUMBRED_ITEM6: {
-                return transformUnNumberedItem((MdUnNumberedItem) e, parentPath);
+                return transformUnNumberedItem((MdElementPath<MdUnNumberedItem>) path);
             }
             case ADMONITION: {
-                return transformAdmonition((MdAdmonition) e, parentPath);
+                return transformAdmonition((MdElementPath<MdAdmonition>) path);
             }
             case TEXT: {
-                return transformText((MdText) e, parentPath);
+                return transformText((MdElementPath<MdText>) path);
             }
             case CODE: {
-                return transformCode((MdCode) e, parentPath);
+                return transformCode((MdElementPath<MdCode>) path);
             }
             case LINE_SEPARATOR: {
-                return transformLineSeparator((MdLineSeparator) e, parentPath);
+                return transformLineSeparator((MdElementPath<MdLineSeparator>) path);
             }
             case TABLE: {
-                return transformTable((MdTable) e, parentPath);
+                return transformTable((MdElementPath<MdTable>) path);
             }
             case BOLD: {
-                return transformBold((MdBold) e, parentPath);
+                return transformBold((MdElementPath<MdBold>) path);
+            }
+            case ITALIC: {
+                return transformItalic((MdElementPath<MdItalic>) path);
             }
             case IMAGE: {
-                return transformImage((MdImage) e, parentPath);
+                return transformImage((MdElementPath<MdImage>) path);
             }
             case LINK: {
-                return transformURL((MdLink) e, parentPath);
+                return transformURL((MdElementPath<MdLink>) path);
             }
             case COLUMN: {
-                return transformColumn((MdColumn) e, parentPath);
+                return transformColumn((MdElementPath<MdColumn>) path);
             }
             case ROW: {
-                return transformRow((MdRow) e, parentPath);
+                return transformRow((MdElementPath<MdRow>) path);
             }
         }
         return e;
     }
 
-    protected MdTable transformTable(MdTable e, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(e);
-        MdColumn[] h = transformColumns(e.getColumns(), newParent);
-        MdRow[] r = transformRows(e.getRows(), newParent);
+    protected MdTable transformTable(MdElementPath<MdTable> path) {
+        MdColumn[] h = transformColumns(path.getElement().getColumns(), path);
+        MdRow[] r = transformRows(path.getElement().getRows(), path);
         return new MdTable(h, r);
     }
 
-    protected MdElement transformLineSeparator(MdLineSeparator e, MdElementPath parentPath) {
-        return e;
+    protected MdElement transformLineSeparator(MdElementPath<MdLineSeparator> path) {
+        return path.getElement();
     }
 
-    protected MdElement transformCode(MdCode e, MdElementPath parentPath) {
-        return e;
+    protected MdElement transformCode(MdElementPath<MdCode> path) {
+        return path.getElement();
     }
 
-    protected MdElement transformText(MdText e, MdElementPath parentPath) {
-        return e;
+    protected MdElement transformText(MdElementPath<MdText> path) {
+        return path.getElement();
     }
 
-    protected MdElement transformAdmonition(MdAdmonition e, MdElementPath parentPath) {
-        return e;
+    protected MdElement transformAdmonition(MdElementPath<MdAdmonition> path) {
+        return path.getElement();
     }
 
-    protected MdElement transformNumberedItem(MdNumberedItem e, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(e);
-        return new MdNumberedItem(e.getNumber(), e.getDepth(), e.getSep(), transformElement(e.getValue(), newParent));
+    protected MdElement transformNumberedItem(MdElementPath<MdNumberedItem> path) {
+        MdNumberedItem e = path.getElement();
+        return new MdNumberedItem(e.getNumber(), e.getDepth(), e.getSep(), transformElement(path.append(e.getValue())),new MdElement[0]);
     }
 
-    protected MdElement transformUnNumberedItem(MdUnNumberedItem e, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(e);
-        return new MdUnNumberedItem(e.getType(), e.getDepth(), transformElement(e.getValue(), newParent));
+    protected MdElement transformUnNumberedItem(MdElementPath<MdUnNumberedItem> path) {
+        MdUnNumberedItem e = path.getElement();
+        return new MdUnNumberedItem(e.getType(), e.getDepth(), transformElement(path.append(e.getValue())),new MdElement[0]);
     }
 
-    protected MdElement transformTitle(MdTitle e, MdElementPath parentPath) {
-        return e;
+    protected MdElement transformTitle(MdElementPath<MdTitle> path) {
+        return path.getElement();
     }
 
-    protected MdElement transformXml(MdXml e, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(e);
-        MdElement r = transformElement(e.getContent(), newParent);
-        return new MdXml(e.getTag(), e.getPropertiesString(), r);
+    protected MdElement transformXml(MdElementPath<MdXml> path) {
+        MdElement r = transformElement(path.append(path.getElement().getContent()));
+        return new MdXml(path.getElement().getTag(), path.getElement().getPropertiesString(), r);
     }
 
-    protected MdElement transformSequence(MdSequence e, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(e);
+    protected MdElement transformSequence(MdElementPath<MdSequence> path) {
         List<MdElement> a = new ArrayList<MdElement>();
-        for (MdElement mdElement : e.getContent()) {
-            MdElement v = transformElement(mdElement, newParent);
+        MdSequence e = path.getElement();
+        for (MdElement mdElement : e.getElements()) {
+            MdElement v = transformElement(path.append(mdElement));
             if (v != null) {
                 a.add(v);
             }
         }
-        if (a.size() == 0) {
+        if (a.isEmpty()) {
             return null;
         }
         if (a.size() == 1) {
@@ -206,29 +208,33 @@ public class MdElementTransformBase {
         return new MdSequence(e.getCode(), a.toArray(new MdElement[0]), e.isInline());
     }
 
-    public MdElement transformBold(MdBold element, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(element);
-        return new MdBold(element.getType(), transformElement(element.getContent(), newParent));
+    public MdElement transformBold(MdElementPath<MdBold> path) {
+        MdBold e = path.getElement();
+        return new MdBold(e.getType(), transformElement(path.append(e.getContent())));
     }
 
-    protected MdElement transformURL(MdLink element, MdElementPath parent) {
-        return element;
+    public MdElement transformItalic(MdElementPath<MdItalic> path) {
+        MdItalic e = path.getElement();
+        return new MdItalic(e.getType(), transformElement(path.append(e.getContent())));
     }
 
-    protected MdElement transformImage(MdImage element, MdElementPath parent) {
-        return element;
+    protected MdElement transformURL(MdElementPath<MdLink> path) {
+        return path.getElement();
     }
 
-    private MdElement transformRow(MdRow element, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(element);
-        return new MdRow(transformArray(element.getCells(), parentPath), element.isHeader());
+    protected MdElement transformImage(MdElementPath<MdImage> path) {
+        return path.getElement();
     }
 
-    private MdElement transformColumn(MdColumn element, MdElementPath parentPath) {
-        MdElementPath newParent = parentPath.append(element);
+    private MdElement transformRow(MdElementPath<MdRow> path) {
+        MdRow e = path.getElement();
+        return new MdRow(transformArray(e.getCells(), path), e.isHeader());
+    }
+
+    private MdElement transformColumn(MdElementPath<MdColumn> path) {
         return new MdColumn(
-                transformElement(element.getName(), newParent),
-                element.getHorizontalAlign()
+                transformElement(path.append(path.getElement().getName())),
+                path.getElement().getHorizontalAlign()
         );
     }
 

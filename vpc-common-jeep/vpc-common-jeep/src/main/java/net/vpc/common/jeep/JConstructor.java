@@ -1,6 +1,6 @@
 package net.vpc.common.jeep;
 
-public interface JConstructor extends JInvokable, JDeclaration {
+public interface JConstructor extends JInvokable {
     JType[] getArgTypes();
 
     String[] getArgNames();
@@ -8,7 +8,6 @@ public interface JConstructor extends JInvokable, JDeclaration {
     JTypeVariable[] getTypeParameters();
 
     JType getDeclaringType();
+    JTypes getTypes() ;
 
-    boolean isPublic();
-    int getModifiers();
 }

@@ -1,0 +1,79 @@
+package net.vpc.common.jeep.impl.types;
+
+import net.vpc.common.jeep.JArray;
+import net.vpc.common.jeep.JType;
+import net.vpc.common.jeep.JTypes;
+import net.vpc.common.jeep.core.types.AbstractJField;
+import net.vpc.common.jeep.util.JTypeUtils;
+
+import java.lang.reflect.Array;
+
+public class ArrFieldLength extends AbstractJField {
+    private JType arrayType;
+    private JTypes types;
+    private JAnnotationInstanceList annotations = new DefaultJAnnotationInstanceList();
+    private JModifierList modifiers = new DefaultJModifierList();
+
+    public ArrFieldLength(JType arrayType, JTypes types) {
+        this.arrayType = arrayType;
+        this.types = types;
+    }
+
+    @Override
+    public String name() {
+        return "length";
+    }
+
+    @Override
+    public JType type() {
+        return JTypeUtils.forInt(types);
+    }
+
+    @Override
+    public Object get(Object instance) {
+        if (instance instanceof JArray) {
+            return ((JArray) instance).length();
+        }
+        return Array.getLength(instance);
+    }
+
+    @Override
+    public void set(Object instance, Object value) {
+        throw new IllegalStateException("Unmodifiable field");
+    }
+
+    @Override
+    public boolean isPublic() {
+        return true;
+    }
+
+    @Override
+    public boolean isStatic() {
+        return false;
+    }
+
+    @Override
+    public boolean isFinal() {
+        return true;
+    }
+
+    @Override
+    public JType getDeclaringType() {
+        return arrayType;
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return annotations;
+    }
+
+    @Override
+    public JModifierList getModifiers() {
+        return modifiers;
+    }
+
+    @Override
+    public JTypes getTypes() {
+        return arrayType.getTypes();
+    }
+}

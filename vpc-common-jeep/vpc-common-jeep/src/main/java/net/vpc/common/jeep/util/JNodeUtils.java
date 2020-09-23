@@ -2,6 +2,7 @@ package net.vpc.common.jeep.util;
 
 import java.lang.reflect.Array;
 import net.vpc.common.jeep.*;
+import net.vpc.common.jeep.core.DefaultJChildInfo;
 import net.vpc.common.jeep.core.nodes.*;
 
 import java.util.ArrayList;
@@ -107,12 +108,12 @@ public class JNodeUtils {
     }
 
     public static JNode findFirstParent(JNode n, Predicate<JNode> filter) {
-        JNode p = n.parentNode();
+        JNode p = n.getParentNode();
         while (p != null) {
             if (filter.test(p)) {
                 return p;
             }
-            p = p.parentNode();
+            p = p.getParentNode();
         }
         return null;
     }
@@ -176,7 +177,7 @@ public class JNodeUtils {
                 if (p == null) {
                     throw new JFixMeLaterException();
                 }
-                if (p.parentNode() != parentNode) {
+                if (p.getParentNode() != parentNode) {
                     ((AbstractJNode) p).parentNode(parentNode);
                 }
                 nargs.set(ii, (T) p);
@@ -192,7 +193,7 @@ public class JNodeUtils {
                 if (p == null) {
                     throw new JFixMeLaterException();
                 }
-                if (p.parentNode() != parentNode) {
+                if (p.getParentNode() != parentNode) {
                     ((AbstractJNode) p).parentNode(parentNode);
                 }
                 nargs[ii] = (T) p;
@@ -267,7 +268,7 @@ public class JNodeUtils {
     public static <T extends JNode> T bind(JNode parent,T child, String asName) {
         if (child != null) {
             ((AbstractJNode) child).parentNode(parent);
-            ((AbstractJNode) child).childInfo(asName);
+            ((AbstractJNode) child).setChildInfo(new DefaultJChildInfo(asName,null));
         }
         return child;
     }
@@ -275,7 +276,7 @@ public class JNodeUtils {
     public static <T extends JNode> T bind(JNode parent,T child, String asName, int index) {
         if (child != null) {
             ((AbstractJNode) child).parentNode(parent);
-            ((AbstractJNode) child).childInfo(asName + "[" + index + "]");
+            child.setChildInfo(new DefaultJChildInfo(asName,String.valueOf(index)));
         }
         return child;
     }

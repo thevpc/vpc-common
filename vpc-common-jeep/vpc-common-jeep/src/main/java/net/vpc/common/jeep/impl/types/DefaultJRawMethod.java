@@ -16,10 +16,22 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     private JSignature signature;
     private String[] argNames;
     private JSignature genericSignature;
-    private int modifiers;
+    private Object defaultValue;
+    private JModifierList modifiers=new DefaultJModifierList();
+    private JAnnotationInstanceList annotations=new DefaultJAnnotationInstanceList();
     private String sourceName;
 
     public DefaultJRawMethod() {
+    }
+
+    @Override
+    public JTypes getTypes() {
+        return getDeclaringType().getTypes();
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return annotations;
     }
 
     @Override
@@ -54,28 +66,9 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
         return genericReturnType;
     }
 
-    @Override
-    public boolean isStatic() {
-        return Modifier.isStatic(getModifiers());
-    }
 
-    @Override
-    public boolean isPublic() {
-        return Modifier.isPublic(getModifiers());
-    }
-
-    @Override
-    public boolean isAbstract() {
-        return Modifier.isAbstract(getModifiers());
-    }
-
-    public int getModifiers() {
+    public JModifierList getModifiers() {
         return modifiers;
-    }
-
-    public DefaultJRawMethod setModifiers(int modifiers) {
-        this.modifiers = modifiers;
-        return this;
     }
 
     public JInvoke getHandler() {
@@ -150,10 +143,8 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     }
 
     public boolean isDefault() {
-        // Default methods are public non-abstract instance methods
-        // declared in an interface.
-        return ((getModifiers() & (Modifier.ABSTRACT | Modifier.PUBLIC | Modifier.STATIC)) ==
-                Modifier.PUBLIC) && getDeclaringType().isInterface();
+        return getDeclaringType().isInterface()
+                && isPublic() && !isAbstract() && !isStatic();
     }
 
     @Override
@@ -164,5 +155,14 @@ public class DefaultJRawMethod extends AbstractJMethod implements JRawMethod{
     public DefaultJRawMethod setSourceName(String sourceName) {
         this.sourceName = sourceName;
         return this;
+    }
+
+    @Override
+    public Object getDefaultValue() {
+        return defaultValue;
+    }
+
+    public void setDefaultValue(Object defaultValue) {
+        this.defaultValue = defaultValue;
     }
 }

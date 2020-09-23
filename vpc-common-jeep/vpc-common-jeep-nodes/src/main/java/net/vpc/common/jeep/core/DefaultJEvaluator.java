@@ -3,7 +3,7 @@ package net.vpc.common.jeep.core;
 import net.vpc.common.jeep.*;
 import net.vpc.common.jeep.core.nodes.*;
 import net.vpc.common.jeep.impl.functions.JSignature;
-import net.vpc.common.jeep.JTypeArray;
+import net.vpc.common.jeep.JArrayType;
 
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -22,7 +22,7 @@ public class DefaultJEvaluator implements JEvaluator {
                 JNodeArray a = (JNodeArray) node;
                 JTypes types = context.getContext().types();
                 JNode[] values = a.getValues();
-                JTypeArray jType = (JTypeArray) JNodeUtils2.getType(a);
+                JArrayType jType = (JArrayType) JNodeUtils2.getType(a);
                 Object arr0 = jType.newArray(values.length);
                 JArray arr = jType.asArray(arr0);
                 int len = arr.length();

@@ -1,12 +1,17 @@
 package net.vpc.common.jeep.core;
 
+import net.vpc.common.jeep.JDeclaration;
 import net.vpc.common.jeep.JFunction;
 import net.vpc.common.jeep.JType;
 import net.vpc.common.jeep.JTypes;
 import net.vpc.common.jeep.impl.functions.JSignature;
+import net.vpc.common.jeep.impl.types.DefaultJAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.DefaultJModifierList;
+import net.vpc.common.jeep.impl.types.JAnnotationInstanceList;
+import net.vpc.common.jeep.impl.types.JModifierList;
 import net.vpc.common.jeep.util.JTypeUtils;
 
-public abstract class JFunctionBase implements JFunction {
+public abstract class JFunctionBase extends AbstractJFunction {
 
     private String name;
     private JType resultType;
@@ -27,6 +32,7 @@ public abstract class JFunctionBase implements JFunction {
     }
 
     public JFunctionBase(String name, JType returnType, JType[] argTypes, boolean varArgs) {
+        super(returnType.getTypes());
         this.resultType = returnType;
         this.name = name;
         this.argTypes = argTypes;
@@ -70,4 +76,10 @@ public abstract class JFunctionBase implements JFunction {
         sb.append(")");
         return sb.toString();
     }
+
+    @Override
+    public JTypes getTypes() {
+        return getReturnType().getTypes();
+    }
+
 }

@@ -59,8 +59,18 @@ public class JParameterizedConstructorImpl extends AbstractJConstructor implemen
     }
 
     @Override
-    public int getModifiers() {
+    public JModifierList getModifiers() {
         return rawConstructor.getModifiers();
+    }
+
+    @Override
+    public JAnnotationInstanceList getAnnotations() {
+        return rawConstructor.getAnnotations();
+    }
+
+    @Override
+    public JTypes getTypes() {
+        return rawConstructor.getTypes();
     }
 
     @Override
