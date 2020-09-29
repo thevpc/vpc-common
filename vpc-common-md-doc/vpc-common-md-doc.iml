@@ -10,7 +10,7 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="vpc-common-md" />
+    <orderEntry type="library" name="Maven: net.vpc.common:vpc-common-md:1.1.0" level="project" />
     <orderEntry type="library" name="Maven: org.hjson:hjson:3.0.0" level="project" />
     <orderEntry type="library" name="Maven: com.github.javaparser:javaparser-symbol-solver-core:3.16.1" level="project" />
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.27.0-GA" level="project" />

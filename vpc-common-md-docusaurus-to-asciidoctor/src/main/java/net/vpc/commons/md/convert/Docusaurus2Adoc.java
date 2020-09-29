@@ -35,13 +35,13 @@ public class Docusaurus2Adoc {
     protected String[] headers;
     protected String projectName;
     protected String projectTitle;
-    protected DocusaurusFolder docs;
+    protected DocusaurusFolder rootFolder;
 
     public Docusaurus2Adoc(String projectName, String projectTitle, String[] headers, DocusaurusFolder docs) {
         this.projectName = projectName;
         this.projectTitle = projectTitle;
         this.headers = headers;
-        this.docs = docs;
+        this.rootFolder = docs;
     }
 
     public Docusaurus2Adoc(DocusaurusProject project) {
@@ -57,7 +57,7 @@ public class Docusaurus2Adoc {
         this.projectName = project.getProjectName();
         this.projectTitle = project.getTitle();
         this.headers = headersList.toArray(new String[0]);
-        this.docs = project.getSidebarsDocsFolder();
+        this.rootFolder = project.getSidebarsDocsFolder();
     }
 
     public Docusaurus2Adoc(File project) {
@@ -162,7 +162,9 @@ public class Docusaurus2Adoc {
         try {
             AsciiDoctorWriter asciiDoctorWriter = new AsciiDoctorWriter(out.writer);
             writeHeader(out);
-            run(docs,out,asciiDoctorWriter);
+            for (DocusaurusFileOrFolder docusaurusFileOrFolder : rootFolder.getChildren()) {
+                run(docusaurusFileOrFolder,out,asciiDoctorWriter);
+            }
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         }
