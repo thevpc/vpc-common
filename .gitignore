@@ -63,3 +63,6 @@
 /vpc-common-file-template/target/
 /vpc-common-ljson/target/
 /vpc-common-md-doc/target/
+/vpc-common-jeep/jeep/target/
+/vpc-common-jeep/jeep-editor-swing/target/
+/vpc-common-jeep/jeep-nodes/target/

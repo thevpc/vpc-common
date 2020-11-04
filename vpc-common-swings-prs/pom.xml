@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.vpc.common</groupId>
-    <artifactId>vpc-common-swings-prs</artifactId>
+    <groupId>net.thevpc.common</groupId>
+    <artifactId>thevpc-common-swings-prs</artifactId>
     <version>2.3.9</version>
-    <name>net.vpc.common.vpc-common-swings-prs</name>
+    <name>net.thevpc.common.thevpc-common-swings-prs</name>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/commons</url>
     <organization>
@@ -52,13 +52,13 @@
                 PRIVATE COMPILE DEPENDENCIES 
         ############################## -->
         <dependency>
-            <groupId>net.vpc.common</groupId>
-            <artifactId>vpc-common-prs</artifactId>
+            <groupId>net.thevpc.common</groupId>
+            <artifactId>thevpc-common-prs</artifactId>
             <version>2.2.1</version>
         </dependency>
         <dependency>
-            <groupId>net.vpc.common</groupId>
-            <artifactId>vpc-common-swings</artifactId>
+            <groupId>net.thevpc.common</groupId>
+            <artifactId>thevpc-common-swings</artifactId>
             <version>2.3.9</version>
         </dependency>
 

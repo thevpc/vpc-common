@@ -1,5 +1,5 @@
-import net.vpc.common.app.*;
-import net.vpc.common.app.swing.Applications;
+import net.thevpc.common.app.*;
+import net.thevpc.common.app.swing.Applications;
 
 import javax.swing.*;
 

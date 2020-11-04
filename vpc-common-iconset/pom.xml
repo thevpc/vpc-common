@@ -3,10 +3,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>net.vpc.common</groupId>
-    <artifactId>vpc-common-iconset</artifactId>
+    <groupId>net.thevpc.common</groupId>
+    <artifactId>thevpc-common-iconset</artifactId>
     <version>1.0.0</version>
-    <name>net.vpc.common.vpc-common-iconset</name>
+    <name>net.thevpc.common.thevpc-common-iconset</name>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/commons</url>
     <organization>
@@ -69,7 +69,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>vpc-common-props</artifactId>
+            <artifactId>thevpc-common-props</artifactId>
             <version>1.0.0</version>
         </dependency>
     </dependencies>

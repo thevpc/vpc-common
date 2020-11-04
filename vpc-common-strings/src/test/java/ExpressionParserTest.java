@@ -1,4 +1,4 @@
-//import net.vpc.common.strings.*;
+//import net.thevpc.common.strings.*;
 //import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //

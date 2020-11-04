@@ -5,14 +5,7 @@
  */
 package test;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.vpc.common.vfs.ListFS;
-import net.vpc.common.vfs.MountableFS;
-import net.vpc.common.vfs.VFS;
-import net.vpc.common.vfs.VFile;
-import net.vpc.common.vfs.VirtualFileSystem;
+import net.thevpc.common.vfs.VFile;
 
 /**
  *

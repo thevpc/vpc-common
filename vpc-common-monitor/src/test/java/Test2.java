@@ -1,5 +1,5 @@
-import net.vpc.common.mon.ProgressMonitor;
-import net.vpc.common.mon.ProgressMonitors;
+import net.thevpc.common.mon.ProgressMonitor;
+import net.thevpc.common.mon.ProgressMonitors;
 
 public class Test2 {
     public static void main(String[] args) {

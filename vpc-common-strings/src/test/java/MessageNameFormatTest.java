@@ -3,8 +3,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
-import net.vpc.common.strings.MessageNameFormat;
-import net.vpc.common.strings.MessageNameFormatContext;
+import net.thevpc.common.strings.MessageNameFormat;
+import net.thevpc.common.strings.MessageNameFormatContext;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
