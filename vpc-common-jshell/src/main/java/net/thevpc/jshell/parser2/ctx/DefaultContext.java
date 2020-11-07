@@ -1,36 +1,42 @@
-package net.thevpc.jshell.parser2;
+package net.thevpc.jshell.parser2.ctx;
 
-class DollarCurlBracketContext extends AbstractContext {
+import net.thevpc.jshell.parser2.AbstractContext;
+import net.thevpc.jshell.parser2.StringReader2;
+import net.thevpc.jshell.parser2.Token;
 
+public class DefaultContext extends AbstractContext {
 
-    public DollarCurlBracketContext(StringReader2 stringReader2) {
+    public DefaultContext(StringReader2 stringReader2) {
         super(stringReader2);
     }
 
-    @Override
     public Token nextToken() {
+        StringReader2.StrReader reader = this.reader.strReader();
         int r = reader.peekChar();
         if (r < 0) {
             return null;
         }
         char rc=(char)r;
-        if (reader.readString("}")) {
-            return null;
+        if (r <= 32) {
+            return this.reader.lexer().continueReadWhite();
         }
-        if (rc <= 32) {
-            return continueReadWhite();
+        if (r == '#') {
+            return this.reader.lexer().processContext("#" ,new SharpContext(this.reader));
         }
         if (reader.readString("$((")) {
-            return processContext("$((" ,new DollarPar2Context(reader));
+            return this.reader.lexer().processContext("$((" ,new DollarPar2Context(this.reader));
         }
         if (reader.readString("((")) {
-            return processContext("((" ,new Par2Context(reader));
+            return this.reader.lexer().processContext("((" ,new Par2Context(this.reader));
         }
         if (reader.readString("$(")) {
-            return processContext("$(" ,new DollarCurlBracketContext(reader));
+            return this.reader.lexer().processContext("$(" ,new DollarParContext(this.reader));
+        }
+        if (reader.readString("${")) {
+            return this.reader.lexer().processContext("${" ,new DollarCurlBracketContext(this.reader));
         }
         if (rc == '$') {
-            return continueReadDollarWord();
+            return this.reader.lexer().continueReadDollarWord();
         }
         for (String s : new String[]{
                 "&>>",
@@ -60,7 +66,6 @@ class DollarCurlBracketContext extends AbstractContext {
                 ":",
                 "))",
                 ")",
-                "${",
                 "{",
                 "}",
                 "if",
@@ -75,20 +80,21 @@ class DollarCurlBracketContext extends AbstractContext {
             }
         }
         if (reader.isWordChar(rc)) {
-            return continueReadWord();
+            return this.reader.lexer().continueReadWord();
         }
         if (rc == '`') {
             reader.read();
-            return processContext(String.valueOf(rc),new AntiQuotedContext(reader));
+            return this.reader.lexer().processContext(String.valueOf(rc),new AntiQuotedContext(this.reader));
         }
         if (rc == '\"') {
             reader.read();
-            return processContext(String.valueOf(rc),new DoubleQuotedContext(reader));
+            return this.reader.lexer().processContext(String.valueOf(rc),new DoubleQuotedContext(this.reader));
         }
         if (rc == '\'') {
             reader.read();
-            return processContext(String.valueOf(rc),new SimpleQuotedContext(reader));
+            return this.reader.lexer().processContext(String.valueOf(rc),new SimpleQuotedContext(this.reader));
         }
+        reader.read();
         return new Token(String.valueOf(rc), String.valueOf(rc));
     }
 }

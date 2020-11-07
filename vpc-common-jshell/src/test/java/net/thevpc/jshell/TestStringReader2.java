@@ -11,7 +11,7 @@ public class TestStringReader2 {
         StringReader2 r=StringReader2.fromString(
                 "a\\\nb\\nt"
         );
-        for (String line : r.lines()) {
+        for (String line : r.strReader().lines()) {
             System.out.println(line);
         }
     }

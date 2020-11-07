@@ -13,6 +13,10 @@ public class Token {
         return "WHITE".equals(type);
     }
 
+    public boolean isNewline() {
+        return "WHITE".equals(type) && String.valueOf(value).indexOf('\n')>=0;
+    }
+
     public String toKeyStr(String s) {
         StringBuilder sb = new StringBuilder();
         for (char c : s.toCharArray()) {

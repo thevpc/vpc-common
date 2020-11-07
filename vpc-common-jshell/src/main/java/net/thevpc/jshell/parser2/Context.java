@@ -1,5 +1,5 @@
 package net.thevpc.jshell.parser2;
 
-interface Context {
+public interface Context {
     Token nextToken();
 }

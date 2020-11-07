@@ -1,12 +1,17 @@
-package net.thevpc.jshell.parser2;
+package net.thevpc.jshell.parser2.ctx;
 
-class DoubleQuotedContext extends AbstractContext {
+import net.thevpc.jshell.parser2.AbstractContext;
+import net.thevpc.jshell.parser2.StringReader2;
+import net.thevpc.jshell.parser2.Token;
+
+public class DoubleQuotedContext extends AbstractContext {
     public DoubleQuotedContext(StringReader2 stringReader2) {
         super(stringReader2);
     }
 
     @Override
     public Token nextToken() {
+        StringReader2.StrReader reader = this.reader.strReader();
         int r = reader.peekChar();
         if (r < 0) {
             return null;
@@ -14,16 +19,16 @@ class DoubleQuotedContext extends AbstractContext {
         char rc = (char) r;
 
         if (reader.readString("$((")) {
-            return processContext("$((", new DollarPar2Context(reader));
+            return this.reader.lexer().processContext("$((", new DollarPar2Context(this.reader));
         }
         if (reader.readString("$(")) {
-            return processContext("$(", new DollarParContext(reader));
+            return this.reader.lexer().processContext("$(", new DollarParContext(this.reader));
         }
         if (reader.readString("${")) {
-            return processContext("${", new DollarCurlBracketContext(reader));
+            return this.reader.lexer().processContext("${", new DollarCurlBracketContext(this.reader));
         }
         if (rc == '$') {
-            return continueReadDollarWord();
+            return this.reader.lexer().continueReadDollarWord();
         }
         if (rc == '\"') {
             reader.read();
@@ -31,7 +36,7 @@ class DoubleQuotedContext extends AbstractContext {
         }
         if (rc == '`') {
             reader.read();
-            return processContext(String.valueOf(rc), new AntiQuotedContext(reader));
+            return this.reader.lexer().processContext(String.valueOf(rc), new AntiQuotedContext(this.reader));
         }
 
 
