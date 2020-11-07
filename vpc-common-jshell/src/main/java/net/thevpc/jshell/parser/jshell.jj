@@ -3,8 +3,8 @@ options {
 }
 
 PARSER_BEGIN(JShellParserImpl)
-package net.vpc.common.javashell.parser;
-import net.vpc.common.javashell.parser.nodes.*;
+package net.thevpc.jshell.parser;
+import net.thevpc.jshell.parser.nodes.*;
 
 class JShellParserImpl{
     private NodeTree tree=new NodeTree();
