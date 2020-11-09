@@ -3,24 +3,20 @@
  * vpc-commons library
  *
  * Description: <start><end>
+ * <br>
  *
- * Copyright (C) 2006-2008 Taha BEN SALAH
- *
- * This program is free software; you can redistribute it and/or modify it under
- * the terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the License, or (at your option) any later
- * version.
- *
- * This program is distributed in the hope that it will be useful, but WITHOUT
- * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details.
- *
- * You should have received a copy of the GNU General Public License along with
- * this program; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ * Copyright [2020] [thevpc]
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain a
+ * copy of the License at http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ * <br>
  * ====================================================================
- */
+*/
 package net.thevpc.common.prs.util;
 
 import java.io.*;
@@ -583,46 +579,6 @@ public final class PRSPrivateIOUtils {
         }
     }
 
-//    public static void main(String[] args) {
-//        try {
-//            replaceInFolder(new File("/home/vpc/xprojects/apps/dbclient/src"),new FileFilter() {
-//                public boolean accept(File pathname) {
-//                    return pathname.getName().toLowerCase().endsWith(".java");
-//                }
-//            },      true,
-//                            "package net.thevpc.dbclient",
-//                    "/**\n" +
-//                            " * ====================================================================\n" +
-//                            " *             DBCLient yet another Jdbc client tool\n" +
-//                            " *\n" +
-//                            " * DBClient is a new Open Source Tool for connecting to jdbc\n" +
-//                            " * compliant relational databases. Specific extensions will take care of\n" +
-//                            " * each RDBMS implementation.\n" +
-//                            " *\n" +
-//                            " * Copyright (C) 2006-2007 Taha BEN SALAH\n" +
-//                            " *\n" +
-//                            " * This program is free software; you can redistribute it and/or modify\n" +
-//                            " * it under the terms of the GNU General Public License as published by\n" +
-//                            " * the Free Software Foundation; either version 2 of the License, or\n" +
-//                            " * (at your option) any later version.\n" +
-//                            " *\n" +
-//                            " * This program is distributed in the hope that it will be useful,\n" +
-//                            " * but WITHOUT ANY WARRANTY; without even the implied warranty of\n" +
-//                            " * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n" +
-//                            " * GNU General Public License for more details.\n" +
-//                            " *\n" +
-//                            " * You should have received a copy of the GNU General Public License along\n" +
-//                            " * with this program; if not, write to the Free Software Foundation, Inc.,\n" +
-//                            " * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.\n" +
-//                            " * ====================================================================\n" +
-//                            " */\n" +
-//                            "\n" +
-//                            "package net.thevpc.dbclient"
-//                    );
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//    }
     public static boolean isFileURL(URL repositoryURL) {
         return "file".equalsIgnoreCase(repositoryURL.getProtocol());
     }

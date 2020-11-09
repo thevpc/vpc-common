@@ -1,17 +1,18 @@
 package net.thevpc.jshell.parser2.ctx;
 
 import net.thevpc.jshell.parser2.AbstractContext;
-import net.thevpc.jshell.parser2.StringReader2;
+import net.thevpc.jshell.parser2.JShellParser2;
+import net.thevpc.jshell.parser2.StrReader;
 import net.thevpc.jshell.parser2.Token;
 
 public class DefaultContext extends AbstractContext {
 
-    public DefaultContext(StringReader2 stringReader2) {
-        super(stringReader2);
+    public DefaultContext(JShellParser2 jshp) {
+        super(jshp);
     }
 
     public Token nextToken() {
-        StringReader2.StrReader reader = this.reader.strReader();
+        StrReader reader = this.reader.strReader();
         int r = reader.peekChar();
         if (r < 0) {
             return null;
