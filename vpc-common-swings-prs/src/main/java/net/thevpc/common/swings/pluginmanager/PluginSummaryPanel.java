@@ -38,7 +38,7 @@ import java.net.URL;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime Oct 22, 2007 7:19:02 PM
+ * %creationtime Oct 22, 2007 7:19:02 PM
  */
 class PluginSummaryPanel extends JPanel {
     PluginManagerEditor pluginManagerEditor;

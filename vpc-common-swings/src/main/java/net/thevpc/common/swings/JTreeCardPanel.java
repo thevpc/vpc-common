@@ -41,7 +41,7 @@ import javax.swing.tree.TreePath;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 19 oct. 2006 00:16:49
+ * %creationtime 19 oct. 2006 00:16:49
  */
 public class JTreeCardPanel extends JCardPanel {
 

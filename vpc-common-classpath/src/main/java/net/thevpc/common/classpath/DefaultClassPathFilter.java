@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Taha BEN SALAH <taha.bensalah@gmail.com>
+ * @author thevpc
  */
 public class DefaultClassPathFilter implements ClassPathFilter {
 

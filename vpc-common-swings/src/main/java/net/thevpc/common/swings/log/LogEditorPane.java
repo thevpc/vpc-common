@@ -35,7 +35,7 @@ import net.thevpc.common.swings.TextManipSupport;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 juin 2007 19:29:18
+ * %creationtime 27 juin 2007 19:29:18
  */
 public class LogEditorPane extends JTextPane  {
     private final SimpleAttributeSet attrTrace = new SimpleAttributeSet();

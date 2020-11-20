@@ -26,7 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 8 févr. 2007 20:08:21
+ * %creationtime 8 févr. 2007 20:08:21
  */
 
 

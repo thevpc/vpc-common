@@ -25,7 +25,7 @@ import java.util.EventObject;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 9 nov. 2006 15:25:46
+ * %creationtime 9 nov. 2006 15:25:46
  */
 public class FileEvent extends EventObject {
     private File file;

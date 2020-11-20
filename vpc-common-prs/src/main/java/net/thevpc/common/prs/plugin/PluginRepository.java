@@ -27,7 +27,7 @@ import java.util.Iterator;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 22 sept. 2007 21:36:41
+ * %creationtime 22 sept. 2007 21:36:41
  */
 public interface PluginRepository extends Comparable<PluginRepository> {
     public static final int UNREACHABLE = -2;

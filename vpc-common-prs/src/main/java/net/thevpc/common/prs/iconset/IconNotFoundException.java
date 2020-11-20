@@ -26,7 +26,7 @@ import java.util.NoSuchElementException;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 18:21:45
+ * %creationtime 23 juin 2006 18:21:45
  */
 public class IconNotFoundException extends NoSuchElementException {
     public IconNotFoundException() {

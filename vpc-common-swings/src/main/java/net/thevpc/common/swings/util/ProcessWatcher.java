@@ -52,7 +52,7 @@ import java.io.InputStreamReader;
  *      w.start();
  * </pre>
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 juin 2007 12:08:13
+ * %creationtime 27 juin 2007 12:08:13
  */
 public class ProcessWatcher {
     private Process process;

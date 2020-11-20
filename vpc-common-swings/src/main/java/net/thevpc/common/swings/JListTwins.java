@@ -31,7 +31,7 @@ import java.awt.event.ActionListener;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 14 août 2007 20:39:47
+ * %creationtime 14 août 2007 20:39:47
  */
 public class JListTwins extends JPanel {
 //    public static void main(String[] args) {

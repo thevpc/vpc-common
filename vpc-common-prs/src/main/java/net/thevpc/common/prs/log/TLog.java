@@ -25,7 +25,7 @@ import java.io.PrintStream;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 1 déc. 2006 00:58:29
+ * %creationtime 1 déc. 2006 00:58:29
  */
 public interface TLog {
     

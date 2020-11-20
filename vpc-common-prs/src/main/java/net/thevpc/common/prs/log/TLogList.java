@@ -2,7 +2,7 @@ package net.thevpc.common.prs.log;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 7 août 2009
+ * %creationtime 7 août 2009
  */
 public class TLogList implements TLog {
     private final TLog[] list;

@@ -24,7 +24,7 @@ import javax.swing.table.TableModel;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 18:12:54
+ * %creationtime 6 mai 2006 18:12:54
  */
 public abstract class DefaultTableCellFilter implements TableCellFilter {
 

@@ -30,7 +30,7 @@ import net.thevpc.common.swings.prs.PRSManager;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  27 juin 2006 00:15:35
+ * %creationtime  27 juin 2006 00:15:35
  */
 public class AbstractButtonMessageSetUpdater implements ComponentMessageSetUpdater {
 

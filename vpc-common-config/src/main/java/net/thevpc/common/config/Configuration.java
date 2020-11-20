@@ -6,7 +6,7 @@ import java.sql.Time;
 import java.util.*;
 
 /**
- * @author Taha BEN SALAH (thevpc@walla.com) @creationtime 13 juil. 2006
+ * @author Taha BEN SALAH (thevpc@walla.com) %creationtime 13 juil. 2006
  * 22:14:21
  */
 public interface Configuration extends Serializable {

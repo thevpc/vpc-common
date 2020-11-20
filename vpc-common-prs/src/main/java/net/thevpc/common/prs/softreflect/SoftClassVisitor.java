@@ -11,7 +11,6 @@ public interface SoftClassVisitor {
     /**
      *
      * @param clazz visited class
-     * @return false to cancel iteration
      */
     public void visit(SoftClass clazz) throws CancelVisitException;
 }

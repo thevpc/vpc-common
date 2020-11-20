@@ -39,7 +39,7 @@ import java.util.StringTokenizer;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 15 dec. 2006 01:41:47
+ * %creationtime 15 dec. 2006 01:41:47
  */
 public class PluginManagerEditor<App> extends JPanel {
     //    private JTable table;

@@ -29,7 +29,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 18:12:57
+ * %creationtime 23 juin 2006 18:12:57
  */
 public class IconSetDescriptor {
 

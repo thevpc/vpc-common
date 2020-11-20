@@ -33,7 +33,7 @@ import java.awt.event.ActionListener;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
-* @creationtime 21 oct. 2007 00:32:56
+* %creationtime 21 oct. 2007 00:32:56
 */
 class PluginRepositoriesPanel extends JPanel {
     private IJTable sourcesTable;

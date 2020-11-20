@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Taha BEN SALAH <taha.bensalah@gmail.com>
- * @creationdate 12/16/12 1:05 PM
+ * @author thevpc
+ * %creationtime 12/16/12 1:05 PM
  */
 public class PatternListClassNameFilter implements ClassNameFilter {
 

@@ -1,8 +1,8 @@
 package net.thevpc.common.classpath;
 
 /**
- * @author Taha BEN SALAH <taha.bensalah@gmail.com>
- * @creationdate 12/16/12 1:05 PM
+ * @author thevpc
+ * %creationtime 12/16/12 1:05 PM
  */
 public class AcceptAllClassFilter implements ClassFilter{
     public static final AcceptAllClassFilter INSTANCE=new AcceptAllClassFilter();

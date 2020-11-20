@@ -28,7 +28,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 avr. 2007 19:47:57
+ * %creationtime 27 avr. 2007 19:47:57
  */
 public class MultiIconSet extends AbstractIconSet {
 

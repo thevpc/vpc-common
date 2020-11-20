@@ -24,7 +24,7 @@ package net.thevpc.common.prs.plugin;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 1 dec. 2006 17:24:36
+ * %creationtime 1 dec. 2006 17:24:36
  */
 public class PluginException extends RuntimeException{
     private String plugin;

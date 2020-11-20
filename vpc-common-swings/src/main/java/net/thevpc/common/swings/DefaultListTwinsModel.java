@@ -25,7 +25,7 @@ import javax.swing.event.ListDataListener;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 14 août 2007 20:49:44
+ * %creationtime 14 août 2007 20:49:44
  */
 public class DefaultListTwinsModel implements JListTwinsModel{
     private DefaultListModel leftModel;

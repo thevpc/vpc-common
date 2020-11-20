@@ -22,7 +22,7 @@ package net.thevpc.common.prs;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 4 sept. 2007 17:54:26
+ * %creationtime 4 sept. 2007 17:54:26
  */
 public class ObjectHolder<T> {
 

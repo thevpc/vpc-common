@@ -31,7 +31,7 @@ import javax.swing.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 10 mai 2007 22:26:14
+ * %creationtime 10 mai 2007 22:26:14
  */
 public class JCheckBoxList extends JPanel {
     private Box verticalBox;

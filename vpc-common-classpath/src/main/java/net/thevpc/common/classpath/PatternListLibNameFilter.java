@@ -4,8 +4,8 @@ package net.thevpc.common.classpath;
 import java.net.URL;
 
 /**
- * @author Taha BEN SALAH <taha.bensalah@gmail.com>
- * @creationdate 12/16/12 1:05 PM
+ * @author thevpc
+ * %creationtime 12/16/12 1:05 PM
  */
 public class PatternListLibNameFilter  {
     private PortablePattern[] patterns;

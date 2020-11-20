@@ -33,7 +33,7 @@ import java.util.Date;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 26 avr. 2006 01:48:56
+ * %creationtime 26 avr. 2006 01:48:56
  */
 public class TextManipSupport {
 

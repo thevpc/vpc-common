@@ -26,7 +26,7 @@ import java.io.Serializable;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 8 sept. 2007 18:57:11
+ * %creationtime 8 sept. 2007 18:57:11
  */
 public class PluginRepositoryInfo implements Serializable {
     private String id;

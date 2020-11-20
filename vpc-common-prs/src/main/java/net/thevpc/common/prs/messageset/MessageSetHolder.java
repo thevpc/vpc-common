@@ -24,7 +24,7 @@ package net.thevpc.common.prs.messageset;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  30 juil. 2006 21:41:45
+ * %creationtime  30 juil. 2006 21:41:45
  */
 public interface MessageSetHolder {
     public MessageSet getMessageSet();

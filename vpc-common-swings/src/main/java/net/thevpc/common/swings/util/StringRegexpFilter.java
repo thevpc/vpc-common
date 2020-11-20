@@ -26,7 +26,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 3 janv. 2006 21:40:14
+ * %creationtime 3 janv. 2006 21:40:14
  */
 public class StringRegexpFilter implements StringFilter {
     private boolean multilineMode = true;

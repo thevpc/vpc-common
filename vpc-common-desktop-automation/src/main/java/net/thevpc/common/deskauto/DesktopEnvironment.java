@@ -64,16 +64,16 @@ public abstract class DesktopEnvironment {
     /**
      * find visible and non special windows matching filter
      *
-     * @param filter
-     * @return
+     * @param filter filter
+     * @return List of DEWindow
      */
     public abstract java.util.List<DEWindow> findWindows(DEWindowFilter filter);
 
     /**
      * find all windows matching filter
      *
-     * @param filter
-     * @return
+     * @param filter filter
+     * @return DEWindow List
      */
     public abstract List<DEWindow> findWindowsExt(final DEWindowFilter filter);
 

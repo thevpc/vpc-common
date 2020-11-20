@@ -29,7 +29,7 @@ import java.util.Locale;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 17:24:08
+ * %creationtime 23 juin 2006 17:24:08
  */
 public interface MessageSetFactory {
     public void registerIconSetDescriptor(IconSetDescriptor desc);

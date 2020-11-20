@@ -11,7 +11,7 @@ import java.util.Enumeration;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)  alias vpc
- * @creationtime 2009/08/15 17:38:37
+ * %creationtime 2009/08/15 17:38:37
  */
 public interface IJTree extends IJComponent {
 

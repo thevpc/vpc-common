@@ -22,7 +22,7 @@ public class JOperatorPrecedences {
      */
     public static final int PRECEDENCE_3 = 300;
     /**
-     * '&' '|' '~'
+     * '{@literal &}' '|' '~'
      */
     public static final int PRECEDENCE_4 = 400;
     /**

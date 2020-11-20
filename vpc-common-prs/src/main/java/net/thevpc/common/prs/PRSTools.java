@@ -33,7 +33,7 @@ import java.util.Properties;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 6 oct. 2007 15:26:07
+ * %creationtime 6 oct. 2007 15:26:07
  */
 public class PRSTools {
     private static final String VERSION = "1.3.20110413";

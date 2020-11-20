@@ -33,7 +33,7 @@ public class _BytesSizeFormat /*implements DoubleFormat*/ {
 //                "0I0BEF0","00BEF0","B0TD1F","B0TD2F","B0TD3F","B0TD1FI","B0TD2FI","B0TD3FI","0I0BEF0","I0BEF","IBEF","0IBTF"
 //        }) {
 //            System.out.println("");
-//            System.out.println(">System.out.println(new BytesSizeFormat(\""+s+"\").format("+value+"));");
+//            System.out.println("System.out.println(new BytesSizeFormat(\""+s+"\").format("+value+"));");
 //            System.out.println(new BytesSizeFormat(s).format(value));
 //        }
 //    }
@@ -63,40 +63,40 @@ public class _BytesSizeFormat /*implements DoubleFormat*/ {
      * </ul>
      * examples
      * <pre>
-     *       >System.out.println(new MemorySizeFormatter("0I0BEF0").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("0I0BEF0").format(1073741824));
      *       0Ei   0Pi   0Ti   1Gi   0Mi   0Ki
      *
-     *       >System.out.println(new MemorySizeFormatter("00BEF0").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("00BEF0").format(1073741824));
      *       0E   0P   0T   1G  73M 741K 824B
      *
-     *       >System.out.println(new MemorySizeFormatter("B0TD1F").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("B0TD1F").format(1073741824));
      *       1G
      *
-     *       >System.out.println(new MemorySizeFormatter("B0TD2F").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("B0TD2F").format(1073741824));
      *       1G  73M
      *
-     *       >System.out.println(new MemorySizeFormatter("B0TD3F").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("B0TD3F").format(1073741824));
      *       1G  73M 741K
      *
-     *       >System.out.println(new MemorySizeFormatter("B0TD1FI").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("B0TD1FI").format(1073741824));
      *       1Gi
      *
-     *       >System.out.println(new MemorySizeFormatter("B0TD2FI").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("B0TD2FI").format(1073741824));
      *       1Gi
      *
-     *       >System.out.println(new MemorySizeFormatter("B0TD3FI").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("B0TD3FI").format(1073741824));
      *       1Gi
      *
-     *       >System.out.println(new MemorySizeFormatter("0I0BEF0").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("0I0BEF0").format(1073741824));
      *       0Ei   0Pi   0Ti   1Gi   0Mi   0Ki
      *
-     *       >System.out.println(new MemorySizeFormatter("I0BEF").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("I0BEF").format(1073741824));
      *       1Gi
      *
-     *       >System.out.println(new MemorySizeFormatter("IBEF").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("IBEF").format(1073741824));
      *       1Gi
      *
-     *       >System.out.println(new MemorySizeFormatter("0IBTF").format(1073741824));
+     *       System.out.println(new MemorySizeFormatter("0IBTF").format(1073741824));
      *       0Ti   1Gi
      *
      *

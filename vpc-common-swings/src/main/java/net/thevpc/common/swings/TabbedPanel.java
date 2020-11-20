@@ -28,7 +28,7 @@ import java.awt.event.ItemListener;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 3 aout 2006 16:41:17
+ * %creationtime 3 aout 2006 16:41:17
  */
 public class TabbedPanel extends JPanel {
     JPanel sub;

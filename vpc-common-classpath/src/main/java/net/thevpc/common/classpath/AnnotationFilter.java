@@ -18,7 +18,7 @@ public interface AnnotationFilter {
      * when true acceptMethodAnnotation and acceptFieldAnnotation will not be
      * invoked if acceptTypeAnnotation returns false
      *
-     * @return
+     * @return true if supported
      */
     boolean isSupportedTypeAnnotation();
 

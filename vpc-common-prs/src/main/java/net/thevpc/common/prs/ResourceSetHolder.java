@@ -25,7 +25,7 @@ import net.thevpc.common.prs.messageset.MessageSetHolder;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  30 juil. 2006 21:41:45
+ * %creationtime  30 juil. 2006 21:41:45
  */
 public interface ResourceSetHolder extends MessageSetHolder, IconSetHolder {
 }

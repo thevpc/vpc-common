@@ -50,7 +50,7 @@ public interface IJTable extends IJComponent {
      * Sets the table's selection mode to allow only single selections, a single
      * contiguous interval, or multiple intervals.
      * <P>
-     * <bold>Note:</bold>
+     * Note:
      * <code>JTable</code> provides all the methods for handling
      * column and row selection.  When setting states,
      * such as <code>setSelectionMode</code>, it not only
@@ -66,7 +66,6 @@ public interface IJTable extends IJComponent {
      * in <code>JList</code> for details about the modes.
      *
      * @see JList#setSelectionMode
-     * @beaninfo
      * description: The selection mode used by the row and column selection models.
      *        enum: SINGLE_SELECTION            ListSelectionModel.SINGLE_SELECTION
      *              SINGLE_INTERVAL_SELECTION   ListSelectionModel.SINGLE_INTERVAL_SELECTION
@@ -80,8 +79,6 @@ public interface IJTable extends IJComponent {
      * Sets whether the rows in this model can be selected.
      *
      * @param rowSelectionAllowed   true if this model will allow row selection
-     * @see #getRowSelectionAllowed
-     * @beaninfo
      *  bound: true
      *    attribute: visualUpdate true
      *  description: If true, an entire row is selected for each selected cell.
@@ -96,7 +93,6 @@ public interface IJTable extends IJComponent {
      *
      * @return  the object that provides row selection state, <code>null</code>
      *          if row selection is not allowed
-     * @see     #setSelectionModel
      */
     public ListSelectionModel getSelectionModel();
 
@@ -121,8 +117,6 @@ public interface IJTable extends IJComponent {
      * @param  columnClass     set the default cell renderer for this columnClass
      * @param  renderer        default cell renderer to be used for this
      *			       columnClass
-     * @see     #getDefaultRenderer
-     * @see     #setDefaultEditor
      */
     public void setDefaultRenderer(Class<?> columnClass, TableCellRenderer renderer);
     
@@ -224,8 +218,6 @@ public interface IJTable extends IJComponent {
      *
      * @param text  the string to display; if the text is <code>null</code>,
      *              the tool tip is turned off for this component
-     * @see #TOOL_TIP_TEXT_KEY
-     * @beaninfo
      *   preferred: true
      * description: The text to display in a tool tip.
      */
@@ -236,7 +228,6 @@ public interface IJTable extends IJComponent {
      * of this table.
      *
      * @return  the object that provides the column state of the table
-     * @see     #setColumnModel
      */
     public TableColumnModel getColumnModel();
     

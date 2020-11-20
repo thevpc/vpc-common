@@ -28,7 +28,7 @@ import net.thevpc.common.prs.messageset.MessageSet;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  27 juin 2006 00:29:57
+ * %creationtime  27 juin 2006 00:29:57
  */
 public class JLabelMessageSetUpdater implements ComponentMessageSetUpdater {
     public void updateMessageSet(JComponent component, String id, MessageSet messageSet) {

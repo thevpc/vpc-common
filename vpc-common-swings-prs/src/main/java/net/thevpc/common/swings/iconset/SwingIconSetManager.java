@@ -41,7 +41,7 @@ import net.thevpc.common.swings.prs.PRSManager;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 17:21:52
+ * %creationtime 23 juin 2006 17:21:52
  */
 public class SwingIconSetManager {
     private static final String PREFIX = "IconSetManager.";

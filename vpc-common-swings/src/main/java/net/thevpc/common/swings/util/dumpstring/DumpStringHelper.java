@@ -24,7 +24,7 @@ import java.util.StringTokenizer;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 1 juin 2007 17:54:12
+ * %creationtime 1 juin 2007 17:54:12
  */
 public class DumpStringHelper {
     private StringBuilder sb = new StringBuilder();

@@ -29,7 +29,7 @@ import net.thevpc.common.swings.SwingUtilities3;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 4 juin 2007 17:28:33
+ * %creationtime 4 juin 2007 17:28:33
  */
 public class LogArea extends JTextArea {
 

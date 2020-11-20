@@ -26,7 +26,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 9 sept. 2007 15:06:39
+ * %creationtime 9 sept. 2007 15:06:39
  */
 public interface PluggableApplication extends LoggerProvider{
     Factory getFactory();

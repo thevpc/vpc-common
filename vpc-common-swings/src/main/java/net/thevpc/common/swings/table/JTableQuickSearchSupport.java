@@ -27,7 +27,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 18:47:41
+ * %creationtime 6 mai 2006 18:47:41
  */
 public class JTableQuickSearchSupport {
     private boolean cellLookupCaseSensitive;

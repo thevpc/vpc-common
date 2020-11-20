@@ -28,7 +28,7 @@ import net.thevpc.common.prs.iconset.IconSet;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 26 juin 2006 08:30:19
+ * %creationtime 26 juin 2006 08:30:19
  */
 public interface ComponentIconSetUpdater {
     public void updateIconSet(JComponent comp, String id, IconSet iconSet);

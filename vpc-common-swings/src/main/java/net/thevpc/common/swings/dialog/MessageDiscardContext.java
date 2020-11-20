@@ -22,7 +22,7 @@ package net.thevpc.common.swings.dialog;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 1 avr. 2007 12:21:20
+ * %creationtime 1 avr. 2007 12:21:20
  */
 public interface MessageDiscardContext {
     public boolean isDiscarded();

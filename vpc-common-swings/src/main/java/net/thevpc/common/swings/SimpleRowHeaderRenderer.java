@@ -26,7 +26,7 @@ import java.awt.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 18 oct. 2006 21:45:48
+ * %creationtime 18 oct. 2006 21:45:48
  */
 public class SimpleRowHeaderRenderer extends JLabel implements ListCellRenderer {
     private JTable table;

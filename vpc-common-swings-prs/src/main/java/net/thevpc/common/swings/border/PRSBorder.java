@@ -27,7 +27,7 @@ import javax.swing.border.Border;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 13:11:28
+ * %creationtime 27 août 2007 13:11:28
  */
 public interface PRSBorder extends Border {
     public void update(IconSet iconSet);

@@ -30,7 +30,7 @@ import java.util.Hashtable;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 12 aout 2005
+ * %creationtime 12 aout 2005
  */
 public class JTabbedSplitPane extends JPanel {
 //    public static void main(String[] args) {

@@ -26,7 +26,7 @@ import java.util.EventListener;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 22:29:38
+ * %creationtime 27 août 2007 22:29:38
  */
 public interface MessageSetChangeListener extends EventListener {
     public void messageSetChanged(MessageSetChangeEvent evt);

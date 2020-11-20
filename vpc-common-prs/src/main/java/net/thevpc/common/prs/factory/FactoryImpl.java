@@ -29,7 +29,7 @@ import java.util.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 3 dec. 2006 19:01:09
+ * %creationtime 3 dec. 2006 19:01:09
  */
 public class FactoryImpl implements Factory {
 

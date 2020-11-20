@@ -24,7 +24,7 @@ package net.thevpc.common.prs.reflect;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 2 aout 2006 13:09:00
+ * %creationtime 2 aout 2006 13:09:00
  */
 public interface ClassFilter {
     boolean accept(Class clz);

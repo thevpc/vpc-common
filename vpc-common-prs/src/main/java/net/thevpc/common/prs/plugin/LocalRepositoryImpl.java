@@ -28,7 +28,7 @@ import java.util.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 8 sept. 2007 18:58:27
+ * %creationtime 8 sept. 2007 18:58:27
  */
 public class LocalRepositoryImpl extends AbstractLocalRepository {
 
@@ -156,7 +156,7 @@ public class LocalRepositoryImpl extends AbstractLocalRepository {
 
     /**
      * Check plugins for modification.
-     * <p/>
+     * <p>
      * Plugins under [InstalledPluginsRepositoryURL]/.install will be installed
      * (or updated) Plugins under [InstalledPluginsRepositoryURL]/.uninstall
      * will be uninstalled (permanently)

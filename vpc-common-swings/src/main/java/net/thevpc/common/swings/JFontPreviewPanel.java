@@ -34,7 +34,7 @@ import java.awt.geom.Rectangle2D;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  13 juil. 2006 22:14:21
+ * %creationtime  13 juil. 2006 22:14:21
  */
 public class JFontPreviewPanel extends JPanel {
 

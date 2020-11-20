@@ -29,7 +29,7 @@ import net.thevpc.common.prs.iconset.IconSet;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 26 juin 2006 08:44:38
+ * %creationtime 26 juin 2006 08:44:38
  */
 public class JLabelIconSetUpdater implements ComponentIconSetUpdater {
     public void updateIconSet(JComponent comp, String id, IconSet iconSet) {

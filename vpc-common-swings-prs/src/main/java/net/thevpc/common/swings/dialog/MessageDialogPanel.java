@@ -80,7 +80,7 @@ public class MessageDialogPanel extends javax.swing.JPanel {
     };
 
     /**
-     * 
+     * @param parentComponent parentComponent
      * @return true if OK clicked
      */
     public boolean showDialog(Component parentComponent) {

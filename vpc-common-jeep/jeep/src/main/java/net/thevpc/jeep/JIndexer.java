@@ -8,23 +8,23 @@ public interface JIndexer {
 
     /**
      *
-     * @param compilationUnit
+     * @param compilationUnit compilationUnit
      * @return number of indexed types
      */
     int indexSource(JCompilationUnit compilationUnit);
 
     /**
      *
-     * @param file
-     * @param force
+     * @param file  file
+     * @param force force
      * @return number of indexed types
      */
     int indexLibrary(File file,boolean force);
 
     /**
      *
-     * @param file
-     * @param force
+     * @param file  file
+     * @param force force
      * @return number of indexed types
      */
     int indexLibrary(URL file, boolean force);

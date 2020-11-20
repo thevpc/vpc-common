@@ -36,10 +36,10 @@ import java.awt.geom.Rectangle2D;
 import java.text.MessageFormat;
 
 /**
- * Tracks Memory allocated & used, displayed as icon tray .
+ * Tracks Memory allocated &#38; used, displayed as icon tray .
  *
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 13 juil. 2006 22:14:21
+ * %creationtime 13 juil. 2006 22:14:21
  */
 public class MemoryUseIconTray extends JComponent {
     private static int MO = 1024 * 1024;

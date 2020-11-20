@@ -27,7 +27,7 @@ import net.thevpc.common.swings.util.ClassMap;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 1 juin 2007 16:10:45
+ * %creationtime 1 juin 2007 16:10:45
  */
 public class DumpStringUtils {
     private static DumpStringHandler nullHandler = new NullDumpStringHandler();

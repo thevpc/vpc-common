@@ -33,7 +33,7 @@ import net.thevpc.common.swings.util.SwingPrivateIOUtils;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 18:47:41
+ * %creationtime 6 mai 2006 18:47:41
  */
 public class JFileTextField extends JPanel {
     public static final String PRE_SELECT_FILE="PRE_SELECT_FILE";

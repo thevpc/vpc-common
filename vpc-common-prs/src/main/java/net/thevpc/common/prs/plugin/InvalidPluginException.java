@@ -24,7 +24,7 @@ package net.thevpc.common.prs.plugin;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 1 dec. 2006 17:25:17
+ * %creationtime 1 dec. 2006 17:25:17
  */
 public class InvalidPluginException extends PluginException{
 

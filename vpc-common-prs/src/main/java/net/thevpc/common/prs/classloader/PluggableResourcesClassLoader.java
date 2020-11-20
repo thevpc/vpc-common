@@ -26,7 +26,7 @@ import java.net.URLClassLoader;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 19 dec. 2006 22:56:31
+ * %creationtime 19 dec. 2006 22:56:31
  */
 public class PluggableResourcesClassLoader extends URLClassLoader {
     private String owner;

@@ -25,7 +25,7 @@ import javax.swing.table.TableModel;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 18:47:41
+ * %creationtime 6 mai 2006 18:47:41
  */
 public class ContainsTextTableCellFilter extends DefaultTableCellFilter {
     public ContainsTextTableCellFilter(String pattern, boolean caseInsensitive) {

@@ -29,7 +29,7 @@ import net.thevpc.common.prs.iconset.IconSet;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 26 juin 2006 10:33:22
+ * %creationtime 26 juin 2006 10:33:22
  */
 public class DefaultActionIconSetUpdater implements ActionIconSetUpdater {
     public void updateIconSet(Action action, IconSet iconSet) {

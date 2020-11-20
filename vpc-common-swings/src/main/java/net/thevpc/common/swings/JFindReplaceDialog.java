@@ -28,7 +28,7 @@ import java.awt.event.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 3 sept. 2005 01:22:28
+ * %creationtime 3 sept. 2005 01:22:28
  */
 public class JFindReplaceDialog extends JDialog {
     private JPanel all;

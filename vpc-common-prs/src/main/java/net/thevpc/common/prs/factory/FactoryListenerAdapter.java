@@ -2,7 +2,7 @@ package net.thevpc.common.prs.factory;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)  alias vpc
- * @creationtime 2009/08/16 18:19:03
+ * %creationtime 2009/08/16 18:19:03
  */
 public abstract class FactoryListenerAdapter implements FactoryListener{
     public void implementationSelectionChanged(FactoryEvent e) {

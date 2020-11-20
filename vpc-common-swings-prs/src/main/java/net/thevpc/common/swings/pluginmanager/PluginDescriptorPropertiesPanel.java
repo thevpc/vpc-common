@@ -30,7 +30,7 @@ import java.awt.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 30 dec. 2006 19:09:06
+ * %creationtime 30 dec. 2006 19:09:06
  */
 class PluginDescriptorPropertiesPanel extends JPanel {
 

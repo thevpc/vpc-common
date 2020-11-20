@@ -31,7 +31,7 @@ import java.net.URL;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 19:39:24
+ * %creationtime 27 août 2007 19:39:24
  */
 public interface PluginManager<App extends PluggableApplication,Plug extends Plugin> {
 

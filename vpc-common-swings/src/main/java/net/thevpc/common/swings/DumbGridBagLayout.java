@@ -30,7 +30,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 5 mai 2006 00:52:57
+ * %creationtime 5 mai 2006 00:52:57
  */
 public class DumbGridBagLayout extends GridBagLayout {
     private String pattern;
@@ -51,20 +51,22 @@ public class DumbGridBagLayout extends GridBagLayout {
      * ..              gridwidth=RELATIVE
      * ;               gridheight=REMAINDER
      * ;;              gridheight=RELATIVE
-     * <               anchor=LINE_START
-     * >               anchor=LINE_END
+     * {@literal <}               anchor=LINE_START
+     * {@literal >}               anchor=LINE_END
      * _               anchor=PAGE_END
      * ~ ou ^          anchor=PAGE_START
      * =               weightx++
      * $               weighty++
-     * #               weightx++ && weighty++
+     * &#35;               weightx++ &#38;&#38; weighty++
      * ' '             do nothing just allowed for formatting
      * Identifier      position identifier to use in component.add(something,"Identifier")
      * [ and ]         define x position (next column)
      * \n              define y position (next row)
-     * <p/>
+     * </pre>
+     * <p>
      * <b>example :</b>
-     * <p/>
+     * <p>
+     * <pre>
      * JPanel p=new JPanel(new DumbGridBagLayout()
      *            .addLine("[&lt;~titleBarStyle  :               ]")
      *            .addLine("[&lt;~enableClose  ] [&lt;~freezeLayout ]")

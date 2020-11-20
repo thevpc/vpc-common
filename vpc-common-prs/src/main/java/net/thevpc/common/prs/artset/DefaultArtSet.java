@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.Properties;
 
 /**
- * @author Taha Ben Salah (taha.bensalah@gmail.com) @creationtime Dec 15, 2007
+ * @author Taha Ben Salah (taha.bensalah@gmail.com) %creationtime Dec 15, 2007
  * 4:32:41 AM
  */
 public class DefaultArtSet implements ArtSet {

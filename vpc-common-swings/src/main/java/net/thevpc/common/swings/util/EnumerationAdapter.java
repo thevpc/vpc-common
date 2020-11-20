@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 /**
  * @author Taha BEN Salah
- * @creationdate 9/2/12 1:52 PM
+ * %creationtime 9/2/12 1:52 PM
  */
 public class EnumerationAdapter<T> implements Enumeration<T> {
     private Iterator<T> it;

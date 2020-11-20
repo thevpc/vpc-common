@@ -41,7 +41,7 @@ import java.util.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 4 janv. 2006 15:13:28
+ * %creationtime 4 janv. 2006 15:13:28
  */
 public class JavaSerializationDelegate implements XmlSerializationDelegate {
     public void store(XmlSerializer xmlSerializer, Document doc, Element element, Object value) {

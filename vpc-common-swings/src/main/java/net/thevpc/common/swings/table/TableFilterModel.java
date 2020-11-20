@@ -28,7 +28,7 @@ import net.thevpc.common.swings.SwingUtilities3;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 16:55:23
+ * %creationtime 6 mai 2006 16:55:23
  */
 public class TableFilterModel extends AbstractTableModel {
     private boolean rebuildInProgess;

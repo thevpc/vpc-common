@@ -6,7 +6,7 @@ import java.beans.PropertyChangeListener;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)  alias vpc
- * @creationtime 2009/08/15 21:25:07
+ * %creationtime 2009/08/15 21:25:07
  */
 public interface IJComponent extends IContainer {
 
@@ -37,7 +37,7 @@ public interface IJComponent extends IContainer {
 
     /**
      * Adds an arbitrary key/value "client property" to this component.
-     * <p/>
+     * <p>
      * The <code>get/putClientProperty</code> methods provide access to
      * a small per-instance hashtable. Callers can use get/putClientProperty
      * to annotate components that were created by another module.
@@ -51,7 +51,7 @@ public interface IJComponent extends IContainer {
      * <code>PropertyChange</code> events.
      * The name of the property (for the sake of PropertyChange
      * events) is <code>key.toString()</code>.
-     * <p/>
+     * <p>
      * The <code>clientProperty</code> dictionary is not intended to
      * support large
      * scale extensions to JComponent nor should be it considered an

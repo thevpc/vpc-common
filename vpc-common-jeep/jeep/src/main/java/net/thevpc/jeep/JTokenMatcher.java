@@ -22,7 +22,7 @@ public interface JTokenMatcher {
      * return
      *   -1 if not valid and should rollback all read chars
      *   0 if valid and should accept all read chars
-     *   n>0 if valid and should rollback 'n' read chars
+     *   n&gt;0 if valid and should rollback 'n' read chars
      * @return valid status
      */
     boolean valid();

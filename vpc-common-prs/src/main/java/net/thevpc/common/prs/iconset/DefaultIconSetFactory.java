@@ -29,7 +29,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 17:26:30
+ * %creationtime 23 juin 2006 17:26:30
  */
 public class DefaultIconSetFactory implements IconSetFactory {
 

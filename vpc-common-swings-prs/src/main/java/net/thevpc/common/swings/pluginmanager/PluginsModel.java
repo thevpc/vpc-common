@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
-* @creationtime 21 oct. 2007 00:24:52
+* %creationtime 21 oct. 2007 00:24:52
 */
 class PluginsModel extends AbstractTableModel {
     Plugin[] plugins;

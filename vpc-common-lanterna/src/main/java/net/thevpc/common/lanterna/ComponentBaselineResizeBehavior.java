@@ -14,8 +14,6 @@ package net.thevpc.common.lanterna;
  * <code>Short.MAX_VALUE</code> the baseline may change in a way
  * other than the baseline resize behavior indicates.
  *
- * @see #getBaselineResizeBehavior
- * @see #getBaseline(int,int)
  * @since 1.6
  */
 public enum ComponentBaselineResizeBehavior {

@@ -24,7 +24,7 @@ package net.thevpc.common.prs.artset;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 19 dec. 2006 11:07:10
+ * %creationtime 19 dec. 2006 11:07:10
  */
 public class InvalidArtSetException extends RuntimeException{
 

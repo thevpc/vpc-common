@@ -28,7 +28,7 @@ import java.awt.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 12 aout 2005
+ * %creationtime 12 aout 2005
  */
 public class LocalizedByValueComboboxRenderer extends DefaultListCellRenderer {
     private MessageSet messageSet;

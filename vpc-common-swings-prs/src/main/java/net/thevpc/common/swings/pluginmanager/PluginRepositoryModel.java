@@ -28,7 +28,7 @@ import java.util.StringTokenizer;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
-* @creationtime 21 oct. 2007 00:33:08
+* %creationtime 21 oct. 2007 00:33:08
 */
 class PluginRepositoryModel extends AbstractTableModel {
     private PluginRepository[] repositories;

@@ -25,7 +25,7 @@ import javax.swing.table.TableModel;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 19:07:10
+ * %creationtime 6 mai 2006 19:07:10
  */
 public class TableRowFilterByCell implements TableRowFilter {
     private TableCellFilter cellFilter;

@@ -193,10 +193,6 @@ public class MSWinLib {
 * @param filename The name of the file to get version information.
      * @return Return version information for the specified file if success,
      * return null if failed.
-     * @see http://msdn.microsoft.com/en-us/library/ms647005(v=vs.85).aspx
-     * @see http://msdn.microsoft.com/en-us/library/ms647003(v=vs.85).aspx
-     * @see http://msdn.microsoft.com/en-us/library/ms647464(v=vs.85).aspx
-     * @see http://stackoverflow.com/questions/6918022/get-version-info-for-exe
      */
     public static String getFileVersion(String filename) {
         return getFileVersion((filename == null) ? null : new File(filename));
@@ -208,10 +204,6 @@ public class MSWinLib {
 * @param file The file to get version information.
      * @return Return version information for the specified file if success,
      * return null if failed.
-     * @see http://msdn.microsoft.com/en-us/library/ms647005(v=vs.85).aspx
-     * @see http://msdn.microsoft.com/en-us/library/ms647003(v=vs.85).aspx
-     * @see http://msdn.microsoft.com/en-us/library/ms647464(v=vs.85).aspx
-     * @see http://stackoverflow.com/questions/6918022/get-version-info-for-exe
      */
     public static String getFileVersion(File file) {
         String fileVersion = null;
@@ -433,10 +425,10 @@ public class MSWinLib {
          * refers to the "o" key, whereas VK_OEM_1 refers to the "o with umlaut"
          * key.
          * @return The return value specifies the status of the specified
-         * virtual key, as follows:<br/>
+         * virtual key, as follows:<br>
          *
          * If the high-order bit is 1, the key is down; otherwise, it is
-         * up.<br/>
+         * up.<br>
          *
          * If the low-order bit is 1, the key is toggled. A key, such as the
          * CAPS LOCK key, is toggled if it is turned on. The key is off and

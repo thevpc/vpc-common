@@ -4,7 +4,7 @@ import java.util.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)  alias vpc
- * @creationtime 2009/08/15 17:43:18
+ * %creationtime 2009/08/15 17:43:18
  */
 public final class ExtensionDescriptor<T> implements Cloneable {
 

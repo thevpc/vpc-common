@@ -3,7 +3,7 @@ package net.thevpc.common.swings;
 /**
  * Implement this inner interface to listen for when files are dropped. For example
  * your class declaration may begin like this:
- * <code><pre>
+ * <code>
  *      public class MyClass implements FileDrop.Listener
  *      ...
  *      public void filesDropped( java.io.File[] files )
@@ -11,7 +11,7 @@ package net.thevpc.common.swings;
  *          ...
  *      }   // end filesDropped
  *      ...
- * </pre></code>
+ * </code>
  *
  * @since 1.1
  */

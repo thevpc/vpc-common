@@ -9,7 +9,7 @@ import java.beans.PropertyChangeListener;
 /**
  * Component Interface Wrapper
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)  alias vpc
- * @creationtime 2009/08/15 21:24:16
+ * %creationtime 2009/08/15 21:24:16
  */
 public interface IComponent {
 

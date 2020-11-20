@@ -4,7 +4,7 @@ import net.thevpc.common.msg.Message;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 19 juil. 2007 00:27:15
+ * %creationtime 19 juil. 2007 00:27:15
  */
 public class ProgressMonitorTranslator extends AbstractProgressMonitor {
 

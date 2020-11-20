@@ -27,7 +27,7 @@ import java.sql.SQLException;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  3 aout 2006 15:06:01
+ * %creationtime  3 aout 2006 15:06:01
  */
 public class TLogPrintStream implements TLog {
     private PrintStream errorStream;

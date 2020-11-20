@@ -28,7 +28,7 @@ import java.util.MissingResourceException;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 22:34:52
+ * %creationtime 27 août 2007 22:34:52
  */
 public abstract class AbstractMessageSetBundle implements MessageSetBundle {
     private EventListenerList listenerList;

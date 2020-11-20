@@ -29,7 +29,7 @@ import java.util.Vector;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 21 oct. 2007 00:30:43
+ * %creationtime 21 oct. 2007 00:30:43
  */
 public class PluginTaskMonitor extends TaskMonitor {
     private JProgressBar jpb = new JProgressBar(0, 100);

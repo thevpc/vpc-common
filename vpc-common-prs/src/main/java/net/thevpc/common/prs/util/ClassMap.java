@@ -27,7 +27,7 @@ import java.util.Stack;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  13 juil. 2006 22:14:21
+ * %creationtime  13 juil. 2006 22:14:21
  */
 public class ClassMap<V> extends HashMap<Class, V> {
     private Map<Class, V> cache = new HashMap<Class, V>();

@@ -1,7 +1,7 @@
-package net.vpc.common.tson.impl.parser.jflex;
-import net.vpc.common.tson.impl.parser.*;
-import net.vpc.common.tson.impl.util.*;
-import net.vpc.common.tson.*;
+package net.thevpc.tson.impl.parser.jflex;
+import net.thevpc.tson.impl.parser.*;
+import net.thevpc.tson.impl.util.*;
+import net.thevpc.tson.*;
 import java.io.*;
 
 

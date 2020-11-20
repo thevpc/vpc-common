@@ -41,7 +41,7 @@ import net.thevpc.common.prs.log.SimpleLogFormatter;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 19:30:54
+ * %creationtime 27 août 2007 19:30:54
  */
 public class DefaultPlugin<T extends PluggableApplication, Pm extends PluginManager> implements Plugin<T, Pm> {
 

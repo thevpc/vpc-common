@@ -10,7 +10,7 @@ import net.thevpc.common.msg.StringMessage;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 31 juil. 2007 23:57:10
+ * %creationtime 31 juil. 2007 23:57:10
  */
 public class ProgressMonitors {
     public static final DecimalFormat PERCENT_FORMAT =new DecimalFormat("#00.00%");

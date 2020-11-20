@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
- * @author Taha BEN SALAH (thevpc@walla.com) @creationtime 13 juil. 2006
+ * @author Taha BEN SALAH (thevpc@walla.com) %creationtime 13 juil. 2006
  * 22:14:21
  */
 public class FileConfiguration extends AbstractConfiguration {

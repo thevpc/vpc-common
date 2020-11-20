@@ -27,7 +27,7 @@ import java.util.MissingResourceException;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  13 juil. 2006 22:14:21
+ * %creationtime  13 juil. 2006 22:14:21
  */
 public interface MessageSetBundle {
     public String getString(String key) throws MissingResourceException;

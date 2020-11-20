@@ -36,7 +36,7 @@ import java.util.Set;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 30 dec. 2006 19:09:06
+ * %creationtime 30 dec. 2006 19:09:06
  */
 class PluginPropertiesPanel extends JPanel {
     private JTextField id = new JTextField();

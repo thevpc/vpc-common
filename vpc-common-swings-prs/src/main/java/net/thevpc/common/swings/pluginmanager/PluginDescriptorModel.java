@@ -27,7 +27,7 @@ import java.util.ArrayList;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
-* @creationtime 21 oct. 2007 00:35:57
+* %creationtime 21 oct. 2007 00:35:57
 */
 public class PluginDescriptorModel extends AbstractTableModel {
     PluginDescriptor[] descriptors;

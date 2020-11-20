@@ -31,7 +31,7 @@ import java.awt.event.ItemListener;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  27 juin 2006 00:25:16
+ * %creationtime  27 juin 2006 00:25:16
  */
 public class JToggleButtonIconSetUpdater extends AbstractButtonIconSetUpdater {
     private ItemListener toggleButtonItemListener = new ItemListener() {

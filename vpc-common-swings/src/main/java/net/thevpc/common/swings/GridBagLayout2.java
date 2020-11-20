@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 5 mai 2006 00:52:57
+ * %creationtime 5 mai 2006 00:52:57
  */
 public class GridBagLayout2 extends GridBagLayout {
     private static final long serialVersionUID = 1L;

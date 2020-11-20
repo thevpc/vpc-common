@@ -34,7 +34,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 17:26:21
+ * %creationtime 23 juin 2006 17:26:21
  */
 public class DefaultIconSet extends AbstractIconSet {
 

@@ -25,7 +25,7 @@ import java.awt.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 19 oct. 2006 00:17:36
+ * %creationtime 19 oct. 2006 00:17:36
  */
 public abstract class JCardPanel extends JPanel {
 

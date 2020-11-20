@@ -36,7 +36,7 @@ import java.util.regex.Pattern;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 19 oct. 2006 00:16:49
+ * %creationtime 19 oct. 2006 00:16:49
  */
 public class JListCardPanel extends JCardPanel {
     private JPanel main = new JPanel(new CardLayout());

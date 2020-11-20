@@ -27,7 +27,7 @@ import java.net.URL;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime Dec 15, 2007 4:31:30 AM
+ * %creationtime Dec 15, 2007 4:31:30 AM
  */
 public interface ArtSet {
     public String getId();

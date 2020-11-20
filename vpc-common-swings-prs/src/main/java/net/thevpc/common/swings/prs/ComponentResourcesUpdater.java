@@ -27,7 +27,7 @@ import javax.swing.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  17 juil. 2006 09:06:11
+ * %creationtime  17 juil. 2006 09:06:11
  */
 public abstract class ComponentResourcesUpdater {
     abstract public void update(JComponent comp, String id, MessageSet messageSet, IconSet iconSet);

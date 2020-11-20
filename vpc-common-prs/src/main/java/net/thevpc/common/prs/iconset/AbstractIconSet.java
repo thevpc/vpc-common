@@ -29,7 +29,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 avr. 2007 19:58:30
+ * %creationtime 27 avr. 2007 19:58:30
  */
 public abstract class AbstractIconSet implements IconSet {
 

@@ -31,7 +31,7 @@ import java.util.StringTokenizer;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 9 nov. 2006 11:55:40
+ * %creationtime 9 nov. 2006 11:55:40
  */
 public class RecentFilesPropertiesModel implements RecentFilesModel {
     private File file;

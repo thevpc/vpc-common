@@ -22,7 +22,7 @@ package net.thevpc.common.swings.util.jcmd;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  13 juil. 2006 22:14:21
+ * %creationtime  13 juil. 2006 22:14:21
  */
 public class CmdParam extends CmdArg {
     CmdParam(String arg, int index) {

@@ -24,7 +24,7 @@ import javax.swing.event.ListDataListener;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 14 août 2007 20:48:17
+ * %creationtime 14 août 2007 20:48:17
  */
 public interface JListTwinsModel {
       /**

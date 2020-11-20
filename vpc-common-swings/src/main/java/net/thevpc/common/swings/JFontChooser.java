@@ -35,7 +35,7 @@ import java.util.Vector;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  13 juil. 2006 22:14:21
+ * %creationtime  13 juil. 2006 22:14:21
  */
 public class JFontChooser extends JComponent
         implements ActionListener, ListSelectionListener {

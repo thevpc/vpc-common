@@ -28,7 +28,7 @@ import java.util.Enumeration;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 28 août 2007 12:35:01
+ * %creationtime 28 août 2007 12:35:01
  */
 public class MultiClassLoader extends ClassLoader {
 

@@ -36,7 +36,7 @@ import net.thevpc.common.swings.util.StringStartsWithFilter;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 18:47:41
+ * %creationtime 6 mai 2006 18:47:41
  */
 public class JQuickSearchTextField extends JPanel {
     public static enum Strategy {

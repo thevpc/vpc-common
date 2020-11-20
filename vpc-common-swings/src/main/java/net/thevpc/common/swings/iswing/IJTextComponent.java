@@ -48,7 +48,6 @@ public interface IJTextComponent extends IJComponent {
      * A PropertyChange event ("document") is propagated to each listener.
      *
      * @param doc the document to display/edit
-     * @beaninfo description: the text document model
      * bound: true
      * expert: true
      * @see #getDocument
@@ -91,7 +90,6 @@ public interface IJTextComponent extends IJComponent {
      * A PropertyChange event ("margin") is sent to all listeners.
      *
      * @param m the space between the border and the text
-     * @beaninfo description: desired space between the border and text area
      * bound: true
      */
     public void setMargin(Insets m);
@@ -139,7 +137,6 @@ public interface IJTextComponent extends IJComponent {
      * PropertyChange event ("caret") being fired.
      *
      * @param c the caret
-     * @beaninfo description: the caret used to select/navigate
      * bound: true
      * expert: true
      * @see #getCaret
@@ -162,7 +159,6 @@ public interface IJTextComponent extends IJComponent {
      * when a new highlighter is installed.
      *
      * @param h the highlighter
-     * @beaninfo description: object responsible for background highlights
      * bound: true
      * expert: true
      * @see #getHighlighter
@@ -177,7 +173,6 @@ public interface IJTextComponent extends IJComponent {
      * is installed.
      *
      * @param map the keymap
-     * @beaninfo description: set of key event to action bindings to use
      * bound: true
      * @see #getKeymap
      */
@@ -193,7 +188,7 @@ public interface IJTextComponent extends IJComponent {
      * anything.  The default value of the <code>dragEnabled</code>
      * property
      * is <code>false</code>.
-     * <p/>
+     * <p>
      * When automatic drag handling is enabled,
      * most look and feels begin a drag-and-drop operation
      * whenever the user presses the mouse button over a selection
@@ -201,7 +196,7 @@ public interface IJTextComponent extends IJComponent {
      * Setting this property to <code>true</code>
      * can therefore have a subtle effect on
      * how selections behave.
-     * <p/>
+     * <p>
      * Some look and feels might not support automatic drag and drop;
      * they will ignore this property.  You can work around such
      * look and feels by modifying the component
@@ -213,7 +208,6 @@ public interface IJTextComponent extends IJComponent {
      *                           <code>b</code> is <code>true</code> and
      *                           <code>GraphicsEnvironment.isHeadless()</code>
      *                           returns <code>true</code>
-     * @beaninfo description: determines whether automatic drag handling is enabled
      * bound: false
      * @see java.awt.GraphicsEnvironment#isHeadless
      * @see #getDragEnabled
@@ -257,7 +251,6 @@ public interface IJTextComponent extends IJComponent {
      * being fired.
      *
      * @param c the color
-     * @beaninfo description: the color used to render the caret
      * bound: true
      * preferred: true
      * @see #getCaretColor
@@ -279,7 +272,6 @@ public interface IJTextComponent extends IJComponent {
      * PropertyChange event ("selectionColor").
      *
      * @param c the color
-     * @beaninfo description: color used to render selection background
      * bound: true
      * preferred: true
      * @see #getSelectionColor
@@ -301,7 +293,6 @@ public interface IJTextComponent extends IJComponent {
      * PropertyChange event ("selectedTextColor") being fired.
      *
      * @param c the color
-     * @beaninfo description: color used to render selected text
      * bound: true
      * preferred: true
      * @see #getSelectedTextColor
@@ -322,7 +313,6 @@ public interface IJTextComponent extends IJComponent {
      * PropertyChange event ("disabledTextColor").
      *
      * @param c the color
-     * @beaninfo description: color used to render disabled text
      * bound: true
      * preferred: true
      * @see #getDisabledTextColor
@@ -335,11 +325,11 @@ public interface IJTextComponent extends IJComponent {
      * this amounts to an insert of the given text.  If there
      * is no replacement text this amounts to a removal of the
      * current selection.
-     * <p/>
+     * <p>
      * This is the method that is used by the default implementation
      * of the action for inserting content that gets bound to the
      * keymap actions.
-     * <p/>
+     * <p>
      * This method is thread safe, although most Swing methods
      * are not. Please see
      * <A HREF="http://java.sun.com/products/jfc/swingdoc-archive/threads.html">Threads
@@ -353,8 +343,8 @@ public interface IJTextComponent extends IJComponent {
      * Fetches a portion of the text represented by the
      * component.  Returns an empty string if length is 0.
      *
-     * @param offs the offset >= 0
-     * @param len  the length >= 0
+     * @param offs the offset &gt;= 0
+     * @param len  the length &gt;= 0
      * @return the text
      * @throws BadLocationException if the offset or length are invalid
      */
@@ -368,7 +358,7 @@ public interface IJTextComponent extends IJComponent {
      * be computed until the component has been sized).  The
      * component does not have to be visible or painted.
      *
-     * @param pos the position >= 0
+     * @param pos the position &gt;= 0
      * @return the coordinates as a rectangle, with (r.x, r.y) as the location
      *         in the coordinate system, or null if the component does
      *         not yet have a positive size.
@@ -387,7 +377,7 @@ public interface IJTextComponent extends IJComponent {
      * component does not have to be visible or painted.
      *
      * @param pt the location in the view to translate
-     * @return the offset >= 0 from the start of the document,
+     * @return the offset &gt;= 0 from the start of the document,
      *         or -1 if the component does not yet have a positive
      *         size.
      * @see javax.swing.plaf.TextUI#viewToModel
@@ -459,7 +449,6 @@ public interface IJTextComponent extends IJComponent {
      * is set, a PropertyChange event (FOCUS_ACCELERATOR_KEY) will be fired.
      *
      * @param aKey the key
-     * @beaninfo description: accelerator character used to grab focus
      * bound: true
      * @see #getFocusAccelerator
      */
@@ -521,7 +510,6 @@ public interface IJTextComponent extends IJComponent {
      * @throws IllegalArgumentException if the value supplied
      *                                  for <code>position</code> is less than zero or greater
      *                                  than the component's text length
-     * @beaninfo description: the caret position
      */
     public void setCaretPosition(int position);
 
@@ -530,7 +518,7 @@ public interface IJTextComponent extends IJComponent {
      * text component.
      *
      * @return the position of the text insertion caret for the
-     *         text component >= 0
+     *         text component &gt;= 0
      */
     public int getCaretPosition();
 
@@ -540,18 +528,17 @@ public interface IJTextComponent extends IJComponent {
      * or empty, has the effect of simply deleting the old text.
      * When text has been inserted, the resulting caret location
      * is determined by the implementation of the caret class.
-     * <p/>
+     * <p>
      * This method is thread safe, although most Swing methods
      * are not. Please see
      * <A HREF="http://java.sun.com/products/jfc/swingdoc-archive/threads.html">Threads
      * and Swing</A> for more information.
-     * <p/>
+     * <p>
      * Note that text is not a bound property, so no <code>PropertyChangeEvent
      * </code> is fired when it changes. To listen for changes to the text,
      * use <code>DocumentListener</code>.
      *
      * @param t the new text to be set
-     * @beaninfo description: the text of this component
      * @see #getText
      * @see DefaultCaret
      */
@@ -561,7 +548,7 @@ public interface IJTextComponent extends IJComponent {
      * Returns the text contained in this <code>TextComponent</code>.
      * If the underlying document is <code>null</code>,
      * will give a <code>NullPointerException</code>.
-     * <p/>
+     * <p>
      * Note that text is not a bound property, so no <code>PropertyChangeEvent
      * </code> is fired when it changes. To listen for changes to the text,
      * use <code>DocumentListener</code>.
@@ -600,7 +587,6 @@ public interface IJTextComponent extends IJComponent {
      * state is changed.
      *
      * @param b the boolean to be set
-     * @beaninfo description: specifies if the text can be edited
      * bound: true
      * @see #isEditable
      */
@@ -610,7 +596,7 @@ public interface IJTextComponent extends IJComponent {
      * Returns the selected text's start position.  Return 0 for an
      * empty document, or the value of dot if no selection.
      *
-     * @return the start position >= 0
+     * @return the start position &gt;= 0
      */
     public int getSelectionStart();
 
@@ -618,14 +604,13 @@ public interface IJTextComponent extends IJComponent {
      * Sets the selection start to the specified position.  The new
      * starting point is constrained to be before or at the current
      * selection end.
-     * <p/>
+     * <p>
      * This is available for backward compatibility to code
      * that called this method on <code>java.awt.TextComponent</code>.
      * This is implemented to forward to the <code>Caret</code>
      * implementation which is where the actual selection is maintained.
      *
-     * @param selectionStart the start position of the text >= 0
-     * @beaninfo description: starting location of the selection.
+     * @param selectionStart the start position of the text &gt;= 0
      */
     public void setSelectionStart(int selectionStart);
 
@@ -633,7 +618,7 @@ public interface IJTextComponent extends IJComponent {
      * Returns the selected text's end position.  Return 0 if the document
      * is empty, or the value of dot if there is no selection.
      *
-     * @return the end position >= 0
+     * @return the end position &gt;= 0
      */
     public int getSelectionEnd();
 
@@ -641,26 +626,25 @@ public interface IJTextComponent extends IJComponent {
      * Sets the selection end to the specified position.  The new
      * end point is constrained to be at or after the current
      * selection start.
-     * <p/>
+     * <p>
      * This is available for backward compatibility to code
      * that called this method on <code>java.awt.TextComponent</code>.
      * This is implemented to forward to the <code>Caret</code>
      * implementation which is where the actual selection is maintained.
      *
-     * @param selectionEnd the end position of the text >= 0
-     * @beaninfo description: ending location of the selection.
+     * @param selectionEnd the end position of the text &gt;= 0
      */
     public void setSelectionEnd(int selectionEnd);
 
     /**
      * Selects the text between the specified start and end positions.
-     * <p/>
+     * <p>
      * This method sets the start and end positions of the
      * selected text, enforcing the restriction that the start position
      * must be greater than or equal to zero.  The end position must be
      * greater than or equal to the start position, and less than or
      * equal to the length of the text component's text.
-     * <p/>
+     * <p>
      * If the caller supplies values that are inconsistent or out of
      * bounds, the method enforces these constraints silently, and
      * without failure. Specifically, if the start position or end
@@ -668,7 +652,7 @@ public interface IJTextComponent extends IJComponent {
      * equal the text length. If the start position is less than zero,
      * it is reset to zero, and if the end position is less than the
      * start position, it is reset to the start position.
-     * <p/>
+     * <p>
      * This call is provided for backward compatibility.
      * It is routed to a call to <code>setCaretPosition</code>
      * followed by a call to <code>moveCaretPosition</code>.
@@ -731,7 +715,7 @@ public interface IJTextComponent extends IJComponent {
      * or column, depending on the value of orientation.  Ideally,
      * components should handle a partially exposed row or column by
      * returning the distance required to completely expose the item.
-     * <p/>
+     * <p>
      * The default implementation of this is to simply return 10% of
      * the visible area.  Subclasses are likely to be able to provide
      * a much more reasonable value.
@@ -752,7 +736,7 @@ public interface IJTextComponent extends IJComponent {
      * Components that display logical rows or columns should compute
      * the scroll increment that will completely expose one block
      * of rows or columns, depending on the value of orientation.
-     * <p/>
+     * <p>
      * The default implementation of this is to simply return the visible
      * area.  Subclasses will likely be able to provide a much more
      * reasonable value.
@@ -778,7 +762,7 @@ public interface IJTextComponent extends IJComponent {
      * edge of the viewport.  Note that returning true for a
      * <code>Scrollable</code> whose ancestor is a <code>JScrollPane</code>
      * effectively disables horizontal scrolling.
-     * <p/>
+     * <p>
      * Scrolling containers, like <code>JViewport</code>,
      * will use this method each time they are validated.
      *
@@ -793,7 +777,7 @@ public interface IJTextComponent extends IJComponent {
      * For example a columnar text view that flowed text in left to
      * right columns could effectively disable vertical scrolling by
      * returning true here.
-     * <p/>
+     * <p>
      * Scrolling containers, like <code>JViewport</code>,
      * will use this method each time they are validated.
      *

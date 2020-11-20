@@ -65,7 +65,7 @@ import net.thevpc.common.prs.Version;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 15 nov. 2006 23:39:30
+ * %creationtime 15 nov. 2006 23:39:30
  */
 public abstract class DefaultPluginManager<App extends PluggableApplication, Plug extends Plugin> implements PluginManager<App, Plug> {
 

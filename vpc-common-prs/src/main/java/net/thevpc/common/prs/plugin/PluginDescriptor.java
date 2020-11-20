@@ -44,7 +44,7 @@ import java.util.zip.ZipEntry;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 30 dec. 2006 21:15:49
+ * %creationtime 30 dec. 2006 21:15:49
  */
 public class PluginDescriptor implements Comparable<PluginDescriptor>, Serializable {
 

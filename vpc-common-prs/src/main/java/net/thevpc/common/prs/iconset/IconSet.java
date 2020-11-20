@@ -27,7 +27,7 @@ import java.util.Locale;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 17:22:04
+ * %creationtime 23 juin 2006 17:22:04
  */
 public interface IconSet {
     Icon getIconByPath(String path) throws IconNotFoundException;

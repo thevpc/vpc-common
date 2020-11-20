@@ -22,7 +22,7 @@ package net.thevpc.common.swings.util;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 juin 2007 12:08:46
+ * %creationtime 27 juin 2007 12:08:46
  */
 public interface ProcessWatcherHandler {
     public void started(Process process);

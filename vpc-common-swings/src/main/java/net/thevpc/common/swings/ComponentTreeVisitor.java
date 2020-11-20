@@ -24,7 +24,7 @@ import java.awt.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 21:22:50
+ * %creationtime 27 août 2007 21:22:50
  */
 public interface ComponentTreeVisitor<T> {
     public void visit(Component comp,T userObject);

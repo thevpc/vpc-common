@@ -6,7 +6,7 @@
     <artifactId>jeep-nodes</artifactId>
     <version>1.2.7</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-jeep-nodes</name>
+    <name>net.thevpc.jeep.jeep-nodes</name>
     <url>https://github.com/thevpc/upa/wiki</url>
     <description>Java Enhanced Expression Parser (JEEP)</description>
     <!-- Java Enhanced Expression parser -->
@@ -92,8 +92,33 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+<plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-gpg-plugin</artifactId>
+      <version>1.6</version>
+      <executions>
+        <execution>
+          <id>sign-artifacts</id>
+          <phase>verify</phase>
+          <goals>
+            <goal>sign</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin><plugin>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.0.2</version>
                 <executions>

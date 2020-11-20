@@ -33,7 +33,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @author Taha BEN SALAH (taha.bensalah@gmail.com) @creationtime 13 juil. 2006
+ * @author Taha BEN SALAH (taha.bensalah@gmail.com) %creationtime 13 juil. 2006
  * 22:14:21
  */
 public class JDropDownButton extends JButton {
@@ -659,7 +659,7 @@ public class JDropDownButton extends JButton {
 
     /**
      * Returns the suggested delay, in milliseconds, before submenus are popped
-     * up or down. Each look and feel (L&F) may determine its own policy for
+     * up or down. Each look and feel (L&#38;F) may determine its own policy for
      * observing the <code>delay</code> property. In most cases, the delay is
      * not observed for top level menus or while dragging. The default for
      * <code>delay</code> is 0. This method is a property of the look and feel
@@ -674,7 +674,7 @@ public class JDropDownButton extends JButton {
 
     /**
      * Sets the suggested delay before the menu's <code>PopupMenu</code> is
-     * popped up or down. Each look and feel (L&F) may determine it's own policy
+     * popped up or down. Each look and feel (L&#35;F) may determine it's own policy
      * for observing the delay property. In most cases, the delay is not
      * observed for top level menus or while dragging. This method is a property
      * of the look and feel code and is used to manage the idiosyncracies of the
@@ -682,7 +682,6 @@ public class JDropDownButton extends JButton {
      *
      * @param d the number of milliseconds to delay
      * @throws IllegalArgumentException if <code>d</code> is less than 0
-     * @@beaninfo description: The delay between menu selection and making the
      * popup menu visible expert: true
      */
     public void setDelay(int d) {
@@ -803,7 +802,7 @@ public class JDropDownButton extends JButton {
      * Removes the menu item at the specified index from this menu.
      *
      * @param pos the position of the item to be removed
-     * @throws IllegalArgumentException if the value of <code>pos</code> < 0, or
+     * @throws IllegalArgumentException if the value of <code>pos</code> &lt; 0, or
      * if <code>pos</code> is greater than the number of menu items
      */
     public void remove(int pos) {
@@ -882,7 +881,7 @@ public class JDropDownButton extends JButton {
      * @param s the text for the menu item to add
      * @param pos an integer specifying the position at which to add the new
      * menu item
-     * @throws IllegalArgumentException when the value of <code>pos</code> < 0
+     * @throws IllegalArgumentException when the value of <code>pos</code> &lt; 0
      */
     public void insert(String s, int pos) {
         if (pos < 0) {
@@ -901,7 +900,7 @@ public class JDropDownButton extends JButton {
      * @param pos an integer specifying the position at which to add the new
      * <code>JMenuitem</code>
      * @return the new menu item
-     * @throws IllegalArgumentException if the value of <code>pos</code> < 0
+     * @throws IllegalArgumentException if the value of <code>pos</code> &lt; 0
      */
     public JMenuItem insert(JMenuItem mi, int pos) {
         if (pos < 0) {
@@ -922,7 +921,7 @@ public class JDropDownButton extends JButton {
      * @param a the <code>Action</code> object for the menu item to add
      * @param pos an integer specifying the position at which to add the new
      * menu item
-     * @throws IllegalArgumentException if the value of <code>pos</code> < 0
+     * @throws IllegalArgumentException if the value of <code>pos</code> &lt; 0
      */
     public JMenuItem insert(Action a, int pos) {
         if (pos < 0) {
@@ -946,7 +945,7 @@ public class JDropDownButton extends JButton {
      *
      * @param index an integer specifying the position at which to insert the
      * menu separator
-     * @throws IllegalArgumentException if the value of <code>index</code> < 0
+     * @throws IllegalArgumentException if the value of <code>index</code> &lt; 0
      */
     public void insertSeparator(int index) {
         if (index < 0) {
@@ -966,7 +965,7 @@ public class JDropDownButton extends JButton {
      * @param pos an integer specifying the position
      * @return the menu item at the specified position; or <code>null</code> if
      * the item as the specified position is not a menu item
-     * @throws IllegalArgumentException if the value of <code>pos</code> < 0
+     * @throws IllegalArgumentException if the value of <code>pos</code> &lt; 0
      */
     public JMenuItem getItem(int pos) {
         if (pos < 0) {
@@ -1466,7 +1465,7 @@ public class JDropDownButton extends JButton {
     /**
      * A listener class that watches for a popup window closing. When the popup
      * is closing, the listener deselects the menu.
-     * <p/>
+     * <p>
      * <strong>Warning:</strong> Serialized objects of this class will not be
      * compatible with future Swing releases. The current serialization support
      * is appropriate for short term storage or RMI between applications running

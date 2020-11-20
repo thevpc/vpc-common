@@ -25,7 +25,7 @@ import java.awt.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 3 dec. 2006 23:18:36
+ * %creationtime 3 dec. 2006 23:18:36
  */
 public interface MessageDialogManager<App>{
     public static enum ReturnType{

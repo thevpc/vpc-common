@@ -29,7 +29,7 @@ import javax.swing.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  17 juil. 2006 09:08:00
+ * %creationtime  17 juil. 2006 09:08:00
  */
 public class ComponentResourcesUpdaterAdapter implements ComponentIconSetUpdater, ComponentMessageSetUpdater {
     private ComponentResourcesUpdater base;

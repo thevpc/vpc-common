@@ -64,7 +64,6 @@ public class JSyntaxUtils {
      * The first line number is ZERO
      *
      * @return line number
-     * @throws BadLocationException
      */
     public static int getLineNumber(JTextComponent editor, int pos){
         if (getSyntaxDocument(editor) != null) {
@@ -81,7 +80,6 @@ public class JSyntaxUtils {
      * ZERO
      *
      * @return the 0 based column number
-     * @throws javax.swing.text.BadLocationException
      */
     public static int getColumnNumber(JTextComponent editor, int pos){
         // speedup if the pos is 0

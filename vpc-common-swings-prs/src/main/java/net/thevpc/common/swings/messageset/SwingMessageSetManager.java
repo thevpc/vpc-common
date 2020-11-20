@@ -34,7 +34,7 @@ import java.util.*;
 import net.thevpc.common.swings.prs.PRSManager;
 
 /**
- * @author Taha BEN SALAH (taha.bensalah@gmail.com) @creationtime 26 juin 2006
+ * @author Taha BEN SALAH (taha.bensalah@gmail.com) %creationtime 26 juin 2006
  * 23:57:46
  */
 public class SwingMessageSetManager {

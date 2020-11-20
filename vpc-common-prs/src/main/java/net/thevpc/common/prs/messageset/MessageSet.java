@@ -31,7 +31,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 13 juil. 2006 22:14:21
+ * %creationtime 13 juil. 2006 22:14:21
  */
 public class MessageSet extends AbstractMessageSetBundle {
     //    private static Hashtable<URL, ImageIcon> cachedIcons = new Hashtable<URL, ImageIcon>();

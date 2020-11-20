@@ -26,7 +26,7 @@ import java.util.Vector;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 8 févr. 2007 20:30:17
+ * %creationtime 8 févr. 2007 20:30:17
  */
 public class JComboboxFontNames extends JComboBox {
     private boolean  nullable;

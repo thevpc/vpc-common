@@ -17,7 +17,7 @@ package net.thevpc.jeep;
  *
  * @author Taha BEN SALAH
  * @version 1.0
- * @date April 2008
+ * %date April 2008
  */
 public interface Jeep extends JContext {
     int POP_STATE=-1;

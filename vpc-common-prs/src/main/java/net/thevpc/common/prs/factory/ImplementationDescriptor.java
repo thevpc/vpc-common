@@ -2,7 +2,7 @@ package net.thevpc.common.prs.factory;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)  alias vpc
-* @creationtime 2009/08/15 17:43:38
+* %creationtime 2009/08/15 17:43:38
 */
 public final class ImplementationDescriptor<T> implements Comparable<ImplementationDescriptor>, Cloneable {
 

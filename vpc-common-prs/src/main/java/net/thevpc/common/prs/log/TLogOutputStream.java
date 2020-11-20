@@ -26,7 +26,7 @@ import java.io.OutputStream;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 4 juin 2007 17:00:26
+ * %creationtime 4 juin 2007 17:00:26
  */
 public class TLogOutputStream extends OutputStream {
     private final TLog log;

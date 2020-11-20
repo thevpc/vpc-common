@@ -26,7 +26,7 @@ import java.net.URL;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 13 oct. 2007 13:37:37
+ * %creationtime 13 oct. 2007 13:37:37
  */
 public interface UrlFilter {
     public boolean accept(URL url,String path);

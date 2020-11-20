@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 7 août 2009
+ * %creationtime 7 août 2009
  */
 public class TLoadableLogList extends TLogList implements TLoadableLog{
     private TLoadableLog loadableLog;

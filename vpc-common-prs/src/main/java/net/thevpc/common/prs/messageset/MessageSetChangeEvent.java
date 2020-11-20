@@ -27,7 +27,7 @@ import java.util.Locale;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 22:29:55
+ * %creationtime 27 août 2007 22:29:55
  */
 public class MessageSetChangeEvent extends EventObject {
     private Locale oldLocale;

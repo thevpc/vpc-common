@@ -22,7 +22,7 @@ package net.thevpc.common.swings.util;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 4 sept. 2007 17:51:11
+ * %creationtime 4 sept. 2007 17:51:11
  */
 public class ObjectHolder<T> {
 

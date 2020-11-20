@@ -35,7 +35,7 @@ import net.thevpc.jeep.impl.*;
  *
  * @author Taha BEN SALAH
  * @version 1.0
- * @date April 2008
+ * %date April 2008
  */
 public class DefaultJeep extends AbstractJContext implements Jeep {
 

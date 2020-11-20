@@ -27,7 +27,7 @@ import java.util.MissingResourceException;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 28 avr. 2007 21:07:13
+ * %creationtime 28 avr. 2007 21:07:13
  */
 public abstract class MessageSetBundleAdapter extends AbstractMessageSetBundle{
 

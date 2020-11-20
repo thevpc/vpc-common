@@ -29,7 +29,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 28 avr. 2007 20:40:04
+ * %creationtime 28 avr. 2007 20:40:04
  */
 public abstract class IconSetAdapter implements IconSet {
     private String idPrefix ="Adapter";

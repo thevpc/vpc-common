@@ -22,7 +22,7 @@ package net.thevpc.common.prs.log;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 13 juil. 2005 14:32:52
+ * %creationtime 13 juil. 2005 14:32:52
  */
 public class TLogConsole extends TLogPrintStream {
     public static final TLogConsole CONSOLE=new TLogConsole();

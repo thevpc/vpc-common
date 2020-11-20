@@ -4,7 +4,7 @@ import net.thevpc.common.msg.Message;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 15 mai 2007 01:34:27
+ * %creationtime 15 mai 2007 01:34:27
  */
 public interface ProgressMonitor extends TaskMonitor {
     double INDETERMINATE_PROGRESS = Double.NaN;

@@ -4,7 +4,7 @@ import net.thevpc.common.msg.Message;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 15 mai 2007 01:36:26
+ * %creationtime 15 mai 2007 01:36:26
  */
 public class DefaultProgressMonitor extends AbstractProgressMonitor {
     private double progress;

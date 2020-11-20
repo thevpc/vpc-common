@@ -31,7 +31,7 @@ import java.util.Map;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 23 sept. 2007 17:00:45
+ * %creationtime 23 sept. 2007 17:00:45
  */
 public class UrlCacheManager {
     private Map<URL, URL> urlMapper = new HashMap<URL, URL>();

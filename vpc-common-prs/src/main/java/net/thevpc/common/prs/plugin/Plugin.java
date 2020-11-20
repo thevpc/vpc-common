@@ -32,7 +32,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 19:23:14
+ * %creationtime 27 août 2007 19:23:14
  */
 public interface Plugin<T, Pm> extends ResourceSetHolder,LoggerProvider {
 
@@ -54,7 +54,7 @@ public interface Plugin<T, Pm> extends ResourceSetHolder,LoggerProvider {
      * <pre>
      *   getApplication().getFactory().getConfiguration(AnyInterface.class).add(AnyClass.class);
      * </pre>
-     * <p/>
+     * <p>
      * system plugin should call the following
      * <pre>
      * getApplication().setDefaultFactoryConfigurations(createFactoryConfigurations(getMessageSet()));

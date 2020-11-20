@@ -7,8 +7,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author Taha BEN SALAH <taha.bensalah@gmail.com>
- * @creationdate 12/16/12 1:00 PM
+ * @author thevpc
+ * %creationtime 12/16/12 1:00 PM
  */
 public class URLClassIterable implements Iterable<Class> {
 

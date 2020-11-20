@@ -28,7 +28,7 @@ import java.awt.*;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 13:13:36
+ * %creationtime 27 août 2007 13:13:36
  */
 public class PRSBorderImpl implements PRSBorder{
     private String id;

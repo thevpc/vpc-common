@@ -40,7 +40,7 @@ import java.util.Properties;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime Dec 15, 2007 4:34:51 AM
+ * %creationtime Dec 15, 2007 4:34:51 AM
  */
 public class ArtSetManager {
 

@@ -29,7 +29,7 @@ import java.util.Map;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 11 avr. 2007 17:46:14
+ * %creationtime 11 avr. 2007 17:46:14
  */
 public final class Version implements Comparable<Version>, Serializable {
 

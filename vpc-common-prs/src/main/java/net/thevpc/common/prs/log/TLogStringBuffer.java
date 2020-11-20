@@ -7,7 +7,7 @@ import java.io.PrintStream;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 3 janv. 2006 21:40:14
+ * %creationtime 3 janv. 2006 21:40:14
  */
 public class TLogStringBuffer implements TLoadableLog {
     private final StringBuffer buffer=new StringBuffer();

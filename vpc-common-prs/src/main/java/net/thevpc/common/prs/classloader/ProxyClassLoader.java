@@ -75,7 +75,7 @@ public class ProxyClassLoader extends ClassLoader {
      *                   automatically search through its parent list
      * @throws IllegalArgumentException if there are any nulls or duplicate
      * parent loaders or cycles.
-     * @since org.netbeans.core/1 > 1.6
+     * @since org.netbeans.core/1 &gt; 1.6
      */
     public ProxyClassLoader(String name,ClassLoader[] parents, boolean transitive) {
         if (parents.length == 0) {
@@ -99,17 +99,17 @@ public class ProxyClassLoader extends ClassLoader {
     // this is used only by system classloader, maybe we can redesign it a bit
     // to live without this functionality, then destroy may also go away
     /** Add new parents dynamically.
-     * @param parents the new parents to add (append to list)
+     * @param classLoaders the new parents to add (append to list)
      * @throws IllegalArgumentException in case of a null or cyclic parent (duplicate OK)
      */
-    public synchronized void append(ClassLoader[] nueparents) throws IllegalArgumentException {
+    public synchronized void append(ClassLoader[] classLoaders) throws IllegalArgumentException {
         // XXX should this be synchronized?
-        if (nueparents == null) throw new IllegalArgumentException("null parents array"); // NOI18N
-        for (int i = 0; i < nueparents.length; i++) {
-            if (nueparents[i] == null) throw new IllegalArgumentException("null parent"); // NOI18N
+        if (classLoaders == null) throw new IllegalArgumentException("null parents array"); // NOI18N
+        for (int i = 0; i < classLoaders.length; i++) {
+            if (classLoaders[i] == null) throw new IllegalArgumentException("null parent"); // NOI18N
         }
         
-        parents = coalesceAppend(parents, nueparents);
+        parents = coalesceAppend(parents, classLoaders);
     }
 
     

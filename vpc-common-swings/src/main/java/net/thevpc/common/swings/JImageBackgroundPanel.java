@@ -25,7 +25,7 @@ import java.awt.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  13 juil. 2006 22:14:21
+ * %creationtime  13 juil. 2006 22:14:21
  */
 public class JImageBackgroundPanel extends JPanel {
     public static final int IMAGE_SIZE=0;

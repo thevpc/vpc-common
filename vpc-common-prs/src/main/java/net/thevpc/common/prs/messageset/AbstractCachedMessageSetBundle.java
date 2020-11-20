@@ -27,7 +27,7 @@ import java.util.MissingResourceException;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 27 août 2007 22:34:52
+ * %creationtime 27 août 2007 22:34:52
  */
 public abstract class AbstractCachedMessageSetBundle extends AbstractMessageSetBundle {
     private HashMap<String, String> cache = new HashMap<String, String>();

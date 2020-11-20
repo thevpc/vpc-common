@@ -30,7 +30,7 @@ import java.net.URL;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 18:47:41
+ * %creationtime 6 mai 2006 18:47:41
  */
 public class JURLTextField extends JPanel {
     public static final String SELECTED_URL ="SELECTED_URL";

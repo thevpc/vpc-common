@@ -42,7 +42,7 @@ import java.util.TreeSet;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 21 oct. 2007 00:35:45
+ * %creationtime 21 oct. 2007 00:35:45
  */
 class AvailablePluginsPanel extends JPanel {
 

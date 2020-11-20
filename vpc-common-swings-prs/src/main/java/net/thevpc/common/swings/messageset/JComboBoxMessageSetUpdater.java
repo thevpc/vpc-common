@@ -30,7 +30,7 @@ import net.thevpc.common.swings.prs.LocalizedByValueComboboxRenderer;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  27 juin 2006 00:38:27
+ * %creationtime  27 juin 2006 00:38:27
  */
 public class JComboBoxMessageSetUpdater implements ComponentMessageSetUpdater {
     public void updateMessageSet(JComponent component, String id, MessageSet messageSet) {

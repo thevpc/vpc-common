@@ -38,7 +38,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 22 sept. 2007 23:13:00
+ * %creationtime 22 sept. 2007 23:13:00
  */
 public class PluginsList implements Serializable {
     protected HashMap<String, PluginDescriptor> dataMap = new HashMap<String, PluginDescriptor>();

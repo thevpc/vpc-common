@@ -24,7 +24,7 @@ import java.util.Collection;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 1 juin 2007 16:24:38
+ * %creationtime 1 juin 2007 16:24:38
  */
 public class CollectionDumpStringHandler implements DumpStringHandler{
 

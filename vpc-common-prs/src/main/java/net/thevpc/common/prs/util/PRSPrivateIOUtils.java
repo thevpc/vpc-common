@@ -33,8 +33,8 @@ import java.util.zip.GZIPOutputStream;
  * Classe utilitaire pour la manipulation des E/S
  *
  * @author tbensalah (Taha Ben Salah)
- * @creation_date date 27/01/2004
- * @last_modification_date date 28/01/2004
+ * %creation_date date 27/01/2004
+ * %last_modification_date date 28/01/2004
  */
 public final class PRSPrivateIOUtils {
 

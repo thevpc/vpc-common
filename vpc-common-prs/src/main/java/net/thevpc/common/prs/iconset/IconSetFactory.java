@@ -27,7 +27,7 @@ import net.thevpc.common.prs.log.LoggerProvider;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 23 juin 2006 17:24:08
+ * %creationtime 23 juin 2006 17:24:08
  */
 public interface IconSetFactory {
     public void registerIconSetDescriptor(IconSetDescriptor desc,LoggerProvider loggerProvider);

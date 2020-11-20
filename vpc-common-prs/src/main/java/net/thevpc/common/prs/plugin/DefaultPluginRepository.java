@@ -29,7 +29,7 @@ import java.util.Iterator;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 22 sept. 2007 22:46:59
+ * %creationtime 22 sept. 2007 22:46:59
  */
 public class DefaultPluginRepository implements PluginRepository {
 

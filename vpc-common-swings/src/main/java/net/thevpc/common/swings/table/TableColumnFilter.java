@@ -24,7 +24,7 @@ import javax.swing.table.TableModel;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 6 mai 2006 17:02:58
+ * %creationtime 6 mai 2006 17:02:58
  */
 public interface TableColumnFilter {
     public boolean acceptColumn(int columnIndex, TableModel model);

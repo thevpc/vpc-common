@@ -3,10 +3,10 @@ options {
 }
 
 PARSER_BEGIN(TsonStreamParserImpl)
-package net.vpc.common.tson.impl.parser.javacc;
-import net.vpc.common.tson.impl.parser.*;
-import net.vpc.common.tson.*;
-import net.vpc.common.tson.impl.*;
+package net.thevpc.tson.impl.parser.javacc;
+import net.thevpc.tson.impl.parser.*;
+import net.thevpc.tson.*;
+import net.thevpc.tson.impl.*;
 
 public class TsonStreamParserImpl implements ITsonStreamParser{
     private TsonStreamParserImplConfig config;
@@ -65,7 +65,7 @@ boolean simple=true;
 
 void elementLevel1() :
 {
-    net.vpc.common.tson.impl.parser.javacc.Token comments=null;
+    net.thevpc.tson.impl.parser.javacc.Token comments=null;
     visitor.visitElementStart();
     Token typeName=null;
 }

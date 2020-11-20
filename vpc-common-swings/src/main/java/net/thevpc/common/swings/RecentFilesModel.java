@@ -24,7 +24,7 @@ import java.io.File;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 9 nov. 2006 11:52:18
+ * %creationtime 9 nov. 2006 11:52:18
  */
 public interface RecentFilesModel {
     public File[] getFiles();

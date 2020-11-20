@@ -25,7 +25,7 @@ import java.io.FilenameFilter;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 7 janv. 2007 18:31:14
+ * %creationtime 7 janv. 2007 18:31:14
  */
 public class ExtensionFileChooserFilter extends javax.swing.filechooser.FileFilter
         implements FilenameFilter, java.io.FileFilter {

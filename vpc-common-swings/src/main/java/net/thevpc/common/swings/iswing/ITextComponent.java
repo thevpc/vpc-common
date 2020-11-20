@@ -31,7 +31,7 @@ public interface ITextComponent {
     /**
      * Sets the flag that determines whether or not this
      * text component is editable.
-     * <p/>
+     * <p>
      * If the flag is set to <code>true</code>, this text component
      * becomes user editable. If the flag is set to <code>false</code>,
      * the user cannot change the text of this text component.
@@ -116,7 +116,7 @@ public interface ITextComponent {
 
     /**
      * Selects the text between the specified start and end positions.
-     * <p/>
+     * <p>
      * This method sets the start and end positions of the
      * selected text, enforcing the restriction that the start position
      * must be greater than or equal to zero.  The end position must be
@@ -128,7 +128,7 @@ public interface ITextComponent {
      * character at <code>endPosition</code> is not selected.
      * If the start and end positions of the selected text are equal,
      * all text is deselected.
-     * <p/>
+     * <p>
      * If the caller supplies values that are inconsistent or out of
      * bounds, the method enforces these constraints silently, and
      * without failure. Specifically, if the start position or end
@@ -232,17 +232,17 @@ public interface ITextComponent {
      * upon this <code>TextComponent</code>.
      * <code><em>Foo</em>Listener</code>s are registered using the
      * <code>add<em>Foo</em>Listener</code> method.
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * You can specify the <code>listenerType</code> argument
      * with a class literal, such as
      * <code><em>Foo</em>Listener.class</code>.
      * For example, you can query a
      * <code>TextComponent</code> <code>t</code>
      * for its text listeners with the following code:
-     * <p/>
+     * <p>
      * <pre>TextListener[] tls = (TextListener[])(t.getListeners(TextListener.class));</pre>
-     * <p/>
+     * <p>
      * If no such listeners exist, this method returns an empty array.
      *
      * @param listenerType the type of listeners requested; this parameter

@@ -7,7 +7,7 @@ package net.thevpc.common.classpath;
 
 /**
  *
- * @author Taha BEN SALAH <taha.bensalah@gmail.com>
+ * @author thevpc
  */
 public class DefaultConfigFilterItem {
 

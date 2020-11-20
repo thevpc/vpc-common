@@ -44,7 +44,7 @@ import java.util.*;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime 26 juin 2006 23:57:46
+ * %creationtime 26 juin 2006 23:57:46
  */
 public class MessageSetManager {
     private static MultiClassLoader defaultClassLoader;

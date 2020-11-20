@@ -30,7 +30,7 @@ import java.util.List;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
-* @creationtime 30 dec. 2006 19:15:19
+* %creationtime 30 dec. 2006 19:15:19
 */
 class ClassMappingModel extends AbstractTableModel {
     public static class Mapping{

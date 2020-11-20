@@ -22,7 +22,7 @@ package net.thevpc.common.swings.dialog;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
-* @creationtime 1 avr. 2007 13:11:34
+* %creationtime 1 avr. 2007 13:11:34
 */
 public enum MessageDialogType {
     INFO, WARNING, ERROR;

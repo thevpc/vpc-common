@@ -36,7 +36,7 @@ import java.util.Map;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  13 juil. 2006 22:14:21
+ * %creationtime  13 juil. 2006 22:14:21
  */
 public class JCmdLine {
     public static final int ERR_UNKNOWN_CMD_ARG = 99001;

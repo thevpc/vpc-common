@@ -28,7 +28,7 @@ import net.thevpc.common.prs.messageset.MessageSet;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * @creationtime  26 juin 2006 23:58:47
+ * %creationtime  26 juin 2006 23:58:47
  */
 public interface ActionMessageSetUpdater {
     public void updateResources(Action action, String id, MessageSet messageSet);

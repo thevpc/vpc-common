@@ -22,7 +22,7 @@ package net.thevpc.common.swings.util.dumpstring;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 1 juin 2007 16:09:51
+ * %creationtime 1 juin 2007 16:09:51
  */
 public interface DumpString {
     String getDumpString();

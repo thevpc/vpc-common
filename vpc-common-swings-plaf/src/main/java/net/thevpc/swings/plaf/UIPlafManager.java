@@ -136,7 +136,7 @@ public class UIPlafManager {
                 @Override
                 public void apply() throws Exception {
                     IntelliJTheme.install(ClassLoader.getSystemClassLoader().getResourceAsStream(
-                            "net/vpc/swings/plaf/intellijthemes/" + theme + ".theme.json"
+                            "net/thevpc/swings/plaf/intellijthemes/" + theme + ".theme.json"
                     )
                     );
                 }
@@ -177,7 +177,7 @@ public class UIPlafManager {
                 @Override
                 public void apply() throws Exception {
                     IntelliJTheme.install(ClassLoader.getSystemClassLoader().getResourceAsStream(
-                            "net/vpc/swings/plaf/intellijthemes/" + theme + ".theme.json"
+                            "net/thevpc/swings/plaf/intellijthemes/" + theme + ".theme.json"
                     )
                     );
                 }

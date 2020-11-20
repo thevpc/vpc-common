@@ -31,7 +31,7 @@ import java.io.InterruptedIOException;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)
- * @creationtime 7 oct. 2007 15:23:41
+ * %creationtime 7 oct. 2007 15:23:41
  */
 /*
  * @(#)ProgressMonitorInputStream.java	1.20 05/11/17
