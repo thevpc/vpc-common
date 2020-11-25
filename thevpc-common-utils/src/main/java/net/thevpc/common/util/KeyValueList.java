@@ -60,4 +60,14 @@ public interface KeyValueList<K,V> extends List<V>, Collection2{
 
     public Set<K> keySet() ;
 
+    public default KeyValueList<K,V> append(V v) {
+        add(v);
+        return this;
+    }
+
+    public default KeyValueList<K,V> appendAll(Collection<V> v) {
+        addAll(v);
+        return this;
+    }
+
 }

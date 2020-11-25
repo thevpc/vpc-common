@@ -38,10 +38,10 @@ public class Collections2 {
     }
 
     public static <K, V> AutoValueMap<K, V> autoValueMap(Function<K, V> autoValueSupplier) {
-        return autoHashValueMap(autoValueSupplier);
+        return autoValueHashMap(autoValueSupplier);
     }
 
-    public static <K, V> AutoValueMap<K, V> autoHashValueMap(Function<K, V> autoValueSupplier) {
+    public static <K, V> AutoValueMap<K, V> autoValueHashMap(Function<K, V> autoValueSupplier) {
         return new DefaultAutoValueMap<>(new HashMap<>(), autoValueSupplier);
     }
 
