@@ -30,7 +30,7 @@ package net.thevpc.common.fprint.parser;
  */
 public class TextNodePlain implements TextNode {
 
-    public static final TextNodePlain NULL = new TextNodePlain(null);
+    public static final TextNodePlain NULL = new TextNodePlain("");
     private String value;
 
     public TextNodePlain(String value) {

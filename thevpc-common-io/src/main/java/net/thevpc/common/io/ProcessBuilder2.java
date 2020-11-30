@@ -310,17 +310,17 @@ public class ProcessBuilder2 {
             if (isFailFast()) {
                 if (base.redirectErrorStream()) {
                     if (isGrabOutputString()) {
-                        throw new IOException("Execution Failed with code " + result + " and message : " + getOutputString());
+                        throw new IOException("execution failed with code " + result + " and message : " + getOutputString());
                     }
                 } else {
                     if (isGrabErrorString()) {
-                        throw new IOException("Execution Failed with code " + result + " and message : " + getErrorString());
+                        throw new IOException("execution failed with code " + result + " and message : " + getErrorString());
                     }
                     if (isGrabOutputString()) {
-                        throw new IOException("Execution Failed with code " + result + " and message : " + getOutputString());
+                        throw new IOException("execution failed with code " + result + " and message : " + getOutputString());
                     }
                 }
-                throw new IOException("Execution Failed with code " + result);
+                throw new IOException("execution failed with code " + result);
             }
         }
     }

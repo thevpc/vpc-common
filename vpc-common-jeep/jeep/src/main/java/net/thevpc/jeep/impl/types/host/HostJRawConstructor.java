@@ -29,7 +29,7 @@ public class HostJRawConstructor extends AbstractJConstructor implements JRawCon
         this.constructor = constructor;
         this.declaringType = declaringType;
         if (!declaringType.isRawType()) {
-            throw new IllegalStateException("Error");
+            throw new IllegalStateException("error");
         }
         JeepPlatformUtils.setAccessibleWorkaround(constructor);
         for (JTypesResolver resolver : declaringType.getTypes().resolvers()) {

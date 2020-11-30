@@ -54,7 +54,7 @@ public class JTokenizerSnapshotImpl implements JTokenizerSnapshot {
 
     protected void checkState() {
         if (errorState) {
-            throw new IllegalArgumentException("Error State");
+            throw new IllegalArgumentException("error state");
         }
     }
 }

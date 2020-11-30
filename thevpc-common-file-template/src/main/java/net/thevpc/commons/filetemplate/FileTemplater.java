@@ -492,7 +492,7 @@ public class FileTemplater {
                         try {
                             processRegularFile(x, null);
                         }catch (Exception ex){
-                            throw new RuntimeException("Error processing "+x+": "+ex.toString(),ex);
+                            throw new RuntimeException("error processing "+x+": "+ex.toString(),ex);
                         }
                     }
                 });

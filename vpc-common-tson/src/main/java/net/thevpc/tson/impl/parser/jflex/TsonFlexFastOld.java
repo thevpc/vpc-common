@@ -345,9 +345,9 @@ public final class TsonFlexFastOld {
 
     /* error messages for the codes above */
     private static final String ZZ_ERROR_MSG[] = {
-        "Unknown internal scanner error",
-        "Error: could not match input",
-        "Error: pushback value was too large"
+        "unknown internal scanner error",
+        "error: could not match input",
+        "error: pushback value was too large"
     };
 
     /**

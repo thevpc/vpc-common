@@ -1028,10 +1028,10 @@ public class IOUtils {
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 try {
                     Files.delete(file);
-                    log.log(Level.FINEST, "Delete file " + file);
+                    log.log(Level.FINEST, "delete file " + file);
                     deleted[0]++;
                 } catch (IOException e) {
-                    log.log(Level.FINEST, "Delete file Failed : " + file);
+                    log.log(Level.FINEST, "failed deleting file : " + file);
                     deleted[2]++;
                 }
                 return FileVisitResult.CONTINUE;
@@ -1049,7 +1049,7 @@ public class IOUtils {
                     log.log(Level.FINEST, "Delete folder " + dir);
                     deleted[1]++;
                 } catch (IOException e) {
-                    log.log(Level.FINEST, "Delete folder Failed : " + dir);
+                    log.log(Level.FINEST, "failed folder Failed : " + dir);
                     deleted[2]++;
                 }
                 return FileVisitResult.CONTINUE;
