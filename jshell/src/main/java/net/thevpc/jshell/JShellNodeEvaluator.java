@@ -13,6 +13,9 @@ import net.thevpc.jshell.parser.nodes.InstructionNode;
  */
 public interface JShellNodeEvaluator {
 
+    void evalSuffixOperation(String opString,InstructionNode node, JShellContext context);
+    void evalSuffixAndOperation(InstructionNode node, JShellContext context);
+
     void evalBinaryAndOperation(InstructionNode left, InstructionNode right, JShellContext context);
 
     void evalBinaryOperation(String opString, InstructionNode left, InstructionNode right, JShellContext context);

@@ -590,7 +590,7 @@ public class JShell {
         n.eval(context);
     }
 
-    public void addToHisotry(String[] command) {
+    public void addToHistory(String[] command) {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < command.length; i++) {
             String arg = command[i];

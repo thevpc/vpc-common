@@ -421,13 +421,22 @@ public class Yaccer {
             Token t = getLexer().peekToken();
             if (t != null) {
                 switch (t.type) {
-                    case "&":
-                    case ";":
-                    case "NEWLINE": {
+                    case "&":{
                         getLexer().nextToken();
                         Command next = readCommandL3();
                         if (next == null) {
                             line = new SuffixOpCommand(line, t);
+                        } else {
+                            line = new BinOpCommand(line, t, next);
+                            loop = true;
+                        }
+                        break;
+                    }
+                    case "NEWLINE": {
+                        getLexer().nextToken();
+                        Command next = readCommandL3();
+                        if (next == null) {
+                            //
                         } else {
                             line = new BinOpCommand(line, t, next);
                             loop = true;
@@ -589,7 +598,7 @@ public class Yaccer {
 
     public String evalNodeString(Node node, JShellContext context) {
         if (node instanceof Comments) {
-            //
+            return "";
         } else if (node instanceof TokenNode) {
             switch (((TokenNode) node).token.type) {
                 case "WORD": {
@@ -710,7 +719,8 @@ public class Yaccer {
 
         @Override
         public void eval(final JShellContext context) {
-            context.getShell().getNodeEvaluator().evalBinaryOperation(String.valueOf(op.value), left, right, context);
+            String cmd = op.type.equals("NEWLINE")?";":String.valueOf(op.value);
+            context.getShell().getNodeEvaluator().evalBinaryOperation(cmd, left, right, context);
         }
 
         @Override
@@ -734,6 +744,12 @@ public class Yaccer {
 
         @Override
         public void eval(JShellContext context) {
+            switch (op.type){
+                case "&":{
+                    context.getShell().getNodeEvaluator().evalSuffixAndOperation(a, context);
+                    break;
+                }
+            }
             throw new IllegalArgumentException("Unsupported yet");
         }
     }
@@ -822,7 +838,14 @@ public class Yaccer {
             JShell shell = context.getShell();
             ArrayList<String> cmds = new ArrayList<String>();
             for (Argument arg : args) {
-                cmds.add(arg.evalString(context));
+                String r = arg.evalString(context);
+                cmds.add(r);
+            }
+            if(cmds.isEmpty()){
+                return;
+            }
+            if(cmds.size()==1 && cmds.get(0).isEmpty()){
+                return;
             }
             shell.executePreparedCommand(cmds.toArray(new String[0]), true, true, true, context);
         }

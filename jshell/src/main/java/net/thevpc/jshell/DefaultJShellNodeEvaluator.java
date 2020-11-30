@@ -52,6 +52,22 @@ public class DefaultJShellNodeEvaluator implements JShellNodeEvaluator {
     }
 
     @Override
+    public void evalSuffixOperation(String opString, InstructionNode node, JShellContext context) {
+        switch (opString){
+            case "&":{
+                evalSuffixAndOperation(node,context);
+                return;
+            }
+        }
+        throw new JShellException(1, "Unsupported suffix operator " + opString);
+    }
+
+    @Override
+    public void evalSuffixAndOperation(InstructionNode node, JShellContext context) {
+        node.eval(context);
+    }
+
+    @Override
     public void evalBinaryAndOperation(InstructionNode left, InstructionNode right, JShellContext context) {
         right.eval(context);
         left.eval(context);
