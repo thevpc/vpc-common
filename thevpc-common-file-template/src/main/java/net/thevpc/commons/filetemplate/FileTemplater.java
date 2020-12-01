@@ -156,6 +156,10 @@ public class FileTemplater {
         return null;
     }
 
+    public FileTemplater setDefaultProcessor(String mimetype, ExprEvaluator processor) {
+        return setDefaultProcessor(mimetype,processor==null?null:new StreamToTemplateProcessor(new DefaultExecutor(processor)));
+    }
+
     public FileTemplater setDefaultProcessor(String mimetype, TemplateProcessor processor) {
         if (processor == null) {
             processorsByMimeType.remove(mimetype);
@@ -248,6 +252,10 @@ public class FileTemplater {
             return parent.getDefaultExecutor(mimetype);
         }
         return null;
+    }
+
+    public FileTemplater setDefaultExecutor(String mimetype, ExprEvaluator executor) {
+        return setDefaultExecutor(mimetype,executor==null?null:new StreamToTemplateProcessor(new DefaultExecutor(executor)));
     }
 
     public FileTemplater setDefaultExecutor(String mimetype, TemplateProcessor executor) {

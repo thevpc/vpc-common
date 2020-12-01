@@ -27,6 +27,8 @@ import java.util.function.Function;
 /**
  * @author vpc
  */
+
+@Deprecated
 public class DocusaurusCtrl {
 
     private DocusaurusProject project;

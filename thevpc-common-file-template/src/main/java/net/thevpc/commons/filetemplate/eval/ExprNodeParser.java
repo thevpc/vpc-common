@@ -35,6 +35,7 @@ public class ExprNodeParser {
         st = new StreamTokenizer(r);
         st.ordinaryChar('\n');
         st.quoteChar('`');
+        st.commentChar('#');
         this.context = context;
     }
 
