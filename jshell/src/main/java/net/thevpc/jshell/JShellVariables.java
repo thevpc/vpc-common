@@ -8,6 +8,19 @@ import java.util.*;
 public class JShellVariables {
 
     private Map<String, JShellVar> vars = new HashMap<>();
+    private List<JShellVarListener> listeners = new ArrayList<>();
+
+    public void addListener(JShellVarListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void removeListener(JShellVarListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public JShellVarListener[] getListeners() {
+        return listeners.toArray(new JShellVarListener[0]);
+    }
 
     public void setParent(JShellVariables parent) {
         if (parent != null) {
@@ -75,8 +88,8 @@ public class JShellVariables {
 
     public void export(String var, String value) {
         JShellVar b = findVar(var);
-        if(value==null){
-            value=var;
+        if (value == null) {
+            value = var;
         }
         if (b == null) {
             vars.put(var, new JShellVar(this, var, value, true));
@@ -85,30 +98,56 @@ public class JShellVariables {
             b.setExported(true);
         }
     }
-    
+
     public void set(String var, String value) {
+        set(var, value, false);
+    }
+
+    public void set(String var, String value, boolean defaultExport) {
         JShellVar b = findVar(var);
         if (b == null && value == null) {
             return;
         }
         if (b == null) {
-            vars.put(var, new JShellVar(this, var, value, false));
+            JShellVar jvar = new JShellVar(this, var, value, defaultExport);
+            vars.put(var, jvar);
+            for (JShellVarListener listener : getListeners()) {
+                listener.varAdded(jvar);
+            }
         } else {
-            b.setValue(value);
+            String oldValue = b.getValue();
+            if(Objects.equals(oldValue,value)) {
+                b.setValue(value);
+                for (JShellVarListener listener : getListeners()) {
+                    listener.varValueUpdated(b,oldValue);
+                }
+            }
         }
     }
 
     public void export(String var) {
         JShellVar b = findVar(var);
         if (b == null) {
-            set(var, var);
+            set(var, var, true);
+        } else {
+            if (!b.isExported()) {
+                b.setExported(true);
+                for (JShellVarListener listener : getListeners()) {
+                    listener.varExportUpdated(b,false);
+                }
+            }
         }
-        getVar(var).setExported(true);
     }
 
     public void unexport(String var) {
         if (vars.containsKey(var)) {
-            getVar(var).setExported(false);
+            JShellVar jvar = getVar(var);
+            if(jvar.isExported()) {
+                jvar.setExported(false);
+            }
+            for (JShellVarListener listener : getListeners()) {
+                listener.varExportUpdated(jvar,false);
+            }
         } else {
             throw new NoSuchElementException("Unable to unexport env var " + var + " . Not found");
         }

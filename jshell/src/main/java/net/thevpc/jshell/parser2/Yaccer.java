@@ -539,7 +539,7 @@ public class Yaccer {
         List<Node2> a = new ArrayList<>();
         while (true) {
             Token t = getLexer().peekToken();
-            if (t == null || t.type.equals("NEWLINE")) {
+            if (t == null || t.type.equals("NEWLINE") || t.type.equals(";")) {
                 break;
             }
             if (t.type.equals("#")) {
@@ -596,64 +596,84 @@ public class Yaccer {
 //        return new Argument(ok);
     }
 
+    public String evalTokenString(Token token, JShellContext context) {
+        switch (token.type) {
+            case "WORD": {
+                return (token.value.toString());
+            }
+            case "$WORD": {
+                String s = (String) token.value;
+                switch (s) {
+                    case "0": {
+                        return (context.getServiceName());
+                    }
+                    case "1":
+                    case "2":
+                    case "3":
+                    case "4":
+                    case "5":
+                    case "6":
+                    case "7":
+                    case "8":
+                    case "9": {
+                        return context.getArgsArray()[Integer.parseInt(s) - 1];
+                    }
+                    case "?": {
+                        return String.valueOf(context.getArgsArray().length);
+                    }
+                    default:{
+                        String y = context.vars().get(s);
+                        if(y==null){
+                            y="";
+                        }
+                        return y;
+                    }
+                }
+            }
+            case "`":
+            case "$(": {
+                List<Token> subTokens = new ArrayList<>((Collection<? extends Token>) token.value);
+                Yaccer yy2 = new Yaccer(new PreloadedLexer(subTokens));
+                Command subCommand = yy2.readCommand();
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                JShellContext c2 = context.getShell().createContext(context)
+                        //need to inherit service name and arguments!!
+                        .setServiceName(context.getServiceName())
+                        .setArgs(context.getArgsArray());
+                PrintStream p = new PrintStream(out);
+                c2.setOut(p);
+                subCommand.eval(c2);
+                p.flush();
+                return (context.getShell().escapeString(out.toString()));
+            }
+            case "\"":{
+                List<Token> s = (List<Token>) token.value;
+                StringBuilder sb=new StringBuilder();
+                for (Token token2 : s) {
+                    sb.append(evalTokenString(token2,context));
+                }
+                return sb.toString();
+            }
+            case "'":{
+                return (String) token.value;
+            }
+            case "STR":{
+                return (String) token.value;
+            }
+            default: {
+                return  (String) token.value;
+            }
+        }
+    }
+    public String evalTokenNodeString(TokenNode node, JShellContext context) {
+        return evalTokenString(node.token,context);
+    }
+
     public String evalNodeString(Node node, JShellContext context) {
         if (node instanceof Comments) {
             return "";
         } else if (node instanceof TokenNode) {
-            switch (((TokenNode) node).token.type) {
-                case "WORD": {
-                    return (((TokenNode) node).token.value.toString());
-                }
-                case "$WORD": {
-                    String s = (String) ((TokenNode) node).token.value;
-                    switch (s) {
-                        case "0": {
-                            return (context.getServiceName());
-                        }
-                        case "1":
-                        case "2":
-                        case "3":
-                        case "4":
-                        case "5":
-                        case "6":
-                        case "7":
-                        case "8":
-                        case "9": {
-                            return context.getArgsArray()[Integer.parseInt(s) - 1];
-                        }
-                        case "?": {
-                            return String.valueOf(context.getArgsArray().length);
-                        }
-                        default:{
-                            String y = context.vars().get(s);
-                            if(y==null){
-                                y="";
-                            }
-                            return y;
-                        }
-                    }
-                }
-                case "`":
-                case "$(": {
-                    List<Token> subTokens = new ArrayList<>((Collection<? extends Token>) ((TokenNode) node).token.value);
-                    Yaccer yy2 = new Yaccer(new PreloadedLexer(subTokens));
-                    Command subCommand = yy2.readCommand();
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    JShellContext c2 = context.getShell().createContext(context)
-                            //need to inherit service name and arguments!!
-                            .setServiceName(context.getServiceName())
-                            .setArgs(context.getArgsArray());
-                    PrintStream p = new PrintStream(out);
-                    c2.setOut(p);
-                    subCommand.eval(c2);
-                    p.flush();
-                    return (context.getShell().escapeString(out.toString()));
-                }
-                default: {
-                    String newline = ((TokenNode) node).token.value.toString();
-                    return (newline);
-                }
-            }
+            return evalTokenNodeString((TokenNode) node,context);
         }
         throw new RuntimeException("Error");
     }

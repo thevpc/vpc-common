@@ -15,7 +15,7 @@
  * common application tools. These applications are running onDoovos guest JVM
  * (distributed jvm).
  * <br>
- *
+ * <p>
  * Copyright [2020] [thevpc]
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain a
@@ -27,11 +27,9 @@
  * governing permissions and limitations under the License.
  * <br>
  * ====================================================================
-*/
+ */
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser.JShellParser;
-import net.thevpc.jshell.parser.ParseException;
 import net.thevpc.jshell.parser.nodes.*;
 import net.thevpc.jshell.parser2.JShellParser2;
 
@@ -91,44 +89,13 @@ public class JShell {
     private JShellNodeEvaluator nodeEvaluator;
     private JShellVariables vars = new JShellVariables();
     private JShellContext context;
+    private BufferedReader _in_reader = null;
 
     public JShell() {
         errorHandler = new DefaultJShellErrorHandler();
         commandTypeResolver = new DefaultJShellCommandTypeResolver();
         nodeEvaluator = new DefaultJShellNodeEvaluator();
         wordEvaluator = new DefaultJShellWordEvaluator();
-    }
-
-    public JShellNodeEvaluator getNodeEvaluator() {
-        return nodeEvaluator;
-    }
-
-    public void setNodeEvaluator(JShellNodeEvaluator nodeEvaluator) {
-        this.nodeEvaluator = nodeEvaluator;
-    }
-
-    public JShellCommandTypeResolver getCommandTypeResolver() {
-        return commandTypeResolver;
-    }
-
-    public void setCommandTypeResolver(JShellCommandTypeResolver whichResolver) {
-        this.commandTypeResolver = whichResolver;
-    }
-
-    public JShellExternalExecutor getExternalExecutor() {
-        return externalExecutor;
-    }
-
-    public void setExternalExecutor(JShellExternalExecutor externalExecutor) {
-        this.externalExecutor = externalExecutor;
-    }
-
-    public JShellErrorHandler getErrorHandler() {
-        return errorHandler;
-    }
-
-    public void setErrorHandler(JShellErrorHandler errorHandler) {
-        this.errorHandler = errorHandler;
     }
 
     public static String shellPatternToRegexp(String pattern) {
@@ -189,6 +156,38 @@ public class JShell {
         return sb.toString();
     }
 
+    public JShellNodeEvaluator getNodeEvaluator() {
+        return nodeEvaluator;
+    }
+
+    public void setNodeEvaluator(JShellNodeEvaluator nodeEvaluator) {
+        this.nodeEvaluator = nodeEvaluator;
+    }
+
+    public JShellCommandTypeResolver getCommandTypeResolver() {
+        return commandTypeResolver;
+    }
+
+    public void setCommandTypeResolver(JShellCommandTypeResolver whichResolver) {
+        this.commandTypeResolver = whichResolver;
+    }
+
+    public JShellExternalExecutor getExternalExecutor() {
+        return externalExecutor;
+    }
+
+    public void setExternalExecutor(JShellExternalExecutor externalExecutor) {
+        this.externalExecutor = externalExecutor;
+    }
+
+    public JShellErrorHandler getErrorHandler() {
+        return errorHandler;
+    }
+
+    public void setErrorHandler(JShellErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+    }
+
     public String getStartupScript() {
         return startupScript;
     }
@@ -197,7 +196,7 @@ public class JShell {
         return shutdownScript;
     }
 
-//    public String[] expandPath2(String[] names, String basePath) {
+    //    public String[] expandPath2(String[] names, String basePath) {
 //        File f = new File(basePath);
 //        if (names.length == 0) {
 //            return new String[]{basePath};
@@ -289,7 +288,7 @@ public class JShell {
         getRootContext().setServiceName(serviceName);
     }
 
-//    public String[] expandPath(String name) {
+    //    public String[] expandPath(String name) {
 //        return expandPath(name, getCwd());
 //    }
 //
@@ -408,7 +407,7 @@ public class JShell {
         return n;
     }
 
-//    public void executeArguments(String[] command, boolean parse, boolean addToHistory, JShellContext context) {
+    //    public void executeArguments(String[] command, boolean parse, boolean addToHistory, JShellContext context) {
 //        if (addToHistory) {
 //            StringBuilder sb = new StringBuilder();
 //            for (int i = 0; i < command.length; i++) {
@@ -552,7 +551,7 @@ public class JShell {
     }
 
     public void executeCommand(String[] command,
-            boolean aliases, boolean builtins, boolean externals, JShellContext context) {
+                               boolean aliases, boolean builtins, boolean externals, JShellContext context) {
         if (context == null) {
             context = createContext();
         }
@@ -607,8 +606,8 @@ public class JShell {
     }
 
     public void executePreparedCommand(String[] command,
-            boolean considerAliases, boolean considerBuiltins, boolean considerExternal,
-            JShellContext context
+                                       boolean considerAliases, boolean considerBuiltins, boolean considerExternal,
+                                       JShellContext context
     ) {
         String cmdToken = command[0];
         if (cmdToken.indexOf('/') >= 0 || cmdToken.indexOf('\\') >= 0) {
@@ -731,8 +730,6 @@ public class JShell {
 
     }
 
-    private BufferedReader _in_reader = null;
-
     protected String readInteractiveLine(JShellContext context) {
         if (_in_reader == null) {
             _in_reader = new BufferedReader(new InputStreamReader(System.in));
@@ -791,7 +788,7 @@ public class JShell {
             if (ignoreIfNotFound) {
                 return;
             }
-            throw new JShellException(1, "Shell file not found : " + file);
+            throw new JShellException(1, "shell file not found : " + file);
         }
         FileInputStream stream = null;
         try {
@@ -814,6 +811,26 @@ public class JShell {
             } catch (IOException ex) {
                 throw new JShellException(1, ex);
             }
+        }
+    }
+
+    public void executeString(String text) {
+        executeString(text,getRootContext());
+    }
+
+    public void executeString(String text, JShellContext context) {
+        if (text == null || text.trim().isEmpty()) {
+            return;
+        }
+        try (InputStream stream=new ByteArrayInputStream(text.getBytes())) {
+            InstructionNode ii = parseCommand(stream);
+            if (ii == null) {
+                return;
+            }
+            JShellContext c = createContext(context).setRoot(ii).setParent(null);
+            ii.eval(c);
+        } catch (IOException ex) {
+            throw new JShellException(1, ex);
         }
     }
 
@@ -844,7 +861,7 @@ public class JShell {
         throw new IllegalArgumentException("Unexpected behaviour");
     }
 
-//    public String getPromptString() {
+    //    public String getPromptString() {
 //        return getPromptString(getRootContext());
 //    }
     protected String getPromptString(JShellContext context) {
