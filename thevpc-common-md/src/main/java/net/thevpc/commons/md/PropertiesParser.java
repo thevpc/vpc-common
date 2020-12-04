@@ -50,7 +50,7 @@ public class PropertiesParser {
                 if (st_ttype == EOF) {
                     break;
                 } else {
-                    throw new IllegalArgumentException("Error");
+                    throw new IllegalArgumentException("missing key");
                 }
             }
             if (parseEq()) {
