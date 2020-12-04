@@ -91,7 +91,7 @@ public interface JShellContext {
     void copyFrom(JShellContext other);
 
     JShellContext copy() ;
-    public interface Watcher{
+    interface Watcher{
         void stop();
         boolean isStopped();
     }

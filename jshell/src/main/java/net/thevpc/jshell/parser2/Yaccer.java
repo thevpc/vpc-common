@@ -20,22 +20,6 @@ public class Yaccer {
         this.lexer = lexer;
     }
 
-    public Iterable<Command> commands() {
-        return () -> new Iterator<Command>() {
-            Command n = null;
-
-            @Override
-            public boolean hasNext() {
-                n = readCommand();
-                return n != null;
-            }
-
-            @Override
-            public Command next() {
-                return n;
-            }
-        };
-    }
 
     public Iterable<Node2> nodes() {
         return () -> new Iterator<Node2>() {
@@ -100,7 +84,7 @@ public class Yaccer {
                 return new TokenNode(getLexer().nextToken());
             }
             case "(": {
-                return readPar();
+                return readScriptPar();
             }
         }
         throw new IllegalArgumentException("Unexpected " + u.type);
@@ -108,6 +92,179 @@ public class Yaccer {
 
     private Lexer getLexer() {
         return lexer;
+    }
+
+    private Command readScriptL1() {
+        Token u = getLexer().peekToken();
+        if (u == null) {
+            return null;
+        }
+        while (true) {
+            Token not = getLexer().peekToken();
+            if (not != null && (not.isNewline() || not.isEndCommand())) {
+                getLexer().nextToken();
+            } else {
+                break;
+            }
+        }
+        if (u.type.equals("!")) {
+            Token not = getLexer().nextToken();
+            Command next = readScriptL1();
+            return new UnOpPrefix(not, next);
+        }
+        if (u.type.equals("(")) {
+            return readScriptPar();
+        }
+        if (u.type.equals("#")) {
+            Comments c = readComments();
+            Command next = readScriptL1();
+            return new CommentedNode(next, c);
+        }
+        Command a = readScriptLine();
+        if (a == null) {
+            return a;
+        }
+        u = getLexer().peekToken();
+        if (u == null) {
+            return a;
+        }
+        switch (u.type) {
+            case "&&":
+            case "||": {
+                Token op = getLexer().nextToken();
+                Node2 b = readScriptLine();
+                if (b == null) {
+                    return new UnOpSuffix(a, op);
+                }
+                return new BinOp(a, op, b);
+            }
+        }
+        return a;
+    }
+
+    public Command readScriptL2() {
+        Command a = readScriptL1();
+        if (a == null) {
+            return null;
+        }
+        while (true) {
+            Token u = getLexer().peekToken();
+            if (u == null) {
+                return a;
+            }
+            switch (u.type) {
+                case "|": {
+                    Token op = getLexer().nextToken();
+                    Command b = readScriptL1();
+                    if (b == null) {
+                        return new UnOpSuffix(a, op);
+                    } else {
+                        a = new BinOp(a, op, b);
+                    }
+                    break;
+                }
+                default: {
+                    return a;
+                }
+            }
+        }
+    }
+
+    public Command readScriptL3() {
+        Command a = readScriptL2();
+        if (a == null) {
+            return null;
+        }
+        while (true) {
+            Token u = getLexer().peekToken();
+            if (u == null) {
+                return a;
+            }
+            switch (u.type) {
+                case "&": {
+                    Token op = getLexer().nextToken();
+                    Command b = readScriptL2();
+                    if (b == null) {
+                        return new UnOpSuffix(a, op);
+                    } else {
+                        a = new BinOp(a, op, b);
+                    }
+                    break;
+                }
+                default: {
+                    return a;
+                }
+            }
+        }
+    }
+
+    public Command readScriptL4() {
+        Command a = readScriptL3();
+        if (a == null) {
+            return null;
+        }
+        while (true) {
+            Token u = getLexer().peekToken();
+            if (u == null) {
+                return a;
+            }
+            switch (u.type) {
+                case ">":
+                case ">>":
+                case "<":
+                case "<<":
+                case "&>":
+                case "&2>":
+                case "&>>":
+                case "&2>>": {
+                    Token op = getLexer().nextToken();
+                    Node2 b = readScriptL3();
+                    if (b == null) {
+                        return new UnOpSuffix(a, op);
+                    } else {
+                        a = new BinOp(a, op, b);
+                    }
+                    break;
+                }
+                default: {
+                    return a;
+                }
+            }
+        }
+    }
+
+    public Command readScriptL5() {
+        Command a = null;
+        Token sep = null;
+        while (true) {
+            Token u = getLexer().peekToken();
+            if (u == null) {
+                return a;
+            }
+            switch (u.type) {
+                case ";":
+                case "NEWLINE": {
+                    sep = getLexer().nextToken();
+                    break;
+                }
+                default: {
+                    Command b = readScriptL4();
+                    if (b == null) {
+                        return a;
+                    }
+                    if (a == null) {
+                        a = b;
+                    } else {
+                        if (sep == null) {
+                            sep = new Token("NEWLINE", "\n");
+                        }
+                        a = new BinOpCommand(a, sep, b);
+                    }
+                    sep = null;
+                    break;
+                }
+            }
+        }
     }
 
     public Node2 readNodeL1() {
@@ -232,19 +389,21 @@ public class Yaccer {
         return readNodeL0();
     }
 
-    public Par readPar() {
+    public Command readScriptPar() {
         Token u = getLexer().peekToken();
         if (u == null) {
             return null;
         }
         if (u.type.equals("(")) {
             getLexer().nextToken();
-            Node2 n = readCommand();
+            Node2 n = readScript();
             u = getLexer().peekToken();
-            if (u == null) {
-                return null;
+            if (u == null || u.type.equals(")")) {
+                if (u != null) {
+                    getLexer().nextToken();
+                }
+                return new Par(n);
             }
-            getLexer().nextToken();
             return new Par(n);
         }
         return null;
@@ -256,7 +415,7 @@ public class Yaccer {
         if (t == null) {
             return null;
         }
-        Command line = readLine();
+        Command line = readScriptLine();
         if (line == null) {
             return null;
         }
@@ -275,7 +434,7 @@ public class Yaccer {
                     case "&<<":
                     case "&>>": {
                         getLexer().nextToken();
-                        Command next = readLine();
+                        Command next = readScriptLine();
                         if (next == null) {
                             line = new SuffixOpCommand(line, t);
                         } else {
@@ -358,102 +517,7 @@ public class Yaccer {
         return "";
     }
 
-    public Command readCommandSimple() {
-        Command line = readCommandL3();
-        if (line == null) {
-            return null;
-        }
-        String start = getArgumentsLineFirstArgToken(line);
-        switch (start) {
-            case "if": {
-                IfCommand ifCommand = new IfCommand();
-                ifCommand._then = readCommandSimple();
-                if (!getArgumentsLineFirstArgToken(ifCommand._then).equals("then")) {
-                    throw new IllegalArgumentException("Error");
-                }
-                ifCommand._if = new CondBloc(line, readCommandSimple());
-                boolean endIf = false;
-                while (!endIf) {
-                    Command a = readCommandSimple();
-                    switch (getArgumentsLineFirstArgToken(a)) {
-                        case "else": {
-                            if (ifCommand._else == null) {
-                                ifCommand._else = readCommandSimple();
-                                if (ifCommand._else == null) {
-                                    throw new IllegalArgumentException("Missing Else");
-                                }
-                            } else {
-                                throw new IllegalArgumentException("Else already visited");
-                            }
-                            break;
-                        }
-                        case "elif": {
-                            Command c = readCommandSimple();
-                            if (c == null) {
-                                throw new IllegalArgumentException("Missing Elif");
-                            }
-                            ifCommand._elif.add(new CondBloc(a, c));
-                            break;
-                        }
-                        case "fi": {
-                            //good
-                            endIf = true;
-                            break;
-                        }
-                        default: {
-                            throw new IllegalArgumentException("Expected fi");
-                        }
-                    }
-                }
-                return ifCommand;
-            }
-            case "while": {
-                WhileCommand ifCommand = new WhileCommand();
-                ifCommand._do = readCommandSimple();
-                ifCommand._while = new CondBloc(line, readCommandSimple());
-                ifCommand._done = readCommandSimple();
-                return ifCommand;
-            }
-        }
-        boolean loop = true;
-        while (loop) {
-            loop = false;
-            Token t = getLexer().peekToken();
-            if (t != null) {
-                switch (t.type) {
-                    case "&":{
-                        getLexer().nextToken();
-                        Command next = readCommandL3();
-                        if (next == null) {
-                            line = new SuffixOpCommand(line, t);
-                        } else {
-                            line = new BinOpCommand(line, t, next);
-                            loop = true;
-                        }
-                        break;
-                    }
-                    case "NEWLINE": {
-                        getLexer().nextToken();
-                        Command next = readCommandL3();
-                        if (next == null) {
-                            //
-                        } else {
-                            line = new BinOpCommand(line, t, next);
-                            loop = true;
-                        }
-                        break;
-                    }
-                }
-            }
-        }
-        return line;
-    }
-
-    public Command readCommand() {
-        return readCommandSimple();
-    }
-
-    public ArgumentsLine readLine() {
+    public ArgumentsLine readScriptLine() {
         List<Argument> a = new ArrayList<>();
         while (true) {
             Token t = getLexer().peekToken();
@@ -499,20 +563,8 @@ public class Yaccer {
         return new ArgumentsLine(a);
     }
 
-    public List<Command> readScript() {
-        List<Command> a = new ArrayList<>();
-        while (true) {
-            Command aa = readLine();
-            if (aa != null) {
-                a.add(aa);
-            } else {
-                break;
-            }
-        }
-        if (a.isEmpty()) {
-            return null;
-        }
-        return a;
+    public Command readScript() {
+        return readScriptL5();
     }
 
     public Comments readComments() {
@@ -621,10 +673,10 @@ public class Yaccer {
                     case "?": {
                         return String.valueOf(context.getArgsArray().length);
                     }
-                    default:{
+                    default: {
                         String y = context.vars().get(s);
-                        if(y==null){
-                            y="";
+                        if (y == null) {
+                            y = "";
                         }
                         return y;
                     }
@@ -634,7 +686,7 @@ public class Yaccer {
             case "$(": {
                 List<Token> subTokens = new ArrayList<>((Collection<? extends Token>) token.value);
                 Yaccer yy2 = new Yaccer(new PreloadedLexer(subTokens));
-                Command subCommand = yy2.readCommand();
+                Command subCommand = yy2.readScript();
                 ByteArrayOutputStream out = new ByteArrayOutputStream();
                 JShellContext c2 = context.getShell().createContext(context)
                         //need to inherit service name and arguments!!
@@ -646,34 +698,39 @@ public class Yaccer {
                 p.flush();
                 return (context.getShell().escapeString(out.toString()));
             }
-            case "\"":{
+            case "\"": {
                 List<Token> s = (List<Token>) token.value;
-                StringBuilder sb=new StringBuilder();
+                StringBuilder sb = new StringBuilder();
                 for (Token token2 : s) {
-                    sb.append(evalTokenString(token2,context));
+                    sb.append(evalTokenString(token2, context));
                 }
                 return sb.toString();
             }
-            case "'":{
-                return (String) token.value;
+            case "'": {
+                if (token.value instanceof String) {
+                    return (String) token.value;
+                }
+                StringBuilder sb = new StringBuilder();
+                for (Token t : ((List<Token>) token.value)) {
+                    sb.append(evalTokenString(t, context));
+                }
+                return sb.toString();
             }
-            case "STR":{
+            case "STR": {
                 return (String) token.value;
             }
             default: {
-                return  (String) token.value;
+                return (String) token.value;
             }
         }
     }
-    public String evalTokenNodeString(TokenNode node, JShellContext context) {
-        return evalTokenString(node.token,context);
-    }
+
 
     public String evalNodeString(Node node, JShellContext context) {
         if (node instanceof Comments) {
             return "";
         } else if (node instanceof TokenNode) {
-            return evalTokenNodeString((TokenNode) node,context);
+            return ((TokenNode) node).evalString(context);
         }
         throw new RuntimeException("Error");
     }
@@ -682,7 +739,7 @@ public class Yaccer {
 
     }
 
-    public abstract interface Command extends InstructionNode, Node2 {
+    public interface Command extends InstructionNode, Node2 {
         void eval(JShellContext context);
 
     }
@@ -720,6 +777,10 @@ public class Yaccer {
             this.token = token;
         }
 
+        public String evalString(JShellContext context) {
+            return evalTokenString(token, context);
+        }
+
         @Override
         public String toString() {
             return String.valueOf(token);
@@ -739,7 +800,7 @@ public class Yaccer {
 
         @Override
         public void eval(final JShellContext context) {
-            String cmd = op.type.equals("NEWLINE")?";":String.valueOf(op.value);
+            String cmd = op.type.equals("NEWLINE") ? ";" : String.valueOf(op.value);
             context.getShell().getNodeEvaluator().evalBinaryOperation(cmd, left, right, context);
         }
 
@@ -764,8 +825,8 @@ public class Yaccer {
 
         @Override
         public void eval(JShellContext context) {
-            switch (op.type){
-                case "&":{
+            switch (op.type) {
+                case "&": {
                     context.getShell().getNodeEvaluator().evalSuffixAndOperation(a, context);
                     break;
                 }
@@ -857,17 +918,56 @@ public class Yaccer {
         public void eval(JShellContext context) {
             JShell shell = context.getShell();
             ArrayList<String> cmds = new ArrayList<String>();
-            for (Argument arg : args) {
-                String r = arg.evalString(context);
-                cmds.add(r);
+            Map<String, String> usingItems = new LinkedHashMap<>();
+            List<Argument> args2 = new ArrayList<>(args);
+            boolean source = false;
+            if (args2.size() > 0) {
+                Argument arg = args2.get(0);
+                List<Node2> anodes = arg.nodes;
+                if (anodes.size() == 1
+                        && anodes.get(0) instanceof TokenNode && ((TokenNode) anodes.get(0)).token.type.equals(".")
+                ) {
+                    source = true;
+                    args2.remove(0);
+                }
             }
-            if(cmds.isEmpty()){
-                return;
+            if(!source) {
+                while (args2.size() > 0) {
+                    Argument arg = args2.get(0);
+                    List<Node2> anodes = arg.nodes;
+                    if (anodes.size() >= 2
+                            && anodes.get(0) instanceof TokenNode && ((TokenNode) anodes.get(0)).token.type.equals("WORD")
+                            && anodes.get(1) instanceof TokenNode && ((TokenNode) anodes.get(1)).token.type.equals("=")
+                    ) {
+                        String varName = ((TokenNode) anodes.get(0)).evalString(context);
+                        String varValue = (anodes.size() > 2) ? new Argument(anodes.subList(2, anodes.size())).evalString(context) : "";
+                        usingItems.put(varName, varValue);
+                        args2.remove(0);
+                    } else {
+                        break;
+                    }
+                }
             }
-            if(cmds.size()==1 && cmds.get(0).isEmpty()){
-                return;
+            for (Argument arg : args2) {
+                cmds.add(arg.evalString(context));
             }
-            shell.executePreparedCommand(cmds.toArray(new String[0]), true, true, true, context);
+            if(source) {
+                cmds.add(0, "source");
+                shell.executePreparedCommand(cmds.toArray(new String[0]), true, true, true, context);
+            }else {
+                if (cmds.isEmpty() || (cmds.size() == 1 && cmds.get(0).isEmpty())) {
+                    if (!usingItems.isEmpty()) {
+                        context.vars().set((Map) usingItems);
+                    }
+                } else {
+                    if (!usingItems.isEmpty()) {
+                        context = shell.createContext(context);
+                        context.setVars(context.vars().copy());
+                        context.vars().set((Map) usingItems);
+                    }
+                    shell.executePreparedCommand(cmds.toArray(new String[0]), true, true, true, context);
+                }
+            }
         }
 
         @Override
@@ -878,15 +978,20 @@ public class Yaccer {
         }
     }
 
-    public class Par implements Node2 {
+    public class Par implements Command {
         Node2 element;
 
         public Par(Node2 element) {
             this.element = element;
         }
+
+        @Override
+        public void eval(JShellContext context) {
+            ((Command) element).eval(context);
+        }
     }
 
-    public class UnOpSuffix implements Node2 {
+    public class UnOpSuffix implements Command {
         Node2 a;
         Token op;
 
@@ -900,9 +1005,57 @@ public class Yaccer {
             return a +
                     " " + op;
         }
+
+        @Override
+        public void eval(JShellContext context) {
+            throw new IllegalArgumentException("Not yet");
+        }
     }
 
-    public class BinOp implements Node2 {
+    public class CommentedNode implements Command {
+        Node2 a;
+        List<Comments> comments = new ArrayList<>();
+
+        public CommentedNode(Node2 a, Comments comments) {
+            if (a instanceof CommentedNode) {
+                this.a = ((CommentedNode) a).a;
+                this.comments.add(comments);
+                this.comments.addAll(((CommentedNode) a).comments);
+            } else {
+                this.a = a;
+                this.comments.add(comments);
+            }
+        }
+
+        @Override
+        public void eval(JShellContext context) {
+            if (a != null) {
+                ((Command) a).eval(context);
+            }
+        }
+    }
+
+    public class UnOpPrefix implements Command {
+        Node2 a;
+        Token op;
+
+        public UnOpPrefix(Token op, Node2 a) {
+            this.a = a;
+            this.op = op;
+        }
+
+        @Override
+        public String toString() {
+            return op + " " + a;
+        }
+
+        @Override
+        public void eval(JShellContext context) {
+            throw new IllegalArgumentException("Not yet");
+        }
+    }
+
+    public class BinOp implements Command {
         Node2 a;
         Token op;
         Node2 b;
@@ -918,6 +1071,11 @@ public class Yaccer {
             return a +
                     " " + op +
                     " " + b;
+        }
+
+        @Override
+        public void eval(JShellContext context) {
+            throw new IllegalArgumentException("Not yet");
         }
     }
 

@@ -23,6 +23,9 @@ public class Token {
     public boolean isNewline() {
         return "NEWLINE".equals(type);
     }
+    public boolean isEndCommand() {
+        return ";".equals(type);
+    }
 
     public String toKeyStr(String s) {
         StringBuilder sb = new StringBuilder();
@@ -94,9 +97,14 @@ public class Token {
 
     @Override
     public String toString() {
-
+        String k=toKeyStr(type);
+        String v=toStr(String.valueOf(value));
+        if(k.equals(v)){
+            return k;
+        }
         return toKeyStr(type) + "(" +
                 toStr(String.valueOf(value)) +
                 ')';
     }
+
 }

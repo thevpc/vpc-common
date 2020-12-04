@@ -83,7 +83,9 @@ public class StrReader {
             case '?':
             case '[':
             case ']':
-            case '#': {
+            case '#':
+            case ';':
+                {
                 return false;
             }
             default: {
