@@ -7,8 +7,6 @@ import net.thevpc.jshell.NodeEvalUnsafeRunnable;
 import net.thevpc.jshell.parser.nodes.InstructionNode;
 import net.thevpc.jshell.parser.nodes.Node;
 
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
 import java.util.*;
 
 public class Yaccer {
@@ -668,10 +666,10 @@ public class Yaccer {
                     case "7":
                     case "8":
                     case "9": {
-                        return context.getArgsArray()[Integer.parseInt(s) - 1];
+                        return context.getArg(Integer.parseInt(s) - 1);
                     }
                     case "?": {
-                        return String.valueOf(context.getArgsArray().length);
+                        return String.valueOf(context.getArgsCount());
                     }
                     default: {
                         String y = context.vars().get(s);
@@ -687,16 +685,7 @@ public class Yaccer {
                 List<Token> subTokens = new ArrayList<>((Collection<? extends Token>) token.value);
                 Yaccer yy2 = new Yaccer(new PreloadedLexer(subTokens));
                 Command subCommand = yy2.readScript();
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                JShellContext c2 = context.getShell().createContext(context)
-                        //need to inherit service name and arguments!!
-                        .setServiceName(context.getServiceName())
-                        .setArgs(context.getArgsArray());
-                PrintStream p = new PrintStream(out);
-                c2.setOut(p);
-                subCommand.eval(c2);
-                p.flush();
-                return (context.getShell().escapeString(out.toString()));
+                return context.getShell().getNodeEvaluator().evalCommandAndReturnString(subCommand,context);
             }
             case "\"": {
                 List<Token> s = (List<Token>) token.value;

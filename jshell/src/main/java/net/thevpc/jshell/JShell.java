@@ -32,6 +32,7 @@ package net.thevpc.jshell;
 
 import net.thevpc.jshell.parser.nodes.*;
 import net.thevpc.jshell.parser2.JShellParser2;
+import net.thevpc.jshell.parser2.Yaccer;
 
 import java.io.*;
 import java.util.*;

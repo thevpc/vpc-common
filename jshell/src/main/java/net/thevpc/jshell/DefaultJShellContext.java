@@ -144,6 +144,16 @@ public class DefaultJShellContext extends AbstractJShellContext {
     }
 
     @Override
+    public String getArg(int index) {
+        return getArgsList().get(index);
+    }
+
+    @Override
+    public int getArgsCount() {
+        return getArgsList().size();
+    }
+
+    @Override
     public List<String> getArgsList() {
         return args;
     }

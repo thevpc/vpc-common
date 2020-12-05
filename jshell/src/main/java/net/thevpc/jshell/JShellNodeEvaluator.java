@@ -25,5 +25,7 @@ public interface JShellNodeEvaluator {
     void evalBinaryPipeOperation(final InstructionNode left, InstructionNode right, final JShellContext context);
 
     void evalBinarySuiteOperation(InstructionNode left, InstructionNode right, JShellContext context);
-    
+
+    String evalCommandAndReturnString(InstructionNode left, JShellContext context);
+
 }

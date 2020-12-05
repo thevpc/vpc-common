@@ -5,21 +5,37 @@
  */
 package net.thevpc.jshell;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.PrintStream;
-
 import net.thevpc.jshell.parser.nodes.InstructionNode;
 import net.thevpc.jshell.util.JavaShellNonBlockingInputStream;
 import net.thevpc.jshell.util.JavaShellNonBlockingInputStreamAdapter;
 
+import java.io.*;
+
 /**
- *
  * @author vpc
  */
 public class DefaultJShellNodeEvaluator implements JShellNodeEvaluator {
+    @Override
+    public void evalSuffixOperation(String opString, InstructionNode node, JShellContext context) {
+        switch (opString) {
+            case "&": {
+                evalSuffixAndOperation(node, context);
+                return;
+            }
+        }
+        throw new JShellException(1, "Unsupported suffix operator " + opString);
+    }
+
+    @Override
+    public void evalSuffixAndOperation(InstructionNode node, JShellContext context) {
+        node.eval(context);
+    }
+
+    @Override
+    public void evalBinaryAndOperation(InstructionNode left, InstructionNode right, JShellContext context) {
+        right.eval(context);
+        left.eval(context);
+    }
 
     @Override
     public void evalBinaryOperation(String opString, InstructionNode left, InstructionNode right, JShellContext context) {
@@ -42,41 +58,6 @@ public class DefaultJShellNodeEvaluator implements JShellNodeEvaluator {
         try {
             context.getShell().uniformException(new NodeEvalUnsafeRunnable(left, context));
             return;
-        } catch (JShellUniformException e) {
-            if (e.isQuit()) {
-                e.throwQuit();
-                return;
-            }
-        }
-        right.eval(context);
-    }
-
-    @Override
-    public void evalSuffixOperation(String opString, InstructionNode node, JShellContext context) {
-        switch (opString){
-            case "&":{
-                evalSuffixAndOperation(node,context);
-                return;
-            }
-        }
-        throw new JShellException(1, "Unsupported suffix operator " + opString);
-    }
-
-    @Override
-    public void evalSuffixAndOperation(InstructionNode node, JShellContext context) {
-        node.eval(context);
-    }
-
-    @Override
-    public void evalBinaryAndOperation(InstructionNode left, InstructionNode right, JShellContext context) {
-        right.eval(context);
-        left.eval(context);
-    }
-
-    @Override
-    public void evalBinarySuiteOperation(InstructionNode left, InstructionNode right, JShellContext context) {
-        try {
-            context.getShell().uniformException(new NodeEvalUnsafeRunnable(left, context));
         } catch (JShellUniformException e) {
             if (e.isQuit()) {
                 e.throwQuit();
@@ -138,6 +119,33 @@ public class DefaultJShellNodeEvaluator implements JShellNodeEvaluator {
         if (a[1] != null) {
             a[1].throwAny();
         }
+    }
+
+    @Override
+    public void evalBinarySuiteOperation(InstructionNode left, InstructionNode right, JShellContext context) {
+        try {
+            context.getShell().uniformException(new NodeEvalUnsafeRunnable(left, context));
+        } catch (JShellUniformException e) {
+            if (e.isQuit()) {
+                e.throwQuit();
+                return;
+            }
+        }
+        right.eval(context);
+    }
+
+    @Override
+    public String evalCommandAndReturnString(InstructionNode command, JShellContext context) {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        JShellContext c2 = context.getShell().createContext(context)
+                //need to inherit service name and arguments!!
+                .setServiceName(context.getServiceName())
+                .setArgs(context.getArgsArray());
+        PrintStream p = new PrintStream(out);
+        c2.setOut(p);
+        command.eval(c2);
+        p.flush();
+        return (context.getShell().escapeString(out.toString()));
     }
 
 }

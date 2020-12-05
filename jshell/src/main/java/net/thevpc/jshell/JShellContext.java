@@ -1,6 +1,8 @@
 package net.thevpc.jshell;
 
+import net.thevpc.jshell.parser.nodes.InstructionNode;
 import net.thevpc.jshell.parser.nodes.Node;
+import net.thevpc.jshell.parser2.Yaccer;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -16,6 +18,10 @@ public interface JShellContext {
     String getServiceName();
 
     JShellContext setServiceName(String serviceName);
+
+    String getArg(int index);
+
+    int getArgsCount();
 
     String[] getArgsArray();
 
@@ -91,6 +97,7 @@ public interface JShellContext {
     void copyFrom(JShellContext other);
 
     JShellContext copy() ;
+
     interface Watcher{
         void stop();
         boolean isStopped();
