@@ -57,7 +57,7 @@ public class DefaultJShellWordEvaluator implements JShellWordEvaluator {
     @Override
     public String evalDollarInteger(int index, JShellContext context) {
         if (index < context.getArgsList().size()) {
-            return (String.valueOf(context.getArgsList().get(index)));
+            return (String.valueOf(context.getArg(index)));
         }
         return "";
     }

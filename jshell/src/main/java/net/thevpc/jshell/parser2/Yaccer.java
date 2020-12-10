@@ -6,6 +6,7 @@ import net.thevpc.jshell.JShellUniformException;
 import net.thevpc.jshell.NodeEvalUnsafeRunnable;
 import net.thevpc.jshell.parser.nodes.InstructionNode;
 import net.thevpc.jshell.parser.nodes.Node;
+import net.thevpc.jshell.util.DirectoryScanner;
 
 import java.util.*;
 
@@ -78,14 +79,18 @@ public class Yaccer {
             case "&>":
             case "&>>":
             case "&<":
-            case "&<<": {
+            case "&<<":
+            case "*":
+            case "?": {
                 return new TokenNode(getLexer().nextToken());
             }
             case "(": {
                 return readScriptPar();
             }
+            default: {
+                return new TokenNode(getLexer().nextToken());
+            }
         }
-        throw new IllegalArgumentException("Unexpected " + u.type);
     }
 
     private Lexer getLexer() {
@@ -646,16 +651,16 @@ public class Yaccer {
 //        return new Argument(ok);
     }
 
-    public String evalTokenString(Token token, JShellContext context) {
+    public static String evalTokenString(Token token, JShellContext context) {
         switch (token.type) {
             case "WORD": {
-                return (token.value.toString());
+                return token.value.toString();
             }
             case "$WORD": {
                 String s = (String) token.value;
                 switch (s) {
                     case "0": {
-                        return (context.getServiceName());
+                        return DirectoryScanner.escape(context.getServiceName());
                     }
                     case "1":
                     case "2":
@@ -666,26 +671,33 @@ public class Yaccer {
                     case "7":
                     case "8":
                     case "9": {
-                        return context.getArg(Integer.parseInt(s) - 1);
+                        return DirectoryScanner.escape(context.getArg(Integer.parseInt(s) - 1));
                     }
                     case "?": {
-                        return String.valueOf(context.getArgsCount());
+                        return DirectoryScanner.escape(String.valueOf(context.getArgsCount()));
                     }
                     default: {
                         String y = context.vars().get(s);
                         if (y == null) {
                             y = "";
                         }
-                        return y;
+                        return DirectoryScanner.escape(y);
                     }
                 }
             }
             case "`":
             case "$(": {
                 List<Token> subTokens = new ArrayList<>((Collection<? extends Token>) token.value);
+                if (subTokens.isEmpty()) {
+                    return "";
+                }
                 Yaccer yy2 = new Yaccer(new PreloadedLexer(subTokens));
                 Command subCommand = yy2.readScript();
-                return context.getShell().getNodeEvaluator().evalCommandAndReturnString(subCommand,context);
+                if (subCommand == null) {
+                    //all are comments perhaps!
+                    return "";
+                }
+                return DirectoryScanner.escape(context.getShell().getNodeEvaluator().evalCommandAndReturnString(subCommand, context));
             }
             case "\"": {
                 List<Token> s = (List<Token>) token.value;
@@ -697,11 +709,11 @@ public class Yaccer {
             }
             case "'": {
                 if (token.value instanceof String) {
-                    return (String) token.value;
+                    return DirectoryScanner.escape((String) token.value);
                 }
                 StringBuilder sb = new StringBuilder();
                 for (Token t : ((List<Token>) token.value)) {
-                    sb.append(evalTokenString(t, context));
+                    sb.append(DirectoryScanner.escape(evalTokenString(t, context)));
                 }
                 return sb.toString();
             }
@@ -715,7 +727,7 @@ public class Yaccer {
     }
 
 
-    public String evalNodeString(Node node, JShellContext context) {
+    public static String evalNodeString(Node node, JShellContext context) {
         if (node instanceof Comments) {
             return "";
         } else if (node instanceof TokenNode) {
@@ -759,7 +771,7 @@ public class Yaccer {
         }
     }
 
-    public class TokenNode implements Node2 {
+    public static class TokenNode implements Node2 {
         Token token;
 
         public TokenNode(Token token) {
@@ -776,7 +788,7 @@ public class Yaccer {
         }
     }
 
-    public class BinOpCommand implements Command {
+    public static class BinOpCommand implements Command {
         Command left;
         Token op;
         Command right;
@@ -896,11 +908,15 @@ public class Yaccer {
         }
     }
 
-    public class ArgumentsLine implements Command {
+    public static class ArgumentsLine implements Command {
         List<Argument> args;
 
         public ArgumentsLine(List<Argument> args) {
             this.args = args;
+        }
+
+        public List<Argument> getArgs() {
+            return args;
         }
 
         @Override
@@ -920,7 +936,7 @@ public class Yaccer {
                     args2.remove(0);
                 }
             }
-            if(!source) {
+            if (!source) {
                 while (args2.size() > 0) {
                     Argument arg = args2.get(0);
                     List<Node2> anodes = arg.nodes;
@@ -929,8 +945,8 @@ public class Yaccer {
                             && anodes.get(1) instanceof TokenNode && ((TokenNode) anodes.get(1)).token.type.equals("=")
                     ) {
                         String varName = ((TokenNode) anodes.get(0)).evalString(context);
-                        String varValue = (anodes.size() > 2) ? new Argument(anodes.subList(2, anodes.size())).evalString(context) : "";
-                        usingItems.put(varName, varValue);
+                        String[] varValues = (anodes.size() > 2) ? new Argument(anodes.subList(2, anodes.size())).evalString(context) : new String[]{""};
+                        usingItems.put(varName, String.join(" ", varValues));
                         args2.remove(0);
                     } else {
                         break;
@@ -938,12 +954,12 @@ public class Yaccer {
                 }
             }
             for (Argument arg : args2) {
-                cmds.add(arg.evalString(context));
+                cmds.addAll(Arrays.asList(arg.evalString(context)));
             }
-            if(source) {
+            if (source) {
                 cmds.add(0, "source");
                 shell.executePreparedCommand(cmds.toArray(new String[0]), true, true, true, context);
-            }else {
+            } else {
                 if (cmds.isEmpty() || (cmds.size() == 1 && cmds.get(0).isEmpty())) {
                     if (!usingItems.isEmpty()) {
                         context.vars().set((Map) usingItems);
@@ -1068,7 +1084,7 @@ public class Yaccer {
         }
     }
 
-    public class Argument implements Node2 {
+    public static class Argument implements Node2 {
         List<Node2> nodes;
 
         public Argument(List<Node2> nodes) {
@@ -1083,12 +1099,49 @@ public class Yaccer {
             return nodes.toString();
         }
 
-        public String evalString(JShellContext context) {
+        public String[] evalString(JShellContext context) {
             StringBuilder sb = new StringBuilder();
             for (Node2 node : nodes) {
                 sb.append(evalNodeString(node, context));
             }
-            return sb.toString();
+            String value = sb.toString();
+            boolean wasAntiSlash = false;
+            boolean applyWildCard = false;
+            StringBuilder sb2 = new StringBuilder();
+            for (char c : value.toCharArray()) {
+                if (wasAntiSlash) {
+                    wasAntiSlash = false;
+                    sb2.append(c);
+                } else {
+                    switch (c) {
+                        case '\\': {
+                            wasAntiSlash = true;
+                            break;
+                        }
+                        case '*':
+                        case '?': {
+                            sb2.append(c);
+                            applyWildCard = true;
+                            break;
+                        }
+                        default: {
+                            sb2.append(c);
+                            break;
+                        }
+                    }
+                }
+            }
+            if (applyWildCard) {
+                DirectoryScanner d = new DirectoryScanner(
+                        DirectoryScanner.PATH_FILE_SYSTEM.isAbsolute(value) ? value :
+                                DirectoryScanner.PATH_FILE_SYSTEM.resolve(context.getCwd(), value)
+                );
+                String[] r = d.toArray();
+                if(r.length>0){
+                    return r;
+                }
+            }
+            return new String[]{sb2.toString()};
         }
     }
 

@@ -44,7 +44,7 @@ public class DoubleQuotedContext extends AbstractContext {
         StringBuilder sb = new StringBuilder();
         while (true) {
             r = reader.peekChar();
-            if (r > 0) {
+            if (r >= 0) {
                 rc = (char) r;
                 if (isDblQChar(rc)) {
                     sb.append((char) reader.read());
@@ -54,6 +54,9 @@ public class DoubleQuotedContext extends AbstractContext {
             } else {
                 break;
             }
+        }
+        if(sb.length()==0){
+            return null;
         }
         return new Token("STR", sb.toString());
     }

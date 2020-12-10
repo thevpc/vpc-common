@@ -11,10 +11,15 @@ package net.thevpc.jshell;
  */
 public interface JShellFileSystem {
 
-    String normalizeWorkingDir(String cwd);
+    String getInitialWorkingDir();
 
-    String getDefaultWorkingDir();
-    
+    String getHomeWorkingDir();
+
+    boolean isAbsolute(String path);
+
     String getAbsolutePath(String path);
+
+    boolean isDirectory(String path);
+    boolean exists(String path);
 
 }

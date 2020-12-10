@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.*;
 
 import net.thevpc.jshell.parser.nodes.Node;
+import net.thevpc.jshell.util.DirectoryScanner;
 import net.thevpc.jshell.util.ShellUtils;
 
 /**
@@ -30,7 +31,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
     private JShellFunctionManager functionManager = new DefaultJShellFunctionManager();
     private JShellAliasManager aliasManager = new DefaultAliasManager();
     private JShellBuiltinManager builtinsManager;
-    private String cwd;
+    private String cwd=System.getProperty("user.dir");
     private JShellFileSystem fileSystem;
     public String oldCommandLine = null;
     public String serviceName = "unknown-command";
@@ -125,7 +126,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
     @Override
     public void setFileSystem(JShellFileSystem fileSystem) {
         this.fileSystem = fileSystem;
-        setCwd(this.fileSystem.getDefaultWorkingDir());
+        setCwd(this.fileSystem.getInitialWorkingDir());
     }
 
     @Override
@@ -140,12 +141,17 @@ public class DefaultJShellContext extends AbstractJShellContext {
 
     @Override
     public String[] getArgsArray() {
-        return getArgsList().toArray(new String[getArgsList().size()]);
+        return getArgsList().toArray(new String[0]);
     }
 
     @Override
     public String getArg(int index) {
-        return getArgsList().get(index);
+        List<String> argsList = getArgsList();
+        if(index>=0 && index<argsList.size()) {
+            String r = argsList.get(index);
+            return r==null?"":r;
+        }
+        return "";
     }
 
     @Override
@@ -264,7 +270,23 @@ public class DefaultJShellContext extends AbstractJShellContext {
 
     @Override
     public void setCwd(String cwd) {
-        this.cwd = getFileSystem().normalizeWorkingDir(cwd);
+        JShellFileSystem fs = getFileSystem();
+        if(cwd==null || cwd.isEmpty()){
+            this.cwd = fs.getHomeWorkingDir();
+        }else {
+            String r =
+                    fs.isAbsolute(cwd)?cwd:
+                    fs.getAbsolutePath(this.cwd + "/" + cwd);
+            if(fs.exists(r)) {
+                if(fs.isDirectory(r)) {
+                    this.cwd = r;
+                }else{
+                    throw new IllegalArgumentException("not a directory : "+cwd);
+                }
+            }else{
+                throw new IllegalArgumentException("no such file or directory : "+cwd);
+            }
+        }
     }
 
     @Override
@@ -287,7 +309,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
 
     @Override
     public String[] expandPaths(String path) {
-        return ShellUtils.expandPath(path, new File(getCwd()));
+        return new DirectoryScanner(path).toArray();
     }
 
     @Override

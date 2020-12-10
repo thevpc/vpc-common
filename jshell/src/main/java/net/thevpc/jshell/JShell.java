@@ -32,7 +32,9 @@ package net.thevpc.jshell;
 
 import net.thevpc.jshell.parser.nodes.*;
 import net.thevpc.jshell.parser2.JShellParser2;
+import net.thevpc.jshell.parser2.Token;
 import net.thevpc.jshell.parser2.Yaccer;
+import net.thevpc.jshell.util.ShellUtils;
 
 import java.io.*;
 import java.util.*;
@@ -281,8 +283,12 @@ public class JShell {
         }
     }
 
-    public void executeFile(String file, String[] args) {
-        executeFile(file, createContext().setArgs(args), false);
+    public void executeFile(String file, String[] args,JShellContext context) {
+        if(context==null){
+            context=getRootContext();
+        }
+        JShellContext context1 = createContext(context);
+        executeFile(file, context1.setArgs(args), false);
     }
 
     public void setServiceName(String serviceName) {
@@ -398,14 +404,21 @@ public class JShell {
         return new DefaultJShellContext(parentContext);
     }
 
-    public CommandNode createCommandNode(String[] args) {
-        CommandNode n = new CommandNode();
+    public InstructionNode createCommandNode(String[] args) {
+        List<Yaccer.Argument> args2=new ArrayList<>();
         for (String arg : args) {
-            CommandItemHolderNode n2 = new CommandItemHolderNode();
-            n2.add(new WordNode(arg));
-            n.add(n2);
+            args2.add(new Yaccer.Argument(
+                    Arrays.asList(
+                            new Yaccer.TokenNode(
+                                    new Token(
+                                            "WORD",
+                                            arg
+                                    )
+                            )
+                    )
+            ));
         }
-        return n;
+        return new Yaccer.ArgumentsLine(args2);
     }
 
     //    public void executeArguments(String[] command, boolean parse, boolean addToHistory, JShellContext context) {
@@ -547,8 +560,8 @@ public class JShell {
         return errorCode;
     }
 
-    public void executeCommand(String[] command) {
-        executeCommand(command, true, true, true, null);
+    public void executeCommand(String[] command,JShellContext context) {
+        executeCommand(command, true, true, true, context);
     }
 
     public void executeCommand(String[] command,
@@ -557,7 +570,7 @@ public class JShell {
             context = createContext();
         }
         context.setArgs(command);
-        CommandNode n = null;
+        InstructionNode n = null;
 //        if (true) {
 //            n = new CommandNode();
 //            for (int i = 0; i < command.length; i++) {
@@ -584,9 +597,9 @@ public class JShell {
 //        } else {
         n = createCommandNode(command);
 //        }
-        n.aliases = aliases;
-        n.builtins = builtins;
-        n.external = externals;
+//        n.aliases = aliases;
+//        n.builtins = builtins;
+//        n.external = externals;
         n.eval(context);
     }
 
@@ -630,7 +643,7 @@ public class JShell {
                     node0 = JShellParser2.fromString(a).parse();
 
                 } catch (Exception ex) {
-                    Logger.getLogger(CommandNode.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(JShell.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 if (node0 instanceof CommandNode) {
                     CommandNode nn = (CommandNode) node0;
@@ -640,11 +653,25 @@ public class JShell {
                         CommandItemHolderNode n = items.get(i);
                         cmds.add(0, n.getPathString(context));
                     }
+                }else if (node0 instanceof Yaccer.ArgumentsLine) {
+                    Yaccer.ArgumentsLine nn = (Yaccer.ArgumentsLine) node0;
+                    List<Yaccer.Argument> items = nn.getArgs();
+                    List<String> newCmd=new ArrayList<>();
+                    for (Yaccer.Argument item : items) {
+                        newCmd.addAll(Arrays.asList(item.evalString(context)));
+                    }
+                    for (int i = 1; i < cmds.size(); i++) {
+                        newCmd.add(cmds.get(i));
+                    }
+                    cmds.clear();
+                    cmds.addAll(newCmd);
                 } else {
-                    throw new IllegalArgumentException("Invalid  alias " + a);
+                    throw new IllegalArgumentException("invalid  alias " + a);
                 }
+            }else{
+                a=cmdToken;
             }
-            JShellBuiltin shellCommand = considerBuiltins ? context.builtins().find(cmdToken) : null;
+            JShellBuiltin shellCommand = considerBuiltins ? context.builtins().find(a) : null;
             if (shellCommand != null && shellCommand.isEnabled()) {
                 ArrayList<String> arg2 = new ArrayList<String>(cmds);
                 arg2.remove(0);
@@ -720,7 +747,7 @@ public class JShell {
 
         if (input == null) {
             try {
-                executeInteractive(out);
+                executeInteractive(out,context);
             } finally {
                 executeFile(shutdownScript, context, true);
             }
@@ -746,15 +773,18 @@ public class JShell {
         //
     }
 
-    protected void executeInteractive(PrintStream out) {
+    protected void executeInteractive(PrintStream out,JShellContext context) {
+        if (context == null) {
+            context = getRootContext();
+        }
         printHeader(out);
 
         while (true) {
             String line = null;
             try {
-                line = readInteractiveLine(getRootContext());
+                line = readInteractiveLine(context);
             } catch (Exception ex) {
-                onResult(ex, getRootContext());
+                onResult(ex,context);
                 break;
             }
             if (line == null) {
@@ -762,7 +792,7 @@ public class JShell {
             }
             if (line.trim().length() > 0) {
                 try {
-                    executeLine(line, true, null);
+                    executeLine(line, true, context);
                 } catch (JShellQuitException q) {
                     if (q.getResult() == 0) {
                         return;
@@ -785,6 +815,9 @@ public class JShell {
     }
 
     public void executeFile(String file, JShellContext context, boolean ignoreIfNotFound) {
+        if(file!=null){
+            file= ShellUtils.getAbsolutePath(new File(context.getCwd()),file);
+        }
         if (file == null || !new File(file).isFile()) {
             if (ignoreIfNotFound) {
                 return;
@@ -815,11 +848,10 @@ public class JShell {
         }
     }
 
-    public void executeString(String text) {
-        executeString(text,getRootContext());
-    }
-
     public void executeString(String text, JShellContext context) {
+        if(context==null){
+            context=getRootContext();
+        }
         if (text == null || text.trim().isEmpty()) {
             return;
         }
@@ -1064,7 +1096,7 @@ public class JShell {
                 return null;
             }
         } catch (Exception ex) {
-            Logger.getLogger(CommandNode.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JShell.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (node0 instanceof InstructionNode) {
             return (InstructionNode) node0;
@@ -1080,7 +1112,7 @@ public class JShell {
                 return null;
             }
         } catch (Exception ex) {
-            Logger.getLogger(CommandNode.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(JShell.class.getName()).log(Level.SEVERE, null, ex);
         }
         if (node0 instanceof InstructionNode) {
             return (InstructionNode) node0;

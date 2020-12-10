@@ -6,6 +6,7 @@
 package net.thevpc.jshell;
 
 import java.io.File;
+import java.nio.file.Paths;
 
 import net.thevpc.jshell.util.ShellUtils;
 
@@ -16,28 +17,32 @@ import net.thevpc.jshell.util.ShellUtils;
 public class DefaultJShellFileSystem implements JShellFileSystem {
 
     @Override
-    public String getDefaultWorkingDir() {
+    public String getInitialWorkingDir() {
         return System.getProperty("user.dir");
     }
 
     @Override
-    public String normalizeWorkingDir(String cwd) {
-        File f = new File(cwd);
-        File f2 = null;
-        if (f.isAbsolute()) {
-            f2 = f;
-        } else {
-            f2 = new File(new File(cwd), f.getPath());
-        }
-        if (f2.exists() && f2.isDirectory()) {
-            return cwd;
-        } else {
-            throw new RuntimeException("Unable to change to " + f2.getPath());
-        }
+    public String getHomeWorkingDir() {
+        return System.getProperty("user.home");
     }
 
     @Override
     public String getAbsolutePath(String path) {
-        return ShellUtils.getAbsolutePath(path);
+        return Paths.get(path).normalize().toString();
+    }
+
+    @Override
+    public boolean isAbsolute(String path) {
+        return new File(path).isAbsolute();
+    }
+
+    @Override
+    public boolean isDirectory(String path) {
+        return new File(path).isDirectory();
+    }
+
+    @Override
+    public boolean exists(String path) {
+        return new File(path).exists();
     }
 }

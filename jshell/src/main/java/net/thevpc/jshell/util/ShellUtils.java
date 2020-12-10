@@ -19,43 +19,43 @@ import java.util.regex.Pattern;
  */
 public class ShellUtils {
 
-    public static String escapeString(String name) {
-        if (name == null) {
-            name = "";
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append("\"");
-        for (char c : name.toCharArray()) {
-            switch (c) {
-                case '\"':
-                case '\\': {
-                    sb.append('\\').append(c);
-                    break;
-                }
-                case '\t': {
-                    sb.append('\\').append('t');
-                    break;
-                }
-                case '\n': {
-                    sb.append('\\').append('n');
-                    break;
-                }
-                case '\r': {
-                    sb.append('\\').append('r');
-                    break;
-                }
-                case '\f': {
-                    sb.append('\\').append('f');
-                    break;
-                }
-                default: {
-                    sb.append(c);
-                }
-            }
-        }
-        sb.append("\"");
-        return sb.toString();
-    }
+//    public static String escapeString(String name) {
+//        if (name == null) {
+//            name = "";
+//        }
+//        StringBuilder sb = new StringBuilder();
+//        sb.append("\"");
+//        for (char c : name.toCharArray()) {
+//            switch (c) {
+//                case '\"':
+//                case '\\': {
+//                    sb.append('\\').append(c);
+//                    break;
+//                }
+//                case '\t': {
+//                    sb.append('\\').append('t');
+//                    break;
+//                }
+//                case '\n': {
+//                    sb.append('\\').append('n');
+//                    break;
+//                }
+//                case '\r': {
+//                    sb.append('\\').append('r');
+//                    break;
+//                }
+//                case '\f': {
+//                    sb.append('\\').append('f');
+//                    break;
+//                }
+//                default: {
+//                    sb.append(c);
+//                }
+//            }
+//        }
+//        sb.append("\"");
+//        return sb.toString();
+//    }
 
     public static boolean isEmpty(String string) {
         return string == null || string.trim().isEmpty();
@@ -146,85 +146,85 @@ public class ShellUtils {
         }
     }
 
-    public static String[] expandPath(String path, File cwd) {
-        return isFilePath(path) ? findFilePaths(path, cwd, null, false) : new String[]{path};
-    }
+//    public static String[] expandPath(String path, File cwd) {
+//        return isFilePath(path) ? findFilePaths(path, cwd, null, false) : new String[]{path};
+//    }
 
     public static boolean isFilePath(String path) {
         return path != null && path.indexOf('/') >= 0 && !path.contains("://");
     }
 
-    public static String[] findFilePaths(String path, File cwd, FileFilter fileFilter, boolean error) {
-        File[] files = findFiles(path, cwd, fileFilter, error);
-        String[] strings = new String[files.length];
-        for (int i = 0; i < strings.length; i++) {
-            strings[i] = files[i].getPath();
-        }
-        return strings;
-    }
+//    public static String[] findFilePaths(String path, File cwd, FileFilter fileFilter, boolean error) {
+//        File[] files = findFiles(path, cwd, fileFilter, error);
+//        String[] strings = new String[files.length];
+//        for (int i = 0; i < strings.length; i++) {
+//            strings[i] = files[i].getPath();
+//        }
+//        return strings;
+//    }
 
-    public static File[] findFiles(String path, File cwd, FileFilter fileFilter, boolean error) {
-        File[] all = findFiles(path, cwd, fileFilter);
-        if (all.length == 0) {
-            if (error) {
-                throw new IllegalArgumentException("No file found " + path);
-            } else {
-                return new File[]{new File(path)};
-            }
-        }
-        return all;
-    }
+//    public static File[] findFiles(String path, File cwd, FileFilter fileFilter, boolean error) {
+//        File[] all = findFiles(path, cwd, fileFilter);
+//        if (all.length == 0) {
+//            if (error) {
+//                throw new IllegalArgumentException("No file found " + path);
+//            } else {
+//                return new File[]{new File(path)};
+//            }
+//        }
+//        return all;
+//    }
 
-    public static File[] findFiles(String path, File cwd, FileFilter fileFilter) {
-        File f = getAbsoluteFile(cwd, path);
-        if (f.isAbsolute()) {
-            File f0 = f;
-            while (f0.getParentFile() != null && f0.getParentFile().getParent() != null) {
-                f0 = f0.getParentFile();
-            }
-            if(f.getParent()==null){
-                //this is root
-                return new File[]{f};
-            }
-            return findFiles(f.getPath().substring(f0.getParent().length()), f0.getParent(), cwd, fileFilter);
-        } else {
-            return findFiles(path, ".", cwd, fileFilter);
-        }
-    }
+//    public static File[] findFiles(String path, File cwd, FileFilter fileFilter) {
+//        File f = getAbsoluteFile(cwd, path);
+//        if (f.isAbsolute()) {
+//            File f0 = f;
+//            while (f0.getParentFile() != null && f0.getParentFile().getParent() != null) {
+//                f0 = f0.getParentFile();
+//            }
+//            if(f.getParent()==null){
+//                //this is root
+//                return new File[]{f};
+//            }
+//            return findFiles(f.getPath().substring(f0.getParent().length()), f0.getParent(), cwd, fileFilter);
+//        } else {
+//            return findFiles(path, ".", cwd, fileFilter);
+//        }
+//    }
 
-    public static File[] findFiles(String path, String base, File cwd, final FileFilter fileFilter) {
-        int x = path.indexOf('/');
-        if (x > 0) {
-            String parent = path.substring(0, x);
-            String child = path.substring(x + 1);
-            List<File> all = new ArrayList<>();
-            for (File file : findFiles(parent, base, cwd, fileFilter)) {
-                Collections.addAll(all, findFiles(child, file.getPath(), cwd, fileFilter));
-            }
-            return all.toArray(new File[all.size()]);
-        } else {
-            if (path.contains("*") || path.contains("?")) {
-                final Pattern s = Pattern.compile(simpexpToRegexp(path));
-                File[] files = getAbsoluteFile(cwd, base).listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File pathname) {
-                        return (fileFilter == null || fileFilter.accept(pathname))
-                                && s.matcher(pathname.getName()).matches();
-                    }
-                });
-                if (files == null) {
-                    return new File[0];
-                }
-                return files;
-            } else {
-                File f = new File(getAbsolutePath(base), path);
-                if (f.exists()) {
-                    return new File[]{f};
-                }
-                return new File[0];
-            }
-        }
-    }
+//    public static File[] findFiles(String path, String base, File cwd, final FileFilter fileFilter) {
+//        int x = path.indexOf('/');
+//        if (x > 0) {
+//            String parent = path.substring(0, x);
+//            String child = path.substring(x + 1);
+//            List<File> all = new ArrayList<>();
+//            for (File file : findFiles(parent, base, cwd, fileFilter)) {
+//                Collections.addAll(all, findFiles(child, file.getPath(), cwd, fileFilter));
+//            }
+//            return all.toArray(new File[all.size()]);
+//        } else {
+//            if (path.contains("*") || path.contains("?")) {
+//                final Pattern s = Pattern.compile(simpexpToRegexp(path));
+//                File[] files = getAbsoluteFile(cwd, base).listFiles(new FileFilter() {
+//                    @Override
+//                    public boolean accept(File pathname) {
+//                        return (fileFilter == null || fileFilter.accept(pathname))
+//                                && s.matcher(pathname.getName()).matches();
+//                    }
+//                });
+//                if (files == null) {
+//                    return new File[0];
+//                }
+//                return files;
+//            } else {
+//                File f = new File(getAbsolutePath(base), path);
+//                if (f.exists()) {
+//                    return new File[]{f};
+//                }
+//                return new File[0];
+//            }
+//        }
+//    }
 
     public static String simpexpToRegexp(String pattern) {
         return simpexpToRegexp(pattern, false);
