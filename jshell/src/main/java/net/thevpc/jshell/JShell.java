@@ -59,21 +59,6 @@ public class JShell {
     public static final String ENV_EXEC_PACKAGES = "EXEC_PKG";
     public static final String ENV_EXEC_EXTENSIONS = "EXEC_EXT";
 
-    static {
-//        if (DSystem.isDoovosEnabled()) {
-//            DProcess pp = DProcess.getProcess();
-//            String title = pp.getMetadata("title");
-//            if (title == null) {
-//                pp.setMetadata("title", APP_TITLE);
-//                pp.setMetadata("version", APP_VERSION);
-//                pp.setMetadata("author", "Taha BEN SALAH");
-//                pp.setMetadata("date", "2010-12-08");
-//                pp.setMetadata("history.1", "2009-04-12 : created");
-//                pp.setMetadata("history.2", "2010-12-08 : update");
-//            }
-//        }
-    }
-
     public String[] args;
     public boolean exitAfterProcessingLines = false;
     public String input = null;

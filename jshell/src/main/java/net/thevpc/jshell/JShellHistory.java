@@ -6,7 +6,7 @@ import java.util.List;
 public interface JShellHistory {
     File getHistoryFile();
 
-    DefaultShellHistory setHistoryFile(File historyFile);
+    JShellHistory setHistoryFile(File historyFile);
 
     void add(String e);
 
