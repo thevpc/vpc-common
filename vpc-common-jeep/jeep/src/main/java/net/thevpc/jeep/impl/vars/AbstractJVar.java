@@ -9,7 +9,7 @@ import net.thevpc.jeep.JVar;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractJVar implements JVar {
 

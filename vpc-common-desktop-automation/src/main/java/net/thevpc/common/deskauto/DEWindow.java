@@ -9,7 +9,7 @@ import java.awt.Rectangle;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface DEWindow {
 

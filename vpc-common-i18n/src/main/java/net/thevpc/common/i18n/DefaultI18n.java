@@ -17,7 +17,7 @@ import net.thevpc.common.props.WritablePValue;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultI18n implements I18n {
 

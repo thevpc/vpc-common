@@ -8,7 +8,7 @@ package net.thevpc.jeep;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public final class JTokenConfigDefinition implements Cloneable, JTokenConfig {
 

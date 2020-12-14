@@ -20,7 +20,7 @@ import net.thevpc.common.deskauto.DesktopEnvironment;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MSWinDesktopEnvironment extends DesktopEnvironment {
 

@@ -7,7 +7,7 @@ package net.thevpc.common.swings.util;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class CancelException extends RuntimeException{
     public CancelException() {

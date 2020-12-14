@@ -15,7 +15,7 @@ import net.thevpc.common.msg.Message;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultAppErrors extends DelegateProperty<Message> implements AppErrors {
 

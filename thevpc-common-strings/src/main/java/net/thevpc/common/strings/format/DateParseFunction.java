@@ -15,7 +15,7 @@ import net.thevpc.common.strings.StringToObject;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 class DateParseFunction extends AbstractFunction {
     

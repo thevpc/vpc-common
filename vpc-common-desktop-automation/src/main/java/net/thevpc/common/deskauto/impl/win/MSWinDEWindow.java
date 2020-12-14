@@ -23,7 +23,7 @@ import net.thevpc.common.deskauto.DEWindowRegion;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MSWinDEWindow implements DEWindow {
 

@@ -10,7 +10,7 @@ import net.thevpc.jeep.*;
 import java.util.Arrays;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNodeInstanceMethodCall extends JNodeStatement {
 

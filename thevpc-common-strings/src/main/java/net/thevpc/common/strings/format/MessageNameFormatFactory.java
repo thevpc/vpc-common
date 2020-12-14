@@ -9,7 +9,7 @@ import net.thevpc.common.strings.MessageNameFormat;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MessageNameFormatFactory {
 

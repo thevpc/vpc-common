@@ -11,7 +11,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 @Target(ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)

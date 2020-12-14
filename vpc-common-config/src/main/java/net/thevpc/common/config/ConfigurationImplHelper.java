@@ -10,7 +10,7 @@ import java.util.StringTokenizer;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ConfigurationImplHelper {
     public static String getStringFromFont(Font font) {

@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class StringUtils {
 

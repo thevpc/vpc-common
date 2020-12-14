@@ -6,7 +6,7 @@
 package net.thevpc.jeep;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class NoSuchVariableException extends JEvalException {
     private String varName;

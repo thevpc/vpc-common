@@ -24,7 +24,7 @@ import java.io.PrintStream;
 import java.text.MessageFormat;
 
 /**
- * @author vpc
+ * @author thevpc
  *         Date: 29 janv. 2005
  *         Time: 12:48:28
  */

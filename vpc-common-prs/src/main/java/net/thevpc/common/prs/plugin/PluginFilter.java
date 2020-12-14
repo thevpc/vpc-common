@@ -6,7 +6,7 @@ package net.thevpc.common.prs.plugin;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface PluginFilter<Plug extends Plugin> {
     boolean accept(Plug plugin);

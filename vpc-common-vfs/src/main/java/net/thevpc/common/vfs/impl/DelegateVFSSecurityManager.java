@@ -12,7 +12,7 @@ import net.thevpc.common.vfs.VFileType;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DelegateVFSSecurityManager implements VFSSecurityManager {
 

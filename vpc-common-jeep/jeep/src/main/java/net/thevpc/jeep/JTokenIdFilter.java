@@ -7,7 +7,7 @@ package net.thevpc.jeep;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface JTokenIdFilter {
     boolean isIdentifierStart(char cc) ;

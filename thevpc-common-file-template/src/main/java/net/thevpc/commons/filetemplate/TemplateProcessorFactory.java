@@ -7,7 +7,7 @@ package net.thevpc.commons.filetemplate;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface TemplateProcessorFactory {
     public TemplateProcessor getProcessor(String mimeType);

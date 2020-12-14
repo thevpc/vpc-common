@@ -17,7 +17,7 @@ import net.thevpc.jeep.core.JTokenState;
 import net.thevpc.common.textsource.JTextSourcePositionTracker;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JTokenizerImpl extends AbstractJTokenizer {
 

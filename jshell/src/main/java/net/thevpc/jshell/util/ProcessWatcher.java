@@ -9,7 +9,7 @@ import java.io.IOException;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ProcessWatcher {
 

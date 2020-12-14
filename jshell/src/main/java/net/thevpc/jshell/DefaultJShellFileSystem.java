@@ -12,7 +12,7 @@ import net.thevpc.jshell.util.ShellUtils;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultJShellFileSystem implements JShellFileSystem {
 

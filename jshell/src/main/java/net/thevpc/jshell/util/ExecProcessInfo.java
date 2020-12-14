@@ -11,7 +11,7 @@ import java.io.OutputStream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ExecProcessInfo {
     public final String[] cmdarray;

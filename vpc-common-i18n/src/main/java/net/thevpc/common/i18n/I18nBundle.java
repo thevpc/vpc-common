@@ -7,7 +7,7 @@ package net.thevpc.common.i18n;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface I18nBundle {
     String getString(String name);

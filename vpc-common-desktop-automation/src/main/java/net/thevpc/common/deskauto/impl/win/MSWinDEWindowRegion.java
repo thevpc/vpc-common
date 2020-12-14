@@ -13,7 +13,7 @@ import net.thevpc.common.deskauto.impl.shared.DefaultDEWindowRegionRobot;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MSWinDEWindowRegion implements DEWindowRegion{
     private MSWinDEWindow win;

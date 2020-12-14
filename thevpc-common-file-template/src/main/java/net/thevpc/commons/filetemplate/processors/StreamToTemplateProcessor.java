@@ -20,7 +20,7 @@ import net.thevpc.commons.filetemplate.util.FileProcessorUtils;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class StreamToTemplateProcessor implements TemplateProcessor {
 

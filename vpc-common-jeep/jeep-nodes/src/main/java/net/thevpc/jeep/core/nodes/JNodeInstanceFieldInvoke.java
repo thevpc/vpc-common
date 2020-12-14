@@ -7,7 +7,7 @@ package net.thevpc.jeep.core.nodes;
 import net.thevpc.jeep.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNodeInstanceFieldInvoke extends JNodeStatement {
 

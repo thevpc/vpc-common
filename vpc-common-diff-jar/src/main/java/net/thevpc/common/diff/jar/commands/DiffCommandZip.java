@@ -19,7 +19,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class DiffCommandZip extends AbstractDiffCommand {
     public static final DiffCommandZip INSTANCE = new DiffCommandZip();

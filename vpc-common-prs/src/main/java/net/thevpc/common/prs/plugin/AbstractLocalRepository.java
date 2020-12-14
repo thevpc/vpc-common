@@ -11,7 +11,7 @@ import java.util.NoSuchElementException;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractLocalRepository implements LocalRepository {
 

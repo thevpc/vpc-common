@@ -9,7 +9,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractDiffItem implements DiffItem {
 

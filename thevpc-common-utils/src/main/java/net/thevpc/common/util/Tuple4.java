@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class Tuple4<T1, T2, T3, T4> {
 

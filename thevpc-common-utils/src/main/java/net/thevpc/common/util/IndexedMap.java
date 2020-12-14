@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.Map.Entry;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class IndexedMap<K, V> {
 

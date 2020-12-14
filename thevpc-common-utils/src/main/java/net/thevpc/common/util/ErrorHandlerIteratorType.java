@@ -7,7 +7,7 @@ package net.thevpc.common.util;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public enum ErrorHandlerIteratorType {
     /**

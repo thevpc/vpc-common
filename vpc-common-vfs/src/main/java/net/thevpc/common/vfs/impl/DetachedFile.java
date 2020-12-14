@@ -24,7 +24,7 @@ import net.thevpc.common.vfs.VirtualFileSystem;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DetachedFile implements VFile {
 

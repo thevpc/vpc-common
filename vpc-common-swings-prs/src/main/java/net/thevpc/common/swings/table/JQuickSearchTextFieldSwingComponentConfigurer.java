@@ -14,7 +14,7 @@ import net.thevpc.common.swings.prs.PRSManager;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JQuickSearchTextFieldSwingComponentConfigurer implements SwingComponentConfigurer {
 

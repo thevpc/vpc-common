@@ -9,7 +9,7 @@ import net.thevpc.common.prs.log.TLog;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TLogArea extends LogArea implements TLog {
 

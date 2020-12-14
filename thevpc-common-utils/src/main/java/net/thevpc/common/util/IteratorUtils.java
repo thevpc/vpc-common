@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class IteratorUtils {
 

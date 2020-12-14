@@ -17,7 +17,7 @@ import java.io.PrintStream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class RandomAccessLineReaderTest {
 

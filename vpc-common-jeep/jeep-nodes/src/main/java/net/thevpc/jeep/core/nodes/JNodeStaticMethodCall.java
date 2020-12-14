@@ -10,7 +10,7 @@ import net.thevpc.jeep.util.JeepUtils;
 import java.util.Arrays;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNodeStaticMethodCall extends JNodeStatement {
 

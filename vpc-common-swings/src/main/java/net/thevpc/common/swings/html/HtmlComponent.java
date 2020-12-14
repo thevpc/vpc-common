@@ -9,7 +9,7 @@ import javax.swing.ButtonModel;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class HtmlComponent {
 

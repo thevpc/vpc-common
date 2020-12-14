@@ -9,7 +9,7 @@ import net.thevpc.common.prs.softreflect.HostToSoftClass;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class HostToSoftClassLoader extends AbstractSoftClassLoader {
     private ClassLoader sunLoader;

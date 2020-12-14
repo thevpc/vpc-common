@@ -14,7 +14,7 @@ import java.util.logging.LogRecord;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class SimpleLogFormatter extends Formatter {
 

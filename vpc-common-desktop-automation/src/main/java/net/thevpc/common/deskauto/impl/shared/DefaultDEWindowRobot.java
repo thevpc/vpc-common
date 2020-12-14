@@ -13,7 +13,7 @@ import net.thevpc.common.deskauto.impl.win.MSWinDEWindow;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultDEWindowRobot extends AbstractContextualRobot {
 

@@ -9,7 +9,7 @@ import net.thevpc.common.deskauto.ProcessId;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MSProcessId implements ProcessId {
 

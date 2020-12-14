@@ -35,7 +35,7 @@ import java.util.Properties;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class FileMessageDiscardContext implements MessageDiscardContext {
     private File file;

@@ -34,7 +34,7 @@ import net.thevpc.commons.md.doc.JDDoc;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JPDoc implements JDDoc {
 

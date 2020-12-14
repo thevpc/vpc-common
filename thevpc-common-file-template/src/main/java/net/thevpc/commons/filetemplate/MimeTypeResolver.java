@@ -7,7 +7,7 @@ package net.thevpc.commons.filetemplate;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface MimeTypeResolver {
     String resolveMimetype(String path);

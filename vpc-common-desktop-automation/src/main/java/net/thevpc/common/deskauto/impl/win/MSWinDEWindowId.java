@@ -12,7 +12,7 @@ import net.thevpc.common.deskauto.DEWindowId;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MSWinDEWindowId implements DEWindowId {
 

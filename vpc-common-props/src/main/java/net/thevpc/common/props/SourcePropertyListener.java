@@ -7,7 +7,7 @@ package net.thevpc.common.props;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class SourcePropertyListener implements PropertyListener {
 

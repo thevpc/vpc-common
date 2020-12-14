@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultMapper<K, V> implements Mapper<K, V> {
 

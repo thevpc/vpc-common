@@ -23,7 +23,7 @@ import net.thevpc.common.textsource.JTextSourceRoot;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JTextSourceResourcesFolder implements JTextSourceRoot {
 

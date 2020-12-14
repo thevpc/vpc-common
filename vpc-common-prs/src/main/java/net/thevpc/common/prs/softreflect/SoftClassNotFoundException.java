@@ -7,7 +7,7 @@ package net.thevpc.common.prs.softreflect;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class SoftClassNotFoundException extends RuntimeException{
 

@@ -43,7 +43,7 @@ import net.thevpc.commons.md.doc.JDType;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JPMethodDoc implements JDMethodDoc {
 

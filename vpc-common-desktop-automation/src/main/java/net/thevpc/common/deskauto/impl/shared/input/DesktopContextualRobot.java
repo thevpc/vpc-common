@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DesktopContextualRobot extends AbstractContextualRobot {
 

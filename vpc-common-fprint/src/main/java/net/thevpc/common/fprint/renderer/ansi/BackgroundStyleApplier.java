@@ -7,7 +7,7 @@ package net.thevpc.common.fprint.renderer.ansi;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class BackgroundStyleApplier implements AnsiStyleStyleApplier {
     

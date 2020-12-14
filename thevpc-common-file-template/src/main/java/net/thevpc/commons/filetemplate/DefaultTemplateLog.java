@@ -9,7 +9,7 @@ import java.io.PrintStream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultTemplateLog implements TemplateLog {
     public static final TemplateLog INSTANCE=new DefaultTemplateLog();

@@ -25,7 +25,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractContextualRobot implements ContextualRobot {
 

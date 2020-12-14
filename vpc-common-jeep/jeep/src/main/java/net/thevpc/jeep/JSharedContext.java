@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JSharedContext {
 

@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNameSignature extends JArgumentTypeNames {
 

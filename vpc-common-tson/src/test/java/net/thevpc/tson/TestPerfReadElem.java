@@ -61,7 +61,7 @@ import java.io.*;
  * yaml-snake                 30.86377669                2165.7845085731924         4.617264534128536
  * .
  *
- * @author vpc
+ * @author thevpc
  */
 public class TestPerfReadElem {
 

@@ -10,7 +10,7 @@ import java.util.TreeSet;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class IdentifierUtils {
 

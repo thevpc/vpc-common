@@ -31,7 +31,7 @@ import java.util.stream.Stream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class FileTemplater {
 

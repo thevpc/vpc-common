@@ -11,7 +11,7 @@ import net.thevpc.common.prs.softreflect.SoftClassNotFoundException;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractSoftClassLoader implements SoftClassLoader {
 

@@ -11,7 +11,7 @@ import net.thevpc.common.props.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PrpBindUtils {
 

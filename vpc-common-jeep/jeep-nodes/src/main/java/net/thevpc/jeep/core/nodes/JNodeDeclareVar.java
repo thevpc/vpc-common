@@ -8,7 +8,7 @@ package net.thevpc.jeep.core.nodes;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JNodeDeclareVar extends JNodeStatement {
 

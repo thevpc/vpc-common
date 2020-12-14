@@ -7,7 +7,7 @@ package net.thevpc.common.app;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface AppPropertiesNodeFolder extends AppPropertiesNode {
 

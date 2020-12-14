@@ -7,7 +7,7 @@ package net.thevpc.common.mvn;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 class URLPart {
 

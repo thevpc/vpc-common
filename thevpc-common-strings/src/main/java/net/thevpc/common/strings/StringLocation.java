@@ -7,7 +7,7 @@ package net.thevpc.common.strings;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class StringLocation {
 

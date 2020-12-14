@@ -12,7 +12,7 @@ import net.thevpc.jeep.impl.functions.JSignature;
 import java.util.function.Function;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public interface JFunctions {
 

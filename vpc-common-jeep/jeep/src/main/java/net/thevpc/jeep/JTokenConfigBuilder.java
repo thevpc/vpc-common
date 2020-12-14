@@ -10,7 +10,7 @@ import net.thevpc.jeep.core.tokens.JavaIdPattern;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public final class JTokenConfigBuilder implements Cloneable, JTokenConfig {
     public static final JTokenPattern DEFAULT_ID_PATTERN = new JavaIdPattern();

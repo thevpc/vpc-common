@@ -7,7 +7,7 @@ package net.thevpc.common.swings.tree;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface TreeCellTextRenderer {
     String renderText(Object object);

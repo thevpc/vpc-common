@@ -15,7 +15,7 @@ import net.thevpc.common.swings.prs.PRSManager;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TLogEditorPane extends LogEditorPane implements TLog {
 

@@ -21,7 +21,7 @@
 package net.thevpc.common.swings;
 
 /**
- * @author vpc
+ * @author thevpc
  * Date: 21 janv. 2005
  * Time: 00:08:44
  */

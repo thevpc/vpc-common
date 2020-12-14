@@ -7,7 +7,7 @@ package net.thevpc.jshell;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface JShellFunctionManager {
 

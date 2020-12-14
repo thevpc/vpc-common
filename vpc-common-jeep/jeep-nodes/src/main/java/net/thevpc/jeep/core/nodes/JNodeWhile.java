@@ -8,7 +8,7 @@ package net.thevpc.jeep.core.nodes;
 import net.thevpc.jeep.util.JeepUtils;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNodeWhile extends JNodeStatement {
 

@@ -12,7 +12,7 @@ import net.thevpc.common.deskauto.impl.shared.input.DesktopContextualRobot;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class DesktopEnvironment {
 

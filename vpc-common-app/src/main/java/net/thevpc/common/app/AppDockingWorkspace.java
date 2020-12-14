@@ -11,7 +11,7 @@ import net.thevpc.common.props.PMap;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface AppDockingWorkspace extends AppWorkspace {
 

@@ -8,7 +8,7 @@ package net.thevpc.tson;
 import net.thevpc.tson.impl.util.Chrono;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class TestPerfReadElemWithDefault {
 

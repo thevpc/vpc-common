@@ -11,7 +11,7 @@ import javax.swing.tree.TreeCellRenderer;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface SubTreeCellRenderer {
      Component getTreeCellRendererComponent(TreeCellRenderer parent,JTree tree, Object value, boolean sel, boolean expanded,

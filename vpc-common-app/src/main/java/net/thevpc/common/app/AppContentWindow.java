@@ -10,7 +10,7 @@ import net.thevpc.common.props.WritablePValue;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface AppContentWindow {
 

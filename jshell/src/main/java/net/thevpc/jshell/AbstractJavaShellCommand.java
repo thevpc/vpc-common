@@ -7,7 +7,7 @@ package net.thevpc.jshell;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractJavaShellCommand implements JShellBuiltin{
     private final String name;

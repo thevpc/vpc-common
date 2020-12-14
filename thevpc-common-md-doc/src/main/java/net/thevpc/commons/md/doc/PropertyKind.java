@@ -7,7 +7,7 @@ package net.thevpc.commons.md.doc;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PropertyKind {
     

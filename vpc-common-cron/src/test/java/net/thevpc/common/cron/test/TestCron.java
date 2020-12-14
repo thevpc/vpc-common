@@ -12,7 +12,7 @@ import net.thevpc.common.cron.Crontab;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TestCron {
 

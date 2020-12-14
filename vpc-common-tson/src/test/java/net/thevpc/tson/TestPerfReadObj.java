@@ -16,7 +16,7 @@ import java.io.StringReader;
 import java.util.List;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class TestPerfReadObj {
 

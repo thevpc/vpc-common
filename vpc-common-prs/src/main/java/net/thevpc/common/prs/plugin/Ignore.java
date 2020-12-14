@@ -9,7 +9,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 @Retention(value = RetentionPolicy.RUNTIME)
 public @interface Ignore {

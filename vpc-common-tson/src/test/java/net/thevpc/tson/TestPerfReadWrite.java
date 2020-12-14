@@ -11,7 +11,7 @@ import net.thevpc.tson.impl.util.Chrono;
 import java.io.StringReader;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class TestPerfReadWrite {
 

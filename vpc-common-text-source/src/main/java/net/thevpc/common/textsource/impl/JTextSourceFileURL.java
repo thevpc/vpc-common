@@ -24,7 +24,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JTextSourceFileURL implements JTextSourceRoot {
     

@@ -11,7 +11,7 @@ import java.io.PrintStream;
 import net.thevpc.jshell.JShellContext;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public interface InstructionNode extends Node {
 

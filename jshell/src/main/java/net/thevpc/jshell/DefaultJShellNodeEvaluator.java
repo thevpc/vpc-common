@@ -12,7 +12,7 @@ import net.thevpc.jshell.util.JavaShellNonBlockingInputStreamAdapter;
 import java.io.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class DefaultJShellNodeEvaluator implements JShellNodeEvaluator {
     @Override

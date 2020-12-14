@@ -33,7 +33,7 @@ import java.util.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class CustomMetalTheme extends DefaultMetalTheme {
 

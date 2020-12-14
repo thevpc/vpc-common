@@ -17,7 +17,7 @@ import net.thevpc.jeep.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JeepUtilsFactory {
 

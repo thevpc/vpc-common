@@ -16,7 +16,7 @@ import net.thevpc.common.swings.table.JQuickSearchTextFieldSwingComponentConfigu
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PRSManagerInstaller {
 

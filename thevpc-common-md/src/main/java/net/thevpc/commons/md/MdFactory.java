@@ -22,7 +22,7 @@ import java.io.Writer;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class MdFactory {
     private static boolean loaded = false;

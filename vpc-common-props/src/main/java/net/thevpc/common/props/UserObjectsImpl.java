@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class UserObjectsImpl implements UserObjects{
 

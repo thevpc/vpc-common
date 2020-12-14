@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ListAnsiStyleStyleApplier implements AnsiStyleStyleApplier {
     public List<AnsiStyleStyleApplier> suppliers=new ArrayList<AnsiStyleStyleApplier>();

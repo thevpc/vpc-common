@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class I18nResourceBundle implements I18nBundle {
 

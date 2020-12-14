@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 @JeepImported({ElementType.TYPE})
 public class JeepPlatformStdImports {

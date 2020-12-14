@@ -11,7 +11,7 @@ import net.thevpc.common.strings.StringToObject;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractFunction implements MessageNameFormat.Function {
     

@@ -27,7 +27,7 @@ package net.thevpc.commons.md.doc;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface JDDocElementTag extends JDDocElement {
 

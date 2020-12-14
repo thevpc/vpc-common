@@ -28,7 +28,7 @@ import java.awt.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface IJTable extends IJComponent {
 

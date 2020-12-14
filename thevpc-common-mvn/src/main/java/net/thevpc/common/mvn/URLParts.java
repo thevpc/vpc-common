@@ -18,7 +18,7 @@ import java.util.jar.JarFile;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 class URLParts {
     

@@ -4,7 +4,7 @@ import java.lang.reflect.AccessibleObject;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JeepPlatformUtils {
 

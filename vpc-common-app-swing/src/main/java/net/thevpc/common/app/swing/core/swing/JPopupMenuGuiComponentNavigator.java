@@ -13,7 +13,7 @@ import net.thevpc.common.app.swing.core.GuiComponentNavigator;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 class JPopupMenuGuiComponentNavigator implements GuiComponentNavigator<JPopupMenu> {
     

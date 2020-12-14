@@ -32,7 +32,7 @@
 package net.thevpc.jshell;
 
 /**
- * @author vpc (taha.bensalah@gmail.com)
+ * @author thevpc (taha.bensalah@gmail.com)
  * @param <T>
  * %lastmodified 26 oct. 2004 Time: 23:06:32
  */

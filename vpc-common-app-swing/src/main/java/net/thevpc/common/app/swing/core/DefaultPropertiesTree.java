@@ -10,7 +10,7 @@ import net.thevpc.common.app.AppPropertiesTree;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultPropertiesTree implements AppPropertiesTree {
 

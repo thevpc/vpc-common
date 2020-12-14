@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface SoftClassBuilder {
     SoftClass buildClass(InputStream stream) throws IOException;

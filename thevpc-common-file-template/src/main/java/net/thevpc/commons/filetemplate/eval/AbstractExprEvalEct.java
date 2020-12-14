@@ -7,7 +7,7 @@ package net.thevpc.commons.filetemplate.eval;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractExprEvalEct implements ExprEvalFct{
     private final String name;

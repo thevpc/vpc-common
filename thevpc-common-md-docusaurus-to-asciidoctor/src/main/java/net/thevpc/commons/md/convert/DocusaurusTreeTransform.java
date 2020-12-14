@@ -24,7 +24,7 @@ import net.thevpc.commons.md.docusaurus.DocusaurusUtils;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DocusaurusTreeTransform extends MdElementTransformBase {
 

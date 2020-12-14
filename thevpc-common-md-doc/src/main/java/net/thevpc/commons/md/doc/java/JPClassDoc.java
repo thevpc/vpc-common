@@ -45,7 +45,7 @@ import net.thevpc.commons.md.doc.JDMethodDoc;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JPClassDoc implements JDClassDoc {
 

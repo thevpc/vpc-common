@@ -18,7 +18,7 @@ import net.thevpc.common.strings.StringComparators;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TestS3 {
 

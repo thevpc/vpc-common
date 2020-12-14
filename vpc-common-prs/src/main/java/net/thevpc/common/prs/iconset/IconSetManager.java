@@ -28,7 +28,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class IconSetManager {
 

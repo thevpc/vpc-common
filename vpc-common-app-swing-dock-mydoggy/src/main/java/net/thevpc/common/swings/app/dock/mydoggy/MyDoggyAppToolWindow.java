@@ -19,7 +19,7 @@ import org.noos.xing.mydoggy.ToolWindowAnchor;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MyDoggyAppToolWindow implements AppToolWindow {
 

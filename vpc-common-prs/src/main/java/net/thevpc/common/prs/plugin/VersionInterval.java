@@ -29,7 +29,7 @@ import java.text.ParseException;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class VersionInterval implements Serializable {
 

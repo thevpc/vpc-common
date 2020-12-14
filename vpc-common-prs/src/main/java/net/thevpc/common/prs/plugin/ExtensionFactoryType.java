@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 
 /**
  * Any Extension Factory MUST have ExtensionFactoryType that specifies the type created by the factory
- * @author vpc
+ * @author thevpc
  */
 @Target(ElementType.TYPE)
 @Retention(value = RetentionPolicy.RUNTIME)

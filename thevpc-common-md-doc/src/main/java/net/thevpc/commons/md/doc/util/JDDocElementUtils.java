@@ -32,7 +32,7 @@ import net.thevpc.commons.md.doc.JDDocElementXml;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JDDocElementUtils {
 

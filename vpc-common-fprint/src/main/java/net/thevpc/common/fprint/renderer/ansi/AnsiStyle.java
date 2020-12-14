@@ -13,7 +13,7 @@ import java.util.Objects;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class AnsiStyle {
     public static final AnsiStyle PLAIN=new AnsiStyle();

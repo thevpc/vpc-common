@@ -24,7 +24,7 @@ package net.thevpc.common.swings.plaf;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PlafItem {
     private String plaf;

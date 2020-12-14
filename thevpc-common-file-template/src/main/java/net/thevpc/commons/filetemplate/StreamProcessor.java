@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface StreamProcessor {
 

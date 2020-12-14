@@ -9,7 +9,7 @@ import net.thevpc.jeep.*;
 import net.thevpc.jeep.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JContextImpl extends AbstractJContext {
 

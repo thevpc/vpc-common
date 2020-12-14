@@ -7,7 +7,7 @@ package net.thevpc.common.io;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public enum RandomAccessOrientation {
     FORWARD, BACKWARD

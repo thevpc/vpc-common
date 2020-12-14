@@ -11,7 +11,7 @@ import static net.thevpc.commons.filetemplate.util.FileProcessorUtils.toHex;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class StringUtils {
 

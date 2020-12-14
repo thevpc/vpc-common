@@ -24,7 +24,7 @@ import net.thevpc.common.textsource.impl.impl.IteratorUtils;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JTextSourceFolderURL implements JTextSourceRoot {
     

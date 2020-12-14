@@ -9,7 +9,7 @@ import net.thevpc.jshell.parser.nodes.InstructionNode;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class NodeEvalUnsafeRunnable implements UnsafeRunnable {
     

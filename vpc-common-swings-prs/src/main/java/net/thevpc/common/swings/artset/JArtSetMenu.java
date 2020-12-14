@@ -33,7 +33,7 @@ import net.thevpc.common.prs.artset.ArtSet;
 import net.thevpc.common.prs.artset.ArtSetManager;
 
 /**
- * @author vpc
+ * @author thevpc
  *         Date: 21 janv. 2005
  *         Time: 18:50:21
  */

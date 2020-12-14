@@ -44,7 +44,7 @@ import java.util.stream.StreamSupport;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JPRootDoc implements JDRootDoc {
 

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface LoggerProvider {
     public Logger getLogger(String name);

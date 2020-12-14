@@ -10,7 +10,7 @@ import java.io.OutputStream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface StreamExecutor {
     public Object execute(InputStream source, OutputStream target, FileTemplater context) ;

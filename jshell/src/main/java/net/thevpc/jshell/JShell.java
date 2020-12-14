@@ -50,12 +50,8 @@ public class JShell {
     public static final String APP_TITLE = "JavaShell";
     public static final String APP_VERSION = "0.4";
     public static final int NEXT_STATEMENT = -2;
-    public static final String NO_WAIT = "@nowait";
-    public static final String NEW_TERM = "@newterm";
-    public static final String STDOUT = "@out";
-    public static final String STDIN = "@in";
-    public static final String STDERR = "@err";
     public static final String ENV_PATH = "PATH";
+    public static final String ENV_HOME = "HOME";
     public static final String ENV_EXEC_PACKAGES = "EXEC_PKG";
     public static final String ENV_EXEC_EXTENSIONS = "EXEC_EXT";
 
@@ -938,9 +934,9 @@ public class JShell {
         vars.set(System.getenv());
         setUndefinedStartupEnv("USER", System.getProperty("user.name"));
         setUndefinedStartupEnv("LOGNAME", System.getProperty("user.name"));
-        setUndefinedStartupEnv("PATH", ".");
+        setUndefinedStartupEnv(JShell.ENV_PATH, ".");
         setUndefinedStartupEnv("PWD", System.getProperty("user.dir"));
-        setUndefinedStartupEnv("HOME", System.getProperty("user.home"));
+        setUndefinedStartupEnv(JShell.ENV_HOME, System.getProperty("user.home"));
         setUndefinedStartupEnv("PS1", ">");
     }
 
@@ -955,123 +951,123 @@ public class JShell {
         return param.toString();
     }
 
-    public String evalAsString(String param, JShellContext context) {
-        Properties envs = new Properties();
-        Properties processEnvs = context.vars().getAll();
-        for (Entry<Object, Object> entry : processEnvs.entrySet()) {
-            envs.put(entry.getKey(), entry.getValue());
-        }
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < param.length(); i++) {
-            char c = param.charAt(i);
-            if (c == '$') {
-                StringBuilder var = new StringBuilder();
-                i++;
-                if (i < param.length()) {
-                    if (param.charAt(i) != '{') {
-                        while (i < param.length()
-                                && ((param.charAt(i) >= 'a' && param.charAt(i) <= 'z')
-                                || (param.charAt(i) >= 'A' && param.charAt(i) <= 'Z')
-                                || (param.charAt(i) >= 'O' && param.charAt(i) <= '9')
-                                || (param.charAt(i) == '_'))) {
-                            var.append(param.charAt(i++));
-                        }
-                        i--;
-                    } else {
-                        i++;//ignore '{'
-                        while (i < param.length() && (param.charAt(i) != '}')) {
-                            var.append(param.charAt(i++));
-                        }
-                    }
-                } else {
-                    var.append('$');
-                }
-                Object obj = envs.get(var.toString());
-                sb.append(obj == null ? "" : String.valueOf(obj));
-            } else {
-                sb.append(c);
-            }
-        }
-        return sb.toString();
-    }
-
-    public String[] findExecFilesInPath(String filePath, String[] classNames, JShellContext context) {
-        ArrayList<String> found = new ArrayList<String>();
-        File f = new File(filePath);
-        if (!f.exists()) {
-            return new String[0];
-        }
-        if (f.isDirectory()) {
-            for (String ff : classNames) {
-                File f2 = new File(f, ff);
-                if (f2.exists()) {
-                    found.add(f2.getPath());
-                }
-            }
-        }
-        return found.toArray(new String[found.size()]);
-    }
-
-    public String[] findClassesInPath(String filePath, String[] classNames, JShellContext context) {
-        System.out.printf("findClassesInPath : path=%s should contain? %s\n", filePath, Arrays.asList(classNames).toString());
-        ArrayList<String> found = new ArrayList<String>();
-        String[] expanded = context.expandPaths(filePath/*, null*/);
-        System.out.printf("path=%s expanded to %s\n", filePath, Arrays.asList(expanded));
-        for (String fp : expanded) {
-            System.out.printf("\tfindClassesInPath : path=%s should contain? %s\n", fp, Arrays.asList(classNames));
-            File f = new File(fp);
-            if (f.exists()) {
-                String[] fileCls = new String[classNames.length];
-                for (int i = 0; i < fileCls.length; i++) {
-                    fileCls[i] = classNames[i].replace('.', '/') + ".class";
-
-                }
-                List<String> clsNames = Arrays.asList(fileCls);
-                if (f.isDirectory()) {
-                    for (String ff : fileCls) {
-                        if (new File(f, ff).exists()) {
-                            found.add(ff);
-                        }
-                    }
-                } else {
-                    ZipFile zipFile = null;
-                    boolean fileFound = false;
-                    try {
-                        System.out.printf("lookup into %s for %s\n", fp, clsNames);
-                        // open a zip file for reading
-                        zipFile = new ZipFile(fp);
-                        // get an enumeration of the ZIP file entries
-                        Enumeration<? extends ZipEntry> e = zipFile.entries();
-                        while (e.hasMoreElements()) {
-                            ZipEntry entry = e.nextElement();
-                            String entryName = entry.getName();
-                            for (String ff : fileCls) {
-                                if (entryName.equals(ff)) {
-                                    found.add(ff);
-                                    break;
-                                }
-                            }
-                            if (found.size() == classNames.length) {
-                                break;
-                            }
-                        }
-
-                    } catch (IOException ioe) {
-                        //return found;
-                    } finally {
-                        try {
-                            if (zipFile != null) {
-                                zipFile.close();
-                            }
-                        } catch (IOException ioe) {
-                            System.err.printf("Error while closing zip file %s\n", ioe);
-                        }
-                    }
-                }
-            }
-        }
-        return found.toArray(new String[found.size()]);
-    }
+//    public String evalAsString(String param, JShellContext context) {
+//        Properties envs = new Properties();
+//        Properties processEnvs = context.vars().getAll();
+//        for (Entry<Object, Object> entry : processEnvs.entrySet()) {
+//            envs.put(entry.getKey(), entry.getValue());
+//        }
+//        StringBuilder sb = new StringBuilder();
+//        for (int i = 0; i < param.length(); i++) {
+//            char c = param.charAt(i);
+//            if (c == '$') {
+//                StringBuilder var = new StringBuilder();
+//                i++;
+//                if (i < param.length()) {
+//                    if (param.charAt(i) != '{') {
+//                        while (i < param.length()
+//                                && ((param.charAt(i) >= 'a' && param.charAt(i) <= 'z')
+//                                || (param.charAt(i) >= 'A' && param.charAt(i) <= 'Z')
+//                                || (param.charAt(i) >= 'O' && param.charAt(i) <= '9')
+//                                || (param.charAt(i) == '_'))) {
+//                            var.append(param.charAt(i++));
+//                        }
+//                        i--;
+//                    } else {
+//                        i++;//ignore '{'
+//                        while (i < param.length() && (param.charAt(i) != '}')) {
+//                            var.append(param.charAt(i++));
+//                        }
+//                    }
+//                } else {
+//                    var.append('$');
+//                }
+//                Object obj = envs.get(var.toString());
+//                sb.append(obj == null ? "" : String.valueOf(obj));
+//            } else {
+//                sb.append(c);
+//            }
+//        }
+//        return sb.toString();
+//    }
+//
+//    public String[] findExecFilesInPath(String filePath, String[] classNames, JShellContext context) {
+//        ArrayList<String> found = new ArrayList<String>();
+//        File f = new File(filePath);
+//        if (!f.exists()) {
+//            return new String[0];
+//        }
+//        if (f.isDirectory()) {
+//            for (String ff : classNames) {
+//                File f2 = new File(f, ff);
+//                if (f2.exists()) {
+//                    found.add(f2.getPath());
+//                }
+//            }
+//        }
+//        return found.toArray(new String[found.size()]);
+//    }
+//
+//    public String[] findClassesInPath(String filePath, String[] classNames, JShellContext context) {
+//        System.out.printf("findClassesInPath : path=%s should contain? %s\n", filePath, Arrays.asList(classNames).toString());
+//        ArrayList<String> found = new ArrayList<String>();
+//        String[] expanded = context.expandPaths(filePath/*, null*/);
+//        System.out.printf("path=%s expanded to %s\n", filePath, Arrays.asList(expanded));
+//        for (String fp : expanded) {
+//            System.out.printf("\tfindClassesInPath : path=%s should contain? %s\n", fp, Arrays.asList(classNames));
+//            File f = new File(fp);
+//            if (f.exists()) {
+//                String[] fileCls = new String[classNames.length];
+//                for (int i = 0; i < fileCls.length; i++) {
+//                    fileCls[i] = classNames[i].replace('.', '/') + ".class";
+//
+//                }
+//                List<String> clsNames = Arrays.asList(fileCls);
+//                if (f.isDirectory()) {
+//                    for (String ff : fileCls) {
+//                        if (new File(f, ff).exists()) {
+//                            found.add(ff);
+//                        }
+//                    }
+//                } else {
+//                    ZipFile zipFile = null;
+//                    boolean fileFound = false;
+//                    try {
+//                        System.out.printf("lookup into %s for %s\n", fp, clsNames);
+//                        // open a zip file for reading
+//                        zipFile = new ZipFile(fp);
+//                        // get an enumeration of the ZIP file entries
+//                        Enumeration<? extends ZipEntry> e = zipFile.entries();
+//                        while (e.hasMoreElements()) {
+//                            ZipEntry entry = e.nextElement();
+//                            String entryName = entry.getName();
+//                            for (String ff : fileCls) {
+//                                if (entryName.equals(ff)) {
+//                                    found.add(ff);
+//                                    break;
+//                                }
+//                            }
+//                            if (found.size() == classNames.length) {
+//                                break;
+//                            }
+//                        }
+//
+//                    } catch (IOException ioe) {
+//                        //return found;
+//                    } finally {
+//                        try {
+//                            if (zipFile != null) {
+//                                zipFile.close();
+//                            }
+//                        } catch (IOException ioe) {
+//                            System.err.printf("Error while closing zip file %s\n", ioe);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        return found.toArray(new String[found.size()]);
+//    }
 
     public InstructionNode parseCommand(InputStream stream) {
         Node node0 = null;

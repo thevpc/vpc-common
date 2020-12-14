@@ -14,7 +14,7 @@ import net.thevpc.common.msg.Message;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultAppLogs extends ReadOnlyPList<Message> implements AppLogs {
 

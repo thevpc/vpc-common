@@ -15,7 +15,7 @@ import javax.swing.ImageIcon;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ResourcesIconSet implements IconSet {
 

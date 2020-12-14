@@ -22,7 +22,7 @@ import java.util.jar.JarFile;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class URLParts {
     

@@ -11,7 +11,7 @@ import net.thevpc.commons.md.*;
 import java.io.Writer;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class DocusaurusWriter extends AbstractMdWriter {
     public DocusaurusWriter(Writer out) {

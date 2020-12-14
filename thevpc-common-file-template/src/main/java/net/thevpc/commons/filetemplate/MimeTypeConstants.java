@@ -7,7 +7,7 @@ package net.thevpc.commons.filetemplate;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MimeTypeConstants {
     public static final String ANY_TEXT="text/*";

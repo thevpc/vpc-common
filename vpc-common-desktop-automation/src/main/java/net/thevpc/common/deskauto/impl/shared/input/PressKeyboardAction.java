@@ -7,7 +7,7 @@ package net.thevpc.common.deskauto.impl.shared.input;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 class PressKeyboardAction extends InputAction {
     String name;

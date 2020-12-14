@@ -8,7 +8,7 @@ import java.util.Locale;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface LocaleManagerListener {
 

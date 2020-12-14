@@ -12,7 +12,7 @@ import java.util.function.IntPredicate;
 import java.util.function.Predicate;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class ArrayUtils {
 

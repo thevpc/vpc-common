@@ -11,7 +11,7 @@ import net.thevpc.common.strings.StringToObject;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 class SwitchFunction implements MessageNameFormat.Function {
     

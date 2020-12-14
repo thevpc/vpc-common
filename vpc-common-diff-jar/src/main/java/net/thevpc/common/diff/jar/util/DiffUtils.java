@@ -15,7 +15,7 @@ import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class DiffUtils {
     private static final char[] HEX_ARRAY = "0123456789ABCDEF".toCharArray();

@@ -19,7 +19,7 @@ package net.thevpc.commons.md;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MdColumn extends MdAbstractElement{
 

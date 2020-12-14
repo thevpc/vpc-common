@@ -8,7 +8,7 @@ import net.thevpc.jeep.JInvokablePrefilled;
 import net.thevpc.jeep.util.JNodeUtils;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNodePrefixUnaryOpCall extends JNodeStatement {
 

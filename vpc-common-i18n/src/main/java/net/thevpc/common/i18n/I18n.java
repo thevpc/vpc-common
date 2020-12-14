@@ -11,7 +11,7 @@ import net.thevpc.common.props.WritablePValue;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface I18n {
 

@@ -9,7 +9,7 @@ import net.thevpc.common.vfs.VFile;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TestListFS {
 

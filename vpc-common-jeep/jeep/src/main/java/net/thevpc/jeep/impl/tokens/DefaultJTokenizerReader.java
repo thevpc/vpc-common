@@ -13,7 +13,7 @@ import java.io.Reader;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultJTokenizerReader implements JTokenizerReader {
 

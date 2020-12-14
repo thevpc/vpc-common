@@ -13,7 +13,7 @@ import net.thevpc.jeep.util.JeepUtils;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JNodeBlock extends JNodeStatement {
 

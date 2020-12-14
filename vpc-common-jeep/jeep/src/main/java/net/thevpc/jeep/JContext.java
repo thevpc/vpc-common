@@ -9,7 +9,7 @@ import java.util.Map;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface JContext {
 

@@ -11,7 +11,7 @@ import java.util.Queue;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class CoalesceIterator<T> implements Iterator<T> {
 

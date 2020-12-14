@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface DiffResult extends AutoCloseable,Iterable {
 

@@ -15,7 +15,7 @@ import net.thevpc.jeep.*;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class DefaultJOperators implements JOperators {
 

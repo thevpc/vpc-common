@@ -16,7 +16,7 @@ import net.thevpc.commons.md.MdElement;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DocusaurusFile implements DocusaurusFileOrFolder {
 

@@ -12,7 +12,7 @@ import net.thevpc.jeep.JContext;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultJVar extends AbstractJVar {
     

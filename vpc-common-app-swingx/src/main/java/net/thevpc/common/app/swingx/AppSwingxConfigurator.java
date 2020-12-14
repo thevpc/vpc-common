@@ -21,7 +21,7 @@ import org.jdesktop.swingx.error.ErrorInfo;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class AppSwingxConfigurator {
 

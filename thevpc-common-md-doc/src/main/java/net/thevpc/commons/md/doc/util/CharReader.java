@@ -27,7 +27,7 @@ package net.thevpc.commons.md.doc.util;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class CharReader {
 

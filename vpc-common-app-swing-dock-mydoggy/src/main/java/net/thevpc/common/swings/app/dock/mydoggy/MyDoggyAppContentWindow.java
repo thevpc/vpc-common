@@ -21,7 +21,7 @@ import org.noos.xing.mydoggy.ContentManager;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MyDoggyAppContentWindow implements AppContentWindow {
 

@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JSignature extends JArgumentTypes {
 

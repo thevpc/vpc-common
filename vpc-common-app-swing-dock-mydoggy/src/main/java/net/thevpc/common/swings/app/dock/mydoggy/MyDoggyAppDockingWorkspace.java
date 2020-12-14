@@ -18,7 +18,7 @@ import net.thevpc.common.app.swing.core.swing.JComponentSupplier;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class MyDoggyAppDockingWorkspace implements AppDockingWorkspace, JComponentSupplier {
 

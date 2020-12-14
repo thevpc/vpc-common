@@ -11,7 +11,7 @@ import java.util.Arrays;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JNodeArray extends JDefaultNode {
 

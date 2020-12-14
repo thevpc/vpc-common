@@ -30,7 +30,7 @@ import java.util.Date;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class URLHeaderInfo {
 

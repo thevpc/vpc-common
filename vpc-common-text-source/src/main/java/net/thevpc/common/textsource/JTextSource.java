@@ -9,7 +9,7 @@ import java.io.Reader;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface JTextSource {
     String name();

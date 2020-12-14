@@ -15,7 +15,7 @@ import net.thevpc.common.textsource.JTextSourceRoot;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JTextSourceString implements JTextSourceRoot {
     

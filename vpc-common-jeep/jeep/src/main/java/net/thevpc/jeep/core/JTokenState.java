@@ -10,7 +10,7 @@ import net.thevpc.jeep.impl.JEnumDefinition;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class JTokenState extends JEnum {
 

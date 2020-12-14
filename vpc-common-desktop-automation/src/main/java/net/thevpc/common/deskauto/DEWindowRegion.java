@@ -8,7 +8,7 @@ package net.thevpc.common.deskauto;
 import java.awt.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public interface DEWindowRegion {
 

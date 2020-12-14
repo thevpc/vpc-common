@@ -30,7 +30,7 @@ import java.util.Iterator;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TextFormatList extends TextFormat implements Iterable<TextFormat> {
 

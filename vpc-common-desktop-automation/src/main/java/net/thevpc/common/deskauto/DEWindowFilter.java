@@ -7,7 +7,7 @@ package net.thevpc.common.deskauto;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface DEWindowFilter {
     public boolean accept(DEWindow w);

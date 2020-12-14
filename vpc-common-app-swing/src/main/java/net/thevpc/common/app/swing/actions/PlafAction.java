@@ -13,7 +13,7 @@ import net.thevpc.swings.plaf.UIPlafManager;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PlafAction extends AbstractAppAction {
 

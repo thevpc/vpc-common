@@ -12,7 +12,7 @@ import net.thevpc.common.app.Application;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class UndoAction extends AbstractAppAction {
 

@@ -7,7 +7,7 @@ package net.thevpc.common.diff.jar;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public enum DiffStatus {
     REMOVED,

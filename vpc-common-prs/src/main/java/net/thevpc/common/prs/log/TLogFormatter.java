@@ -6,7 +6,7 @@ package net.thevpc.common.prs.log;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface TLogFormatter {
     public String format(Object message);

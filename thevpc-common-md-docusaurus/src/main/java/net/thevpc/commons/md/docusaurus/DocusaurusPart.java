@@ -7,7 +7,7 @@ package net.thevpc.commons.md.docusaurus;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DocusaurusPart {
 

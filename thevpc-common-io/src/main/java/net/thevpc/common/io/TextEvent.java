@@ -27,7 +27,7 @@
 package net.thevpc.common.io;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class TextEvent {
     private Object source;

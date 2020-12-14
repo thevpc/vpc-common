@@ -9,7 +9,7 @@ import java.util.Objects;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class UIPlaf {
     

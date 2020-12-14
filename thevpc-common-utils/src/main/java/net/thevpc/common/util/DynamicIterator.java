@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DynamicIterator<T> implements Iterator<T> {
 

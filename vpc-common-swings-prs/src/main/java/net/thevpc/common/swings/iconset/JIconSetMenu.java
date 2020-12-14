@@ -32,7 +32,7 @@ import net.thevpc.common.prs.iconset.IconSetDescriptor;
 import net.thevpc.common.prs.iconset.IconSetManager;
 
 /**
- * @author vpc Date: 21 janv. 2005 Time: 18:50:21
+ * @author thevpc Date: 21 janv. 2005 Time: 18:50:21
  */
 public class JIconSetMenu extends JMenu {
 

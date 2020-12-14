@@ -8,7 +8,7 @@ package net.thevpc.common.diff.jar;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class AbstractDiffResult implements DiffResult {
 

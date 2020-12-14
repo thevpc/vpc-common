@@ -10,7 +10,7 @@ import java.io.InputStream;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface DiffHash {
     String hash(InputStream inputStream) throws IOException;

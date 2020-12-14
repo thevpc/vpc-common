@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JVarsImpl implements JVars {
 

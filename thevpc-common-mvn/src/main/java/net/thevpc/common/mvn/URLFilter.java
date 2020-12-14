@@ -9,7 +9,7 @@ import java.net.URL;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 interface URLFilter {
 

@@ -10,7 +10,7 @@ import java.nio.file.Paths;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultPathTranslator implements PathTranslator {
 

@@ -13,7 +13,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TreeCellRendererHighligter extends DefaultTreeCellRenderer {
 

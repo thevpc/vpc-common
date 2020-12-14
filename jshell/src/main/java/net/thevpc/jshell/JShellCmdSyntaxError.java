@@ -32,7 +32,7 @@
 package net.thevpc.jshell;
 
 /**
- * @author vpc (taha.bensalah@gmail.com)
+ * @author thevpc (taha.bensalah@gmail.com)
  * %lastmodified 13 nov. 2004 Time: 21:17:13
  */
 public class JShellCmdSyntaxError extends JShellException {

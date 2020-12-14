@@ -11,7 +11,7 @@ import net.thevpc.jeep.core.JFunctionBase;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JListOperator extends JFunctionBase {
     

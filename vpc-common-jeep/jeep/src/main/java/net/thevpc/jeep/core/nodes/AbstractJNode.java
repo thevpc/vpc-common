@@ -12,7 +12,7 @@ import java.lang.reflect.Constructor;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractJNode implements JNode {
 

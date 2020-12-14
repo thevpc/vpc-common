@@ -12,7 +12,7 @@ import net.thevpc.common.strings.format.MessageNameFormatFactory;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public final class MessageNameFormatContext {
     

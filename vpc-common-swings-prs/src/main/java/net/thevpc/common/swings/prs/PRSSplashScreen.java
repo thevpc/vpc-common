@@ -14,7 +14,7 @@ import net.thevpc.common.swings.SimpleSplashScreen;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PRSSplashScreen extends SimpleSplashScreen implements ProgressMonitor {
 

@@ -7,7 +7,7 @@ package net.thevpc.common.classpath;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface ClassVisitor {
 

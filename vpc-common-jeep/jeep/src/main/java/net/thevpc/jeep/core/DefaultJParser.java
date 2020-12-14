@@ -16,7 +16,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class DefaultJParser<T extends JNode,O extends JExpressionOptions<?>> implements JParser<T> {
 

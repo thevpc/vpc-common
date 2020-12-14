@@ -7,7 +7,7 @@ package net.thevpc.tson.impl.util;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class Chrono implements Comparable<Chrono>{
 

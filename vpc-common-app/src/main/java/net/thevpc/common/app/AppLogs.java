@@ -10,7 +10,7 @@ import net.thevpc.common.msg.Message;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface AppLogs extends PList<Message> {
 

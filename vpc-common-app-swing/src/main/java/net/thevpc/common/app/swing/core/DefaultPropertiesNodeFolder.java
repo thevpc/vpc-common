@@ -13,7 +13,7 @@ import net.thevpc.common.app.AppPropertiesNodeFolder;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultPropertiesNodeFolder extends AbstractPropertiesNode implements AppPropertiesNodeFolder {
 

@@ -9,7 +9,7 @@ import net.thevpc.common.prs.softreflect.classloader.SoftClassLoader;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class SoftClassImpl implements SoftClass{
     private String name;

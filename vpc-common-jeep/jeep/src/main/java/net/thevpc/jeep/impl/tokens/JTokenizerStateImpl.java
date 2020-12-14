@@ -12,7 +12,7 @@ import net.thevpc.jeep.core.tokens.JTokenDef;
 import java.util.*;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JTokenizerStateImpl implements JTokenizerState {
 

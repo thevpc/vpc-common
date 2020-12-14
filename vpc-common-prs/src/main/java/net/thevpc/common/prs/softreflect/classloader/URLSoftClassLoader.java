@@ -15,7 +15,7 @@ import net.thevpc.common.prs.softreflect.SoftClass;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class URLSoftClassLoader extends AbstractSoftClassLoader {
 

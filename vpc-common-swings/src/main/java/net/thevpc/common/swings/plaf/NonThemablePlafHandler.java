@@ -26,7 +26,7 @@ import javax.swing.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class NonThemablePlafHandler implements PlafHandler{
     private static final PlafItem[] NO_PLAF_ITEMS=new PlafItem[0];

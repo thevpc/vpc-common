@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JTextSourceFile implements JTextSourceRoot {
 

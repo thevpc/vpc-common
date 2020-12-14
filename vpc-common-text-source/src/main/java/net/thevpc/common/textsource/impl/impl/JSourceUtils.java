@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JSourceUtils {
     public static final String NEWLINE = "\n";

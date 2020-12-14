@@ -7,7 +7,7 @@ package net.thevpc.common.fprint.parser;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class FDocNode {
 

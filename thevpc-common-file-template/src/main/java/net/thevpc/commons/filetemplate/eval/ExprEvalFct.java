@@ -9,7 +9,7 @@ import net.thevpc.commons.filetemplate.FileTemplater;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface ExprEvalFct {
 

@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class MonitoredInputStream extends InputStream {
 

@@ -7,7 +7,7 @@ package net.thevpc.jeep.core.nodes;
 import net.thevpc.jeep.JType;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNodeStaticFieldInvoke extends JNodeStatement {
 

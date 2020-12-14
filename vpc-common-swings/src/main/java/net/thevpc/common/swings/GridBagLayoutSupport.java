@@ -25,7 +25,7 @@ import java.util.Hashtable;
 import java.util.NoSuchElementException;
 
 /**
- * @author vpc
+ * @author thevpc
  *         Date: 12 janv. 2005
  *         Time: 19:41:17
  */

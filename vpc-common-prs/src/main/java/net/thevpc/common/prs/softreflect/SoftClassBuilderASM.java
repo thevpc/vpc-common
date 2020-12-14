@@ -19,7 +19,7 @@ import org.objectweb.asm.MethodVisitor;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class SoftClassBuilderASM implements SoftClassBuilder {
 

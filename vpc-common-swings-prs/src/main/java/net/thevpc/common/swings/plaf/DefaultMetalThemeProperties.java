@@ -34,7 +34,7 @@ import java.util.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultMetalThemeProperties extends DefaultMetalTheme {
     private String name;

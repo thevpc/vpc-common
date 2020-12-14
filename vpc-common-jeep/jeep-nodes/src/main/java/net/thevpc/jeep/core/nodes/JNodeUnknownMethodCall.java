@@ -8,7 +8,7 @@ import net.thevpc.jeep.util.JNodeUtils;
 import net.thevpc.jeep.util.JeepUtils;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JNodeUnknownMethodCall extends JNodeStatement {
 

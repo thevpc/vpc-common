@@ -9,7 +9,7 @@ import java.io.File;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultJShellCommandTypeResolver implements JShellCommandTypeResolver {
 

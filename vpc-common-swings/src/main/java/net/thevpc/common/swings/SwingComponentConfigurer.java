@@ -7,7 +7,7 @@ package net.thevpc.common.swings;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface SwingComponentConfigurer {
     public void onCreateComponent(Object instance);

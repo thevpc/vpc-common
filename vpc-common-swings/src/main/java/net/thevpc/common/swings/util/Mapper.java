@@ -6,7 +6,7 @@ package net.thevpc.common.swings.util;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface Mapper<K,V> {
     V get(K k);

@@ -27,7 +27,7 @@ import java.util.Vector;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class UIManager2 {
 

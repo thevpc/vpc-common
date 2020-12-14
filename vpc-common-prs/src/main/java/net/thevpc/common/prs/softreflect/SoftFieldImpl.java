@@ -9,7 +9,7 @@ import java.lang.reflect.Field;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class SoftFieldImpl implements SoftField {
 

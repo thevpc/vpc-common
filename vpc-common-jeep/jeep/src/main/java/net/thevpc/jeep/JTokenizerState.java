@@ -9,7 +9,7 @@ import net.thevpc.jeep.core.tokens.JTokenDef;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface JTokenizerState {
 

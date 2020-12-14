@@ -12,7 +12,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TBufferedLog implements TLog {
 

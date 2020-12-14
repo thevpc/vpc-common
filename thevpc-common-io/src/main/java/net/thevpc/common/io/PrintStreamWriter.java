@@ -11,7 +11,7 @@ import java.io.Writer;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PrintStreamWriter extends Writer{
     private PrintStream out;

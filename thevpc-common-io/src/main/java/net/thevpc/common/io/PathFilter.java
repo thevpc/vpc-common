@@ -28,7 +28,7 @@ package net.thevpc.common.io;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface PathFilter {
 

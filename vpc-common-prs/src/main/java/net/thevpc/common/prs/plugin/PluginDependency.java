@@ -27,7 +27,7 @@ import java.text.ParseException;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PluginDependency implements Serializable {
     private String id;

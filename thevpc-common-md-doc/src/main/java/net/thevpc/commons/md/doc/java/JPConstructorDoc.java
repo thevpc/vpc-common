@@ -41,7 +41,7 @@ import net.thevpc.commons.md.doc.JDParameter;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JPConstructorDoc implements JDConstructorDoc {
 

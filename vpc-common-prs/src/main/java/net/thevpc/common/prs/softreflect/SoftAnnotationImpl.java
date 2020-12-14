@@ -12,7 +12,7 @@ import java.util.NoSuchElementException;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class SoftAnnotationImpl implements SoftAnnotation {
 

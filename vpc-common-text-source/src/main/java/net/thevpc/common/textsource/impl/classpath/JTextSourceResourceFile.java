@@ -20,7 +20,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JTextSourceResourceFile implements JTextSourceRoot {
 

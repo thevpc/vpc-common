@@ -26,7 +26,7 @@ import javax.swing.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface PlafHandler {
     public PlafItem[] loadItems();

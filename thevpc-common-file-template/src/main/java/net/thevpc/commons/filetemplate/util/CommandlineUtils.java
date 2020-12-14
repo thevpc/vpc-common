@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class CommandlineUtils {
     public static String[] parseCommandLine(String commandLineString) {

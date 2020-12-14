@@ -11,7 +11,7 @@ import java.lang.reflect.Modifier;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public final class SoftMethodImpl implements SoftMethod{
     private String name;

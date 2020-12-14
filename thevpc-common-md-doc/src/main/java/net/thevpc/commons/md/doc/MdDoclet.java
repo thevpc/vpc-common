@@ -29,7 +29,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class MdDoclet /*extends Doclet*/ {
 

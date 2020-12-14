@@ -21,7 +21,7 @@ import java.io.Writer;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultMdWriter extends AbstractMdWriter{
 

@@ -30,7 +30,7 @@ import net.thevpc.common.swings.FileMessageDiscardContext;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultMessageDialogManager<App> implements MessageDialogManager<App> {
 

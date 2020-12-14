@@ -20,7 +20,7 @@ import javax.swing.plaf.metal.OceanTheme;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class UIPlafManager {
     public static UIPlafManager INSTANCE = new UIPlafManager();

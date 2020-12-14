@@ -31,7 +31,7 @@ import java.util.List;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultNonOption implements NonOption {
     public static final NonOption NAME=new DefaultNonOption("name");

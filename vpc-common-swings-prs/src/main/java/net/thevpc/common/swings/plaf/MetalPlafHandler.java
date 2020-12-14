@@ -36,7 +36,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class MetalPlafHandler implements PlafHandler {
     public static final String METAL = "javax.swing.plaf.metal.MetalLookAndFeel";

@@ -18,7 +18,7 @@ import net.thevpc.common.props.WritablePValue;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultPIconSet implements PIconSet {
 

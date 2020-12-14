@@ -30,7 +30,7 @@ import java.util.function.Predicate;
  * }
  * </pre>
  *
- * @author vpc
+ * @author thevpc
  */
 public class DiffCommandJar extends DiffCommandZip {
     public static final DiffCommandJar INSTANCE = new DiffCommandJar();

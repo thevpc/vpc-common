@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class HtmlHighlighter {
     private static final String HighLightTemplate = "<span style='background:rgb(230,230,0);'>$1</span>";

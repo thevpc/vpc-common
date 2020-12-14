@@ -27,7 +27,7 @@ import java.awt.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JTableImpl extends JTable implements IJTable {
     public JTableImpl() {

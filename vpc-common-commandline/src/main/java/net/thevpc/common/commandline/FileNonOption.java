@@ -27,7 +27,7 @@ package net.thevpc.common.commandline;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class FileNonOption extends DefaultNonOption {
 

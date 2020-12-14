@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class VersionIntervall implements XmlSerializable {
 

@@ -9,7 +9,7 @@ import net.thevpc.jeep.JType;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JNodeImport extends JNodeStatement {
 

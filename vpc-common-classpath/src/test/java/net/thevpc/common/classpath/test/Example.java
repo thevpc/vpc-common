@@ -14,7 +14,7 @@ import java.net.URL;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class Example {
     @Test

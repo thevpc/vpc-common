@@ -27,7 +27,7 @@ package net.thevpc.common.fprint;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class TextFormat {
     

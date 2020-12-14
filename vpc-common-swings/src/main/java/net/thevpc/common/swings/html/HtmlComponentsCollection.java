@@ -23,7 +23,7 @@ import javax.swing.text.html.HTMLDocument;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class HtmlComponentsCollection implements Iterable<HtmlComponent> {
 

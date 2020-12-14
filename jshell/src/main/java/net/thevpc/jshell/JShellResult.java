@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JShellResult implements Serializable{
 

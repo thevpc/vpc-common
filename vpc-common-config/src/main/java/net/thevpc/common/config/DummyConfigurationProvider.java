@@ -6,7 +6,7 @@ package net.thevpc.common.config;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DummyConfigurationProvider implements ConfigurationProvider{
     private Configuration configuration=new FileConfiguration();

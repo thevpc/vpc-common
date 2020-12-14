@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractJContext implements JContext {
     private final Map<String, Object> userProperties = new HashMap<>();

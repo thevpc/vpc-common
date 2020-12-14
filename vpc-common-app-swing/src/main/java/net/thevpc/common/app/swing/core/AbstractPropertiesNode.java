@@ -14,7 +14,7 @@ import net.thevpc.common.app.AppPropertiesTree;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class AbstractPropertiesNode implements AppPropertiesNode {
 

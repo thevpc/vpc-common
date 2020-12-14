@@ -13,7 +13,7 @@ import javax.swing.tree.TreePath;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JTreeUtil {
     public static void setTreeExpandedState(JTree tree, boolean expanded) {

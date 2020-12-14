@@ -22,7 +22,7 @@ import net.thevpc.commons.md.MdText;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DocusaurusInlineParser {
 

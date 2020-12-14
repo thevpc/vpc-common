@@ -6,7 +6,7 @@ package net.thevpc.common.config;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ConfigurationChangeEvent {
     private String id;

@@ -7,7 +7,7 @@ package net.thevpc.common.deskauto.impl.shared.input;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 class PressMouseAction extends InputAction {
 

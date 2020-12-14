@@ -28,7 +28,7 @@ import net.thevpc.commons.ljson.LJSON;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class Docusaurus2Adoc {
 
