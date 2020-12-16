@@ -25,13 +25,11 @@ public class DefaultLexer extends AbstractLexer {
                 char nc = (char) n;
                 boolean doBreak = false;
                 switch (n) {
-                    case '\\': {
-                        n = reader.read();
-                        if (n >= 0) {
-                            sb.append((char) n);
-                        } else {
-                            doBreak = true;
-                        }
+                    case '\\':
+                    case '/':
+                    case '-':
+                        {
+                        doBreak = true;
                         break;
                     }
                     default: {

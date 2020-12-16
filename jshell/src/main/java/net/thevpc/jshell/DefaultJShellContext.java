@@ -99,6 +99,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
 
     public void copyFrom(JShellContext other) {
         if (other != null) {
+            this.serviceName = other.getServiceName();
             this.shell = other.getShell();
             this.vars = other.vars();
             this.functionManager = other.functions();

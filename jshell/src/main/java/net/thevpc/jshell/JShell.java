@@ -269,7 +269,7 @@ public class JShell {
             context=getRootContext();
         }
         JShellContext context1 = createContext(context);
-        executeFile(file, context1.setArgs(args), false);
+        executeFile(file, args,context1.setArgs(args), false);
     }
 
     public void setServiceName(String serviceName) {
@@ -718,11 +718,11 @@ public class JShell {
             System.out.printf("%s version %s\n", APP_TITLE, APP_VERSION);
         }
 
-        executeFile(startupScript, context, true);
+        executeFileIfExists(startupScript, new String[0], context);
 
         if (input != null) {
             if (!new File(input).exists()) {
-                throw new JShellException(1, "File Not Found " + input);
+                throw new JShellException(1, "file not found " + input);
             }
         }
 
@@ -730,11 +730,11 @@ public class JShell {
             try {
                 executeInteractive(out,context);
             } finally {
-                executeFile(shutdownScript, context, true);
+                executeFileIfExists(shutdownScript, args, context);
             }
         } else {
-            executeFile(input, context, false);
-            executeFile(shutdownScript, context, true);
+            executeFile(input, args,context);
+            executeFileIfExists(shutdownScript, new String[0], context);
         }
 
     }
@@ -795,7 +795,11 @@ public class JShell {
         throw quitExcepion;
     }
 
-    public void executeFile(String file, JShellContext context, boolean ignoreIfNotFound) {
+    public void executeFileIfExists(String file, String[] args,JShellContext context) {
+        executeFile(file,args,context,true);
+    }
+
+    public void executeFile(String file, String[] args,JShellContext context, boolean ignoreIfNotFound) {
         if(file!=null){
             file= ShellUtils.getAbsolutePath(new File(context.getCwd()),file);
         }
@@ -805,6 +809,8 @@ public class JShell {
             }
             throw new JShellException(1, "shell file not found : " + file);
         }
+        context.setServiceName(file);
+        context.setArgs(args);
         FileInputStream stream = null;
         try {
             try {

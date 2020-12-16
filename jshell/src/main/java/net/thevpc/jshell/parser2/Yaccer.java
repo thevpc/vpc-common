@@ -720,6 +720,26 @@ public class Yaccer {
             case "STR": {
                 return (String) token.value;
             }
+            case "${": {
+                StringBuilder sb = new StringBuilder();
+                //TODO fix me, should implement ${...} expressions
+                List<Token> values = (List<Token>) token.value;
+                if(values.isEmpty()){
+                    throw new IllegalArgumentException("bad substitution");
+                }
+                String varVal="";
+                Token t = values.get(0);
+                if(t.isWord()) {
+                    String y = context.vars().get(evalTokenString(t,context));
+                    if (y != null) {
+                        varVal = y;
+                    }
+                }else{
+                    throw new IllegalArgumentException("bad substitution");
+                }
+                sb.append(DirectoryScanner.escape(varVal));
+                return sb.toString();
+            }
             default: {
                 return (String) token.value;
             }
