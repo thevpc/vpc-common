@@ -11,6 +11,6 @@ package net.thevpc.jshell;
  */
 public interface JShellCommandTypeResolver {
 
-    JShellCommandType type(String path0, JShellContext context);
+    JShellCommandType type(String path0, JShellFileContext context);
 
 }

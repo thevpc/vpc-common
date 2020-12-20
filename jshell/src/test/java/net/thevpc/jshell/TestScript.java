@@ -1,7 +1,5 @@
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser.nodes.Node;
-import net.thevpc.jshell.parser2.JShellParser2;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
@@ -12,7 +10,7 @@ public class TestScript {
         JShell sh = new JShell();
         sh.setExternalExecutor(new JShellExternalExecutor() {
             @Override
-            public void execExternalCommand(String[] command, JShellContext context) {
+            public void execExternalCommand(String[] command, JShellFileContext context) {
                 try {
                     ProcessBuilder pb = new ProcessBuilder();
                     Process p = pb.command(command)
@@ -27,6 +25,6 @@ public class TestScript {
                 }
             }
         });
-        sh.executeLine("echo $(dirname aa/$0)", true, sh.createContext().setServiceName("example"));
+        sh.executeLine("echo $(dirname aa/$0)", true, sh.createNewContext(sh.getRootContext(),"example",new String[0]));
     }
 }

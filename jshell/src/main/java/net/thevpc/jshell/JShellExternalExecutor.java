@@ -11,5 +11,5 @@ package net.thevpc.jshell;
  */
 public interface JShellExternalExecutor {
 
-    void execExternalCommand(String[] command, JShellContext context);
+    void execExternalCommand(String[] command, JShellFileContext context);
 }

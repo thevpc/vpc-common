@@ -8,9 +8,8 @@ package net.thevpc.jshell;
 import java.io.*;
 import java.util.*;
 
-import net.thevpc.jshell.parser.nodes.Node;
+import net.thevpc.jshell.parser2.Node;
 import net.thevpc.jshell.util.DirectoryScanner;
-import net.thevpc.jshell.util.ShellUtils;
 
 /**
  *
@@ -21,12 +20,11 @@ public class DefaultJShellContext extends AbstractJShellContext {
     private static final JShellResult OK_RESULT = new JShellResult(0, null, null);
     private JShell shell;
     private JShellVariables vars = new JShellVariables();
-    private Node root;
-    private Node parent;
+    private Node rootNode;
+    private Node parentNode;
     private InputStream in = System.in;
     private PrintStream out = System.out;
     private PrintStream err = System.err;
-    private List<String> args = new ArrayList<String>();
     private Map<String, Object> userProperties = new HashMap<>();
     private JShellFunctionManager functionManager = new DefaultJShellFunctionManager();
     private JShellAliasManager aliasManager = new DefaultAliasManager();
@@ -34,9 +32,8 @@ public class DefaultJShellContext extends AbstractJShellContext {
     private String cwd=System.getProperty("user.dir");
     private JShellFileSystem fileSystem;
     public String oldCommandLine = null;
-    public String serviceName = "unknown-command";
-    public int commandLineIndex = -1;
     public JShellResult lastResult = OK_RESULT;
+    public JShellContext parentContext;
 
     public DefaultJShellContext() {
         this.vars = new JShellVariables();
@@ -46,17 +43,6 @@ public class DefaultJShellContext extends AbstractJShellContext {
     public DefaultJShellContext(JShell shell) {
         setShell(shell);
         setFileSystem(new DefaultJShellFileSystem());
-    }
-
-    @Override
-    public String getServiceName() {
-        return serviceName;
-    }
-
-    @Override
-    public JShellContext setServiceName(String serviceName) {
-        this.serviceName = serviceName;
-        return this;
     }
 
     @Override
@@ -85,7 +71,13 @@ public class DefaultJShellContext extends AbstractJShellContext {
 //        setArgs(args);
 //    }
     public DefaultJShellContext(JShellContext other) {
+        this.parentContext=other;
         copyFrom(other);
+    }
+
+    @Override
+    public JShellContext getParentContext() {
+        return parentContext;
     }
 
     @Override
@@ -99,22 +91,21 @@ public class DefaultJShellContext extends AbstractJShellContext {
 
     public void copyFrom(JShellContext other) {
         if (other != null) {
-            this.serviceName = other.getServiceName();
             this.shell = other.getShell();
             this.vars = other.vars();
             this.functionManager = other.functions();
             this.aliasManager = other.aliases();
             this.builtinsManager = other.builtins();
-            this.root = other.getRoot();
-            this.parent = other.getParent();
+            this.rootNode = other.getRootNode();
+            this.parentNode = other.getParentNode();
             this.in = other.in();
             this.out = other.out();
             this.err = other.err();
-            this.args = new ArrayList<String>(other.getArgsList());
             this.userProperties = new HashMap<>();
             this.userProperties.putAll(other.getUserProperties());
             setFileSystem(other.getFileSystem());
             this.cwd = other.getCwd();
+            this.parentContext = other.getParentContext();
         }
     }
 
@@ -141,43 +132,18 @@ public class DefaultJShellContext extends AbstractJShellContext {
     }
 
     @Override
-    public String[] getArgsArray() {
-        return getArgsList().toArray(new String[0]);
-    }
-
-    @Override
-    public String getArg(int index) {
-        List<String> argsList = getArgsList();
-        if(index>=0 && index<argsList.size()) {
-            String r = argsList.get(index);
-            return r==null?"":r;
-        }
-        return "";
-    }
-
-    @Override
-    public int getArgsCount() {
-        return getArgsList().size();
-    }
-
-    @Override
-    public List<String> getArgsList() {
-        return args;
-    }
-
-    @Override
     public JShell getShell() {
         return shell;
     }
 
     @Override
-    public Node getRoot() {
-        return root;
+    public Node getRootNode() {
+        return rootNode;
     }
 
     @Override
-    public Node getParent() {
-        return parent;
+    public Node getParentNode() {
+        return parentNode;
     }
 
     @Override
@@ -206,13 +172,13 @@ public class DefaultJShellContext extends AbstractJShellContext {
     }
 
     public JShellContext setRoot(Node root) {
-        this.root = root;
+        this.rootNode = root;
         return this;
     }
 
     @Override
-    public JShellContext setParent(Node parent) {
-        this.parent = parent;
+    public JShellContext setParentNode(Node parent) {
+        this.parentNode = parent;
         return this;
     }
 
@@ -231,18 +197,8 @@ public class DefaultJShellContext extends AbstractJShellContext {
         return this;
     }
 
-    public JShellContext setArgs(List<String> args) {
-        this.args = args;
-        return this;
-    }
-
-    public JShellContext setArgs(String[] args) {
-        this.args = args == null ? new ArrayList<String>() : new ArrayList<String>(Arrays.asList(args));
-        return this;
-    }
-
-    public JShellExecutionContext createCommandContext(JShellBuiltin command) {
-        return new DefaultJShellExecutionContext(this);
+    public JShellExecutionContext createCommandContext(JShellBuiltin command, JShellFileContext context) {
+        return new DefaultJShellExecutionContext(context);
     }
 
     @Override
@@ -252,7 +208,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
     }
 
     @Override
-    public List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine) {
+    public List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine, JShellFileContext ctx) {
         return new ArrayList<>();
     }
 
@@ -322,6 +278,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
     public void setLastResult(JShellResult lastResult) {
         this.lastResult = lastResult == null ? OK_RESULT : lastResult;
     }
+
 
     @Override
     public Watcher bindStreams(InputStream out, InputStream err, OutputStream in) {

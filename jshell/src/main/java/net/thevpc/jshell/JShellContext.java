@@ -1,8 +1,6 @@
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser.nodes.InstructionNode;
-import net.thevpc.jshell.parser.nodes.Node;
-import net.thevpc.jshell.parser2.Yaccer;
+import net.thevpc.jshell.parser2.Node;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -15,27 +13,15 @@ import java.util.Map;
  */
 public interface JShellContext {
 
-    String getServiceName();
-
-    JShellContext setServiceName(String serviceName);
-
-    String getArg(int index);
-
-    int getArgsCount();
-
-    String[] getArgsArray();
-
-    List<String> getArgsList();
-
     JShell getShell();
 
-    Node getRoot();
+    Node getRootNode();
 
     JShellContext setRoot(Node root);
 
-    Node getParent();
+    Node getParentNode();
 
-    JShellContext setParent(Node parent);
+    JShellContext setParentNode(Node parent);
 
     InputStream in();
 
@@ -58,13 +44,11 @@ public interface JShellContext {
 
     JShellContext setIn(InputStream in);
 
-    JShellContext setArgs(String[] args);
-
-    JShellExecutionContext createCommandContext(JShellBuiltin command);
+    JShellExecutionContext createCommandContext(JShellBuiltin command, JShellFileContext context);
 
     void setShell(JShell console);
 
-    List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine);
+    List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine, JShellFileContext ctx);
 
     JShellContext setEnv(Map<String,String> env);
 
@@ -81,6 +65,8 @@ public interface JShellContext {
     String getAbsolutePath(String path);
 
     String[] expandPaths(String path);
+
+    JShellContext getParentContext();
 
     JShellAliasManager aliases();
 

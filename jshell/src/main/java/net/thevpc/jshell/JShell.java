@@ -30,20 +30,17 @@
  */
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser.nodes.*;
-import net.thevpc.jshell.parser2.JShellParser2;
-import net.thevpc.jshell.parser2.Token;
-import net.thevpc.jshell.parser2.Yaccer;
+import net.thevpc.jshell.parser2.*;
+import net.thevpc.jshell.util.ByteArrayPrintStream;
 import net.thevpc.jshell.util.ShellUtils;
 
 import java.io.*;
-import java.util.*;
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 public class JShell {
 
@@ -55,97 +52,72 @@ public class JShell {
     public static final String ENV_EXEC_PACKAGES = "EXEC_PKG";
     public static final String ENV_EXEC_EXTENSIONS = "EXEC_EXT";
 
-    public String[] args;
-    public boolean exitAfterProcessingLines = false;
-    public String input = null;
     public boolean fallBackToMain = false;
 
     public Object shellInterpreter = null;
+    protected JShellFileContext rootContext;
     private String version = "1.0.0";
-    private String startupScript;
-    private String shutdownScript;
-    private JShellOptions options = new JShellOptions();
-    private JShellWordEvaluator wordEvaluator;
-    private JShellHistory history = new DefaultShellHistory();
+    private JShellOptions options;
+    private JShellEvaluator evaluator;
+    private JShellHistory history;
     private JShellErrorHandler errorHandler;
     private JShellExternalExecutor externalExecutor;
     private JShellCommandTypeResolver commandTypeResolver;
-    private JShellNodeEvaluator nodeEvaluator;
     private JShellVariables vars = new JShellVariables();
-    private JShellContext context;
     private BufferedReader _in_reader = null;
 
-    public JShell() {
-        errorHandler = new DefaultJShellErrorHandler();
-        commandTypeResolver = new DefaultJShellCommandTypeResolver();
-        nodeEvaluator = new DefaultJShellNodeEvaluator();
-        wordEvaluator = new DefaultJShellWordEvaluator();
+    public JShell(){
+        this(null,null,null,null,null,null,null,null);
     }
 
-    public static String shellPatternToRegexp(String pattern) {
-        String pathSeparator = "/";
-        if (pattern == null) {
-            pattern = "*";
+    public JShell(String serviceName, String[] args,JShellOptionsParser shellOptionsParser,
+                  JShellEvaluator evaluator,JShellCommandTypeResolver commandTypeResolver,
+                  JShellErrorHandler errorHandler,
+                  JShellExternalExecutor externalExecutor,
+                  JShellHistory history
+    ) {
+        if(commandTypeResolver==null) {
+            this.commandTypeResolver = new DefaultJShellCommandTypeResolver();
+        }else{
+            this.commandTypeResolver=commandTypeResolver;
         }
-        int i = 0;
-        char[] cc = pattern.toCharArray();
-        StringBuilder sb = new StringBuilder("^");
-        while (i < cc.length) {
-            char c = cc[i];
-            switch (c) {
-                case '.':
-                case '!':
-                case '$':
-                case '{':
-                case '}':
-                case '+': {
-                    sb.append('\\').append(c);
-                    break;
-                }
-                case '\\': {
-                    sb.append(c);
-                    i++;
-                    sb.append(cc[i]);
-                    break;
-                }
-                case '[': {
-                    while (i < cc.length) {
-                        sb.append(cc[i]);
-                        if (cc[i] == ']') {
-                            break;
-                        }
-                    }
-                    break;
-                }
-                case '?': {
-                    sb.append("[^").append(pathSeparator).append("]");
-                    break;
-                }
-                case '*': {
-                    if (i + 1 < cc.length && cc[i + 1] == '*') {
-                        i++;
-                        sb.append(".*");
-                    } else {
-                        sb.append("[^").append(pathSeparator).append("]*");
-                    }
-                    break;
-                }
-                default: {
-                    sb.append(c);
-                }
-            }
-            i++;
+        if(errorHandler==null) {
+            this.errorHandler = new DefaultJShellErrorHandler();
+        }else{
+            this.errorHandler=errorHandler;
         }
-        sb.append('$');
-        return sb.toString();
+        if(evaluator==null) {
+            this.evaluator = new DefaultJShellEvaluator();
+        }else{
+            this.evaluator=evaluator;
+        }
+        if(history==null) {
+            this.history = new DefaultShellHistory();
+        }else{
+            this.history=history;
+        }
+        if(shellOptionsParser==null){
+            shellOptionsParser=new DefaultJShellOptionsParser();
+        }
+        options=shellOptionsParser.parse(args);
+        this.externalExecutor=externalExecutor;
+        if(options.getServiceName()==null){
+            options.setServiceName(serviceName==null?"jshell":serviceName);
+        }
+        rootContext = createFileContext(createRootContext(), options.getServiceName(), options.getCommandArgs().toArray(new String[0]));
     }
 
-    public JShellNodeEvaluator getNodeEvaluator() {
-        return nodeEvaluator;
+
+
+
+
+
+    public JShellEvaluator getEvaluator() {
+        return evaluator;
     }
 
-    public void setNodeEvaluator(JShellNodeEvaluator nodeEvaluator) {
-        this.nodeEvaluator = nodeEvaluator;
+    public void setEvaluator(JShellEvaluator evaluator) {
+        this.evaluator = evaluator;
     }
 
     public JShellCommandTypeResolver getCommandTypeResolver() {
@@ -172,67 +144,6 @@ public class JShell {
         this.errorHandler = errorHandler;
     }
 
-    public String getStartupScript() {
-        return startupScript;
-    }
-
-    public String getShutdownScript() {
-        return shutdownScript;
-    }
-
-    //    public String[] expandPath2(String[] names, String basePath) {
-//        File f = new File(basePath);
-//        if (names.length == 0) {
-//            return new String[]{basePath};
-//        }
-//        String[] names2 = new String[names.length - 1];
-//        System.arraycopy(names, 1, names2, 0, names2.length);
-//        String names0 = names[0];
-//        //check if names0 is not generic
-//        StringBuilder pattern = new StringBuilder();
-//        boolean ispattern = false;
-//        char[] charArray = names0.toCharArray();
-//        for (int i = 0; i < charArray.length; i++) {
-//            char c = charArray[i];
-//            switch (c) {
-//                case '\\': {
-//                    ispattern = true;
-//                    pattern.append('\\');
-//                    pattern.append(charArray[i + 1]);
-//                    i++;
-//                    break;
-//                }
-//                case '.': {
-//                    pattern.append('\\');
-//                    pattern.append(c);
-//                    break;
-//                }
-//                case '*': {
-//                    ispattern = true;
-//                    pattern.append(".*");
-//                    break;
-//                }
-//                case '$': {
-//                    pattern.append("\\$");
-//                    break;
-//                }
-//                case '^': {
-//                    pattern.append("\\^");
-//                    break;
-//                }
-//                default: {
-//                    pattern.append(c);
-//                    break;
-//                }
-//            }
-//        }
-//        List<String> files = findFiles(ispattern ? pattern.toString() : names0, !ispattern, basePath);
-//        List<String> all = new ArrayList<String>();
-//        for (String newParent : files) {
-//            all.addAll(Arrays.asList(expandPath2(names2, newParent)));
-//        }
-//        return all.toArray(new String[all.size()]);
-//    }
     public JShellVariables vars() {
         return vars;
     }
@@ -264,121 +175,41 @@ public class JShell {
         }
     }
 
-    public void executeFile(String file, String[] args,JShellContext context) {
-        if(context==null){
-            context=getRootContext();
-        }
-        JShellContext context1 = createContext(context);
-        executeFile(file, args,context1.setArgs(args), false);
-    }
-
     public void setServiceName(String serviceName) {
         getRootContext().setServiceName(serviceName);
     }
 
-    //    public String[] expandPath(String name) {
-//        return expandPath(name, getCwd());
-//    }
-//
-//    public String[] expandPath(String name, String basePath) {
-//        List<String> nameParts = new ArrayList<String>();
-//        StringBuilder b = new StringBuilder();
-//        boolean isExpandable = false;
-//
-//        char[] charArray = name.toCharArray();
-//        for (int i = 0; i < charArray.length; i++) {
-//            char c = charArray[i];
-//            switch (c) {
-//                case '*':
-//                case '?':
-//                case '[': {
-//                    isExpandable = true;
-//                    b.append(charArray[i]);
-//                    break;
-//                }
-//                case '/': {
-//                    if (b.length() > 0) {
-//                        String bs = b.toString();
-//                        if (bs.equals(".")) {
-//                            // do nothing;
-//                        } else if (bs.equals("..")) {
-//                            if (nameParts.size() > 0) {
-//                                nameParts.remove(nameParts.size() - 1);
-//                            } else {
-//                                nameParts.add(bs);
-//                            }
-//                        } else {
-//                            nameParts.add(bs);
-//                        }
-//                        b.delete(0, b.length());
-//                    }
-//                    break;
-//                }
-//                case '\\': {
-//                    i++;
-//                    b.append(charArray[i]);
-////                    if (charArray[i] == '/') {
-////                        b.append('/');
-////                    } else {
-////                        b.append('\\').append(charArray[i]);
-////                    }
-//                    break;
-//                }
-//                default: {
-//                    b.append(charArray[i]);
-//                }
-//            }
-//        }
-//        if (b.length() > 0) {
-//            String bs = b.toString();
-//            if (bs.equals(".")) {
-//                // do nothing;
-//            } else if (bs.equals("..")) {
-//                if (nameParts.size() > 0) {
-//                    nameParts.remove(nameParts.size() - 1);
-//                } else {
-//                    nameParts.add(bs);
-//                }
-//            } else {
-//                nameParts.add(bs);
-//            }
-//            b.delete(0, b.length());
-//        }
-//        if (isExpandable) {
-//            while (nameParts.size() > 0 && nameParts.get(0).equals("..")) {
-//                nameParts.remove(0);
-//                basePath = basePath + "/..";
-//            }
-//            String[] strings = expandPath2(nameParts.toArray(new String[nameParts.size()]), basePath);
-//            if (strings.length == 0) {
-//                return new String[]{name};
-//            }
-//            return strings;
-//        } else {
-//            //just apply escapes!
-//            b = new StringBuilder();
-//            for (int i = 0; i < charArray.length; i++) {
-//                char c = charArray[i];
-//                switch (c) {
-//                    case '\\': {
-//                        i++;
-//                        b.append(charArray[i]);
-//                        break;
-//                    }
-//                    default: {
-//                        b.append(charArray[i]);
-//                    }
-//                }
-//            }
-//            return new String[]{b.toString()};
-//        }
-//    }
+
     protected JShellContext createRootContext() {
         return new DefaultJShellContext(this);
     }
 
-    public JShellContext createContext() {
-        return createContext(getRootContext());
+    public JShellFileContext createFileContext(JShellContext rootContext, String serviceName, String[] args) {
+        return new DefaultJShellFileContext(
+                rootContext,
+                serviceName, args
+        );
+    }
+
+    public JShellFileContext createSourceFileContext(JShellFileContext parentContext, String serviceName, String[] args) {
+        return createFileContext(
+                parentContext.getShellContext(),
+                serviceName, args
+        );
+    }
+
+    public JShellFileContext createNewContext(JShellFileContext parentContext, String serviceName, String[] args) {
+        return createFileContext(
+                createContext(parentContext.getShellContext()),
+                serviceName, args
+        );
+    }
+
+    public JShellFileContext createNewContext(JShellFileContext parentContext) {
+        return createFileContext(
+                createContext(parentContext.getShellContext()),
+                parentContext.getServiceName(), parentContext.getArgsArray()
+        );
     }
 
     public JShellContext createContext(JShellContext parentContext) {
@@ -386,7 +217,7 @@ public class JShell {
     }
 
     public InstructionNode createCommandNode(String[] args) {
-        List<Yaccer.Argument> args2=new ArrayList<>();
+        List<Yaccer.Argument> args2 = new ArrayList<>();
         for (String arg : args) {
             args2.add(new Yaccer.Argument(
                     Arrays.asList(
@@ -402,58 +233,12 @@ public class JShell {
         return new Yaccer.ArgumentsLine(args2);
     }
 
-    //    public void executeArguments(String[] command, boolean parse, boolean addToHistory, JShellContext context) {
-//        if (addToHistory) {
-//            StringBuilder sb = new StringBuilder();
-//            for (int i = 0; i < command.length; i++) {
-//                String arg = command[i];
-//                if (i > 0) {
-//                    sb.append(" ");
-//                }
-//                if (arg.contains(" ")) {
-//                    sb.append("\"").append(arg).append("\"");
-//                } else {
-//                    sb.append(arg);
-//                }
-//            }
-//            getHistory().add(sb.toString());
-//        }
-//        if (parse) {
-//            CommandNode n = new CommandNode();
-//            for (int i = 0; i < command.length; i++) {
-//                JShellParser parser = new JShellParser();
-//                Node node0 = null;
-//                try {
-//                    node0 = parser.parse(command[i]);
-//                } catch (ParseException e) {
-//                    throw new IllegalArgumentException(e);
-//                }
-//                if (node0 instanceof CommandItemHolderNode) {
-//                    n.add((CommandItemHolderNode) node0);
-//                } else if (node0 instanceof CommandNode) {
-//                    for (CommandItemHolderNode item : ((CommandNode) node0).items) {
-//                        n.add(item);
-//                    }
-//                    if (((CommandNode) node0).nowait) {
-//                        n.nowait = true;
-//                    }
-//                } else {
-//                    throw new ClassCastException();
-//                }
-//            }
-//            n.eval(context);
-//        } else {
-//            createCommandNode(command).eval(context);
-//        }
-//    }
-    public JShellContext getRootContext() {
-        if (context == null) {
-            context = createRootContext();
-        }
-        return context;
+
+    public JShellFileContext getRootContext() {
+        return rootContext;
     }
 
-    public void executeLine(String line, boolean storeResult, JShellContext context) {
+    public void executeLine(String line, boolean storeResult, JShellFileContext context) {
         if (context == null) {
             context = getRootContext();
         }
@@ -490,7 +275,7 @@ public class JShell {
         }
     }
 
-    public int onResult(Throwable th, JShellContext context) {
+    public int onResult(Throwable th, JShellFileContext context) {
         if (th == null) {
             context.setLastResult(new JShellResult(0, null, null));
             return 0;
@@ -525,10 +310,10 @@ public class JShell {
         return errorCode;
     }
 
-    public int onResult(int errorCode, Throwable th, JShellContext context) {
+    public int onResult(int errorCode, Throwable th, JShellFileContext context) {
         if (errorCode != 0) {
             if (th == null) {
-                th = new RuntimeException("Error occurred. Error Code #" + errorCode);
+                th = new RuntimeException("error occurred. Error Code #" + errorCode);
             }
         } else {
             th = null;
@@ -541,47 +326,10 @@ public class JShell {
         return errorCode;
     }
 
-    public void executeCommand(String[] command,JShellContext context) {
-        executeCommand(command, true, true, true, context);
-    }
-
-    public void executeCommand(String[] command,
-                               boolean aliases, boolean builtins, boolean externals, JShellContext context) {
-        if (context == null) {
-            context = createContext();
-        }
-        context.setArgs(command);
-        InstructionNode n = null;
-//        if (true) {
-//            n = new CommandNode();
-//            for (int i = 0; i < command.length; i++) {
-//                JShellParser parser = new JShellParser();
-//                Node node0 = null;
-//                try {
-//                    node0 = parser.parse(command[i]);
-//                } catch (ParseException e) {
-//                    throw new IllegalArgumentException(e);
-//                }
-//                if (node0 instanceof CommandItemHolderNode) {
-//                    n.add((CommandItemHolderNode) node0);
-//                } else if (node0 instanceof CommandNode) {
-//                    for (CommandItemHolderNode item : ((CommandNode) node0).items) {
-//                        n.add(item);
-//                    }
-//                    if (((CommandNode) node0).nowait) {
-//                        n.nowait = true;
-//                    }
-//                } else {
-//                    throw new ClassCastException();
-//                }
-//            }
-//        } else {
-        n = createCommandNode(command);
-//        }
-//        n.aliases = aliases;
-//        n.builtins = builtins;
-//        n.external = externals;
-        n.eval(context);
+    public void executeCommand(String[] command, JShellFileContext context) {
+        context.setServiceName(command[0]);
+        context.setArgs(Arrays.copyOfRange(command, 1, command.length));
+        createCommandNode(command).eval(context);
     }
 
     public void addToHistory(String[] command) {
@@ -602,7 +350,7 @@ public class JShell {
 
     public void executePreparedCommand(String[] command,
                                        boolean considerAliases, boolean considerBuiltins, boolean considerExternal,
-                                       JShellContext context
+                                       JShellFileContext context
     ) {
         String cmdToken = command[0];
         if (cmdToken.indexOf('/') >= 0 || cmdToken.indexOf('\\') >= 0) {
@@ -626,18 +374,10 @@ public class JShell {
                 } catch (Exception ex) {
                     Logger.getLogger(JShell.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (node0 instanceof CommandNode) {
-                    CommandNode nn = (CommandNode) node0;
-                    ArrayList<CommandItemHolderNode> items = nn.items;
-                    cmds.remove(0);
-                    for (int i = nn.items.size() - 1; i >= 0; i--) {
-                        CommandItemHolderNode n = items.get(i);
-                        cmds.add(0, n.getPathString(context));
-                    }
-                }else if (node0 instanceof Yaccer.ArgumentsLine) {
+                if (node0 instanceof Yaccer.ArgumentsLine) {
                     Yaccer.ArgumentsLine nn = (Yaccer.ArgumentsLine) node0;
                     List<Yaccer.Argument> items = nn.getArgs();
-                    List<String> newCmd=new ArrayList<>();
+                    List<String> newCmd = new ArrayList<>();
                     for (Yaccer.Argument item : items) {
                         newCmd.addAll(Arrays.asList(item.evalString(context)));
                     }
@@ -649,8 +389,8 @@ public class JShell {
                 } else {
                     throw new IllegalArgumentException("invalid  alias " + a);
                 }
-            }else{
-                a=cmdToken;
+            } else {
+                a = cmdToken;
             }
             JShellBuiltin shellCommand = considerBuiltins ? context.builtins().find(a) : null;
             if (shellCommand != null && shellCommand.isEnabled()) {
@@ -671,75 +411,46 @@ public class JShell {
         }
     }
 
-    /**
-     * read options
-     *
-     * @param args
-     */
-    protected void prepareExecuteShell(String[] args) {
-        PrintStream out = System.out;
-        PrintStream err = System.err;
-        for (int i = 0; i < args.length; i++) {
-            String arg = args[i];
-            if ("-?".equals(arg)) {
-                out.printf("Syntax : shell [<FILE>]\n");
-                out.printf("    <FILE> : if present content will be processed as input\n");
-                return;
-            } else if ("--version".equals(arg)) {
-                out.printf("v%s\n", APP_VERSION);
-            } else if ("--verbose".equals(arg)) {
-                getOptions().setVerbose(true);
-            } else if ("-x".equals(arg)) {
-                getOptions().setXtrace(true);
-            } else if ("--startup-script".equals(arg)) {
-                i++;
-                startupScript = args[i];
-            } else if ("--shutdown-script".equals(arg)) {
-                i++;
-                shutdownScript = args[i];
-            } else if (arg.startsWith("-")) {
-                err.printf("Syntax error\n");
-                //return -1;
-                throw new JShellException(1, "Syntax Error");
+
+    public void run() {
+        if (getOptions().isHelp()) {
+            executeHelp(getRootContext());
+            return;
+        }
+        if (getOptions().isVersion()) {
+            executeVersion(getRootContext());
+            return;
+        }
+        if (getOptions().isStdInAndPos()) {
+            if (getOptions().getCommandArgs().isEmpty()) {
+                //ok
+                executeInteractive(getRootContext());
             } else {
-                input = arg;
-                exitAfterProcessingLines = true;
+                getRootContext().err().println("-s option not supported yet. ignored");
+                executeInteractive(getRootContext());
             }
+            return;
         }
+        if (getOptions().isInteractive()) {
+            executeInteractive(getRootContext());
+            return;
+        }
+
+        if (getOptions().isCommand()) {
+            executeCommand(getOptions().getCommandArgs().toArray(new String[0]),getRootContext());
+            return;
+        }
+
+        if (!getOptions().getFiles().isEmpty()) {
+            for (String file : getOptions().getFiles()) {
+                executeFile(createSourceFileContext(rootContext, file, getOptions().getCommandArgs().toArray(new String[0])), false);
+            }
+            return;
+        }
+        executeInteractive(getRootContext());
     }
 
-    public void executeShell(String[] args) {
-        PrintStream out = System.out;
-        JShellContext context = createContext();
-        context.setArgs(args);
-        prepareContext(context);
-
-        if (input == null) {
-            System.out.printf("%s version %s\n", APP_TITLE, APP_VERSION);
-        }
-
-        executeFileIfExists(startupScript, new String[0], context);
-
-        if (input != null) {
-            if (!new File(input).exists()) {
-                throw new JShellException(1, "file not found " + input);
-            }
-        }
-
-        if (input == null) {
-            try {
-                executeInteractive(out,context);
-            } finally {
-                executeFileIfExists(shutdownScript, args, context);
-            }
-        } else {
-            executeFile(input, args,context);
-            executeFileIfExists(shutdownScript, new String[0], context);
-        }
-
-    }
-
-    protected String readInteractiveLine(JShellContext context) {
+    protected String readInteractiveLine(JShellFileContext context) {
         if (_in_reader == null) {
             _in_reader = new BufferedReader(new InputStreamReader(System.in));
         }
@@ -754,18 +465,28 @@ public class JShell {
         //
     }
 
-    protected void executeInteractive(PrintStream out,JShellContext context) {
-        if (context == null) {
-            context = getRootContext();
+    protected void executeHelp(JShellFileContext context) {
+        context.out().println("Syntax : shell [<FILE>]\n");
+        context.out().println("    <FILE> : if present content will be processed as input\n");
+    }
+
+    protected void executeVersion(JShellFileContext context) {
+        context.out().printf("v%s\n", APP_VERSION);
+    }
+
+    protected void executeInteractive(JShellFileContext context) {
+        prepareContext(rootContext);
+        printHeader(context.out());
+        if (getOptions().isLogin()) {
+            executeLoginScripts();
         }
-        printHeader(out);
 
         while (true) {
             String line = null;
             try {
                 line = readInteractiveLine(context);
             } catch (Exception ex) {
-                onResult(ex,context);
+                onResult(ex, context);
                 break;
             }
             if (line == null) {
@@ -775,6 +496,9 @@ public class JShell {
                 try {
                     executeLine(line, true, context);
                 } catch (JShellQuitException q) {
+                    if (getOptions().isLogin()) {
+                        executeLogoutScripts();
+                    }
                     if (q.getResult() == 0) {
                         return;
                     }
@@ -783,7 +507,45 @@ public class JShell {
                 }
             }
         }
+        if (getOptions().isLogin()) {
+            executeLogoutScripts();
+        }
         onQuit(new JShellQuitException(1, null));
+    }
+
+    private void executeLoginScripts() {
+        if (!getOptions().isNoProfile()) {
+            for (String profileFile : new String[]{
+                    "/etc/profile",
+                    (getOptions().isPosix()) ? null : "~/.bash_profile",
+                    (getOptions().isPosix()) ? null : "~/.bash_login",
+                    "~/.profile",
+                    getOptions().isBash() || getOptions().isPosix() ? null : getOptions().getStartupScript()
+            }) {
+                if (profileFile != null) {
+                    if (profileFile.startsWith("~/") || profileFile.startsWith("~\\")) {
+                        profileFile = System.getProperty("user.home") + profileFile.substring(1);
+                    }
+                    executeFile(createSourceFileContext(rootContext, profileFile, new String[0]), true);
+                }
+            }
+        }
+    }
+
+    private void executeLogoutScripts() {
+        if (!getOptions().isNoProfile()) {
+            for (String profileFile : new String[]{
+                    (getOptions().isPosix()) ? null : "~/.bash_logout",
+                    (getOptions().isBash() || getOptions().isPosix()) ? null : getOptions().getStartupScript()
+            }) {
+                if (profileFile != null) {
+                    if (profileFile.startsWith("~/") || profileFile.startsWith("~\\")) {
+                        profileFile = System.getProperty("user.home") + profileFile.substring(1);
+                    }
+                    executeFile(createSourceFileContext(rootContext, profileFile, new String[0]), true);
+                }
+            }
+        }
     }
 
     protected void onQuit(JShellQuitException quitExcepion) {
@@ -795,13 +557,10 @@ public class JShell {
         throw quitExcepion;
     }
 
-    public void executeFileIfExists(String file, String[] args,JShellContext context) {
-        executeFile(file,args,context,true);
-    }
-
-    public void executeFile(String file, String[] args,JShellContext context, boolean ignoreIfNotFound) {
-        if(file!=null){
-            file= ShellUtils.getAbsolutePath(new File(context.getCwd()),file);
+    public void executeFile(JShellFileContext context, boolean ignoreIfNotFound) {
+        String file = context.getServiceName();
+        if (file != null) {
+            file = ShellUtils.getAbsolutePath(new File(context.getCwd()), file);
         }
         if (file == null || !new File(file).isFile()) {
             if (ignoreIfNotFound) {
@@ -810,7 +569,6 @@ public class JShell {
             throw new JShellException(1, "shell file not found : " + file);
         }
         context.setServiceName(file);
-        context.setArgs(args);
         FileInputStream stream = null;
         try {
             try {
@@ -819,7 +577,7 @@ public class JShell {
                 if (ii == null) {
                     return;
                 }
-                JShellContext c = createContext(context).setRoot(ii).setParent(null);
+                JShellFileContext c = context.setRoot(ii);//.setParent(null);
                 ii.eval(c);
             } catch (IOException ex) {
                 throw new JShellException(1, ex);
@@ -835,19 +593,19 @@ public class JShell {
         }
     }
 
-    public void executeString(String text, JShellContext context) {
-        if(context==null){
-            context=getRootContext();
+    public void executeString(String text, JShellFileContext context) {
+        if (context == null) {
+            context = getRootContext();
         }
         if (text == null || text.trim().isEmpty()) {
             return;
         }
-        try (InputStream stream=new ByteArrayInputStream(text.getBytes())) {
+        try (InputStream stream = new ByteArrayInputStream(text.getBytes())) {
             InstructionNode ii = parseCommand(stream);
             if (ii == null) {
                 return;
             }
-            JShellContext c = createContext(context).setRoot(ii).setParent(null);
+            JShellFileContext c = context.setRoot(ii);//.setParent(null);
             ii.eval(c);
         } catch (IOException ex) {
             throw new JShellException(1, ex);
@@ -867,7 +625,7 @@ public class JShell {
         }
     }
 
-    public int safeEval(InstructionNode n, JShellContext context) {
+    public int safeEval(InstructionNode n, JShellFileContext context) {
         boolean success = false;
         try {
             n.eval(context);
@@ -884,7 +642,7 @@ public class JShell {
     //    public String getPromptString() {
 //        return getPromptString(getRootContext());
 //    }
-    protected String getPromptString(JShellContext context) {
+    protected String getPromptString(JShellFileContext context) {
 
         String promptValue = context.vars().getAll().getProperty("PS1");
         if (promptValue == null) {
@@ -931,7 +689,7 @@ public class JShell {
 
     }
 
-    public void prepareContext(JShellContext context) {
+    public void prepareContext(JShellFileContext context) {
 //        try {
 //            cwd = new File(".").getCanonicalPath();
 //        } catch (IOException ex) {
@@ -944,6 +702,7 @@ public class JShell {
         setUndefinedStartupEnv("PWD", System.getProperty("user.dir"));
         setUndefinedStartupEnv(JShell.ENV_HOME, System.getProperty("user.home"));
         setUndefinedStartupEnv("PS1", ">");
+        setUndefinedStartupEnv("IFS", " \t\n");
     }
 
     private void setUndefinedStartupEnv(String name, String defaultValue) {
@@ -952,10 +711,6 @@ public class JShell {
         }
     }
 
-    public String evalAsString(CommandItemNode param) {
-        System.err.printf("FIX ME PLEASE evalAsString\n");
-        return param.toString();
-    }
 
 //    public String evalAsString(String param, JShellContext context) {
 //        Properties envs = new Properties();
@@ -1173,17 +928,9 @@ public class JShell {
 //        return sb.toString();
 //    }
 
-    public JShellWordEvaluator getWordEvaluator() {
-        return wordEvaluator;
-    }
-
-    public void setWordEvaluator(JShellWordEvaluator wordEvaluator) {
-        this.wordEvaluator = wordEvaluator;
-    }
-
-    public void traceExecution(String msg) {
+    public void traceExecution(String msg, JShellFileContext context) {
         if (getOptions().isXtrace()) {
-            System.out.println("+ " + msg);
+            context.out().println("+ " + msg);
         }
     }
 
@@ -1201,5 +948,17 @@ public class JShell {
 
     protected void setVersion(String version) {
         this.version = version;
+    }
+
+    public void executeCommand(String[] command, StringBuilder in, StringBuilder out, StringBuilder err) {
+        ByteArrayPrintStream oout = new ByteArrayPrintStream();
+        ByteArrayPrintStream oerr = new ByteArrayPrintStream();
+        JShellFileContext newContext = createNewContext(getRootContext(), command[0], Arrays.copyOfRange(command, 1, command.length));
+        newContext.setIn(new ByteArrayInputStream(in == null ? new byte[0] : in.toString().getBytes()));
+        newContext.setOut(oout);
+        newContext.setOut(oerr);
+        executeCommand(command, newContext);
+        out.append(oout.toString());
+        err.append(oerr.toString());
     }
 }

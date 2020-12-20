@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.io.PrintStream;
 
 public class DefaultJShellExecutionContext implements JShellExecutionContext {
-    private final JShellContext context;
+    private final JShellFileContext context;
 
-    public DefaultJShellExecutionContext(JShellContext context) {
+    public DefaultJShellExecutionContext(JShellFileContext context) {
         this.context = context;
     }
 
@@ -37,7 +37,7 @@ public class DefaultJShellExecutionContext implements JShellExecutionContext {
     }
 
     @Override
-    public JShellContext getGlobalContext() {
+    public JShellFileContext getGlobalContext() {
         return context;
     }
 }

@@ -15,5 +15,5 @@ public interface JShellExecutionContext {
 
     JShellVariables vars();
 
-    JShellContext getGlobalContext();
+    JShellFileContext getGlobalContext();
 }

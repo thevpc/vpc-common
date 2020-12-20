@@ -1,6 +1,5 @@
 package net.thevpc.jshell.parser2;
 
-import net.thevpc.jshell.parser.nodes.Node;
 import net.thevpc.jshell.parser2.ctx.DefaultContext;
 
 import java.io.InputStream;

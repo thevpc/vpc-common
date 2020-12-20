@@ -15,7 +15,7 @@ public interface JShellErrorHandler {
     
     String errorToMessage(Throwable th);
 
-    void onErrorImpl(String message, Throwable th, JShellContext context);
+    void onErrorImpl(String message, Throwable th, JShellFileContext context);
 
     boolean isRequireExit(Throwable th);
 }

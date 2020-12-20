@@ -8,10 +8,7 @@ package net.thevpc.jshell.util;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -56,6 +53,65 @@ public class ShellUtils {
 //        sb.append("\"");
 //        return sb.toString();
 //    }
+
+    public static String shellPatternToRegexp(String pattern) {
+        String pathSeparator = "/";
+        if (pattern == null) {
+            pattern = "*";
+        }
+        int i = 0;
+        char[] cc = pattern.toCharArray();
+        StringBuilder sb = new StringBuilder("^");
+        while (i < cc.length) {
+            char c = cc[i];
+            switch (c) {
+                case '.':
+                case '!':
+                case '$':
+                case '{':
+                case '}':
+                case '+': {
+                    sb.append('\\').append(c);
+                    break;
+                }
+                case '\\': {
+                    sb.append(c);
+                    i++;
+                    sb.append(cc[i]);
+                    break;
+                }
+                case '[': {
+                    while (i < cc.length) {
+                        sb.append(cc[i]);
+                        if (cc[i] == ']') {
+                            break;
+                        }
+                    }
+                    break;
+                }
+                case '?': {
+                    sb.append("[^").append(pathSeparator).append("]");
+                    break;
+                }
+                case '*': {
+                    if (i + 1 < cc.length && cc[i + 1] == '*') {
+                        i++;
+                        sb.append(".*");
+                    } else {
+                        sb.append("[^").append(pathSeparator).append("]*");
+                    }
+                    break;
+                }
+                default: {
+                    sb.append(c);
+                }
+            }
+            i++;
+        }
+        sb.append('$');
+        return sb.toString();
+    }
+
 
     public static boolean isEmpty(String string) {
         return string == null || string.trim().isEmpty();
@@ -307,4 +363,44 @@ public class ShellUtils {
         }
     }
 
+    public static int readQuotes(char[] chars,int i,StringBuilder v){
+        Stack<Character> s=new Stack<Character>();
+        s.push(chars[i]);
+        int j=0;
+        while (i+j < chars.length && !s.isEmpty()) {
+            switch (chars[i+j]){
+                case '\\':{
+                    j++;
+                    break;
+                }
+                case '\"':{
+                    if(s.peek().equals('\"')){
+                        s.pop();
+                    }else {
+                        s.push('\"');
+                    }
+                    break;
+                }
+                case '\'':{
+                    if(s.peek().equals('\'')){
+                        s.pop();
+                    }else {
+                        s.push('\'');
+                    }
+                    break;
+                }
+                case '`':{
+                    if(s.peek().equals('`')){
+                        s.pop();
+                    }else {
+                        s.push('`');
+                    }
+                    break;
+                }
+            }
+            v.append(chars[i+j]);
+            j++;
+        }
+        return i;
+    }
 }

@@ -1,8 +1,7 @@
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser.nodes.Node;
 import net.thevpc.jshell.parser2.JShellParser2;
-import net.thevpc.jshell.parser2.Yaccer;
+import net.thevpc.jshell.parser2.Node;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

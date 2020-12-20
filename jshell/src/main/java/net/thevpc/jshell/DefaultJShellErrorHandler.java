@@ -27,7 +27,7 @@ public class DefaultJShellErrorHandler implements JShellErrorHandler {
     }
 
     @Override
-    public void onErrorImpl(String message, Throwable th, JShellContext context) {
+    public void onErrorImpl(String message, Throwable th, JShellFileContext context) {
         th.printStackTrace();
     }
 }

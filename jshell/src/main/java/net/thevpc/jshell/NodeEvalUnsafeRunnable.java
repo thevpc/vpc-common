@@ -5,7 +5,7 @@
  */
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser.nodes.InstructionNode;
+import net.thevpc.jshell.parser2.InstructionNode;
 
 /**
  *
@@ -14,9 +14,9 @@ import net.thevpc.jshell.parser.nodes.InstructionNode;
 public class NodeEvalUnsafeRunnable implements UnsafeRunnable {
     
     private final InstructionNode left;
-    private final JShellContext context;
+    private final JShellFileContext context;
 
-    public NodeEvalUnsafeRunnable(InstructionNode left, JShellContext context) {
+    public NodeEvalUnsafeRunnable(InstructionNode left, JShellFileContext context) {
         this.left = left;
         this.context = context;
     }
