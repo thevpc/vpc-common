@@ -130,7 +130,7 @@ public class DollarVarStreamProcessor implements StreamProcessor {
                                     }
                                 }
                             }
-                            String v = context.executeStream(new ByteArrayInputStream(sb2.toString().getBytes()), MimeTypeConstants.FTEX);
+                            String v = evaluateDollarValue(sb2.toString(),context);
                             out.append(String.valueOf(v));
                         } else {
                             out.append(c);
@@ -146,6 +146,10 @@ public class DollarVarStreamProcessor implements StreamProcessor {
         } catch (IOException ex) {
             throw new UncheckedIOException(ex);
         }
+    }
+
+    protected String evaluateDollarValue(String str,FileTemplater context){
+        return context.executeStream(new ByteArrayInputStream(str.getBytes()), MimeTypeConstants.FTEX);
     }
 
     @Override

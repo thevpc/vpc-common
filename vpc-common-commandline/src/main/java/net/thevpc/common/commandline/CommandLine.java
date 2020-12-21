@@ -580,7 +580,7 @@ public class CommandLine {
                 args.clear();
                 return;
             }
-            throw new IllegalArgumentException("Missing Arguments");
+            throw new IllegalArgumentException("missing arguments");
         }
     }
 

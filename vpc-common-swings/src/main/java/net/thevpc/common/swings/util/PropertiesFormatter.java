@@ -94,7 +94,7 @@ public final class PropertiesFormatter {
             return str;
         }
         if (regexp) {
-            throw new IllegalArgumentException("Not yet supported");
+            throw new IllegalArgumentException("regexp is unsupported");
         }
 
         String current = str;

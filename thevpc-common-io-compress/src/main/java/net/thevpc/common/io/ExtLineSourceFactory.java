@@ -26,7 +26,7 @@ public class ExtLineSourceFactory implements LineSourceFactory {
 
     @Override
     public LineSource createLineSource(InputStream stream, String mimeType) {
-        throw new IllegalArgumentException("Not yet supported");
+        throw new IllegalArgumentException("not supported: 'createLineSource'");
     }
 
     @Override

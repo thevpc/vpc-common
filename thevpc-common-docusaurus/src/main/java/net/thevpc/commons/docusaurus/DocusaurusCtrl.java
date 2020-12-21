@@ -8,7 +8,6 @@ package net.thevpc.commons.docusaurus;
 import net.thevpc.commons.filetemplate.*;
 import net.thevpc.commons.ljson.LJSON;
 import net.thevpc.commons.md.convert.Docusaurus2Asciidoctor;
-import net.thevpc.commons.filetemplate.*;
 import net.thevpc.commons.filetemplate.util.FileProcessorUtils;
 import net.thevpc.commons.md.docusaurus.DocusaurusFolder;
 import net.thevpc.commons.md.docusaurus.DocusaurusProject;
@@ -82,7 +81,7 @@ public class DocusaurusCtrl {
         boolean genSidebarMenu=Boolean.parseBoolean(genSidebarMenuString);
         Path basePath = base;
         Path preProcessor = getPreProcessorBaseDir();
-        if (Files.isDirectory(preProcessor) && Files.isRegularFile(preProcessor.resolve(FileTemplater.PROJECT_FTEX_FILENAME))) {
+        if (Files.isDirectory(preProcessor) && Files.isRegularFile(preProcessor.resolve(FileTemplater.PROJECT_FILENAME))) {
 //            Files.walk(base).filter(x->Files.isDirectory(base))
             try {
                 Path docs = basePath.resolve("docs");

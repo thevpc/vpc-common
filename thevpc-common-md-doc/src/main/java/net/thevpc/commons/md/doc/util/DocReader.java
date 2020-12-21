@@ -31,13 +31,13 @@ import com.github.javaparser.javadoc.description.JavadocSnippet;
 import net.thevpc.commons.md.*;
 import net.thevpc.commons.md.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author thevpc
  */
 public class DocReader {
+    private static Set<String> unclosableTags=new HashSet<>(Arrays.asList("p","img","br","hr"));
 
     private List<Object> all = new ArrayList<>();
 
@@ -137,7 +137,9 @@ public class DocReader {
                         } else {
                             MdElement content = readAny();
                             if (!isCurrText() || !currText().read("</" + na[0] + ">")) {
-                                System.err.println("missing " + "</" + na[0] + ">");
+                                if(!unclosableTags.contains(na[0])) {
+                                    System.err.println("missing " + "</" + na[0] + ">");
+                                }
                                 //ignore.
                             } else {
                                 result.add(prepareXml(new MdXml(na[0], null, content)));

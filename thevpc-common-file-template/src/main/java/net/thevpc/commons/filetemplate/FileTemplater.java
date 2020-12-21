@@ -53,7 +53,7 @@ public class FileTemplater {
     public static final String ROOT_DIR = "rootDir";
     public static final String WORKING_DIR = "workingDir";
     public static final String SOURCE_PATH = "sourcePath";
-    public static final String PROJECT_FTEX_FILENAME = "project.ftex";
+    public static final String PROJECT_FILENAME = "project.ftex";
 
     static {
         globalProcessorsByMimeType.put(MimeTypeConstants.PLACEHOLDER_DOLLARS, new StreamToTemplateProcessor(new DollarVarStreamProcessor()));
@@ -76,6 +76,7 @@ public class FileTemplater {
     private final Map<String, TemplateProcessor> execProcessorsByMimeType = new HashMap<>();
     private boolean userParentProperties;
     private PathTranslator pathTranslator;
+    private String projectFileName= PROJECT_FILENAME;
 
     public FileTemplater() {
 
@@ -91,6 +92,18 @@ public class FileTemplater {
 
     public FileTemplater setUserParentProperties(boolean userParentProperties) {
         this.userParentProperties = userParentProperties;
+        return this;
+    }
+
+    public String getProjectFileName() {
+        return projectFileName;
+    }
+
+    public FileTemplater setProjectFileName(String projectFileName) {
+        if(projectFileName==null ||projectFileName.isEmpty()){
+            projectFileName=PROJECT_FILENAME;
+        }
+        this.projectFileName = projectFileName;
         return this;
     }
 
@@ -536,6 +549,10 @@ public class FileTemplater {
         }
     }
 
+    public void executeProjectFile(Path path, String mimeTypesString) {
+        executeRegularFile(path,mimeTypesString);
+    }
+
     public String executeRegularFile(Path path, String mimeTypesString) {
         Path absolutePath = toAbsolutePath(path);
         Path parentPath = absolutePath.getParent();
@@ -724,7 +741,7 @@ public class FileTemplater {
             }
         }
         Path oProjectDirPath = Paths.get(projectPath);
-        Path oProjectFile = oProjectDirPath.resolve(PROJECT_FTEX_FILENAME);
+        Path oProjectFile = oProjectDirPath.resolve(getProjectFileName());
         Path oProjectSrc = oProjectDirPath.resolve("src");
         if (!Files.isDirectory(oProjectSrc)) {
             throw new IllegalArgumentException("invalid project, missing src/ folder : " + oProjectDirPath);
@@ -748,7 +765,7 @@ public class FileTemplater {
         for (String initScript : initScripts) {
             Path fpath = Paths.get(initScript).toAbsolutePath();
             this.setWorkingDir(workingPath(fpath).toString());
-            this.executeRegularFile(fpath, scriptType);
+            this.executeProjectFile(fpath, scriptType);
         }
         if (projectPath != null) {
             //&& targetFolder==null
