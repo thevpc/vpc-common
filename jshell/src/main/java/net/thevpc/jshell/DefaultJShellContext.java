@@ -8,7 +8,6 @@ package net.thevpc.jshell;
 import java.io.*;
 import java.util.*;
 
-import net.thevpc.jshell.parser2.Node;
 import net.thevpc.jshell.util.DirectoryScanner;
 
 /**
@@ -19,15 +18,15 @@ public class DefaultJShellContext extends AbstractJShellContext {
 
     private static final JShellResult OK_RESULT = new JShellResult(0, null, null);
     private JShell shell;
-    private JShellVariables vars = new JShellVariables();
-    private Node rootNode;
-    private Node parentNode;
+    private JShellVariables vars;
+    private JShellNode rootNode;
+    private JShellNode parentNode;
     private InputStream in = System.in;
     private PrintStream out = System.out;
     private PrintStream err = System.err;
     private Map<String, Object> userProperties = new HashMap<>();
     private JShellFunctionManager functionManager = new DefaultJShellFunctionManager();
-    private JShellAliasManager aliasManager = new DefaultAliasManager();
+    private JShellAliasManager aliasManager = new DefaultJShellAliasManager();
     private JShellBuiltinManager builtinsManager;
     private String cwd=System.getProperty("user.dir");
     private JShellFileSystem fileSystem;
@@ -35,13 +34,9 @@ public class DefaultJShellContext extends AbstractJShellContext {
     public JShellResult lastResult = OK_RESULT;
     public JShellContext parentContext;
 
-    public DefaultJShellContext() {
-        this.vars = new JShellVariables();
-        setFileSystem(new DefaultJShellFileSystem());
-    }
-
     public DefaultJShellContext(JShell shell) {
-        setShell(shell);
+        this.vars = new JShellVariables(this);
+        this.shell=shell;
         setFileSystem(new DefaultJShellFileSystem());
     }
 
@@ -58,7 +53,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
         this.builtinsManager = builtinsManager;
     }
 
-//    public DefaultJShellContext(JShell shell, JShellFunctionManager functionManager, JShellAliasManager aliasManager,JShellVariables env, Node root, Node parent, InputStream in, PrintStream out, PrintStream err, String... args) {
+//    public DefaultJShellContext(JShell shell, JShellFunctionManager functionManager, JShellAliasManager aliasManager,JShellVariables env, JShellNode root, JShellNode parent, InputStream in, PrintStream out, PrintStream err, String... args) {
 //        setShell(shell);
 //        setVars(env);
 //        setAliases(aliasManager);
@@ -86,7 +81,7 @@ public class DefaultJShellContext extends AbstractJShellContext {
     }
 
     public void setAliases(JShellAliasManager aliasManager) {
-        this.aliasManager = aliasManager == null ? new DefaultAliasManager() : aliasManager;
+        this.aliasManager = aliasManager == null ? new DefaultJShellAliasManager() : aliasManager;
     }
 
     public void copyFrom(JShellContext other) {
@@ -109,11 +104,11 @@ public class DefaultJShellContext extends AbstractJShellContext {
         }
     }
 
-    public JShellContext copy() {
-        DefaultJShellContext c = new DefaultJShellContext();
-        c.copyFrom(this);
-        return c;
-    }
+//    public JShellContext copy() {
+//        DefaultJShellContext c = new DefaultJShellContext(shell);
+//        c.copyFrom(this);
+//        return c;
+//    }
 
     @Override
     public void setFileSystem(JShellFileSystem fileSystem) {
@@ -137,12 +132,12 @@ public class DefaultJShellContext extends AbstractJShellContext {
     }
 
     @Override
-    public Node getRootNode() {
+    public JShellNode getRootNode() {
         return rootNode;
     }
 
     @Override
-    public Node getParentNode() {
+    public JShellNode getParentNode() {
         return parentNode;
     }
 
@@ -166,18 +161,14 @@ public class DefaultJShellContext extends AbstractJShellContext {
         return vars;
     }
 
-    public JShellContext setVars(JShellVariables vars) {
-        this.vars = vars == null ? new JShellVariables() : vars;
-        return this;
-    }
 
-    public JShellContext setRoot(Node root) {
+    public JShellContext setRoot(JShellNode root) {
         this.rootNode = root;
         return this;
     }
 
     @Override
-    public JShellContext setParentNode(Node parent) {
+    public JShellContext setParentNode(JShellNode parent) {
         this.parentNode = parent;
         return this;
     }
@@ -202,19 +193,12 @@ public class DefaultJShellContext extends AbstractJShellContext {
     }
 
     @Override
-    public void setShell(JShell shell) {
-        this.shell = shell;
-        vars.setParent(shell.vars());
-    }
-
-    @Override
-    public List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine, JShellFileContext ctx) {
+    public List<JShellAutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine, JShellFileContext ctx) {
         return new ArrayList<>();
     }
 
     @Override
     public JShellContext setEnv(Map<String, String> env) {
-        this.vars = new JShellVariables();
         if (env != null) {
             this.vars.set(env);
         }

@@ -1,7 +1,5 @@
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser2.Node;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -15,13 +13,13 @@ public interface JShellContext {
 
     JShell getShell();
 
-    Node getRootNode();
+    JShellNode getRootNode();
 
-    JShellContext setRoot(Node root);
+    JShellContext setRoot(JShellNode root);
 
-    Node getParentNode();
+    JShellNode getParentNode();
 
-    JShellContext setParentNode(Node parent);
+    JShellContext setParentNode(JShellNode parent);
 
     InputStream in();
 
@@ -36,7 +34,6 @@ public interface JShellContext {
 
     JShellFunctionManager functions();
 
-    JShellContext setVars(JShellVariables env);
 
     JShellContext setOut(PrintStream out);
 
@@ -46,9 +43,7 @@ public interface JShellContext {
 
     JShellExecutionContext createCommandContext(JShellBuiltin command, JShellFileContext context);
 
-    void setShell(JShell console);
-
-    List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine, JShellFileContext ctx);
+    List<JShellAutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine, JShellFileContext ctx);
 
     JShellContext setEnv(Map<String,String> env);
 
@@ -82,7 +77,7 @@ public interface JShellContext {
 
     void copyFrom(JShellContext other);
 
-    JShellContext copy() ;
+//    JShellContext copy() ;
 
     interface Watcher{
         void stop();

@@ -9,16 +9,21 @@ public class JShellVariables {
 
     private Map<String, JShellVar> vars = new HashMap<>();
     private List<JShellVarListener> listeners = new ArrayList<>();
+    private JShellContext shellContext;
 
-    public void addListener(JShellVarListener listener) {
+    public JShellVariables(JShellContext shellContext) {
+        this.shellContext=shellContext;
+    }
+
+    public void addVarListener(JShellVarListener listener) {
         this.listeners.add(listener);
     }
 
-    public void removeListener(JShellVarListener listener) {
+    public void removeVarListener(JShellVarListener listener) {
         this.listeners.add(listener);
     }
 
-    public JShellVarListener[] getListeners() {
+    public JShellVarListener[] getVarListeners() {
         return listeners.toArray(new JShellVarListener[0]);
     }
 
@@ -111,15 +116,21 @@ public class JShellVariables {
         if (b == null) {
             JShellVar jvar = new JShellVar(this, var, value, defaultExport);
             vars.put(var, jvar);
-            for (JShellVarListener listener : getListeners()) {
-                listener.varAdded(jvar);
+            for (JShellVarListener listener : getVarListeners()) {
+                listener.varAdded(jvar,this,shellContext);
+            }
+            for (JShellVarListener listener : shellContext.getShell().getVarListeners()) {
+                listener.varAdded(jvar,this,shellContext);
             }
         } else {
             String oldValue = b.getValue();
             if(Objects.equals(oldValue,value)) {
                 b.setValue(value);
-                for (JShellVarListener listener : getListeners()) {
-                    listener.varValueUpdated(b,oldValue);
+                for (JShellVarListener listener : getVarListeners()) {
+                    listener.varValueUpdated(b,oldValue,this,shellContext);
+                }
+                for (JShellVarListener listener : shellContext.getShell().getVarListeners()) {
+                    listener.varValueUpdated(b,oldValue,this,shellContext);
                 }
             }
         }
@@ -132,8 +143,11 @@ public class JShellVariables {
         } else {
             if (!b.isExported()) {
                 b.setExported(true);
-                for (JShellVarListener listener : getListeners()) {
-                    listener.varExportUpdated(b,false);
+                for (JShellVarListener listener : getVarListeners()) {
+                    listener.varExportUpdated(b,false,this,shellContext);
+                }
+                for (JShellVarListener listener : shellContext.getShell().getVarListeners()) {
+                    listener.varExportUpdated(b,false,this,shellContext);
                 }
             }
         }
@@ -145,8 +159,11 @@ public class JShellVariables {
             if(jvar.isExported()) {
                 jvar.setExported(false);
             }
-            for (JShellVarListener listener : getListeners()) {
-                listener.varExportUpdated(jvar,false);
+            for (JShellVarListener listener : getVarListeners()) {
+                listener.varExportUpdated(jvar,false,this,shellContext);
+            }
+            for (JShellVarListener listener : shellContext.getShell().getVarListeners()) {
+                listener.varExportUpdated(jvar,false,this,shellContext);
             }
         } else {
             throw new NoSuchElementException("Unable to unexport env var " + var + " . Not found");
@@ -156,12 +173,6 @@ public class JShellVariables {
     public boolean isExported(String var) {
         JShellVar v = findVar(var);
         return v != null && v.isExported();
-    }
-
-    public JShellVariables copy() {
-        JShellVariables env = new JShellVariables();
-        env.set(this);
-        return env;
     }
 
     public void set(JShellVariables other) {

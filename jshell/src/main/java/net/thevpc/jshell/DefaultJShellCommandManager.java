@@ -60,10 +60,10 @@ public class DefaultJShellCommandManager implements JShellBuiltinManager {
     public JShellBuiltin get(String cmd) {
         JShellBuiltin command = find(cmd);
         if (command == null) {
-            throw new NoSuchElementException("Command not found : " + cmd);
+            throw new NoSuchElementException("JShellCommandNode not found : " + cmd);
         }
         if (!command.isEnabled()) {
-            throw new NoSuchElementException("Command disabled : " + cmd);
+            throw new NoSuchElementException("JShellCommandNode disabled : " + cmd);
         }
         return command;
     }

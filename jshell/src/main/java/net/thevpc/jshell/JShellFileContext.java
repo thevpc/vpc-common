@@ -1,7 +1,5 @@
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser2.Node;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -25,13 +23,13 @@ public interface JShellFileContext {
 
     JShell getShell();
 
-    Node getRoot();
+    JShellNode getRoot();
 
-    JShellFileContext setRoot(Node root);
+    JShellFileContext setRoot(JShellNode root);
 
-    Node getParent();
+    JShellNode getParent();
 
-    JShellFileContext setParent(Node parent);
+    JShellFileContext setParent(JShellNode parent);
 
     InputStream in();
 
@@ -46,7 +44,6 @@ public interface JShellFileContext {
 
     JShellFunctionManager functions();
 
-    JShellFileContext setVars(JShellVariables env);
 
     JShellFileContext setOut(PrintStream out);
 
@@ -57,9 +54,7 @@ public interface JShellFileContext {
 
     JShellExecutionContext createCommandContext(JShellBuiltin command);
 
-    void setShell(JShell console);
-
-    List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine);
+    List<JShellAutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine);
 
     JShellFileContext setEnv(Map<String,String> env);
 

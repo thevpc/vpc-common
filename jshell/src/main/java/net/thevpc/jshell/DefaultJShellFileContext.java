@@ -1,8 +1,6 @@
 package net.thevpc.jshell;
 
 
-import net.thevpc.jshell.parser2.Node;
-
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -75,23 +73,23 @@ public class DefaultJShellFileContext implements JShellFileContext {
     }
 
     @Override
-    public Node getRoot() {
+    public JShellNode getRoot() {
         return shellContext.getRootNode();
     }
 
     @Override
-    public JShellFileContext setRoot(Node root) {
+    public JShellFileContext setRoot(JShellNode root) {
         shellContext.setRoot(root);
         return this;
     }
 
     @Override
-    public Node getParent() {
+    public JShellNode getParent() {
         return shellContext.getParentNode();
     }
 
     @Override
-    public JShellFileContext setParent(Node parent) {
+    public JShellFileContext setParent(JShellNode parent) {
         shellContext.setParentNode(parent);
         return this;
     }
@@ -127,12 +125,6 @@ public class DefaultJShellFileContext implements JShellFileContext {
     }
 
     @Override
-    public JShellFileContext setVars(JShellVariables env) {
-        shellContext.setVars(env);
-        return this;
-    }
-
-    @Override
     public JShellFileContext setOut(PrintStream out) {
         shellContext.setOut(out);
         return this;
@@ -157,12 +149,7 @@ public class DefaultJShellFileContext implements JShellFileContext {
     }
 
     @Override
-    public void setShell(JShell console) {
-        shellContext.setShell(console);
-    }
-
-    @Override
-    public List<AutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine) {
+    public List<JShellAutoCompleteCandidate> resolveAutoCompleteCandidates(String commandName, List<String> autoCompleteWords, int wordIndex, String autoCompleteLine) {
         return shellContext.resolveAutoCompleteCandidates(commandName, autoCompleteWords, wordIndex, autoCompleteLine, this);
     }
 

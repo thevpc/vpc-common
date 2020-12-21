@@ -1,19 +1,19 @@
 package net.thevpc.jshell;
 
 public interface JShellVarListener {
-    default void varAdded(JShellVar jShellVar) {
+    default void varAdded(JShellVar jShellVar, JShellVariables vars, JShellContext context) {
 
     }
 
-    default void varValueUpdated(JShellVar jShellVar, String oldValue) {
+    default void varValueUpdated(JShellVar jShellVar, String oldValue, JShellVariables vars, JShellContext context) {
 
     }
 
-    default void varExportUpdated(JShellVar jShellVar, boolean oldValue) {
+    default void varExportUpdated(JShellVar jShellVar, boolean oldValue, JShellVariables vars, JShellContext context) {
 
     }
 
-    default void varRemoved(JShellVar jShellVar) {
+    default void varRemoved(JShellVar jShellVar, JShellVariables vars, JShellContext context) {
 
     }
 }

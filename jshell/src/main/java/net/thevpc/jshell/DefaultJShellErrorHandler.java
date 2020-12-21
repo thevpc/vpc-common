@@ -18,6 +18,9 @@ public class DefaultJShellErrorHandler implements JShellErrorHandler {
 
     @Override
     public int errorToCode(Throwable th) {
+        if (th instanceof JShellException) {
+            return ((JShellException) th).getResult();
+        }
         return 1;
     }
 

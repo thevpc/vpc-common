@@ -30,7 +30,7 @@
  */
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser2.*;
+import net.thevpc.jshell.parser.*;
 import net.thevpc.jshell.util.ByteArrayPrintStream;
 import net.thevpc.jshell.util.ShellUtils;
 
@@ -63,8 +63,20 @@ public class JShell {
     private JShellErrorHandler errorHandler;
     private JShellExternalExecutor externalExecutor;
     private JShellCommandTypeResolver commandTypeResolver;
-    private JShellVariables vars = new JShellVariables();
     private BufferedReader _in_reader = null;
+    private List<JShellVarListener> listeners = new ArrayList<>();
+
+    public void addVarListener(JShellVarListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public void removeVarListener(JShellVarListener listener) {
+        this.listeners.add(listener);
+    }
+
+    public JShellVarListener[] getVarListeners() {
+        return listeners.toArray(new JShellVarListener[0]);
+    }
 
     public JShell(){
         this(null,null,null,null,null,null,null,null);
@@ -92,7 +104,7 @@ public class JShell {
             this.evaluator=evaluator;
         }
         if(history==null) {
-            this.history = new DefaultShellHistory();
+            this.history = new DefaultJShellHistory();
         }else{
             this.history=history;
         }
@@ -104,7 +116,6 @@ public class JShell {
         if(options.getServiceName()==null){
             options.setServiceName(serviceName==null?"jshell":serviceName);
         }
-        rootContext = createFileContext(createRootContext(), options.getServiceName(), options.getCommandArgs().toArray(new String[0]));
     }
 
 
@@ -142,10 +153,6 @@ public class JShell {
 
     public void setErrorHandler(JShellErrorHandler errorHandler) {
         this.errorHandler = errorHandler;
-    }
-
-    public JShellVariables vars() {
-        return vars;
     }
 
     public List<String> findFiles(final String namePattern, boolean exact, String parent) {
@@ -216,25 +223,15 @@ public class JShell {
         return new DefaultJShellContext(parentContext);
     }
 
-    public InstructionNode createCommandNode(String[] args) {
-        List<Yaccer.Argument> args2 = new ArrayList<>();
-        for (String arg : args) {
-            args2.add(new Yaccer.Argument(
-                    Arrays.asList(
-                            new Yaccer.TokenNode(
-                                    new Token(
-                                            "WORD",
-                                            arg
-                                    )
-                            )
-                    )
-            ));
-        }
-        return new Yaccer.ArgumentsLine(args2);
+    public JShellCommandNode createCommandNode(String[] args) {
+        return JShellParser.createCommandNode(args);
     }
 
 
     public JShellFileContext getRootContext() {
+        if(rootContext==null){
+            rootContext = createFileContext(createRootContext(), options.getServiceName(), options.getCommandArgs().toArray(new String[0]));
+        }
         return rootContext;
     }
 
@@ -246,7 +243,7 @@ public class JShell {
         if (line.trim().length() > 0 && !line.trim().startsWith("#")) {
             try {
                 getHistory().add(line);
-                InstructionNode nn = parseCommandLine(line);
+                JShellCommandNode nn = parseCommandLine(line);
                 nn.eval(context);
                 success = true;
             } catch (Throwable e) {
@@ -364,21 +361,20 @@ public class JShell {
             List<String> cmds = new ArrayList<>(Arrays.asList(command));
             String a = considerAliases ? context.aliases().get(cmdToken) : null;
             if (a != null) {
-                Node node0 = null;
+                JShellNode node0 = null;
                 try {
 //                    JShellParser parser = new JShellParser();
 //                    node0 = parser.parse(a);
 
-                    node0 = JShellParser2.fromString(a).parse();
+                    node0 = JShellParser.fromString(a).parse();
 
                 } catch (Exception ex) {
                     Logger.getLogger(JShell.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if (node0 instanceof Yaccer.ArgumentsLine) {
-                    Yaccer.ArgumentsLine nn = (Yaccer.ArgumentsLine) node0;
-                    List<Yaccer.Argument> items = nn.getArgs();
+                if (node0 instanceof JShellCommandLineNode) {
+                    JShellCommandLineNode nn = (JShellCommandLineNode) node0;
                     List<String> newCmd = new ArrayList<>();
-                    for (Yaccer.Argument item : items) {
+                    for (JShellArgumentNode item : nn) {
                         newCmd.addAll(Arrays.asList(item.evalString(context)));
                     }
                     for (int i = 1; i < cmds.size(); i++) {
@@ -429,21 +425,26 @@ public class JShell {
                 getRootContext().err().println("-s option not supported yet. ignored");
                 executeInteractive(getRootContext());
             }
-            return;
-        }
-        if (getOptions().isInteractive()) {
-            executeInteractive(getRootContext());
+            if (getOptions().isInteractive()) {
+                executeInteractive(getRootContext());
+            }
             return;
         }
 
         if (getOptions().isCommand()) {
             executeCommand(getOptions().getCommandArgs().toArray(new String[0]),getRootContext());
+            if (getOptions().isInteractive()) {
+                executeInteractive(getRootContext());
+            }
             return;
         }
 
         if (!getOptions().getFiles().isEmpty()) {
             for (String file : getOptions().getFiles()) {
-                executeFile(createSourceFileContext(rootContext, file, getOptions().getCommandArgs().toArray(new String[0])), false);
+                executeFile(createSourceFileContext(getRootContext(), file, getOptions().getCommandArgs().toArray(new String[0])), false);
+            }
+            if (getOptions().isInteractive()) {
+                executeInteractive(getRootContext());
             }
             return;
         }
@@ -475,7 +476,7 @@ public class JShell {
     }
 
     protected void executeInteractive(JShellFileContext context) {
-        prepareContext(rootContext);
+        prepareContext(getRootContext());
         printHeader(context.out());
         if (getOptions().isLogin()) {
             executeLoginScripts();
@@ -526,7 +527,7 @@ public class JShell {
                     if (profileFile.startsWith("~/") || profileFile.startsWith("~\\")) {
                         profileFile = System.getProperty("user.home") + profileFile.substring(1);
                     }
-                    executeFile(createSourceFileContext(rootContext, profileFile, new String[0]), true);
+                    executeFile(createSourceFileContext(getRootContext(), profileFile, new String[0]), true);
                 }
             }
         }
@@ -542,7 +543,7 @@ public class JShell {
                     if (profileFile.startsWith("~/") || profileFile.startsWith("~\\")) {
                         profileFile = System.getProperty("user.home") + profileFile.substring(1);
                     }
-                    executeFile(createSourceFileContext(rootContext, profileFile, new String[0]), true);
+                    executeFile(createSourceFileContext(getRootContext(), profileFile, new String[0]), true);
                 }
             }
         }
@@ -573,7 +574,7 @@ public class JShell {
         try {
             try {
                 stream = new FileInputStream(file);
-                InstructionNode ii = parseCommand(stream);
+                JShellCommandNode ii = parseCommand(stream);
                 if (ii == null) {
                     return;
                 }
@@ -601,7 +602,7 @@ public class JShell {
             return;
         }
         try (InputStream stream = new ByteArrayInputStream(text.getBytes())) {
-            InstructionNode ii = parseCommand(stream);
+            JShellCommandNode ii = parseCommand(stream);
             if (ii == null) {
                 return;
             }
@@ -625,7 +626,7 @@ public class JShell {
         }
     }
 
-    public int safeEval(InstructionNode n, JShellFileContext context) {
+    public int safeEval(JShellCommandNode n, JShellFileContext context) {
         boolean success = false;
         try {
             n.eval(context);
@@ -695,19 +696,19 @@ public class JShell {
 //        } catch (IOException ex) {
 //            cwd = new File(".").getAbsolutePath();
 //        }
-        vars.set(System.getenv());
-        setUndefinedStartupEnv("USER", System.getProperty("user.name"));
-        setUndefinedStartupEnv("LOGNAME", System.getProperty("user.name"));
-        setUndefinedStartupEnv(JShell.ENV_PATH, ".");
-        setUndefinedStartupEnv("PWD", System.getProperty("user.dir"));
-        setUndefinedStartupEnv(JShell.ENV_HOME, System.getProperty("user.home"));
-        setUndefinedStartupEnv("PS1", ">");
-        setUndefinedStartupEnv("IFS", " \t\n");
+        context.vars().set(System.getenv());
+        setUndefinedStartupEnv("USER", System.getProperty("user.name"),context);
+        setUndefinedStartupEnv("LOGNAME", System.getProperty("user.name"),context);
+        setUndefinedStartupEnv(JShell.ENV_PATH, ".",context);
+        setUndefinedStartupEnv("PWD", System.getProperty("user.dir"),context);
+        setUndefinedStartupEnv(JShell.ENV_HOME, System.getProperty("user.home"),context);
+        setUndefinedStartupEnv("PS1", ">",context);
+        setUndefinedStartupEnv("IFS", " \t\n",context);
     }
 
-    private void setUndefinedStartupEnv(String name, String defaultValue) {
-        if (vars.get(name) == null) {
-            vars.set(name, defaultValue);
+    private void setUndefinedStartupEnv(String name, String defaultValue,JShellFileContext context) {
+        if (context.vars().get(name) == null) {
+            context.vars().set(name, defaultValue);
         }
     }
 
@@ -830,36 +831,36 @@ public class JShell {
 //        return found.toArray(new String[found.size()]);
 //    }
 
-    public InstructionNode parseCommand(InputStream stream) {
-        Node node0 = null;
+    public JShellCommandNode parseCommand(InputStream stream) {
+        JShellNode node0 = null;
         try {
-            node0 = JShellParser2.fromInputStream(stream).parse();
+            node0 = JShellParser.fromInputStream(stream).parse();
             if (node0 == null) {
                 return null;
             }
         } catch (Exception ex) {
             Logger.getLogger(JShell.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (node0 instanceof InstructionNode) {
-            return (InstructionNode) node0;
+        if (node0 instanceof JShellCommandNode) {
+            return (JShellCommandNode) node0;
         }
-        throw new IllegalArgumentException("Expected node " + node0);
+        throw new IllegalArgumentException("expected node " + node0);
     }
 
-    public InstructionNode parseCommandLine(String line) {
-        Node node0 = null;
+    public JShellCommandNode parseCommandLine(String line) {
+        JShellNode node0 = null;
         try {
-            node0 = JShellParser2.fromString(line).parse();
+            node0 = JShellParser.fromString(line).parse();
             if (node0 == null) {
                 return null;
             }
         } catch (Exception ex) {
             Logger.getLogger(JShell.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (node0 instanceof InstructionNode) {
-            return (InstructionNode) node0;
+        if (node0 instanceof JShellCommandNode) {
+            return (JShellCommandNode) node0;
         }
-        throw new IllegalArgumentException("Expected node " + line);
+        throw new IllegalArgumentException("expected node " + line);
     }
 
     public String escapeString(String s) {

@@ -8,6 +8,7 @@ public class JShellOptions {
     public boolean xtrace = false;
     public boolean restricted = false;
     public boolean interactive = false;
+    public boolean effectiveInteractive = false;
     public boolean posix = false;
     public boolean exitAfterProcessingLines = false;
 
@@ -249,6 +250,15 @@ public class JShellOptions {
 
     public JShellOptions setHelp(boolean help) {
         this.help = help;
+        return this;
+    }
+
+    public boolean isEffectiveInteractive() {
+        return effectiveInteractive;
+    }
+
+    public JShellOptions setEffectiveInteractive(boolean effectiveInteractive) {
+        this.effectiveInteractive = effectiveInteractive;
         return this;
     }
 }

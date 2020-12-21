@@ -5,7 +5,6 @@
  */
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser2.InstructionNode;
 import net.thevpc.jshell.util.JavaShellNonBlockingInputStream;
 import net.thevpc.jshell.util.JavaShellNonBlockingInputStreamAdapter;
 import net.thevpc.jshell.util.ShellUtils;
@@ -74,7 +73,7 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
     }
 
     @Override
-    public void evalSuffixOperation(String opString, InstructionNode node, JShellFileContext context) {
+    public void evalSuffixOperation(String opString, JShellCommandNode node, JShellFileContext context) {
         switch (opString) {
             case "&": {
                 evalSuffixAndOperation(node, context);
@@ -85,18 +84,18 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
     }
 
     @Override
-    public void evalSuffixAndOperation(InstructionNode node, JShellFileContext context) {
+    public void evalSuffixAndOperation(JShellCommandNode node, JShellFileContext context) {
         node.eval(context);
     }
 
     @Override
-    public void evalBinaryAndOperation(InstructionNode left, InstructionNode right, JShellFileContext context) {
+    public void evalBinaryAndOperation(JShellCommandNode left, JShellCommandNode right, JShellFileContext context) {
         right.eval(context);
         left.eval(context);
     }
 
     @Override
-    public void evalBinaryOperation(String opString, InstructionNode left, InstructionNode right, JShellFileContext context) {
+    public void evalBinaryOperation(String opString, JShellCommandNode left, JShellCommandNode right, JShellFileContext context) {
         context.getShell().traceExecution("(" + left + ") " + opString + "(" + right + ")", context);
         if (";".equals(opString)) {
             evalBinarySuiteOperation(left, right, context);
@@ -112,9 +111,9 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
     }
 
     @Override
-    public void evalBinaryOrOperation(final InstructionNode left, InstructionNode right, final JShellFileContext context) {
+    public void evalBinaryOrOperation(final JShellCommandNode left, JShellCommandNode right, final JShellFileContext context) {
         try {
-            context.getShell().uniformException(new NodeEvalUnsafeRunnable(left, context));
+            context.getShell().uniformException(new JShellNodeUnsafeRunnable(left, context));
             return;
         } catch (JShellUniformException e) {
             if (e.isQuit()) {
@@ -126,7 +125,7 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
     }
 
     @Override
-    public void evalBinaryPipeOperation(final InstructionNode left, InstructionNode right, final JShellFileContext context) {
+    public void evalBinaryPipeOperation(final JShellCommandNode left, JShellCommandNode right, final JShellFileContext context) {
         final PipedOutputStream out;
         final PipedInputStream in;
         final JavaShellNonBlockingInputStream in2;
@@ -145,7 +144,7 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
             @Override
             public void run() {
                 try {
-                    context.getShell().uniformException(new NodeEvalUnsafeRunnable(left, leftContext));
+                    context.getShell().uniformException(new JShellNodeUnsafeRunnable(left, leftContext));
                 } catch (JShellUniformException e) {
                     if (e.isQuit()) {
                         e.throwQuit();
@@ -160,7 +159,7 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
         j1.start();
         JShellFileContext rightContext = context.getShell().createNewContext(context).setIn((InputStream) in2);
         try {
-            context.getShell().uniformException(new NodeEvalUnsafeRunnable(right, rightContext));
+            context.getShell().uniformException(new JShellNodeUnsafeRunnable(right, rightContext));
         } catch (JShellUniformException e) {
             if (e.isQuit()) {
                 e.throwQuit();
@@ -180,9 +179,9 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
     }
 
     @Override
-    public void evalBinarySuiteOperation(InstructionNode left, InstructionNode right, JShellFileContext context) {
+    public void evalBinarySuiteOperation(JShellCommandNode left, JShellCommandNode right, JShellFileContext context) {
         try {
-            context.getShell().uniformException(new NodeEvalUnsafeRunnable(left, context));
+            context.getShell().uniformException(new JShellNodeUnsafeRunnable(left, context));
         } catch (JShellUniformException e) {
             if (e.isQuit()) {
                 e.throwQuit();
@@ -193,7 +192,7 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
     }
 
     @Override
-    public String evalCommandAndReturnString(InstructionNode command, JShellFileContext context) {
+    public String evalCommandAndReturnString(JShellCommandNode command, JShellFileContext context) {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         JShellFileContext c2 = context.getShell().createNewContext(context, context.getServiceName(), context.getArgsArray());
         PrintStream p = new PrintStream(out);
@@ -303,7 +302,7 @@ public class DefaultJShellEvaluator implements JShellEvaluator {
 
     @Override
     public String evalAntiQuotesExpression(String stringExpression, JShellFileContext context) {
-        InstructionNode t = context.getShell().parseCommandLine(stringExpression);
+        JShellCommandNode t = context.getShell().parseCommandLine(stringExpression);
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         JShellFileContext c2 = context.getShell().createNewContext(context);
         c2.setOut(new PrintStream(out));

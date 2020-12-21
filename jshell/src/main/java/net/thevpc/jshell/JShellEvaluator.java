@@ -5,29 +5,27 @@
  */
 package net.thevpc.jshell;
 
-import net.thevpc.jshell.parser2.InstructionNode;
-
 /**
  *
  * @author thevpc
  */
 public interface JShellEvaluator {
 
-    void evalSuffixOperation(String opString, InstructionNode node, JShellFileContext context);
+    void evalSuffixOperation(String opString, JShellCommandNode node, JShellFileContext context);
 
-    void evalSuffixAndOperation(InstructionNode node, JShellFileContext context);
+    void evalSuffixAndOperation(JShellCommandNode node, JShellFileContext context);
 
-    void evalBinaryAndOperation(InstructionNode left, InstructionNode right, JShellFileContext context);
+    void evalBinaryAndOperation(JShellCommandNode left, JShellCommandNode right, JShellFileContext context);
 
-    void evalBinaryOperation(String opString, InstructionNode left, InstructionNode right, JShellFileContext context);
+    void evalBinaryOperation(String opString, JShellCommandNode left, JShellCommandNode right, JShellFileContext context);
 
-    void evalBinaryOrOperation(InstructionNode left, InstructionNode right, JShellFileContext context);
+    void evalBinaryOrOperation(JShellCommandNode left, JShellCommandNode right, JShellFileContext context);
 
-    void evalBinaryPipeOperation(final InstructionNode left, InstructionNode right, final JShellFileContext context);
+    void evalBinaryPipeOperation(JShellCommandNode left, JShellCommandNode right, final JShellFileContext context);
 
-    void evalBinarySuiteOperation(InstructionNode left, InstructionNode right, JShellFileContext context);
+    void evalBinarySuiteOperation(JShellCommandNode left, JShellCommandNode right, JShellFileContext context);
 
-    String evalCommandAndReturnString(InstructionNode left, JShellFileContext context);
+    String evalCommandAndReturnString(JShellCommandNode left, JShellFileContext context);
 
 
     String evalDollarSharp(JShellFileContext context);

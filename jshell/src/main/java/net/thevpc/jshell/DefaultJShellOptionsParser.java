@@ -14,12 +14,23 @@ public class DefaultJShellOptionsParser implements JShellOptionsParser{
         JShellOptions options= createOptions();
         List<String> args0 = new ArrayList<>(Arrays.asList(args));
         while (!args0.isEmpty()) {
-            processNextArgument(args0,options);
+            parseNextArgument(args0,options);
         }
+        postParse(options);
         return options;
     }
 
-    protected void processNextArgument(List<String> args,JShellOptions options) {
+    protected void postParse(JShellOptions options) {
+        if(options.isInteractive() ||
+                (options.getFiles().isEmpty()
+                && !options.isStdInAndPos()
+                && !options.isCommand())
+        ){
+            options.setEffectiveInteractive(true);
+        }
+    }
+
+    protected void parseNextArgument(List<String> args, JShellOptions options) {
         String arg = args.get(0);
         switch (arg) {
             case "-?":
@@ -163,7 +174,7 @@ public class DefaultJShellOptionsParser implements JShellOptionsParser{
             }
             default: {
                 if (arg.startsWith("-")) {
-                    throw new JShellException(1, "Syntax Error");
+                    parseUnsupportedNextArgument(args,options);
                 } else {
                     options.getFiles().add(args.remove(0));
                     options.getCommandArgs().addAll(Arrays.asList(args.toArray(new String[0])));
@@ -174,4 +185,9 @@ public class DefaultJShellOptionsParser implements JShellOptionsParser{
         }
 
     }
+
+    protected void parseUnsupportedNextArgument(List<String> args, JShellOptions options) {
+        throw new JShellException(1, "unsupported option "+args.get(0));
+    }
+
 }
