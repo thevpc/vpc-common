@@ -178,6 +178,7 @@ public class DefaultJShellOptionsParser implements JShellOptionsParser{
                 } else {
                     options.getFiles().add(args.remove(0));
                     options.getCommandArgs().addAll(Arrays.asList(args.toArray(new String[0])));
+                    args.clear();
                     options.setExitAfterProcessingLines(true);
                 }
                 break;
