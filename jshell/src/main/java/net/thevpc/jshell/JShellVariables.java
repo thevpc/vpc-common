@@ -124,7 +124,7 @@ public class JShellVariables {
             }
         } else {
             String oldValue = b.getValue();
-            if(Objects.equals(oldValue,value)) {
+            if(!Objects.equals(oldValue,value)) {
                 b.setValue(value);
                 for (JShellVarListener listener : getVarListeners()) {
                     listener.varValueUpdated(b,oldValue,this,shellContext);
