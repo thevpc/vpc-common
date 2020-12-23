@@ -45,4 +45,13 @@ public interface JDClassDoc {
 
     public JDDoc comments();
 
+    boolean isClass();
+
+    boolean isInterface();
+
+    boolean isAnnotation();
+
+    boolean isEnum();
+
+    boolean isRecord();
 }

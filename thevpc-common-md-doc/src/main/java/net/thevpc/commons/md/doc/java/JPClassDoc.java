@@ -1,7 +1,7 @@
 /**
  * ====================================================================
- *            Nuts : Network Updatable Things Service
- *                  (universal package manager)
+ * Nuts : Network Updatable Things Service
+ * (universal package manager)
  * <br>
  * is a new Open Source Package Manager to help install packages
  * and libraries for runtime execution. Nuts is the ultimate companion for
@@ -10,38 +10,30 @@
  * to share shell scripts and other 'things' . Its based on an extensible
  * architecture to help supporting a large range of sub managers / repositories.
  * <br>
- *
+ * <p>
  * Copyright [2020] [thevpc]
- * Licensed under the Apache License, Version 2.0 (the "License"); you may 
- * not use this file except in compliance with the License. You may obtain a 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain a
  * copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
- * either express or implied. See the License for the specific language 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * <br>
  * ====================================================================
-*/
+ */
 package net.thevpc.commons.md.doc.java;
 
 import com.github.javaparser.StaticJavaParser;
-import com.github.javaparser.ast.body.BodyDeclaration;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
-import com.github.javaparser.ast.body.ConstructorDeclaration;
-import com.github.javaparser.ast.body.FieldDeclaration;
-import com.github.javaparser.ast.body.MethodDeclaration;
-import com.github.javaparser.ast.body.VariableDeclarator;
+import com.github.javaparser.ast.body.*;
 import com.github.javaparser.ast.comments.JavadocComment;
+import net.thevpc.commons.md.doc.*;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import net.thevpc.commons.md.doc.JDClassDoc;
-import net.thevpc.commons.md.doc.JDConstructorDoc;
-import net.thevpc.commons.md.doc.JDDoc;
-import net.thevpc.commons.md.doc.JDFieldDoc;
-import net.thevpc.commons.md.doc.JDMethodDoc;
 
 /**
  *
@@ -74,12 +66,12 @@ public class JPClassDoc implements JDClassDoc {
                 methods.add(new JPMethodDoc((MethodDeclaration) member, this));
             }
             if (member instanceof ConstructorDeclaration) {
-                constructors.add(new JPConstructorDoc((ConstructorDeclaration) member,this));
+                constructors.add(new JPConstructorDoc((ConstructorDeclaration) member, this));
             }
             if (member instanceof FieldDeclaration) {
                 FieldDeclaration vv = (FieldDeclaration) member;
                 for (VariableDeclarator variable : vv.getVariables()) {
-                    fields.add(new JPFieldDoc(vv,variable,this));
+                    fields.add(new JPFieldDoc(vv, variable, this));
                 }
             }
         }
@@ -101,13 +93,13 @@ public class JPClassDoc implements JDClassDoc {
     }
 
     @Override
-    public String modifiers() {
-        return Arrays.stream(declaration.getModifiers().toArray()).map(x -> x.toString()).collect(Collectors.joining(" "));
+    public String name() {
+        return declaration.getName().asString();
     }
 
     @Override
-    public String name() {
-        return declaration.getName().asString();
+    public String modifiers() {
+        return Arrays.stream(declaration.getModifiers().toArray()).map(x -> x.toString()).collect(Collectors.joining(" "));
     }
 
     @Override
@@ -125,6 +117,31 @@ public class JPClassDoc implements JDClassDoc {
             return new JPDoc(StaticJavaParser.parseJavadoc(jc.getContent()));
         }
         return null;
+    }
+
+    @Override
+    public boolean isClass() {
+        return !isInterface() && !isEnum() && !isRecord() && !isAnnotation();
+    }
+
+    @Override
+    public boolean isInterface() {
+        return declaration.isInterface();
+    }
+
+    @Override
+    public boolean isAnnotation() {
+        return declaration.isAnnotationDeclaration();
+    }
+
+    @Override
+    public boolean isEnum() {
+        return declaration.isEnumDeclaration();
+    }
+
+    @Override
+    public boolean isRecord() {
+        return false;
     }
 
     public JPRootDoc getRoot() {

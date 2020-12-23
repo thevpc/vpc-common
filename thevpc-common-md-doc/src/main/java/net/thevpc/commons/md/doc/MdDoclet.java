@@ -16,7 +16,10 @@ package net.thevpc.commons.md.doc;
 //import com.sun.javadoc.RootDoc;
 //import com.sun.javadoc.Type;
 
-import net.thevpc.commons.md.*;
+import net.thevpc.commons.md.MdDocumentBuilder;
+import net.thevpc.commons.md.MdElement;
+import net.thevpc.commons.md.MdFactory;
+import net.thevpc.commons.md.MdWriter;
 import net.thevpc.commons.md.doc.java.JPRootDoc;
 
 import java.io.File;
@@ -92,77 +95,16 @@ public class MdDoclet /*extends Doclet*/ {
         return "Other";
     }
 
-    public boolean start(MdDocletConfig config) {
-        JPRootDoc root = new JPRootDoc();
-        String[] packages = config.getPackages();
-        Predicate<String> packageFilter=packages.length==0?(x->true):x->{
-            for (String p : packages) {
-                if(p.equals("*")){
-                    return true;
-                }
-                if(p.equals(".*")){
-                    String sp = p.substring(0, p.length() - 2);
-                    return x.equals(sp) || x.startsWith(sp+".");
-                }
-                if(p.equals(".**")){
-                    String sp = p.substring(0, p.length() - 3);
-                    return x.equals(sp) || x.startsWith(sp+".");
-                }
-                return x.equals(p);
-            }
-            return false;
-        };
-        for (String s : config.getSources()) {
-            root.parseSrcFolder(Paths.get(s),packageFilter);
-        }
-
-        JDClassDoc[] classes = root.classes();
-        Arrays.sort(classes, new Comparator<JDClassDoc>() {
-            @Override
-            public int compare(JDClassDoc o1, JDClassDoc o2) {
-                return o1.qualifiedName().compareTo(o2.qualifiedName());
-            }
-        });
-        Map<String, List<JDClassDoc>> categories = new HashMap<>();
-        for (int i = 0; i < classes.length; ++i) {
-            String c = getCategory(classes[i]);
-            List<JDClassDoc> li = (List<JDClassDoc>) categories.computeIfAbsent(c, new Function<String, List<JDClassDoc>>() {
-                @Override
-                public List<JDClassDoc> apply(String t) {
-                    return new ArrayList<JDClassDoc>();
-                }
-            });
-            li.add(classes[i]);
-        }
-        for (Map.Entry<String, List<JDClassDoc>> entry : categories.entrySet()) {
-            String name = entry.getKey();
-            String id = "javadoc_" + name.replace(' ', '_');
-            File file = new File(config.getTarget(), entry.getKey() + ".md");
-            try {
-                System.out.println("generating " + file.getCanonicalPath());
-            } catch (IOException ex) {
-                throw new UncheckedIOException(ex);
-            }
-            MdDocumentBuilder doc=MdFactory.document();
-            doc.setId(id);
-            doc.setTitle(name);
-            for (JDClassDoc classDoc : entry.getValue()) {
-                doc.append(printClass(classDoc));
-            }
-            try (MdWriter out = MdFactory.createWriter(config.getBackend(), new FileWriter(file))) {
-                out.write(doc.build());
-            } catch (IOException ex) {
-                throw new UncheckedIOException(ex);
-            }
-        }
-        return true;
-    }
-
     static MdElement printClass(JDClassDoc cls) {
         ToClassDoc tcd = new ToClassDoc(cls);
         List<MdElement> seq = new ArrayList<>();
         seq.add(MdFactory.title(2, CLASS_ICON + " " + tcd.getCls().name()));
-        seq.add(MdFactory.code("java", tcd.getCls().modifiers() + " " + tcd.getCls().qualifiedName()));
+        String classType = tcd.getCls().isClass() ? "class"
+                : tcd.getCls().isAnnotation() ? "@interface"
+                : tcd.getCls().isEnum() ? "enum"
+                : tcd.getCls().isRecord() ? "record"
+                : "class";
+        seq.add(MdFactory.code("java", tcd.getCls().modifiers() + " " + classType + " " + tcd.getCls().qualifiedName()));
         if (tcd.getCls().comments() != null) {
             seq.add(tcd.getCls().comments().getDescription());
         }
@@ -466,5 +408,71 @@ public class MdDoclet /*extends Doclet*/ {
             }
         }
         return sb.toString();
+    }
+
+    public boolean start(MdDocletConfig config) {
+        JPRootDoc root = new JPRootDoc();
+        String[] packages = config.getPackages();
+        Predicate<String> packageFilter = packages.length == 0 ? (x -> true) : x -> {
+            for (String p : packages) {
+                if (p.equals("*")) {
+                    return true;
+                }
+                if (p.equals(".*")) {
+                    String sp = p.substring(0, p.length() - 2);
+                    return x.equals(sp) || x.startsWith(sp + ".");
+                }
+                if (p.equals(".**")) {
+                    String sp = p.substring(0, p.length() - 3);
+                    return x.equals(sp) || x.startsWith(sp + ".");
+                }
+                return x.equals(p);
+            }
+            return false;
+        };
+        for (String s : config.getSources()) {
+            root.parseSrcFolder(Paths.get(s), packageFilter);
+        }
+
+        JDClassDoc[] classes = root.classes();
+        Arrays.sort(classes, new Comparator<JDClassDoc>() {
+            @Override
+            public int compare(JDClassDoc o1, JDClassDoc o2) {
+                return o1.qualifiedName().compareTo(o2.qualifiedName());
+            }
+        });
+        Map<String, List<JDClassDoc>> categories = new HashMap<>();
+        for (int i = 0; i < classes.length; ++i) {
+            String c = getCategory(classes[i]);
+            List<JDClassDoc> li = (List<JDClassDoc>) categories.computeIfAbsent(c, new Function<String, List<JDClassDoc>>() {
+                @Override
+                public List<JDClassDoc> apply(String t) {
+                    return new ArrayList<JDClassDoc>();
+                }
+            });
+            li.add(classes[i]);
+        }
+        for (Map.Entry<String, List<JDClassDoc>> entry : categories.entrySet()) {
+            String name = entry.getKey();
+            String id = "javadoc_" + name.replace(' ', '_');
+            File file = new File(config.getTarget(), entry.getKey() + ".md");
+            try {
+                System.out.println("generating " + file.getCanonicalPath());
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
+            MdDocumentBuilder doc = MdFactory.document();
+            doc.setId(id);
+            doc.setTitle(name);
+            for (JDClassDoc classDoc : entry.getValue()) {
+                doc.append(printClass(classDoc));
+            }
+            try (MdWriter out = MdFactory.createWriter(config.getBackend(), new FileWriter(file))) {
+                out.write(doc.build());
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
+        }
+        return true;
     }
 }

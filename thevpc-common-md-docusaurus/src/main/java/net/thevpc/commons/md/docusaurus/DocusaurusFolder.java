@@ -158,6 +158,60 @@ public class DocusaurusFolder implements DocusaurusFileOrFolder {
         StringBuilder sb = new StringBuilder();
         char[] indentChars = DocusaurusUtils.indentChars(indent);
         sb.append(indentChars);
+        int filesCount=0;
+        int foldersCount=0;
+        for (DocusaurusFileOrFolder child : children) {
+            if(child.isFolder()){
+                foldersCount++;
+            }else if(child.isFile()){
+                filesCount++;
+            }
+        }
+        if(foldersCount==0 && filesCount==0){
+
+        }else if(foldersCount>0 && filesCount>0){
+            sb.append("'").append(DocusaurusUtils.escapeString(getTitle() + "': {"));
+            if (children.length == 0) {
+                sb.append("}");
+            } else {
+                for (DocusaurusFileOrFolder child : children) {
+                    if(child instanceof DocusaurusFile){
+                        sb.append("\n").append("'").append(DocusaurusUtils.escapeString(child.getTitle() + "': ["));
+                        sb.append(child.toJSON(indent + 1));
+                        sb.append("],");
+                    }else {
+                        sb.append("\n").append(child.toJSON(indent + 1)).append(",");
+                    }
+                }
+                sb.append("\n").append(indentChars).append("}");
+            }
+            return sb.toString();
+        }else if(foldersCount>0){
+            sb.append("'").append(DocusaurusUtils.escapeString(getTitle() + "': {"));
+            if (children.length == 0) {
+                sb.append("}");
+            } else {
+                for (DocusaurusFileOrFolder child : children) {
+                    sb.append("\n").append(child.toJSON(indent + 1)).append(",");
+                }
+                sb.append("\n").append(indentChars).append("}");
+            }
+            return sb.toString();
+        }else if(filesCount>0){
+            sb.append("'").append(DocusaurusUtils.escapeString(getTitle() + "': ["));
+            if (children.length == 0) {
+                sb.append("]");
+            } else {
+                for (DocusaurusFileOrFolder child : children) {
+                    sb.append("\n").append(child.toJSON(indent + 1)).append(",");
+                }
+                sb.append("\n").append(indentChars).append("]");
+            }
+            return sb.toString();
+        }else{
+
+        }
+
         sb.append("'").append(DocusaurusUtils.escapeString(getTitle() + "': ["));
         if (children.length == 0) {
             sb.append("]");

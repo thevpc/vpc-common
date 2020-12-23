@@ -140,7 +140,7 @@ public class FileTemplater {
                 }
             }
         }
-        return null;
+        return getProcessorExact(MimeTypeConstants.ANY_TYPE);
     }
 
     public Function<String, Object> getCustomVarEvaluator() {
