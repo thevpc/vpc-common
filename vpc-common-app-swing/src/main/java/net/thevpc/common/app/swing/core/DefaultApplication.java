@@ -247,7 +247,7 @@ public class DefaultApplication implements Application {
     protected void initImpl() {
         AppWindowBuilder wb = builder().mainWindowBuilder().get();
         if (wb == null) {
-            throw new IllegalArgumentException("Missing AppWindowBuilder");
+            throw new IllegalArgumentException("missing AppWindowBuilder");
         }
         AppWindow window = wb.createWindow("mainWindow", this);
         mainWindow().set(window);

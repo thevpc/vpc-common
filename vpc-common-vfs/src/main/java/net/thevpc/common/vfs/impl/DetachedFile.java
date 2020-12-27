@@ -106,7 +106,7 @@ public class DetachedFile implements VFile {
     public InputStream getInputStream() throws IOException {
         InputStream s = inputSupplier == null ? null : inputSupplier.get();
         if (s == null) {
-            throw new IOException("Missing InputStream");
+            throw new IOException("missing InputStream");
         }
         return s;
     }
@@ -115,7 +115,7 @@ public class DetachedFile implements VFile {
     public OutputStream getOutputStream() throws IOException {
         OutputStream s = outputSupplier == null ? null : outputSupplier.apply(false);
         if (s == null) {
-            throw new IOException("Missing OutputStream");
+            throw new IOException("missing OutputStream");
         }
         return s;
     }
@@ -124,7 +124,7 @@ public class DetachedFile implements VFile {
     public OutputStream getOutputStream(boolean append) throws IOException {
         OutputStream s = outputSupplier == null ? null : outputSupplier.apply(true);
         if (s == null) {
-            throw new IOException("Missing OutputStream");
+            throw new IOException("missing OutputStream");
         }
         return s;
     }

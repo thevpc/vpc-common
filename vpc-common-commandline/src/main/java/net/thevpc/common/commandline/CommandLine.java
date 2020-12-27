@@ -333,7 +333,7 @@ public class CommandLine {
     public Argument readRequiredOption(String name) {
         Argument o = readVoidOption(name);
         if (o == null) {
-            throw new IllegalArgumentException("Missing argument " + name);
+            throw new IllegalArgumentException("mMissing argument " + name);
         }
         return o;
     }
@@ -352,7 +352,7 @@ public class CommandLine {
 
     public Argument readNonOption(String... names) {
         if (names.length == 0) {
-            throw new IllegalArgumentException("Missing non Option Name");
+            throw new IllegalArgumentException("missing non option Name");
         }
         Argument a = get(0);
         if (a != null) {
@@ -418,7 +418,7 @@ public class CommandLine {
             if (args.size() > 0 && isOption()) {
                 throw new IllegalArgumentException("Unexpected option " + get(0));
             }
-            throw new IllegalArgumentException("Missing argument " + name);
+            throw new IllegalArgumentException("missing argument " + name);
         }
     }
 

@@ -5,10 +5,18 @@ import net.thevpc.jeep.JType;
 import net.thevpc.jeep.JVar;
 
 public abstract class JVarReadOnly extends AbstractJVar {
-    private String name;
 
-    public JVarReadOnly(String name) {
+    private String name;
+    private JType _type;
+
+    public JVarReadOnly(String name, JType type) {
         this.name = name;
+        this._type = type;
+    }
+
+    @Override
+    public JType type() {
+        return _type;
     }
 
     @Override
@@ -31,11 +39,9 @@ public abstract class JVarReadOnly extends AbstractJVar {
         return name;
     }
 
-
-
     @Override
     public JVar setValue(Object value, JInvokeContext context) {
-        throw new IllegalArgumentException("Read only var "+ name());
+        throw new IllegalArgumentException("read only var " + name());
     }
 
     @Override
@@ -50,6 +56,6 @@ public abstract class JVarReadOnly extends AbstractJVar {
 
     @Override
     public JVar setUndefinedValue() {
-        throw new IllegalArgumentException("Read only var "+ name());
+        throw new IllegalArgumentException("read only var " + name());
     }
 }

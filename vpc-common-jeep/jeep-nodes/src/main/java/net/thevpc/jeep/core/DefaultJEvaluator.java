@@ -17,25 +17,25 @@ public class DefaultJEvaluator implements JEvaluator {
     }
 
     @Override
-    public Object evaluate(JNode node, JInvokeContext context) {
+    public Object evaluate(JNode node, JInvokeContext invokeContext) {
         JDefaultNode dn=(JDefaultNode) node;
         switch (dn.id()) {
             case JNodeDefaultIds.NODE_ARRAY: {
                 JNodeArray a = (JNodeArray) node;
-                JTypes types = context.getContext().types();
+                JTypes types = invokeContext.getContext().types();
                 JNode[] values = a.getValues();
                 JArrayType jType = (JArrayType) JNodeUtils2.getType(a);
                 Object arr0 = jType.newArray(values.length);
                 JArray arr = jType.asArray(arr0);
                 int len = arr.length();
                 for (int i = 0; i < len; i++) {
-                    arr.set(i, evaluate(values[i], context));
+                    arr.set(i, evaluate(values[i], invokeContext));
                 }
                 return arr;
             }
             case JNodeDefaultIds.NODE_CONVERTER: {
                 JNodeConverter a = (JNodeConverter) node;
-                return a.getCurrentConverter().convert(evaluate(a.getNode(), context), context);
+                return a.getCurrentConverter().convert(evaluate(a.getNode(), invokeContext), invokeContext);
             }
             case JNodeDefaultIds.NODE_LITERAL: {
                 JNodeLiteral a = (JNodeLiteral) node;
@@ -46,7 +46,7 @@ public class DefaultJEvaluator implements JEvaluator {
                 JNode n = a.getName();
                 JNode v = a.getValue();
                 if (n instanceof JNodeVarName) {
-                    context.getContext().vars().setValue(((JNodeVarName) n).getName(), evaluate(v, context), context);
+                    invokeContext.getContext().vars().setValue(((JNodeVarName) n).getName(), evaluate(v, invokeContext), invokeContext);
                 } else {
                     throw new IllegalArgumentException("Not Supported Yet");
                 }
@@ -56,25 +56,25 @@ public class DefaultJEvaluator implements JEvaluator {
                 JNodeBlock a = (JNodeBlock) node;
                 Object val = null;
                 for (JNode statement : a.getStatements()) {
-                    val = evaluate(statement, context);
+                    val = evaluate(statement, invokeContext);
                 }
                 return val;
             }
             case JNodeDefaultIds.NODE_BRACES: {
                 JNodeBraces a = (JNodeBraces) node;
-                return evaluateFunction(context,"{", a.getItems());
+                return evaluateFunction(invokeContext,"{", a.getItems());
             }
             case JNodeDefaultIds.NODE_BRACKETS: {
                 JNodeBrackets a = (JNodeBrackets) node;
-                return evaluateFunction(context,"[", a.getItems());
+                return evaluateFunction(invokeContext,"[", a.getItems());
             }
             case JNodeDefaultIds.NODE_PARS: {
                 JNodePars a = (JNodePars) node;
-                return evaluateFunction(context,"(", a.getItems());
+                return evaluateFunction(invokeContext,"(", a.getItems());
             }
             case JNodeDefaultIds.NODE_BREAK: {
                 JNodeBreak a = (JNodeBreak) node;
-                return evaluateFunction(context,"break");
+                return evaluateFunction(invokeContext,"break");
             }
             case JNodeDefaultIds.NODE_DECLARE_CLASS: {
                 throw new IllegalArgumentException("Unsupporte declare class");
@@ -87,8 +87,8 @@ public class DefaultJEvaluator implements JEvaluator {
                 JNode name = a.getName();
                 JType type = JNodeUtils2.getType(a);
                 JNode value = a.getValue();
-                Object newValue = value == null ? null : evaluate(value, context);
-                context.getContext().vars().declareVar(((JNodeVarName) name).getName(),
+                Object newValue = value == null ? null : evaluate(value, invokeContext);
+                invokeContext.getContext().vars().declareVar(((JNodeVarName) name).getName(),
                         type,
                         newValue
                 );
@@ -96,7 +96,7 @@ public class DefaultJEvaluator implements JEvaluator {
             }
             case JNodeDefaultIds.NODE_VAR_NAME: {
                 JNodeVarName a = (JNodeVarName) node;
-                return context.getContext().vars().getValue(a.getName(), context);
+                return invokeContext.getContext().vars().getValue(a.getName(), invokeContext);
             }
             case JNodeDefaultIds.NODE_FUNCTION_CALL: {
                 JNodeFunctionCall a = (JNodeFunctionCall) node;
@@ -104,7 +104,7 @@ public class DefaultJEvaluator implements JEvaluator {
                 JNode[] nargs = a.getArgs();
                 JType[] ntypes = JNodeUtils2.getTypes((JDefaultNode[]) nargs);
                 JEvaluable[] eargs = JNodeUtils2.getEvaluatables((JDefaultNode[])nargs);
-                JFunction f = context.getContext().functions().findFunctionMatchOrNull(JSignature.of(name, ntypes), context.getCallerInfo());
+                JFunction f = invokeContext.getContext().functions().findFunctionMatchOrNull(JSignature.of(name, ntypes), invokeContext.getCallerInfo());
                 if (f == null) {
                     JSignature sig = new JSignature(name, ntypes, false);
                     if (name.isEmpty()) {
@@ -114,7 +114,7 @@ public class DefaultJEvaluator implements JEvaluator {
 //            return Object.class;
                 }
                 return f.invoke(
-                        context.builder()
+                        invokeContext.builder()
                                 .setName(a.getName())
                                 .setArguments(eargs)
                                 .build()
@@ -126,9 +126,9 @@ public class DefaultJEvaluator implements JEvaluator {
                 JType[] ntypes = JNodeUtils2.getTypes(nargs);
                 JEvaluable[] eargs = JNodeUtils2.getEvaluatables((JDefaultNode[])nargs);
                 JSignature sig = JSignature.of(c.getName(), ntypes);
-                JFunction f = context.getContext().functions().findFunctionMatch(sig, context.getCallerInfo());
+                JFunction f = invokeContext.getContext().functions().findFunctionMatch(sig, invokeContext.getCallerInfo());
                 return f.invoke(
-                        context.builder()
+                        invokeContext.builder()
                                 .setName(sig.name())
                                 .setArguments(eargs)
                                 .build()
@@ -140,12 +140,12 @@ public class DefaultJEvaluator implements JEvaluator {
                 JType[] ntypes = JNodeUtils2.getTypes((JDefaultNode[]) nargs);
                 JEvaluable[] eargs = JNodeUtils2.getEvaluatables((JDefaultNode[])nargs);
                 JSignature sig = JSignature.of(c.getName(), ntypes);
-                JFunction f = context.getContext().functions().findFunctionMatchOrNull(sig, context.getCallerInfo());
+                JFunction f = invokeContext.getContext().functions().findFunctionMatchOrNull(sig, invokeContext.getCallerInfo());
                 if (f == null) {
                     throw new NoSuchElementException("JFunction not found " + sig + " for " + Arrays.asList(nargs));
                 }
                 return f.invoke(
-                        context.builder()
+                        invokeContext.builder()
                                 .setName(sig.name())
                                 .setArguments(eargs)
                                 .build()
@@ -157,11 +157,11 @@ public class DefaultJEvaluator implements JEvaluator {
                 JType[] ntypes = JNodeUtils2.getTypes((JDefaultNode[]) nargs);
                 JEvaluable[] eargs = JNodeUtils2.getEvaluatables((JDefaultNode[])nargs);
                 JSignature sig = JSignature.of(c.getName(), ntypes);
-                JFunction f = context.getContext().functions().findFunctionMatchOrNull(sig, context.getCallerInfo());
+                JFunction f = invokeContext.getContext().functions().findFunctionMatchOrNull(sig, invokeContext.getCallerInfo());
                 if (f == null) {
                     throw new NoSuchElementException("JFunction not found " + sig + " for " + Arrays.asList(nargs));
                 }
-                return f.invoke(context.builder()
+                return f.invoke(invokeContext.builder()
                         .setName(sig.name())
                         .setArguments(eargs)
                         .build());

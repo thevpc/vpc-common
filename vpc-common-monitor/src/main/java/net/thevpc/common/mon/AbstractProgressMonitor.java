@@ -169,7 +169,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
     public final ProgressMonitor inc(String message) {
         ProgressMonitorInc incrementor = getIncrementor();
         if (incrementor == null) {
-            throw new IllegalArgumentException("Missing Incrementor");
+            throw new IllegalArgumentException("missing incrementor");
         }
         setProgress(incrementor.inc(getProgress()), new StringMessage(Level.FINE, message));
         return this;
@@ -178,7 +178,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
     public final ProgressMonitor inc(String message, Object... args) {
         ProgressMonitorInc incrementor = getIncrementor();
         if (incrementor == null) {
-            throw new IllegalArgumentException("Missing Incrementor");
+            throw new IllegalArgumentException("missing incrementor");
         }
         setProgress(incrementor.inc(getProgress()), new FormattedMessage(Level.FINE, message, args));
         return this;

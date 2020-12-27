@@ -51,11 +51,11 @@ public class DefaultAppWindowBuilder implements AppWindowBuilder {
     public AppWindow createWindow(String path, Application application) {
         AppLayoutWindowFactory wf = windowFactory().get();
         if (wf == null) {
-            throw new IllegalArgumentException("Missing Window Factory");
+            throw new IllegalArgumentException("missing window factory");
         }
         AppWindow window = wf.createWindow(path, application);
         if (window == null) {
-            throw new IllegalArgumentException("Invalid Window Factory. Returned Null Window");
+            throw new IllegalArgumentException("invalid window factory. returned null window");
         }
 
         AppLayoutMenuBarFactory m = menuBarFactory().get();

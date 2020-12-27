@@ -47,7 +47,7 @@ public class DocusaurusWriter extends AbstractMdWriter {
         Object id = document.getId();
         String title = document.getTitle();
         if(id==null && title==null){
-            throw new IllegalArgumentException("Missing Id & title");
+            throw new IllegalArgumentException("missing id and title");
         }
         if(title==null){
             title=id.toString();

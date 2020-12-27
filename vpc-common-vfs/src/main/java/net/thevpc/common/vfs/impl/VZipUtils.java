@@ -24,7 +24,7 @@ public class VZipUtils {
 
     public static void zip(VFile targetFile, VZipOptions options, VFile... source) throws IOException {
         if (options == null || options.getTempFileSystem() == null) {
-            throw new IllegalArgumentException("Missing Options");
+            throw new IllegalArgumentException("missing options");
         }
         boolean tempFile = options.isTempFile();
         if (options.isTempFile()) {

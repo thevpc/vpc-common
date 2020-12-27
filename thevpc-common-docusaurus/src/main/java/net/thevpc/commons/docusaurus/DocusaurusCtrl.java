@@ -242,7 +242,7 @@ public class DocusaurusCtrl {
     }
 
     private Path getPreProcessorBaseDir() {
-        return Paths.get(project.getDocusaurusBaseFolder()).resolve("dir-template");
+        return Paths.get(project.getDocusaurusBaseFolder()).resolve(".dir-template");
     }
 
     public boolean isAutoInstallNutsPackages() {
@@ -304,7 +304,7 @@ public class DocusaurusCtrl {
             ) {
                 String[] sources = config.get("sources").asStringArray();
                 if (sources == null || sources.length == 0) {
-                    throw new IllegalArgumentException("Missing doc sources in " + source);
+                    throw new IllegalArgumentException("missing doc sources in " + source);
                 }
                 String[] packages = config.get("packages").asStringArray();
                 String target = context.getPathTranslator().translatePath(source.getParent().toString());

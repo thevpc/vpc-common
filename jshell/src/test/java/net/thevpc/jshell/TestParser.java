@@ -11,7 +11,7 @@ public class TestParser {
 //        }
 //        for (Yaccer.JShellNode t : JShellParser.fromString(
 //                "#!/bin/nuts\n" +
-//                "ntemplate -p dir-template\n" +
+//                "ntemplate -p .dir-template\n" +
 //                "ndocusaurus -d website build\n" +
 //                "cp website/nuts/build docs\n" +
 //                "_nuts_version=$(nuts nprops -f METADATA apiVersion)\n" +

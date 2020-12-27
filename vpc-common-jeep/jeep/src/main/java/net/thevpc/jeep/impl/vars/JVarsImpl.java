@@ -14,6 +14,7 @@ import net.thevpc.jeep.core.DefaultJVar;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.thevpc.jeep.impl.functions.DefaultJInvokeContext;
 
 /**
  * @author thevpc
@@ -34,17 +35,17 @@ public class JVarsImpl implements JVars {
 
     @Override
     public JVar declareConst(String name, Class type, Object value) {
-        return declareConst(name,context.types().forName(type.getName()),value);
+        return declareConst(name, context.types().forName(type.getName()), value);
     }
 
     @Override
     public JVar declareVar(String name, Class type, Class undefinedType, Object value) {
-        return declareVar(name,context.types().forName(type.getName()),context.types().forName(undefinedType.getName()),value);
+        return declareVar(name, context.types().forName(type.getName()), context.types().forName(undefinedType.getName()), value);
     }
 
     @Override
     public JVar declareVar(String name, Class type, Object value) {
-        return declareVar(name,context.types().forName(type.getName()),value);
+        return declareVar(name, context.types().forName(type.getName()), value);
     }
 
     public boolean isWritable() {
@@ -68,7 +69,6 @@ public class JVarsImpl implements JVars {
 //        }
 //        return v;
 //    }
-
     public boolean isReadOnlyVariable(String varName) {
         JVar ff = find(getCanonicalName(varName));
         return ff != null && ff.isReadOnly();
@@ -86,27 +86,26 @@ public class JVarsImpl implements JVars {
     @Override
     public JVar declareConst(String name, Object value) {
         chechWritable(name);
-        return declareConst(name, value == null ?
-                        JTypeUtils.forObject(context.types())
-                         :
-                        context.types().typeOf(value)
-                , value);
+        return declareConst(name, value == null
+                ? JTypeUtils.forObject(context.types())
+                : context.types().typeOf(value),
+                 value);
     }
 
     @Override
     public JVar declareVar(String name, JType type, JType undefinedType, Object value) {
         chechWritable(name);
         JeepUtils.validateFunctionName(name);
-        if(type==null){
-            if(value!=null){
-                type=context.types().typeOf(value);
+        if (type == null) {
+            if (value != null) {
+                type = context.types().typeOf(value);
             }
         }
-        if(type==null){
-            type=context.types().typeOf("Object");
+        if (type == null) {
+            type = context.types().typeOf("Object");
         }
-        if(undefinedType==null){
-            undefinedType=type;
+        if (undefinedType == null) {
+            undefinedType = type;
         }
         JVar value2 = new DefaultJVar(name, type, undefinedType, value);
         declareVar(value2);
@@ -126,8 +125,8 @@ public class JVarsImpl implements JVars {
         JeepUtils.validateFunctionName(def.name());
         String cn = getCanonicalName(def.name());
         JVar old = variables.get(cn);
-        if(old!=null){
-            throw new IllegalArgumentException("Variable already declared "+def.name());
+        if (old != null) {
+            throw new IllegalArgumentException("Variable already declared " + def.name());
         }
         variables.put(cn, def);
         invalidateVarCache(def.name());
@@ -201,7 +200,6 @@ public class JVarsImpl implements JVars {
 ////        return new JNodeVarName(varName, o == null ? Object.class : o.getEffectiveType(this));
 //        return new JNodeVarName(varName);
 //    }
-
     @Override
     public JVar get(String var) {
         JVar ff = find(var);
@@ -212,13 +210,19 @@ public class JVarsImpl implements JVars {
     }
 
     @Override
-    public void setValue(String varName, Object value, JInvokeContext context) {
-        get(varName).setValue(value, context);
+    public void setValue(String varName, Object value, JInvokeContext invokeContext) {
+        if (invokeContext == null) {
+            invokeContext = new DefaultJInvokeContext(context, context.evaluators().newEvaluator(), null, new JEvaluable[0], null, JCallerInfo.NO_CALLER);
+        }
+        get(varName).setValue(value, invokeContext);
     }
 
     @Override
-    public Object getValue(String varName, JInvokeContext context) {
-        return get(varName).getValue(context);
+    public Object getValue(String varName, JInvokeContext invokeContext) {
+        if (invokeContext == null) {
+            invokeContext = new DefaultJInvokeContext(context, context.evaluators().newEvaluator(), null, new JEvaluable[0], null, JCallerInfo.NO_CALLER);
+        }
+        return get(varName).getValue(invokeContext);
     }
 
 //    public JNode findNode(String var) {
@@ -233,7 +237,6 @@ public class JVarsImpl implements JVars {
 //        }
 //        return null;
 //    }
-
     public void invalidateVarCache(String name) {
         cacheVars.remove(getCanonicalName(name));
     }

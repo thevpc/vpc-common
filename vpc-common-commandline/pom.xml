@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-commandline</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.3</version><!--updated-->
     <packaging>jar</packaging>
     <name>net.thevpc.common.thevpc-common-commandline</name>
     <url>https://github.com/thevpc/upa/wiki</url>

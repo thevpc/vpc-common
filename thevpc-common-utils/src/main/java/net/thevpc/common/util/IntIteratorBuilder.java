@@ -46,14 +46,14 @@ public class IntIteratorBuilder {
 
     public IntIterator depthFirst() {
         if (to == null) {
-            throw new IllegalArgumentException("Missing To");
+            throw new IllegalArgumentException("missing to");
         }
         return new IntIteratorByMax((from == null) ? new int[to.length] : from, to, max);
     }
 
     public IntIterator breadthFirst() {
         if (from == null && to == null) {
-            throw new IllegalArgumentException("Missing From");
+            throw new IllegalArgumentException("missing from");
         }
         if (from == null) {
             from = new int[to.length];

@@ -420,7 +420,7 @@ public class TsonSerializerConfig {
         }
         TsonObjectToElement<T> w = objToElem.get(c);
         if (w == null) {
-            throw new NoSuchElementException("Missing Object To Element Converter for " + c);
+            throw new NoSuchElementException("missing object to element converter for " + c);
         }
         return w;
     }

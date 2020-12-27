@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-vfs</artifactId>
-    <version>2.1</version>
+    <version>2.1</version><!--updated-->
     <packaging>jar</packaging>
     <name>net.thevpc.common.thevpc-common-vfs</name>
     <url>https://github.com/thevpc/upa/wiki</url>

@@ -8,16 +8,16 @@ import java.util.Arrays;
 import java.util.List;
 
 public class JSimpleNode extends AbstractJNode{
-    private String typeName;
+    private String nodeTypeName;
     private Object[] arguments;
 
     public JSimpleNode(String typeName,Object... arguments) {
-        this.typeName=typeName;
+        this.nodeTypeName=typeName;
         this.arguments=arguments;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getNodeTypeName() {
+        return nodeTypeName;
     }
 
     public Object[] getArguments() {
@@ -47,7 +47,7 @@ public class JSimpleNode extends AbstractJNode{
                     arguments2[i]=((JNode)arguments2[i]).copy();
                 }
             }
-            this.typeName=s.typeName;
+            this.nodeTypeName=s.nodeTypeName;
             this.arguments=arguments2;
         }
     }

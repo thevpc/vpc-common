@@ -33,11 +33,9 @@ public class PrivateStringUtils {
     }
 
     /**
-     * *
-     * **
      *
-     * @param pattern
-     * @return
+     * @param pattern pattern
+     * @return regexp
      */
     public static String simpexpToRegexp(String pattern, boolean contains) {
         if (pattern == null) {

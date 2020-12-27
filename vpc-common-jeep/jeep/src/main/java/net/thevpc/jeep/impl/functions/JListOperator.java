@@ -20,7 +20,7 @@ public class JListOperator extends JFunctionBase {
 
     public JListOperator(JInvoke operator, String name, JType resultType, JType operandType) {
         //            super(name, resultType, true, toArrayClass(operandType));
-        super(name, resultType, new JType[]{operandType.toArray(1)}, true);
+        super(name, resultType, new JType[]{operandType.toArray(1)}, true,"<unknown-source>");
         this.operator = operator;
         this.operandTypeArr = (JArrayType) operandType.toArray(1);
     } //            super(name, resultType, true, toArrayClass(operandType));
@@ -41,11 +41,6 @@ public class JListOperator extends JFunctionBase {
         sb.append(operandTypeArr.componentType().simpleName()).append("...");
         sb.append(")");
         return "ExpressionListOperator{" + "operator=" + operator + ", resultType=" + getReturnType() + ", operandTypeArr=" + operandTypeArr + '}';
-    }
-
-    @Override
-    public String getSourceName() {
-        return "<unknown-source>";
     }
 
     @Override

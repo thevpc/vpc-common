@@ -5,7 +5,7 @@
 
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-app-swing</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0</version><!--updated-->
     <name>net.thevpc.common.thevpc-common-app-swing</name>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/commons</url>

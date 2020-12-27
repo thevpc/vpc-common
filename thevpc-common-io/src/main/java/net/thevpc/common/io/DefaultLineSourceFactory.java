@@ -68,7 +68,7 @@ public class DefaultLineSourceFactory implements LineSourceFactory {
                     }
                 }
             } else {
-                throw new IllegalArgumentException("Missing source");
+                throw new IllegalArgumentException("missing source");
             }
         }
     }

@@ -6,7 +6,7 @@ import net.thevpc.jeep.core.JFunctionBase;
 
 public class JIdentFunction extends JFunctionBase {
     public JIdentFunction(String name, JType type) {
-        super(name, type,new JType[0],false);
+        super(name, type,new JType[0],false,"<runtime>");
     }
 
     @Override
@@ -14,8 +14,4 @@ public class JIdentFunction extends JFunctionBase {
         return icontext.evaluate(icontext.getArguments()[0]);
     }
 
-    @Override
-    public String getSourceName() {
-        return "<runtime>";
-    }
 }

@@ -27,7 +27,7 @@ public class CharStreamCodeSupportJava extends AbstractCharStreamCodeSupport {
             if(sb.length()>0){
                 sb.append(". ");
             }
-            sb.append("Missing '('");
+            sb.append("missing '('");
         }
         if(braces<0){
             if(sb.length()>0){
@@ -39,7 +39,7 @@ public class CharStreamCodeSupportJava extends AbstractCharStreamCodeSupport {
             if(sb.length()>0){
                 sb.append(". ");
             }
-            sb.append("Missing '{'");
+            sb.append("missing '{'");
         }
         if(brackets<0){
             if(sb.length()>0){
@@ -51,20 +51,20 @@ public class CharStreamCodeSupportJava extends AbstractCharStreamCodeSupport {
             if(sb.length()>0){
                 sb.append(". ");
             }
-            sb.append("Missing '['");
+            sb.append("missing '['");
         }
         switch (state){
             case "\"":{
                 if(sb.length()>0){
                     sb.append(". ");
                 }
-                sb.append("Missing '\"'");
+                sb.append("missing '\"'");
             }
             case "'":{
                 if(sb.length()>0){
                     sb.append(". ");
                 }
-                sb.append("Missing '\\''");
+                sb.append("missing '\\''");
             }
             case "/*":
             case "/*_*":
@@ -72,7 +72,7 @@ public class CharStreamCodeSupportJava extends AbstractCharStreamCodeSupport {
                 if(sb.length()>0){
                     sb.append(". ");
                 }
-                sb.append("Missing '*/'");
+                sb.append("missing '*/'");
             }
         }
         return sb.toString();

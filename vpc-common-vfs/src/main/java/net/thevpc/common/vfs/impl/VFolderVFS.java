@@ -68,7 +68,7 @@ public class VFolderVFS extends AbstractDelegateVirtualFileSystem implements Lis
         List<String> pp = VFSUtils.toPathParts(name, true);
         switch (pp.size()) {
             case 0: {
-                throw new IllegalArgumentException("Missing name");
+                throw new IllegalArgumentException("missing name");
             }
             case 1: {
                 root.addChild(name);

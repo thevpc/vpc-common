@@ -182,7 +182,7 @@ public class Argument {
 
     public String getStringOrError() {
         if (expression == null) {
-            throw new IllegalArgumentException("Missing value");
+            throw new IllegalArgumentException("missing value");
         }
         return expression;
     }

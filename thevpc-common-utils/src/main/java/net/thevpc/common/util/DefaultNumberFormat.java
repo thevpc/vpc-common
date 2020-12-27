@@ -112,7 +112,7 @@ public class DefaultNumberFormat implements DoubleFormat {
             }
         }
         if (this.unitCode == null || this.unitCode.isEmpty()) {
-            throw new IllegalArgumentException("Missing Unit");
+            throw new IllegalArgumentException("missing unit");
         }
         if (low == '\0') {
             low = 'H';

@@ -13,28 +13,30 @@ public abstract class JFunctionBase extends AbstractJFunction {
     private JType[] argTypes;
     private boolean varArgs;
     private JSignature signature;
+    private String sourceName;
 
-    public JFunctionBase(String name, String returnType, String[] argTypes, JTypes types) {
-        this(name, types.forName(returnType), types.forName(argTypes), false);
+    public JFunctionBase(String name, String returnType, String[] argTypes, JTypes types, String sourceName) {
+        this(name, types.forName(returnType), types.forName(argTypes), false,sourceName);
     }
 
 //    public JFunctionBase(String name, Class returnType, Class[] argTypes, JTypes types) {
 //        this(name, types.forName(returnType), types.forName(argTypes), false);
 //    }
 
-    public JFunctionBase(String name, JType returnType, JType[] argTypes) {
-        this(name, returnType, argTypes, false);
+    public JFunctionBase(String name, JType returnType, JType[] argTypes, String sourceName) {
+        this(name, returnType, argTypes, false,sourceName);
     }
 
-    public JFunctionBase(String name, JType returnType, JType[] argTypes, boolean varArgs) {
+    public JFunctionBase(String name, JType returnType, JType[] argTypes, boolean varArgs, String sourceName) {
         super(returnType.getTypes());
+        this.sourceName = sourceName;
         this.resultType = returnType;
         this.name = name;
         this.argTypes = argTypes;
         this.varArgs = varArgs;
         this.signature = new JSignature(name, argTypes, varArgs);
         if (varArgs && (this.argTypes.length == 0 || !this.argTypes[this.argTypes.length - 1].isArray())) {
-            throw new IllegalArgumentException("Invalid varargs");
+            throw new IllegalArgumentException("invalid varargs");
         }
     }
 
@@ -77,4 +79,9 @@ public abstract class JFunctionBase extends AbstractJFunction {
         return getReturnType().getTypes();
     }
 
+    @Override
+    public String getSourceName() {
+        return sourceName;
+    }
+    
 }

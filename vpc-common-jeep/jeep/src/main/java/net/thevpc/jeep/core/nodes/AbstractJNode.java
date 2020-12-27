@@ -88,6 +88,7 @@ public abstract class AbstractJNode implements JNode {
         }
     }
 
+    @Override
     public void setUserObject(String name, boolean valid) {
         if (valid) {
             userObjects.put(name, true);
@@ -96,6 +97,7 @@ public abstract class AbstractJNode implements JNode {
         }
     }
 
+    @Override
     public void setUserObject(String name) {
         userObjects.put(name, true);
     }
@@ -126,6 +128,7 @@ public abstract class AbstractJNode implements JNode {
         return node.getPosition(caretOffset);
     }
 
+    @Override
     public JPositionStyle getPosition(int caretOffset) {
         if (caretOffset < this.getStartToken().startCharacterNumber) {
             return JPositionStyle.BEFORE;
@@ -140,6 +143,7 @@ public abstract class AbstractJNode implements JNode {
         }
     }
 
+    @Override
     public void visit(JNodeVisitor visitor) {
         visitor.startVisit(this);
         visitNext(visitor, getChildrenNodes());
@@ -207,6 +211,7 @@ public abstract class AbstractJNode implements JNode {
         return n;
     }
 
+    @Override
     public JNode findAndReplace(JNodeFindAndReplace findAndReplace) {
         boolean replaceFirst = findAndReplace.isReplaceFirst();
         if (replaceFirst) {
@@ -269,6 +274,7 @@ public abstract class AbstractJNode implements JNode {
         return (root != null && root.containsCaret(caretOffset));
     }
 
+    @Override
     public JToken[] getSeparators() {
         return separators;
     }

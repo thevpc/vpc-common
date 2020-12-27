@@ -17,7 +17,7 @@ public class JMethodInvocationFunction extends JFunctionBase {
     private final int[] argIndices;
 
     public JMethodInvocationFunction(String name, JMethod method, int baseIndex, int... argIndices) {
-        super(name, method.getReturnType(), evalParameterTypes(method, baseIndex, argIndices), false);
+        super(name, method.getReturnType(), evalParameterTypes(method, baseIndex, argIndices), false,method.getSourceName());
         this.method = method;
         this.baseIndex = baseIndex;
         if (baseIndex < 0 && !method.isStatic()) {
@@ -92,11 +92,6 @@ public class JMethodInvocationFunction extends JFunctionBase {
 
     protected Object evaluateImpl(JMethod m, JInvokeContext icontext) throws InvocationTargetException, IllegalAccessException {
         return m.invoke(icontext);
-    }
-
-    @Override
-    public String getSourceName() {
-        return method.getSourceName();
     }
 
     @Override

@@ -2,7 +2,6 @@ package net.thevpc.jeep.impl.functions;
 
 import net.thevpc.jeep.*;
 import net.thevpc.jeep.util.JTypeUtils;
-import net.thevpc.jeep.*;
 import net.thevpc.jeep.core.JFunctionBase;
 import net.thevpc.jeep.core.eval.JEvaluableValue;
 
@@ -11,7 +10,7 @@ public class JFunctionFromJMethod extends JFunctionBase {
 
     public JFunctionFromJMethod(String name, JMethod method, JTypePattern[] argTypes) {
         //TODO fix me later
-        super(name, method.getReturnType(), JTypeUtils.typesOrError(argTypes), method.getSignature().isVarArgs());
+        super(name, method.getReturnType(), JTypeUtils.typesOrError(argTypes), method.getSignature().isVarArgs(), method.getSourceName());
         this.method = method;
     }
 
@@ -63,11 +62,6 @@ public class JFunctionFromJMethod extends JFunctionBase {
                         .setArguments(all)
                         .build()
         );
-    }
-
-    @Override
-    public String getSourceName() {
-        return method.getSourceName();
     }
 
     @Override

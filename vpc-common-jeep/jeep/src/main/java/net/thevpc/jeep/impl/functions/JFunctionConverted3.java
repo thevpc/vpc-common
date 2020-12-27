@@ -17,7 +17,7 @@ public class JFunctionConverted3 extends JFunctionBase {
         super(other.getName(),
                 returnType,
                 convArgTypes(other.getSignature().argTypes(), argConverters)
-                ,false
+                ,false,other.getSourceName()
         );
         this.other = other;
         this.argConverters = argConverters;
@@ -79,11 +79,6 @@ public class JFunctionConverted3 extends JFunctionBase {
             v=resultConverter.convert(v, icontext);
         }
         return v;
-    }
-
-    @Override
-    public String getSourceName() {
-        return other.getSourceName();
     }
 
     @Override

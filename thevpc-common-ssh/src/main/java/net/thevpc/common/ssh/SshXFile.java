@@ -8,16 +8,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class SshXFile extends XFile {
-    private SshPath file;
-
-    SshXFile(XFileSystem fs, String path, SshPath file) {
-        super(fs, path);
-        this.file = file;
-    }
-
-
     private SshPath sshPath;
     private SshListener listener;
+
+
+    SshXFile(XFileSystem fs, String path, SshPath sshPath) {
+        super(fs, path);
+        this.sshPath = sshPath;
+    }
+
 
     public SshListener getListener() {
         return listener;

@@ -1010,14 +1010,14 @@ public class StringUtils {
         if (s.endsWith(oldTail)) {
             return s.substring(0, s.length() - oldTail.length()) + newTail;
         }
-        throw new IllegalArgumentException("Missing old Tail");
+        throw new IllegalArgumentException("missing old tail");
     }
 
     public static String replaceHead(String s, String oldHead, String newHead) {
         if (s.startsWith(oldHead)) {
             return newHead + s.substring(oldHead.length());
         }
-        throw new IllegalArgumentException("Missing old Head");
+        throw new IllegalArgumentException("missing old head");
     }
 
     public static String formatLeft(Object number, int size) {

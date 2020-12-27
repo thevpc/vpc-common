@@ -73,10 +73,18 @@ public class Docusaurus2Asciidoctor {
         config.setOutputPdf(pdfFile);
         config.setPlaceHolderReplacer((String varName) -> {
             if (varName.equals("asciidoctor.baseDir")) {
-                return getAsciiDoctorBaseFolder();
+                String r = getAsciiDoctorBaseFolder();
+                if(r!=null){
+                    r=Paths.get(r).normalize().toAbsolutePath().toString();
+                }
+                return r;
             }
             if (varName.equals("docusaurus.baseDir")) {
-                return project.getDocusaurusBaseFolder();
+                String r = project.getDocusaurusBaseFolder();
+                if(r!=null){
+                    r=Paths.get(r).normalize().toAbsolutePath().toString();
+                }
+                return r;
             }
             if (varName.startsWith("asciidoctor.")) {
                 return asciiDoctorConfig.get(varName.substring("asciidoctor.".length())).asString();

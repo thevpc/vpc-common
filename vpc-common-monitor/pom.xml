@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-monitor</artifactId>
-    <version>1.22.7</version>
+    <version>1.22.7</version><!--updated-->
     <packaging>jar</packaging>
     <name>net.thevpc.common.thevpc-common-monitor</name>
     <url>https://github.com/thevpc/upa/wiki</url>

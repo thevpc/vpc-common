@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-utils</artifactId>
-    <version>1.23.1</version>
+    <version>1.23.1</version><!--updated-->
     <packaging>jar</packaging>
     <name>net.thevpc.common.thevpc-common-utils</name>
     <url>https://github.com/thevpc/vpc-common</url>

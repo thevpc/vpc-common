@@ -31,97 +31,73 @@ public class SimpleNodeNodeFactory implements JParserNodeFactory<JSimpleNode> {
 
     @Override
     public JSimpleNode createPrefixUnaryOperatorNode(JToken op, JSimpleNode child, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PrefixUnaryOperator",
-                new ListBuilder<>().addEach(op, child).toObjectArray()
+        return new JSimpleNode("PrefixUnaryOperator", new ListBuilder<>().addEach(op, child).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createPostfixBracketsNode(JSimpleNode leftBaseChild, JSimpleNode rightIndexChildren, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PostfixBrackets",
-                new ListBuilder<>().addEach(leftBaseChild, rightIndexChildren).toObjectArray()
+        return new JSimpleNode("PostfixBrackets", new ListBuilder<>().addEach(leftBaseChild, rightIndexChildren).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createPrefixBracketsNode(JSimpleNode leftIndexChildren, JSimpleNode rightBaseChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PrefixBrackets",
-                new ListBuilder<>().addEach(leftIndexChildren, rightBaseChild).toObjectArray()
+        return new JSimpleNode( "PrefixBrackets", new ListBuilder<>().addEach(leftIndexChildren, rightBaseChild).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createPostfixParenthesisNode(JSimpleNode leftBaseChild, JSimpleNode rightIndexChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PostfixParenthesis",
-                new ListBuilder<>().addEach(leftBaseChild, rightIndexChild).toObjectArray()
+        return new JSimpleNode( "PostfixParenthesis", new ListBuilder<>().addEach(leftBaseChild, rightIndexChild).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createPrefixParenthesisNode(JSimpleNode leftIndexChild, JSimpleNode rightBaseChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PrefixParenthesis",
-                new ListBuilder<>().addEach(leftIndexChild, rightBaseChild).toObjectArray()
+        return new JSimpleNode( "PrefixParenthesis", new ListBuilder<>().addEach(leftIndexChild, rightBaseChild).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createPostfixBracesNode(JSimpleNode leftBaseChild, JSimpleNode rightIndexChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PostfixBraces",
-                new ListBuilder<>().addEach(leftBaseChild, rightIndexChild).toObjectArray()
+        return new JSimpleNode("PostfixBraces", new ListBuilder<>().addEach(leftBaseChild, rightIndexChild).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createPrefixBracesNode(JSimpleNode leftIndexChild, JSimpleNode rightBaseChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PrefixBraces",
-                new ListBuilder<>().addEach(leftIndexChild, rightBaseChild).toObjectArray()
+        return new JSimpleNode("PrefixBraces", new ListBuilder<>().addEach(leftIndexChild, rightBaseChild).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createBracketsNode(List<JSimpleNode> children, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "Brackets",
-                new ListBuilder<>().addAll((List)children).toObjectArray()
+        return new JSimpleNode("Brackets", new ListBuilder<>().addAll((List)children).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createPostfixUnaryOperatorNode(JToken name, JSimpleNode argumentChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "PostfixUnaryOperator",
-                new ListBuilder<>().add(name).add(argumentChild).toObjectArray()
+        return new JSimpleNode("PostfixUnaryOperator", new ListBuilder<>().add(name).add(argumentChild).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createListOperatorNode(JToken token, List<JSimpleNode> argumentChildren, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "ListOperator",
-                new ListBuilder<>().add(token).addAll((List)argumentChildren).toObjectArray()
+        return new JSimpleNode("ListOperator", new ListBuilder<>().add(token).addAll((List)argumentChildren).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createBinaryOperatorNode(JToken op, JSimpleNode leftChild, JSimpleNode rightChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "BinaryOperator",
-                new ListBuilder<>().add(op).add(leftChild).add(rightChild).toObjectArray()
+        return new JSimpleNode("BinaryOperator", new ListBuilder<>().add(op).add(leftChild).add(rightChild).toObjectArray()
         );
     }
 
     @Override
     public JSimpleNode createImplicitOperatorNode(JSimpleNode leftChild, JSimpleNode rightChild, JNodeTokens nodeTokens) {
-        return new JSimpleNode(
-                "BinaryOperator",
-                new ListBuilder<>().add(leftChild).add(rightChild).toObjectArray()
+        return new JSimpleNode("ImplicitOperator", new ListBuilder<>().add(leftChild).add(rightChild).toObjectArray()
         );
     }
 

@@ -10,7 +10,7 @@ public class JFunctionFromInvoke extends JFunctionBase {
     private JInvoke handler;
 
     public JFunctionFromInvoke(String name, JType returnType, JType[] argTypes, boolean varArgs, JInvoke handler) {
-        super(name, returnType, argTypes,varArgs);
+        super(name, returnType, argTypes,varArgs,"<unknown-source>");
         this.handler = handler;
     }
 
@@ -19,8 +19,4 @@ public class JFunctionFromInvoke extends JFunctionBase {
         return handler.invoke(icontext);
     }
 
-    @Override
-    public String getSourceName() {
-        return "<unknown-source>";
-    }
 }

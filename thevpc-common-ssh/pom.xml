@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-ssh</artifactId>
-    <version>1.1.6</version>
+    <version>1.1.6</version><!--updated-->
     <packaging>jar</packaging>
     <name>net.thevpc.common.thevpc-common-ssh</name>
     <url>https://github.com/thevpc/vpc-common</url>

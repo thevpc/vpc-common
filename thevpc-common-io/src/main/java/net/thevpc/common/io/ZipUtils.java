@@ -10,19 +10,19 @@
  * other 'things' . Its based on an extensible architecture to help supporting a
  * large range of sub managers / repositories.
  * <br>
- *
+ * <p>
  * Copyright [2020] [thevpc]
- * Licensed under the Apache License, Version 2.0 (the "License"); you may 
- * not use this file except in compliance with the License. You may obtain a 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may
+ * not use this file except in compliance with the License. You may obtain a
  * copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an 
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, 
- * either express or implied. See the License for the specific language 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+ * either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * <br>
  * ====================================================================
-*/
+ */
 package net.thevpc.common.io;
 
 import java.io.*;
@@ -47,7 +47,10 @@ public class ZipUtils {
         }
         File targetFile = new File(target);
         File f = options.isTempFile() ? File.createTempFile("zip", ".zip") : targetFile;
-        f.getParentFile().mkdirs();
+        File parentFile = f.getParentFile();
+        if (parentFile != null) {
+            parentFile.mkdirs();
+        }
         ZipOutputStream zip = null;
         FileOutputStream fW = null;
         try {
@@ -85,6 +88,54 @@ public class ZipUtils {
             if (!f.renameTo(targetFile)) {
                 IOUtils.copy(f, targetFile);
             }
+        }
+    }
+
+    public static void zip(String target, ZipOptions options, Folder... sources) {
+        if (options == null) {
+            options = new ZipOptions();
+        }
+        try {
+            File targetFile = new File(target);
+            File f = options.isTempFile() ? File.createTempFile("zip", ".zip") : targetFile;
+            File parentFile = f.getParentFile();
+            if (parentFile != null) {
+                parentFile.mkdirs();
+            }
+            ZipOutputStream zip = null;
+            FileOutputStream fW = null;
+            try {
+                fW = new FileOutputStream(f);
+                try {
+                    zip = new ZipOutputStream(fW);
+                    for (Folder s : sources) {
+                        File file1 = new File(s.path);
+                        if (file1.isDirectory()) {
+                            for (File file : file1.listFiles()) {
+                                add(s.name, file.getPath(), zip);
+                            }
+                        } else {
+                            add(s.name, file1.getPath(), zip);
+                        }
+                    }
+                } finally {
+                    if (zip != null) {
+                        zip.close();
+                    }
+                }
+            } finally {
+                if (fW != null) {
+                    fW.close();
+                }
+            }
+            if (options.isTempFile()) {
+                targetFile.getParentFile().mkdirs();
+                if (!f.renameTo(targetFile)) {
+                    IOUtils.copy(f, targetFile);
+                }
+            }
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
     }
 
@@ -166,14 +217,11 @@ public class ZipUtils {
         }
     }
 
-    public static boolean visitZipFile(File zipFile, PathFilter possiblePaths, InputStreamVisitor visitor) throws IOException {
-        InputStream is = null;
-        try {
-            return visitZipStream(is = new FileInputStream(zipFile), possiblePaths, visitor);
-        } finally {
-            if (is != null) {
-                is.close();
-            }
+    public static boolean visitZipFile(File zipFile, PathFilter possiblePaths, InputStreamVisitor visitor) {
+        try (InputStream is = new FileInputStream(zipFile)) {
+            return visitZipStream(is, possiblePaths, visitor);
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
     }
 
@@ -182,78 +230,78 @@ public class ZipUtils {
      *
      * @param zipFile input zip file
      * @param outputFolder zip file output folder
-     * @throws IOException IOException
      */
-    public static void unzip(String zipFile, String outputFolder, UnzipOptions options) throws IOException {
-        if (options == null) {
-            options = new UnzipOptions();
-        }
-        byte[] buffer = new byte[1024];
+    public static void unzip(String zipFile, String outputFolder, UnzipOptions options) {
+        try {
+            if (options == null) {
+                options = new UnzipOptions();
+            }
+            byte[] buffer = new byte[1024];
 
-        //create output directory is not exists
-        File folder = new File(outputFolder);
-        if (!folder.exists()) {
-            folder.mkdir();
-        }
+            //create output directory is not exists
+            File folder = new File(outputFolder);
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
 
-        //get the zip file content
-        ZipInputStream zis
-                = new ZipInputStream(new FileInputStream(new File(zipFile)));
-        //get the zipped file list entry
-        ZipEntry ze = zis.getNextEntry();
-        String root = null;
-        while (ze != null) {
+            //get the zip file content
+            try (ZipInputStream zis
+                         = new ZipInputStream(new FileInputStream(new File(zipFile)))) {
+                //get the zipped file list entry
+                ZipEntry ze = zis.getNextEntry();
+                String root = null;
+                while (ze != null) {
 
-            String fileName = ze.getName();
-            if (options.isSkipRoot()) {
-                if (root == null) {
-                    if (fileName.endsWith("/")) {
-                        root = fileName;
-                        ze = zis.getNextEntry();
-                        continue;
-                    } else {
-                        throw new IOException("tot a single root zip");
+                    String fileName = ze.getName();
+                    if (options.isSkipRoot()) {
+                        if (root == null) {
+                            if (fileName.endsWith("/")) {
+                                root = fileName;
+                                ze = zis.getNextEntry();
+                                continue;
+                            } else {
+                                throw new IOException("tot a single root zip");
+                            }
+                        }
+                        if (fileName.startsWith(root)) {
+                            fileName = fileName.substring(root.length());
+                        } else {
+                            throw new IOException("tot a single root zip");
+                        }
                     }
+                    if (fileName.endsWith("/")) {
+                        File newFile = new File(outputFolder + File.separator + fileName);
+                        newFile.mkdirs();
+                    } else {
+                        File newFile = new File(outputFolder + File.separator + fileName);
+                        log.log(Level.FINEST, "file unzip : " + newFile.getAbsoluteFile());
+                        //create all non exists folders
+                        //else you will hit FileNotFoundException for compressed folder
+                        newFile.getParentFile().mkdirs();
+
+                        FileOutputStream fos = new FileOutputStream(newFile);
+
+                        int len;
+                        while ((len = zis.read(buffer)) > 0) {
+                            fos.write(buffer, 0, len);
+                        }
+
+                        fos.close();
+                    }
+                    ze = zis.getNextEntry();
                 }
-                if (fileName.startsWith(root)) {
-                    fileName = fileName.substring(root.length());
-                } else {
-                    throw new IOException("tot a single root zip");
-                }
+                zis.closeEntry();
             }
-            if (fileName.endsWith("/")) {
-                File newFile = new File(outputFolder + File.separator + fileName);
-                newFile.mkdirs();
-            } else {
-                File newFile = new File(outputFolder + File.separator + fileName);
-                log.log(Level.FINEST, "file unzip : " + newFile.getAbsoluteFile());
-                //create all non exists folders
-                //else you will hit FileNotFoundException for compressed folder
-                newFile.getParentFile().mkdirs();
-
-                FileOutputStream fos = new FileOutputStream(newFile);
-
-                int len;
-                while ((len = zis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, len);
-                }
-
-                fos.close();
-            }
-            ze = zis.getNextEntry();
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
-
-        zis.closeEntry();
-        zis.close();
     }
 
-    public static boolean extractFirstPath(InputStream zipFile, Set<String> possiblePaths, OutputStream output, boolean closeOutput) throws IOException {
+    public static boolean extractFirstPath(InputStream zipFile, Set<String> possiblePaths, OutputStream output, boolean closeOutput) {
         byte[] buffer = new byte[4 * 1024];
 
         //get the zip file content
-        ZipInputStream zis = null;
-        try {
-            zis = new ZipInputStream(zipFile);
+        try (ZipInputStream zis = new ZipInputStream(zipFile)) {
             //get the zipped file list entry
             ZipEntry ze = zis.getNextEntry();
 
@@ -278,15 +326,13 @@ public class ZipUtils {
                 }
                 ze = zis.getNextEntry();
             }
-        } finally {
-            if (zis != null) {
-                zis.close();
-            }
+        }catch (IOException ex){
+            throw new UncheckedIOException(ex);
         }
         return false;
     }
 
-//    public static void zip(final File _folder, final File _zipFilePath) {
+    //    public static void zip(final File _folder, final File _zipFilePath) {
 //        final Path folder = _folder.toPath();
 //        Path zipFilePath = _zipFilePath.toPath();
 //        try (
@@ -310,13 +356,11 @@ public class ZipUtils {
 //            throw new UncheckedIOException(e);
 //        }
 //    }
-    public static boolean visitZipStream(InputStream zipFile, PathFilter possiblePaths, InputStreamVisitor visitor) throws IOException {
+    public static boolean visitZipStream(InputStream zipFile, PathFilter possiblePaths, InputStreamVisitor visitor){
         //byte[] buffer = new byte[4 * 1024];
 
         //get the zip file content
-        ZipInputStream zis = null;
-        try {
-            zis = new ZipInputStream(zipFile);
+        try (ZipInputStream zis= new ZipInputStream(zipFile)){
             //get the zipped file list entry
             ZipEntry ze = zis.getNextEntry();
             final ZipInputStream finalZis = zis;
@@ -354,12 +398,23 @@ public class ZipUtils {
                 }
                 ze = zis.getNextEntry();
             }
-        } finally {
-            if (zis != null) {
-                zis.close();
-            }
+        } catch (IOException ex){
+            throw new UncheckedIOException(ex);
         }
 
         return false;
+    }
+
+    public static class Folder {
+        String name;
+        String path;
+        FileFilter filter;
+
+        public Folder(String name, String path, FileFilter filter) {
+            this.name = name;
+            this.path = path;
+            this.filter = filter;
+        }
+
     }
 }

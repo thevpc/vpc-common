@@ -521,10 +521,10 @@ public class SShConnection implements AutoCloseable {
     public void copyLocalToRemote(String from, String to, boolean mkdirs) {
         try {
             if (from == null || from.trim().isEmpty()) {
-                throw new IllegalArgumentException("Missing Source Path");
+                throw new IllegalArgumentException("missing source path");
             }
             if (to == null || to.trim().isEmpty()) {
-                throw new IllegalArgumentException("Missing Target Path");
+                throw new IllegalArgumentException("missing target path");
             }
             for (SshListener listener : listeners) {
                 listener.onPut(from, to, mkdirs);

@@ -38,9 +38,9 @@ public interface JVars {
 
     JVar get(String var);
 
-    void setValue(String varName, Object value, JInvokeContext context);
+    void setValue(String varName, Object value, JInvokeContext invokeContext);
 
-    Object getValue(String varName, JInvokeContext context);
+    Object getValue(String varName, JInvokeContext invokeContext);
 
 //    JNode findNode(String name);
 

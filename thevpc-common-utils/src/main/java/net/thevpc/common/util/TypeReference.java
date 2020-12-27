@@ -26,7 +26,7 @@ public abstract class TypeReference<T> implements Serializable {
     protected TypeReference() {
         Type superclass = getClass().getGenericSuperclass();
         if (superclass instanceof Class) {
-            throw new RuntimeException("Missing type parameter.");
+            throw new RuntimeException("missing type parameter.");
         }
         this.type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
     }

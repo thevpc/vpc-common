@@ -183,6 +183,11 @@ public class DefaultJOperators implements JOperators {
         } else {
             operatorsAliases.put(aliasCanonicalName, canonicalName);
             functions.invalidateFunctionsCache();
+            if (aliasCanonicalName.length() > 0) {
+                JTokenConfigBuilder config = new JTokenConfigBuilder(context.tokens().config());
+                config.addOperator(aliasCanonicalName);
+                context.tokens().setConfig(config);
+            }
         }
 
         functions.invalidateFunctionsCache(new JSignature(alias, operands, false));
@@ -209,7 +214,6 @@ public class DefaultJOperators implements JOperators {
 //                operatorPrecedence, operator
 //        );
 //    }
-
     @Override
     public JOperators declareListOperator(String name, String returnType, String argType, int operatorPrecedence) {
         return declareListOperator(name,
@@ -227,7 +231,6 @@ public class DefaultJOperators implements JOperators {
 //                operatorPrecedence, operator
 //        );
 //    }
-
     @Override
     public JOperators declareListOperator(String name, Class returnType, Class argType, int operatorPrecedence) {
         return declareListOperator(name,
@@ -247,7 +250,7 @@ public class DefaultJOperators implements JOperators {
     @Override
     public JOperators declareListOperator(String name, JType returnType, JType argType, int operatorPrecedence) {
         //JOperators e = declareOperator(new JListOperator(operator, name, returnType, argType));
-        declareOperator(JOperator.list(name),operatorPrecedence);
+        declareOperator(JOperator.list(name), operatorPrecedence);
         abstractListOpNames.add(name);
         return this;
     }
@@ -262,7 +265,15 @@ public class DefaultJOperators implements JOperators {
         if (parent != null) {
             return parent.isOperator(operator);
         }
-        return opPrecedence.containsKey(operator);
+        if (opPrecedence.containsKey(operator)) {
+            return true;
+        }
+        final String n = operator.name();
+        final String t = operatorsAliases.get(n);
+        if (t != null) {
+            return isOperator(new JOperator(t, operator.type()));
+        }
+        return false;
     }
 
     @Override
@@ -343,7 +354,7 @@ public class DefaultJOperators implements JOperators {
     }
 
     @Override
-    public JOperators declareSpecialOperators(String ... operators) {
+    public JOperators declareSpecialOperators(String... operators) {
         for (String s : operators) {
             declareSpecialOperator(s);
         }
@@ -386,9 +397,18 @@ public class DefaultJOperators implements JOperators {
         if (opNames().contains(canonicalName)) {
             return true;
         }
+
+        final String t = operatorsAliases.get(operator);
+        if (t != null) {
+            if (opNames().contains(getCanonicalName(t))) {
+                return true;
+            }
+        }
+
         if (parent != null) {
             return parent.isOperator(canonicalName);
         }
+
         return false;
     }
 
@@ -500,6 +520,14 @@ public class DefaultJOperators implements JOperators {
     public int getOperatorPrecedence(JOperator operator) {
         Integer p = opPrecedence.get(operator);
         if (p == null) {
+            final String n = operator.name();
+            final String t = operatorsAliases.get(n);
+            if (t != null) {
+                p = opPrecedence.get(new JOperator(t, operator.type()));
+                if(p!=null){
+                    return p;
+                }
+            }
             if (parent != null) {
                 return parent.getOperatorPrecedence(operator);
             }
