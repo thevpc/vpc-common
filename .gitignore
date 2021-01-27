@@ -36,7 +36,6 @@
 /vpc-common-swings-app-dock-mydoggy/target/
 /vpc-common-app-swing/target/
 /vpc-common-app-swing-dock-mydoggy/target/
-/vpc-common-app-swing-plaf/target/
 /vpc-common-app-swings/target/
 /vpc-common-props/target/
 /vpc-common-app-swingx/target/
@@ -97,3 +96,13 @@
 /thevpc-common-utils/thevpc-common-utils.iml
 /thevpc-common-xfile/thevpc-common-xfile.iml
 /thevpc-common-ssh/thevpc-common-ssh.iml
+/thevpc-common-monitor/target/
+/thevpc-common-msg/target/
+/thevpc-common-props/target/
+/vpc-common-swing-prs/target/
+/tson/target/
+/thevpc-common-web-xml/target/
+/thevpc-common-log2/target/
+/thevpc-common-lanterna/target/
+/thevpc-common-swing-iconset-default/target/
+/thevpc-common-iconset-default/target/

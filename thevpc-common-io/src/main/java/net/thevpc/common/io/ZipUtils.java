@@ -230,6 +230,7 @@ public class ZipUtils {
      *
      * @param zipFile input zip file
      * @param outputFolder zip file output folder
+     * @param options options
      */
     public static void unzip(String zipFile, String outputFolder, UnzipOptions options) {
         try {

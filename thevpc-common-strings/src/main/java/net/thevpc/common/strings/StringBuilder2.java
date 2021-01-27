@@ -65,6 +65,7 @@ public final class StringBuilder2 implements java.io.Serializable, CharSequence,
      * {@code char} array may be greater than the number of
      * characters currently stored in the string builder, in which
      * case extra characters are ignored.
+     * @throws java.io.IOException IOException
      */
     private void writeObject(java.io.ObjectOutputStream s)
             throws java.io.IOException {
@@ -82,6 +83,9 @@ public final class StringBuilder2 implements java.io.Serializable, CharSequence,
     /**
      * readObject is called to restore the state of the StringBuffer from
      * a stream.
+     * @param  s stream
+     * @throws java.io.IOException IOException
+     * @throws ClassNotFoundException ClassNotFoundException
      */
     private void readObject(java.io.ObjectInputStream s)
             throws java.io.IOException, ClassNotFoundException {
@@ -1267,5 +1271,18 @@ public final class StringBuilder2 implements java.io.Serializable, CharSequence,
 
     public boolean regionMatches(int toffset, String other, int ooffset, int len) {
         return toString().regionMatches(toffset, other, ooffset, len);
+    }
+
+    public StringBuilder2 appendln(CharSequence other) {
+        return append(other).appendln();
+    }
+    public StringBuilder2 appendln(StringBuilder2 other) {
+        return append(other).appendln();
+    }
+    public StringBuilder2 appendln(StringBuffer other) {
+        return append(other).appendln();
+    }
+    public StringBuilder2 appendln() {
+        return append("\n");
     }
 }

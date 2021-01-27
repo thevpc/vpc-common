@@ -103,18 +103,7 @@ public class IteratorUtils {
     }
 
     public static <T> Iterator<T> unique(Iterator<T> it) {
-        Predicate<T> filter = new Predicate<T>() {
-            HashSet<T> visited = new HashSet<>();
-
-            @Override
-            public boolean test(T value) {
-                if (visited.contains(value)) {
-                    return false;
-                }
-                visited.add(value);
-                return true;
-            }
-        };
+        Predicate<T> filter = new UniquePredicate<>();
         return new FilteredIterator<>(it, filter);
     }
 
@@ -133,5 +122,18 @@ public class IteratorUtils {
             }
         };
         return new FilteredIterator<>(it, filter);
+    }
+
+    private static class UniquePredicate<T> implements Predicate<T> {
+        HashSet<T> visited = new HashSet<>();
+
+        @Override
+        public boolean test(T value) {
+            if (visited.contains(value)) {
+                return false;
+            }
+            visited.add(value);
+            return true;
+        }
     }
 }

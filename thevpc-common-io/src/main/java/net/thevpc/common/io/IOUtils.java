@@ -551,7 +551,7 @@ public class IOUtils {
      *
      * @param string  value to save
      * @param physicalName file path
-     * @throws IOException
+     * @throws IOException IOException
      */
     public static void saveString(String string, String physicalName) throws IOException {
         physicalName = FileUtils.expandPath(physicalName);

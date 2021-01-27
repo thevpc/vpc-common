@@ -35,6 +35,7 @@ public class PrivateStringUtils {
     /**
      *
      * @param pattern pattern
+     * @param contains contains
      * @return regexp
      */
     public static String simpexpToRegexp(String pattern, boolean contains) {

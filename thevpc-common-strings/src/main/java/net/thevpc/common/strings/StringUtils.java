@@ -202,7 +202,7 @@ public class StringUtils {
     /**
      * @param pattern simple shell like
      * @param pathSeparator pathSeparator to consider for '**' escape pattern
-     * @return
+     * @return regular expression
      */
     public static String wildcardToRegex(String pattern, char pathSeparator) {
         if (pattern == null) {
@@ -623,8 +623,8 @@ public class StringUtils {
      * string, it is first converted to a string using String.valueOf(object);
      * if the resulting string is empty, null is returned
      *
-     * @param any
-     * @return
+     * @param any any
+     * @return null or trimmed object's toString
      */
     public static String trimObjectToNull(Object any) {
         if (any == null) {
@@ -825,8 +825,9 @@ public class StringUtils {
 
     /**
      * @param message in the form "This is a message with ${param}
-     * @param parameters
-     * @return
+     * @param parameters parameters
+     * @param messageNameFormatContext messageNameFormatContext
+     * @return formatted string
      */
     public static String format(String message, Map<String, Object> parameters, MessageNameFormatContext messageNameFormatContext) {
         return new MessageNameFormat(message).format(parameters, messageNameFormatContext);
@@ -1252,9 +1253,9 @@ public class StringUtils {
      * StringUtils.compileSubPatterns("\"java.lang:type=Threading\".operations.dumpAllThreads[£0].threadName", "?&lt;Item&gt;[0-9]+")
      * </pre>
      *
-     * @param text
-     * @param subPatterns
-     * @return
+     * @param text text
+     * @param subPatterns subPatterns
+     * @return Pattern
      */
     public static Pattern compileSubPatterns(String text, String... subPatterns) {
         Matcher matcher = SUB_PATTERN.matcher(text);

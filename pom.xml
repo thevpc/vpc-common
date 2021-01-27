@@ -8,44 +8,35 @@
     <name>net.thevpc.common</name>
     <modules>
         <module>thevpc-common-utils</module>
-        <module>vpc-common-config</module>
-        <module>vpc-common-desktop-automation</module>
+        <module>thevpc-common-config</module>
+        <module>thevpc-common-desktop-automation</module>
         <module>thevpc-common-io</module>
         <module>thevpc-common-io-compress</module>
-        <module>vpc-common-sql</module>
-        <module>vpc-common-classpath</module>
-        <module>vpc-common-commandline</module>
-        <module>vpc-common-fprint</module>
-        <module>vpc-common-text-source</module>
-        <module>vpc-common-text-source-log</module>
-        <module>vpc-common-jeep</module>
-        <module>vpc-common-log</module>
+        <module>thevpc-common-sql</module>
+        <module>thevpc-common-classpath</module>
+        <module>thevpc-common-commandline</module>
+        <module>thevpc-common-fprint</module>
+        <module>thevpc-common-text-source</module>
+        <module>thevpc-common-text-source-log</module>
+        <module>thevpc-common-log</module>
         <module>thevpc-common-mvn</module>
-        <module>vpc-common-prs</module>
+        <module>thevpc-common-prs</module>
         <module>thevpc-common-ssh</module>
-        <module>vpc-common-swings</module>
-        <module>vpc-common-swings-prs</module>
+        <module>thevpc-common-swing</module>
         <module>thevpc-common-strings</module>
-        <module>vpc-common-web-jsf</module>
-        <module>vpc-common-lanterna</module>
-        <module>vpc-common-web-xml</module>
+        <module>thevpc-common-web-jsf</module>
+        <module>thevpc-common-lanterna</module>
+        <module>thevpc-common-web-xml</module>
         <module>thevpc-common-xfile</module>
-        <module>vpc-common-diff-jar</module>
-        <module>vpc-common-cron</module>
-        <module>vpc-common-vfs</module>
-        <module>vpc-common-props</module>
-        <module>vpc-common-swings-plaf</module>
-        <module>vpc-common-msg</module>
-        <module>vpc-common-monitor</module>
-        <module>vpc-common-i18n</module>
-        <module>vpc-common-iconset</module>
-        <module>vpc-common-app</module>
-        <module>vpc-common-app-swing</module>
-        <module>vpc-common-app-swing-plaf</module>
-        <module>vpc-common-app-swing-dock-mydoggy</module>
-        <module>vpc-common-app-swingx</module>
-        <module>jshell</module>
-        <module>vpc-common-tson</module>
+        <module>thevpc-common-diff-jar</module>
+        <module>thevpc-common-cron</module>
+        <module>thevpc-common-vfs</module>
+        <module>thevpc-common-props</module>
+        <module>thevpc-common-plaf</module>
+        <module>thevpc-common-msg</module>
+        <module>thevpc-common-monitor</module>
+        <module>thevpc-common-i18n</module>
+        <module>thevpc-common-iconset</module>
         <module>thevpc-common-md</module>
         <module>thevpc-common-md-docusaurus</module>
         <module>thevpc-common-docusaurus</module>
@@ -54,6 +45,8 @@
         <module>thevpc-common-file-template</module>
         <module>thevpc-common-ljson</module>
         <module>thevpc-common-md-doc</module>
+        <module>thevpc-common-swing-prs</module>
+        <module>thevpc-common-iconset-default</module>
     </modules>
 
 </project>

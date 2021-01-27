@@ -97,7 +97,9 @@ public class RandomAccessLineReader implements AutoCloseable {
 
     public String nextForwardLine() throws IOException {
         String m = file.readLine();
-        lineNumber++;
+        if(m!=null) {
+            lineNumber++;
+        }
         return m;
     }
 
@@ -310,6 +312,24 @@ public class RandomAccessLineReader implements AutoCloseable {
 
     public RandomAccessOrientation getOrientation() {
         return orientation;
+    }
+
+    public boolean hasMore() throws IOException {
+        switch (orientation){
+            case FORWARD:{
+                long po = file.getFilePointer();
+                boolean more=file.read()!=-1;
+                if(more) {
+                    file.seek(po);
+                    return true;
+                }
+                return false;
+            }
+            case BACKWARD:{
+                return lineNumber>=0;
+            }
+        }
+        return true;
     }
 
 }

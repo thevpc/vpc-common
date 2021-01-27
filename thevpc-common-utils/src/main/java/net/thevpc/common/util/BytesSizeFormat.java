@@ -356,9 +356,16 @@ public class BytesSizeFormat implements DoubleFormat {
         long T = eval('T');
         long P = eval('P');
         long E = eval('E');
+
+        int KK = 3;
+        int MM = 6;
+        int GG = 9;
+        int TT = 12;
+        int PP = 15;
+        int EE = 18;
 //        long Z = eval('Z');
 //        long Y = eval('Y');
-        if (low <= E) {
+        if (low <= EE) {
 //            if (high >= Y) {
 //                r = v / T;
 //                if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % Y)>0)) || (v==0 && trailingZeros)) {
@@ -401,7 +408,7 @@ public class BytesSizeFormat implements DoubleFormat {
 //                    }
 //                }
 //            }
-            if (high >= E) {
+            if (high >= EE) {
                 r = v / T;
                 if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % E) > 0)) || (v == 0 && trailingZeros)) {
                     if (currDepth < 0) {
@@ -422,7 +429,7 @@ public class BytesSizeFormat implements DoubleFormat {
                     }
                 }
             }
-            if (high >= P) {
+            if (high >= PP) {
                 r = v / T;
                 if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % P) > 0)) || (v == 0 && trailingZeros)) {
                     if (currDepth < 0) {
@@ -443,7 +450,7 @@ public class BytesSizeFormat implements DoubleFormat {
                     }
                 }
             }
-            if (high >= T) {
+            if (high >= TT) {
                 r = v / T;
                 if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % T) > 0)) || (v == 0 && trailingZeros)) {
                     if (currDepth < 0) {
@@ -464,8 +471,8 @@ public class BytesSizeFormat implements DoubleFormat {
                     }
                 }
             }
-            if (low <= G) {
-                if (high >= G) {
+            if (low <= GG) {
+                if (high >= GG) {
                     r = v / G;
                 }
                 if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % G) > 0)) || (v == 0 && trailingZeros)) {
@@ -486,8 +493,8 @@ public class BytesSizeFormat implements DoubleFormat {
                         empty = false;
                     }
                 }
-                if (low <= M) {
-                    if (high >= M) {
+                if (low <= MM) {
+                    if (high >= MM) {
                         r = v / M;
                         if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % M) > 0)) || (v == 0 && trailingZeros)) {
                             if (currDepth < 0) {
@@ -508,8 +515,8 @@ public class BytesSizeFormat implements DoubleFormat {
                             }
                         }
                     }
-                    if (low <= K) {
-                        if (high >= K) {
+                    if (low <= KK) {
+                        if (high >= KK) {
                             r = v / K;
                             if ((leadingZeros && leading) || r > 0 || (!empty && intermediateZeros && ((v % K) > 0)) || (v == 0 && trailingZeros)) {
                                 if (currDepth < 0) {
