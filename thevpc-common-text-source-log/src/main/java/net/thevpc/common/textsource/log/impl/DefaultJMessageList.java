@@ -12,18 +12,48 @@ public class DefaultJMessageList implements JMessageList {
     private List<JSourceMessage> messages = new ArrayList<>();
 
     @Override
-    public void info(String id, String group, String message, JTextSourceToken token) {
-        add(JSourceMessage.info(id, group, message, token));
+    public void info(String id, String group, JTextSourceToken token, String message) {
+        add(JSourceMessage.info(id, group, token, message));
     }
 
     @Override
-    public void error(String id, String group, String message, JTextSourceToken token) {
-        add(JSourceMessage.error(id, group, message, token));
+    public void error(String id, String group, JTextSourceToken token, String message) {
+        add(JSourceMessage.error(id, group, token, message));
     }
 
     @Override
-    public void warn(String id, String group, String message, JTextSourceToken token) {
-        add(JSourceMessage.warning(id, group, message, token));
+    public void warn(String id, String group, JTextSourceToken token, String message) {
+        add(JSourceMessage.warning(id, group, token, message));
+    }
+
+    @Override
+    public void cinfo(String id, String group, JTextSourceToken token, String message,Object ...params) {
+        add(JSourceMessage.cinfo(id, group, token, message,params));
+    }
+
+    @Override
+    public void cerror(String id, String group, JTextSourceToken token, String message,Object ...params) {
+        add(JSourceMessage.cerror(id, group, token, message,params));
+    }
+
+    @Override
+    public void cwarn(String id, String group, JTextSourceToken token, String message,Object ...params) {
+        add(JSourceMessage.cwarning(id, group, token, message,params));
+    }
+
+    @Override
+    public void jinfo(String id, String group, JTextSourceToken token, String message,Object ...params) {
+        add(JSourceMessage.jinfo(id, group, token, message,params));
+    }
+
+    @Override
+    public void jerror(String id, String group, JTextSourceToken token, String message,Object ...params) {
+        add(JSourceMessage.jerror(id, group, token, message,params));
+    }
+
+    @Override
+    public void jwarn(String id, String group, JTextSourceToken token, String message,Object ...params) {
+        add(JSourceMessage.jwarning(id, group, token, message,params));
     }
 
     @Override

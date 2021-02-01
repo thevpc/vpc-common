@@ -60,7 +60,6 @@ public class StringUtils {
         if (expression == null) {
             return null;
         }
-
         String nfdNormalizedString = Normalizer.normalize(expression, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
         return pattern.matcher(nfdNormalizedString).replaceAll("");

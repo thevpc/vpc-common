@@ -1,5 +1,6 @@
 package net.thevpc.common.textsource.log.impl;
 
+import java.io.ByteArrayOutputStream;
 import net.thevpc.common.textsource.JTextSourceToken;
 import net.thevpc.common.textsource.log.JSourceMessage;
 import net.thevpc.common.textsource.log.JTextSourceLog;
@@ -15,15 +16,12 @@ public class DefaultJTextSourceLog implements JTextSourceLog, Cloneable {
     private String operationName;
     private List<JSourceMessage> messages = new ArrayList<>();
     private Set<ErrorKey> visitedMessages = new LinkedHashSet<>();
-    private PrintStream out = System.err;
+    private int errorsCount = 0;
+    private int warningsCount = 0;
+    private int infosCount = 0;
 
     public DefaultJTextSourceLog(String operationName) {
         this.operationName = operationName == null ? DEFAULT_OPERATION_NAME : operationName;
-    }
-
-    public DefaultJTextSourceLog(String operationName, PrintStream out) {
-        this.operationName = operationName == null ? DEFAULT_OPERATION_NAME : operationName;
-        this.out = out;
     }
 
     public String getOperationName() {
@@ -36,18 +34,48 @@ public class DefaultJTextSourceLog implements JTextSourceLog, Cloneable {
     }
 
     @Override
-    public void info(String id, String group, String message, JTextSourceToken token) {
-        add(JSourceMessage.info(id, group, message, token));
+    public void info(String id, String group, JTextSourceToken token, String message) {
+        add(JSourceMessage.info(id, group, token, message));
     }
 
     @Override
-    public void error(String id, String group, String message, JTextSourceToken token) {
-        add(JSourceMessage.error(id, group, message, token));
+    public void error(String id, String group, JTextSourceToken token, String message) {
+        add(JSourceMessage.error(id, group, token, message));
     }
 
     @Override
-    public void warn(String id, String group, String message, JTextSourceToken token) {
-        add(JSourceMessage.warning(id, group, message, token));
+    public void warn(String id, String group, JTextSourceToken token, String message) {
+        add(JSourceMessage.warning(id, group, token, message));
+    }
+
+    @Override
+    public void cinfo(String id, String group, JTextSourceToken token, String message, Object... params) {
+        add(JSourceMessage.cinfo(id, group, token, message, params));
+    }
+
+    @Override
+    public void cerror(String id, String group, JTextSourceToken token, String message, Object... params) {
+        add(JSourceMessage.cerror(id, group, token, message, params));
+    }
+
+    @Override
+    public void cwarn(String id, String group, JTextSourceToken token, String message, Object... params) {
+        add(JSourceMessage.cwarning(id, group, token, message, params));
+    }
+
+    @Override
+    public void jinfo(String id, String group, JTextSourceToken token, String message, Object... params) {
+        add(JSourceMessage.jinfo(id, group, token, message, params));
+    }
+
+    @Override
+    public void jerror(String id, String group, JTextSourceToken token, String message, Object... params) {
+        add(JSourceMessage.jerror(id, group, token, message, params));
+    }
+
+    @Override
+    public void jwarn(String id, String group, JTextSourceToken token, String message, Object... params) {
+        add(JSourceMessage.jwarning(id, group, token, message, params));
     }
 
     @Override
@@ -61,14 +89,20 @@ public class DefaultJTextSourceLog implements JTextSourceLog, Cloneable {
             }
             visitedMessages.add(k);
             this.messages.add(message);
-            if (out != null) {
-                out.println(message);
+            final Level lvl = message.getLevel();
+            if (lvl.intValue() >= Level.SEVERE.intValue()) {
+                errorsCount++;
+            } else if (lvl.intValue() >= Level.WARNING.intValue()) {
+                warningsCount++;
+            } else if (lvl.intValue() >= Level.INFO.intValue()) {
+                infosCount++;
             }
+            printlnMessage(message);
         }
     }
 
     @Override
-    public int errorCountAtLine(int line) {
+    public int getErrorCountAtLine(int line) {
         int errors = 0;
         for (JSourceMessage message : messages) {
             if (message.getLevel().intValue() >= Level.SEVERE.intValue()) {
@@ -84,30 +118,21 @@ public class DefaultJTextSourceLog implements JTextSourceLog, Cloneable {
     }
 
     @Override
-    public int errorCount() {
-        int errors = 0;
-        for (JSourceMessage message : messages) {
-            if (message.getLevel().intValue() >= Level.SEVERE.intValue()) {
-                errors++;
-            }
-        }
-        return errors;
+    public int getErrorCount() {
+        return errorsCount;
     }
 
     @Override
-    public int warningCount() {
-        int warnings = 0;
-        for (JSourceMessage message : messages) {
-            if (message.getLevel().intValue() >= Level.WARNING.intValue()) {
-                warnings++;
-            }
-        }
-        return warnings;
+    public int getWarningCount() {
+        return warningsCount;
     }
 
     @Override
     public JTextSourceLog clear() {
         messages.clear();
+        errorsCount = 0;
+        warningsCount = 0;
+        infosCount = 0;
         return this;
     }
 
@@ -128,7 +153,7 @@ public class DefaultJTextSourceLog implements JTextSourceLog, Cloneable {
 
     @Override
     public boolean isSuccessful() {
-        return errorCount() == 0;
+        return getErrorCount() == 0;
     }
 
     @Override
@@ -151,74 +176,55 @@ public class DefaultJTextSourceLog implements JTextSourceLog, Cloneable {
         return messages.iterator();
     }
 
+    public void printlnMessage(JSourceMessage jSourceMessage) {
+        System.err.println(jSourceMessage);
+    }
+
+    @Override
     public void print() {
-        if (out != null) {
-            print(out);
-        }
-    }
-
-    public void print(PrintStream out) {
-        int errors = 0;
-        List<JSourceMessage> errorsList = new ArrayList<>();
-        List<JSourceMessage> warningsList = new ArrayList<>();
-        List<JSourceMessage> otherList = new ArrayList<>();
-        for (JSourceMessage message : messages) {
-            if (message.getLevel().intValue() >= Level.SEVERE.intValue()) {
-                errors++;
-                errorsList.add(message);
-            } else if (message.getLevel().intValue() >= Level.WARNING.intValue()) {
-                warningsList.add(message);
-            } else {
-                otherList.add(message);
+        List<JSourceMessage> messages2 = new ArrayList<JSourceMessage>(messages);
+        messages2.sort(new Comparator<JSourceMessage>() {
+            @Override
+            public int compare(JSourceMessage o1, JSourceMessage o2) {
+                int c = Integer.compare(o2.getLevel().intValue(), o1.getLevel().intValue());
+                if (c != 0) {
+                    return c;
+                }
+                return 0;
             }
-        }
-        printFooter();
-        for (JSourceMessage jSourceMessage : errorsList) {
-            out.println(jSourceMessage);
-        }
-        for (JSourceMessage jSourceMessage : warningsList) {
-            out.println(jSourceMessage);
-        }
-        for (JSourceMessage jSourceMessage : otherList) {
-            out.println(jSourceMessage);
+        });
+        for (JSourceMessage jSourceMessage : messages2) {
+            printlnMessage(jSourceMessage);
         }
         printFooter();
     }
 
-    public void printFooter() {
-        if (out != null) {
-            printFooter(out);
+    public String getFooterMessage() {
+        final ByteArrayOutputStream b = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(b);
+        String op = operationName;
+        if (op == null) {
+            op = DEFAULT_OPERATION_NAME;
         }
-    }
-
-    public void printFooter(PrintStream out) {
-        int errors = 0;
-        int warnings = 0;
-        List<JSourceMessage> errorsList = new ArrayList<>();
-        List<JSourceMessage> warningsList = new ArrayList<>();
-        List<JSourceMessage> otherList = new ArrayList<>();
-        for (JSourceMessage message : messages) {
-            if (message.getLevel().intValue() >= Level.SEVERE.intValue()) {
-                errors++;
-                errorsList.add(message);
-            } else if (message.getLevel().intValue() >= Level.WARNING.intValue()) {
-                warnings++;
-                warningsList.add(message);
-            } else {
-                otherList.add(message);
-            }
-        }
-        out.println("-----------------------------------------------------------------------------------");
-        if (operationName == null) {
-            operationName = DEFAULT_OPERATION_NAME;
-        }
-        if (errors == 0) {
-            out.printf("%s successful with %d errors and %d warnings.\n", operationName, errors, warnings);
+        final int errors = getErrorCount();
+        final int warnings = getWarningCount();
+        if (errors == 0 && warnings == 0) {
+            out.printf("%s successful", op);
+        } else if (errors == 0) {
+            out.printf("%s successful with %d warning%s.", op, warnings, warnings > 1 ? "s" : "");
         } else if (warnings == 0) {
-            out.printf("%s failed with %d errors.\n", operationName, errors);
+            out.printf("%s failed with %d error%s.", op, errors, errors > 1 ? "s" : "");
         } else {
-            out.printf("%s failed with %d errors and %d warnings.\n", operationName, errors, warnings);
+            out.printf("%s failed with %d error%s and %d warning%s.", op, errors, errors > 1 ? "s" : "", warnings, warnings > 1 ? "s" : "");
         }
+        out.flush();
+        return b.toString();
+    }
+
+    @Override
+    public void printFooter() {
+        System.err.println("-----------------------------------------------------------------------------------");
+        System.err.println(getFooterMessage());
     }
 
     @Override

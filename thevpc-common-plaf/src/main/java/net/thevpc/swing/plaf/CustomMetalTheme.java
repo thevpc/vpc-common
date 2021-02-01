@@ -19,7 +19,7 @@
  * <br>
  * ====================================================================
 */
-package net.thevpc.swings.plaf;
+package net.thevpc.swing.plaf;
 
 import javax.swing.*;
 import javax.swing.plaf.*;

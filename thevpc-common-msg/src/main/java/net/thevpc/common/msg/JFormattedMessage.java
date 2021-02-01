@@ -1,19 +1,20 @@
 package net.thevpc.common.msg;
 
+import java.text.MessageFormat;
 import java.util.logging.Level;
 
 /**
  * Created by vpc on 3/20/17.
  */
-public class StringMessage implements Message {
-
+public class JFormattedMessage implements Message {
     private Level level;
     private String message;
+    private Object[] args;
 
-    public StringMessage(Level level, String message) {
-
+    public JFormattedMessage(Level level, String message, Object[] args) {
+        this.level= level;
         this.message = message;
-        this.level = level;
+        this.args = args;
     }
 
     @Override
@@ -23,11 +24,11 @@ public class StringMessage implements Message {
 
     @Override
     public String getText() {
-        return message;
+        return MessageFormat.format(message ,args);
     }
 
     @Override
     public String toString() {
-        return message;
+        return MessageFormat.format(message ,args);
     }
 }

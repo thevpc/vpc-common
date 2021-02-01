@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 
-import net.thevpc.common.msg.FormattedMessage;
+import net.thevpc.common.msg.JFormattedMessage;
 import net.thevpc.common.msg.Message;
 import net.thevpc.common.msg.StringMessage;
 
@@ -248,9 +248,8 @@ public abstract class AbstractTaskMonitor implements TaskMonitor {
 
     @Override
     public void setMessage(String message, Object... args) {
-        setMessage(
-                message==null?EMPTY_MESSAGE:
-                new FormattedMessage(Level.FINE, message, args));
+        setMessage(message==null?EMPTY_MESSAGE:
+                new JFormattedMessage(Level.FINE, message, args));
     }
 
     protected abstract void setMessageImpl(Message message);

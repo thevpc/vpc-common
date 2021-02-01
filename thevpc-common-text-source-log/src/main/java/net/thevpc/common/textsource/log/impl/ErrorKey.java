@@ -15,9 +15,11 @@ class ErrorKey {
     public ErrorKey(JSourceMessage m) {
         String id = m.getId();
         if (id == null) {
-            id = m.getMessage();
+            id = "::" + m.getMessage().getText();
+        } else {
+            id = id + "::" + m.getMessage().getText();
         }
-        this.id = id + "::" + m.getMessage();
+        this.id = id;
         JTextSourceToken token = m.getToken();
         this.tokenId = token == null ? -1 : token.getTokenNumber();
         JTextSource s = token == null ? null : token.getSource();

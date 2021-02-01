@@ -1,14 +1,13 @@
 package net.thevpc.common.textsource.log;
 
-import java.io.PrintStream;
 import java.util.List;
 
 public interface JTextSourceLog extends JMessageList{
-    int errorCountAtLine(int line);
+    int getErrorCountAtLine(int line);
 
-    int errorCount();
+    int getErrorCount();
 
-    int warningCount();
+    int getWarningCount();
 
     JTextSourceLog clear();
 
@@ -24,9 +23,5 @@ public interface JTextSourceLog extends JMessageList{
 
     void print();
 
-    void print(PrintStream out);
-
     void printFooter();
-
-    void printFooter(PrintStream out);
 }

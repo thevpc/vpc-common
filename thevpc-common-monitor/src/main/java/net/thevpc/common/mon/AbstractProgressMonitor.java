@@ -2,7 +2,7 @@ package net.thevpc.common.mon;
 
 import java.util.logging.Level;
 
-import net.thevpc.common.msg.FormattedMessage;
+import net.thevpc.common.msg.JFormattedMessage;
 import net.thevpc.common.msg.Message;
 import net.thevpc.common.msg.StringMessage;
 
@@ -140,7 +140,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
 
     @Override
     public final void setProgress(double progress, String message, Object... args) {
-        setProgress(progress, new FormattedMessage(Level.FINE, message, args));
+        setProgress(progress, new JFormattedMessage(Level.FINE, message, args));
     }
 
     @Override
@@ -151,7 +151,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
 
     @Override
     public final ProgressMonitor setIndeterminate(String message, Object... args) {
-        setProgress(INDETERMINATE_PROGRESS, new FormattedMessage(Level.FINE, message, args));
+        setProgress(INDETERMINATE_PROGRESS, new JFormattedMessage(Level.FINE, message, args));
         return this;
     }
 
@@ -194,7 +194,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
 
     @Override
     public final ProgressMonitor stepInto(String message, Object... msgParams) {
-        return stepInto(new FormattedMessage(Level.FINE, message, msgParams));
+        return stepInto(new JFormattedMessage(Level.FINE, message, msgParams));
     }
 
     @Override
@@ -225,7 +225,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
         if (incrementor == null) {
             throw new IllegalArgumentException("missing incrementor");
         }
-        setProgress(incrementor.inc(getProgress()), new FormattedMessage(Level.FINE, message, args));
+        setProgress(incrementor.inc(getProgress()), new JFormattedMessage(Level.FINE, message, args));
         return this;
     }
 
@@ -259,7 +259,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
 
     public final ProgressMonitor terminate(String message, Object... args) {
         if (!isTerminated()) {
-            setProgress(1, new FormattedMessage(Level.INFO, message, args));
+            setProgress(1, new JFormattedMessage(Level.INFO, message, args));
         }
         return this;
     }
@@ -274,7 +274,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
     public final ProgressMonitor start(String message, Object... args) {
         if (!isStarted()) {
             start();
-            setProgress(0, new FormattedMessage(Level.INFO, message, args));
+            setProgress(0, new JFormattedMessage(Level.INFO, message, args));
         }
         return this;
     }
