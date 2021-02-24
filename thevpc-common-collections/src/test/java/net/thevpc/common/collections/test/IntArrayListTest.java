@@ -1,0 +1,81 @@
+package net.thevpc.common.collections.test;
+
+import net.thevpc.common.collections.IntArrayList;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class IntArrayListTest {
+
+    @Test
+    public void test0(){
+        IntArrayList a=new IntArrayList(0);
+        int oldCommited=-1;
+        int commitCount=0;
+        for (int i = 0; i < 1000; i++) {
+            a.add(i);
+            if(a.getCommittedSize()!=oldCommited){
+                oldCommited=a.getCommittedSize();
+                commitCount++;
+            }
+            //System.out.println(a.size()+"/"+a.getCommittedSize());
+        }
+        System.out.println(commitCount);
+    }
+
+    @Test
+    public void test1(){
+        IntArrayList a=new IntArrayList();
+        Assertions.assertEquals("[]",a.toString());
+        a.addAll(1,2,3);
+        Assertions.assertEquals("[1,2,3]",a.toString());
+        a.addAll(a);
+        Assertions.assertEquals("[1,2,3,1,2,3]",a.toString());
+
+        a.insertAll(2,7,9);
+        System.out.println(a+" : insertAll "+a.toStringDebug());
+
+        a.removeAll(2,2);
+        System.out.println(a+" : insertAll "+a.toStringDebug());
+
+        a.removeAll(-1,2);
+        System.out.println(a+" : insertAll "+a.toStringDebug());
+
+        a.removeAll(5,2);
+        System.out.println(a+" : removeAll "+a.toStringDebug());
+
+        a.removeAll(6,2);
+        System.out.println(a+" : removeAll "+a.toStringDebug());
+
+        a.insertAll(0,7,9);
+        System.out.println(a+" : insertAll "+a.toStringDebug());
+
+        a.insertAll(7,7,9);
+        System.out.println(a+" : insertAll "+a.toStringDebug());
+
+        a.replaceSubList(2,2,8,8,8);
+        System.out.println(a+" : replaceSubList "+a.toStringDebug());
+    }
+
+    @Test
+    public void testPerf(){
+        long start=System.currentTimeMillis();
+        IntArrayList a1=new IntArrayList();
+        int count = 100000;
+        for (int i = 0; i < count; i++) {
+            a1.add(0,i);
+        }
+        long end=System.currentTimeMillis();
+        start=System.currentTimeMillis();
+        System.out.println(end-start);
+        List<Integer> a2=new ArrayList<>();
+        for (int i = 0; i < count; i++) {
+            a1.add(0,i);
+        }
+        end=System.currentTimeMillis();
+        System.out.println(end-start);
+    }
+}

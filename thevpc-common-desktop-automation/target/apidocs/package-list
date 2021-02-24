@@ -1,0 +1,4 @@
+net.thevpc.common.deskauto
+net.thevpc.common.deskauto.impl.shared
+net.thevpc.common.deskauto.impl.shared.input
+net.thevpc.common.deskauto.impl.win

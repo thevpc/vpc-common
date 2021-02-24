@@ -1,0 +1,39 @@
+/usr/java/jdk1.8.0_211-amd64/jre/../bin/javadoc
+@options
+@packages
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/data/public/git/vpc-common/thevpc-common-log/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2021. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/data/public/git/vpc-common/thevpc-common-log/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'net.thevpc.common.thevpc-common-log 1.0.1 API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/data/public/git/vpc-common/thevpc-common-log/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'net.thevpc.common.thevpc-common-log 1.0.1 API'
+net.thevpc.common.log
+/data/public/git/vpc-common/thevpc-common-log/src/main/java = 1573929183000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/script.js = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/help-doc.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/serialized-form.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/stylesheet.css = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/overview-tree.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/deprecated-list.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/allclasses-frame.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/index-all.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/allclasses-noframe.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/package-list = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/index.html = 1612467963000
+/data/public/git/vpc-common/thevpc-common-log/target/apidocs/constant-values.html = 1612467963000

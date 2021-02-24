@@ -8,6 +8,8 @@
     <name>net.thevpc.common</name>
     <modules>
         <module>thevpc-common-utils</module>
+        <module>thevpc-common-collections</module>
+        <module>thevpc-common-iterators</module>
         <module>thevpc-common-config</module>
         <module>thevpc-common-desktop-automation</module>
         <module>thevpc-common-io</module>

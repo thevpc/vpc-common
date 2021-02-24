@@ -21,51 +21,83 @@ public class ArrayUtils {
     }
 
     public static double[] concatArrays(double[]... arrays) {
-        DoubleArrayList all = new DoubleArrayList();
+        int count = 0;
+        for (double[] v : arrays) {
+            if (v != null) {
+                count += v.length;
+            }
+        }
+        double[] all = new double[count];
+        int idx = 0;
         if (arrays != null) {
             for (double[] v : arrays) {
                 if (v != null) {
-                    all.addAll(v);
+                    System.arraycopy(v, 0, all, idx, v.length);
+                    idx += v.length;
                 }
             }
         }
-        return all.toArray();
+        return all;
     }
 
     public static long[] concatArrays(long[]... arrays) {
-        LongArrayList all = new LongArrayList();
+        int count = 0;
+        for (long[] v : arrays) {
+            if (v != null) {
+                count += v.length;
+            }
+        }
+        long[] all = new long[count];
+        int idx = 0;
         if (arrays != null) {
             for (long[] v : arrays) {
                 if (v != null) {
-                    all.addAll(v);
+                    System.arraycopy(v, 0, all, idx, v.length);
+                    idx += v.length;
                 }
             }
         }
-        return all.toArray();
+        return all;
     }
 
     public static int[] concatArrays(int[]... arrays) {
-        IntArrayList all = new IntArrayList();
+        int count = 0;
+        for (int[] v : arrays) {
+            if (v != null) {
+                count += v.length;
+            }
+        }
+        int[] all = new int[count];
+        int idx = 0;
         if (arrays != null) {
             for (int[] v : arrays) {
                 if (v != null) {
-                    all.addAll(v);
+                    System.arraycopy(v, 0, all, idx, v.length);
+                    idx += v.length;
                 }
             }
         }
-        return all.toArray();
+        return all;
     }
 
     public static <T> T[] concatArrays(Class<T> cls, T[]... arrays) {
-        List<T> all = new ArrayList<>();
+        int count = 0;
+        for (T[] v : arrays) {
+            if (v != null) {
+                count += v.length;
+            }
+        }
+        T[] all = (T[]) Array.newInstance(cls, count);
+        int idx = 0;
         if (arrays != null) {
             for (T[] v : arrays) {
                 if (v != null) {
-                    all.addAll(Arrays.asList(v));
+                    System.arraycopy(v, 0, all, idx, v.length);
+                    idx += v.length;
                 }
             }
         }
-        return all.toArray((T[]) Array.newInstance(cls, all.size()));
+        return all;
     }
 
     public static <T> T[] filterArray(Class<T> cls, T[] array, Predicate<T> t) {
@@ -101,7 +133,6 @@ public class ArrayUtils {
         System.arraycopy(source, beginIndex, arr, 0, endIndex - beginIndex);
         return arr;
     }
-
 
     public static double[] dtimes(double min, double max, int times) {
         double[] d = new double[times];
@@ -260,14 +291,15 @@ public class ArrayUtils {
             return new int[0];
         }
         int times = Math.abs((max - min) / step) + 1;
-        IntArrayList d = new IntArrayList();
+        int[] d = new int[times];
+        int idx = 0;
         for (int i = 0; i < times; i++) {
             int v = min + i * step;
             if (filter.test(v)) {
-                d.add(v);
+                d[idx++] = v;
             }
         }
-        return d.toArray();
+        return Arrays.copyOf(d, idx);
     }
 
     public static int[] itimes(int min, int max, int times) {
@@ -353,7 +385,6 @@ public class ArrayUtils {
     public static int[] itimes(int min, int max, int times, int maxTimes, IndexSelectionStrategy strategy) {
         return subArray1(itimes(min, max, maxTimes), times, strategy);
     }
-
 
     public static Double[] box(double[] c) {
         Double[] r = new Double[c.length];

@@ -1,0 +1,12 @@
+net.thevpc.common.swing
+net.thevpc.common.swing.dialog
+net.thevpc.common.swing.html
+net.thevpc.common.swing.iswing
+net.thevpc.common.swing.log
+net.thevpc.common.swing.plaf
+net.thevpc.common.swing.table
+net.thevpc.common.swing.tree
+net.thevpc.common.swing.util
+net.thevpc.common.swing.util.dumpstring
+net.thevpc.common.swing.util.jcmd
+net.thevpc.common.swing.win

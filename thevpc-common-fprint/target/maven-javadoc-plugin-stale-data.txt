@@ -1,0 +1,47 @@
+/usr/java/jdk1.8.0_211-amd64/jre/../bin/javadoc
+@options
+@packages
+-classpath
+'/home/vpc/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar'
+-encoding
+'UTF-8'
+-protected
+-sourcepath
+'/data/public/git/vpc-common/thevpc-common-fprint/src/main/java'
+-author
+-bottom
+'Copyright &#169; 2021 <a href="http://thevpc.net">vpc open source initiative</a>. All rights reserved.'
+-charset
+'UTF-8'
+-d
+'/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs'
+-docencoding
+'UTF-8'
+-doctitle
+'net.thevpc.common.thevpc-common-fprint 1.0.4 API'
+-linkoffline
+'https://docs.oracle.com/javase/8/docs/api' '/data/public/git/vpc-common/thevpc-common-fprint/target/javadoc-bundle-options'
+-use
+-version
+-windowtitle
+'net.thevpc.common.thevpc-common-fprint 1.0.4 API'
+net.thevpc.common.fprint
+net.thevpc.common.fprint.renderer
+net.thevpc.common.fprint.renderer.ansi
+net.thevpc.common.fprint.util
+net.thevpc.common.fprint.parser
+/home/vpc/.m2/repository/org/fusesource/jansi/jansi/1.17.1/jansi-1.17.1.jar = 1546541876000
+/data/public/git/vpc-common/thevpc-common-fprint/src/main/java = 1573929183000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/script.js = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/help-doc.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/stylesheet.css = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/overview-tree.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/deprecated-list.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/overview-frame.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/allclasses-frame.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/index-all.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/allclasses-noframe.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/package-list = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/overview-summary.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/index.html = 1612467954000
+/data/public/git/vpc-common/thevpc-common-fprint/target/apidocs/constant-values.html = 1612467954000
