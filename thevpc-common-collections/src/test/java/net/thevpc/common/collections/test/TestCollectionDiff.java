@@ -27,4 +27,15 @@ public class TestCollectionDiff {
         Assertions.assertEquals(2, diff.getAdded().size());
         Assertions.assertEquals(1, diff.getRemoved().size());
     }
+
+    @Test
+    public void test2() {
+        List<String> a = Arrays.asList("a", "b", "C", "a", "e");
+        List<String> b = Arrays.asList("c", "b", "a", "b", "D");
+        CollectionDiff diff = CollectionDiff.of(a, b, x -> x.toLowerCase());
+        System.out.println(diff);
+        Assertions.assertEquals(3, diff.getUnchanged().size());
+        Assertions.assertEquals(2, diff.getAdded().size());
+        Assertions.assertEquals(2, diff.getRemoved().size());
+    }
 }
