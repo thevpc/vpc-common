@@ -2,18 +2,19 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>net.thevpc.common</groupId>
-    <artifactId>thevpc-common-monitor</artifactId>
-    <version>1.22.7</version><!--updated-->
+    <artifactId>thevpc-common-time</artifactId>
+    <version>1.23.1</version><!--updated-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-monitor</name>
-    <url>https://github.com/thevpc/commons</url>
-    <description>Progress Monitor library</description>
+    <name>net.thevpc.common.thevpc-common-time</name>
+    <url>https://github.com/thevpc/vpc-common</url>
+    <description>
+        Common Utils Library
+    </description>
     <scm>
-        <connection>scm:git:git://github.com/thevpc/echo.git</connection>
-        <developerConnection>scm:git:ssh://github.com:thevpc/echo.git</developerConnection>
-        <url>https://github.com/thevpc/echo/tree/master</url>
+        <connection>scm:git:git://github.com/thevpc/vpc-common.git</connection>
+        <developerConnection>scm:git:ssh://github.com:thevpc/vpc-common.git</developerConnection>
+        <url>https://github.com/thevpc/vpc-common/tree/master</url>
     </scm>
 
     <organization>
@@ -54,29 +55,11 @@
         <github.global.server>github</github.global.server>
     </properties>
     <dependencies>
-        <!-- ##############################
-                PRIVATE COMPILE DEPENDENCIES 
-        ############################## -->
-
-
-        <!-- ##############################
-                THIRD PARTY COMPILE DEPENDENCIES 
-        ############################## -->
-      
-      
-        <!-- ##############################
-                TEST DEPENDENCIES
-        ############################## -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.5.0</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>thevpc-common-msg</artifactId>
-            <version>1.0.0</version>
         </dependency>
     </dependencies>
     <distributionManagement>
@@ -89,32 +72,13 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <version>1.6</version>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.8.1</version>
                 <configuration>
                     <showDeprecation>true</showDeprecation>
                     <debug>true</debug>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>
-            </plugin>            
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
@@ -137,6 +101,20 @@
                         <id>attach-javadocs</id>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>1.6</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
                         </goals>
                     </execution>
                 </executions>

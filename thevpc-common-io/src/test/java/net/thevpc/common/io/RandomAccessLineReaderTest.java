@@ -25,6 +25,7 @@ public class RandomAccessLineReaderTest {
 
     @BeforeAll
     public static void setup() throws IOException {
+        System.out.println("setup");
         file = File.createTempFile("temp", "temp");
         PrintStream out = new PrintStream(file);
         for (int i = 0; i < 100; i++) {
@@ -40,15 +41,25 @@ public class RandomAccessLineReaderTest {
 
     @Test
     public void test_count() throws FileNotFoundException, IOException {
+        if (file == null) {
+            //maven is not calling setup
+            setup();
+        }
+        System.out.println("test_count");
         try (RandomAccessLineReader r = new RandomAccessLineReader(file)) {
-            Assertions.assertEquals(100,r.countLines());
+            Assertions.assertEquals(100, r.countLines());
             Assertions.assertEquals("line number " + 0, r.readLine());
-            Assertions.assertEquals(100,r.countLines());
+            Assertions.assertEquals(100, r.countLines());
             Assertions.assertEquals("line number " + 1, r.readLine());
         }
     }
+
     @Test
     public void test_readLine_int() throws FileNotFoundException, IOException {
+        if (file == null) {
+            //maven is not calling setup
+            setup();
+        }
         try (RandomAccessLineReader r = new RandomAccessLineReader(file)) {
             for (int i = 3; i < 5; i++) {
                 String s = r.readLine(i);
@@ -64,6 +75,10 @@ public class RandomAccessLineReaderTest {
 
     @Test
     public void testOrientation() throws IOException {
+        if (file == null) {
+            //maven is not calling setup
+            setup();
+        }
         try (RandomAccessLineReader r = new RandomAccessLineReader(file)) {
             r.forward();
             m(r);
@@ -79,6 +94,10 @@ public class RandomAccessLineReaderTest {
     }
 
     private static void m(RandomAccessLineReader r) throws IOException {
+        if (file == null) {
+            //maven is not calling setup
+            setup();
+        }
         long n0 = r.getNextLineNumber();
         long l0 = r.getLastLineNumber();
         String rr = r.readLine();

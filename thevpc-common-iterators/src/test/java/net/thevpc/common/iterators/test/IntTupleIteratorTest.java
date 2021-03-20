@@ -32,7 +32,7 @@ public class IntTupleIteratorTest {
 //        List<int[]> next = IntIteratorBuilder.iter().to(6, 6, 6,6).depthFirst().next(100000);
 //        next.sort(IntIteratorBuilder.SUM_COMPARATOR);
 
-        dump(IntIteratorBuilder.iter().from(0, 0, 0, 0).to(4,4,-1,4).breadthFirst());
+        dump(IntIteratorBuilder.iter().from(0, 0, 0, 0).to(4,4,1,4).breadthFirst());
 
 //        dumpDiff(next.iterator(), IntIteratorBuilder.iter().to(1, 2, 3, 4).breadthFirst());
 //        dump(next);

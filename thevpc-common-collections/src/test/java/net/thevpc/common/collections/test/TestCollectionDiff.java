@@ -19,13 +19,15 @@ public class TestCollectionDiff {
 
     @Test
     public void test1() {
-        List<String> a = Arrays.asList("a", "b", "c", "a", "e");
-        List<String> b = Arrays.asList("c", "b", "a", "b", "d");
+        List<String> a = Arrays.asList("a", "b", "c", "a", "e"); //2*a,   b, c,  , e 
+        List<String> b = Arrays.asList("c", "b", "a", "b", "d"); //a  , 2*b, c, d,
+        //a removed, b added, added, c unchanged, d added, e removed
+        //a&e removed, b&d added, c unchanged
         CollectionDiff diff = CollectionDiff.of(a, b);
         System.out.println(diff);
-        Assertions.assertEquals(3, diff.getUnchanged().size());
-        Assertions.assertEquals(2, diff.getAdded().size());
-        Assertions.assertEquals(1, diff.getRemoved().size());
+        Assertions.assertEquals(Arrays.asList("a","b","c"), diff.getUnchanged()); // a,b,c
+        Assertions.assertEquals(Arrays.asList("b","d"), diff.getAdded());     // b,d added
+        Assertions.assertEquals(Arrays.asList("a","e"), diff.getRemoved());   // a,e removed
     }
 
     @Test

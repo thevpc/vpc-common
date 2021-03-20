@@ -20,10 +20,13 @@ import java.io.*;
 import java.net.URI;
 import java.net.URL;
 import java.util.*;
+import java.util.logging.Level;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.xml.sax.SAXParseException;
 
 public class PomXmlParser {
+
     private static Map<String, String> map = new HashMap<>();
     private static Pattern ENTITY_PATTERN = Pattern.compile("&[a-zA-Z]+;");
 
@@ -59,8 +62,8 @@ public class PomXmlParser {
 //            ex.printStackTrace();
 //        }
 //    }
-
-    public static final ErrorHandler EH = null;
+//    public static final ErrorHandler EH = null;
+    public PomErrorHandler errorHandler = null;
 //            new ErrorHandler() {
 //        @Override
 //        public void warning(SAXParseException exception) throws SAXException {
@@ -79,6 +82,15 @@ public class PomXmlParser {
 //
 //        }
 //    };
+
+    public PomErrorHandler getErrorHandler() {
+        return errorHandler;
+    }
+
+    public PomXmlParser setErrorHandler(PomErrorHandler errorHandler) {
+        this.errorHandler = errorHandler;
+        return this;
+    }
 
     public Pom parse(URL url) throws IOException, SAXException, ParserConfigurationException {
         return parse(url, null);
@@ -134,9 +146,29 @@ public class PomXmlParser {
     }
 
     public Pom parse(InputStream stream, PomDomVisitor visitor) throws IOException, SAXException, ParserConfigurationException {
-        Document doc = createDocumentBuilder().parse(preValidateStream(stream));
+        DocumentBuilder builder = createDocumentBuilder();
+        if (errorHandler != null) {
+            builder.setErrorHandler(new ErrorHandler() {
+                @Override
+                public void warning(SAXParseException exception) throws SAXException {
+                    errorHandler.log(Level.WARNING, exception.toString(), exception);
+                }
+
+                @Override
+                public void error(SAXParseException exception) throws SAXException {
+                    errorHandler.log(Level.SEVERE, exception.toString(), exception);
+                }
+
+                @Override
+                public void fatalError(SAXParseException exception) throws SAXException {
+                    errorHandler.log(Level.SEVERE, exception.toString(), exception);
+                }
+            });
+        }
+        Document doc = builder.parse(preValidateStream(stream));
         return parse(doc, visitor);
     }
+
     private byte[] loadAllBytes(InputStream in) throws IOException {
         ByteArrayOutputStream o = new ByteArrayOutputStream();
         int size = in.available();
@@ -152,12 +184,12 @@ public class PomXmlParser {
     }
 
     private InputStream preValidateStream(InputStream in) throws IOException {
-        byte[] bytes0=loadAllBytes(in);
+        byte[] bytes0 = loadAllBytes(in);
         int skip = 0;
         while (skip < bytes0.length && Character.isWhitespace(bytes0[skip])) {
             skip++;
         }
-        String x = new String(bytes0,skip,bytes0.length-skip);
+        String x = new String(bytes0, skip, bytes0.length - skip);
         StringBuffer sb = new StringBuffer();
         Matcher m = ENTITY_PATTERN.matcher(x);
         while (m.find()) {

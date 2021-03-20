@@ -5,20 +5,16 @@
  */
 package net.thevpc.commons.md.docusaurus.preproc;
 
-import net.thevpc.commons.docusaurus.DocusaurusCtrl;
-import net.thevpc.commons.md.docusaurus.DocusaurusProject;
-import org.junit.jupiter.api.Test;
-
 /**
  *
  * @author thevpc
  */
 public class TestPreProcessor {
-    @Test
-    public void test1(){
-        DocusaurusCtrl proc=new DocusaurusCtrl(
-                new DocusaurusProject("/data/public/git/nuts/website/nuts")
-        );
-        proc.run();
-    }
+//    @Test
+//    public void test1(){
+//        DocusaurusCtrl proc=new DocusaurusCtrl(
+//                new DocusaurusProject("/data/git/nuts/website/nuts")
+//        );
+//        proc.run();
+//    }
 }

@@ -3,26 +3,24 @@
  * Nuts : Network Updatable Things Service
  * (universal package manager)
  * <p>
- * is a new Open Source Package Manager to help install packages
- * and libraries for runtime execution. Nuts is the ultimate companion for
- * maven (and other build managers) as it helps installing all package
- * dependencies at runtime. Nuts is not tied to java and is a good choice
- * to share shell scripts and other 'things' . Its based on an extensible
- * architecture to help supporting a large range of sub managers / repositories.
+ * is a new Open Source Package Manager to help install packages and libraries
+ * for runtime execution. Nuts is the ultimate companion for maven (and other
+ * build managers) as it helps installing all package dependencies at runtime.
+ * Nuts is not tied to java and is a good choice to share shell scripts and
+ * other 'things' . Its based on an extensible architecture to help supporting a
+ * large range of sub managers / repositories.
  * <br>
  *
- * Copyright [2020] [thevpc]
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain a
- * copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language
+ * Copyright [2020] [thevpc] Licensed under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * <br>
- * ====================================================================
-*/
+ * <br> ====================================================================
+ */
 package net.thevpc.common.commandline.format;
 
 import net.thevpc.common.commandline.Argument;
@@ -35,15 +33,22 @@ import java.util.*;
  * Created by vpc on 2/17/17.
  */
 public class TableFormatter {
+
     public static TableFormatterBorders NO_BORDER = new TableFormatterBorders(
             "", "", "", "",
             "", "", "",
             "", "", "", "",
             "", "", "", ""
     );
+    public static TableFormatterBorders DEFAULT_BORDER = new TableFormatterBorders(
+            "╭", "─", "┬", "╮",
+            "│",      "│", "│",
+            "│", "─", "┼", "│",
+            "╰", "─", "┴", "╯"
+    );
     public static TableFormatterBorders SIMPLE_BORDER = new TableFormatterBorders(
             ".", "-", "-", ".",
-            "|", "|", "|",
+            "|", " | ", "|",
             "|", "-", "+", "|",
             ".", "-", "-", "."
     );
@@ -61,7 +66,7 @@ public class TableFormatter {
     );
     public static TableFormatterBorders FANCY_COLUMNS_BORDER = new TableFormatterBorders(
             "", "", "", "",
-            "", "|", "",
+            "", " | ", "",
             "", "", "", "",
             "", "", "", ""
     );
@@ -80,22 +85,18 @@ public class TableFormatter {
     private Map<String, Integer> columns = new HashMap<>();
     private boolean visibleHeader = true;
 
-
     public enum Separator {
         FIRST_ROW_START('A'),
         FIRST_ROW_LINE('B'),
         FIRST_ROW_SEP('C'),
         FIRST_ROW_END('D'),
-
         ROW_START('E'),
         ROW_SEP('F'),
         ROW_END('G'),
-
         INTER_ROW_START('H'),
         INTER_ROW_LINE('I'),
         INTER_ROW_SEP('J'),
         INTER_ROW_END('K'),
-
         LAST_ROW_START('L'),
         LAST_ROW_LINE('M'),
         LAST_ROW_SEP('N'),
@@ -120,7 +121,6 @@ public class TableFormatter {
 //
 //        System.out.println(t);
 //    }
-
     public TableFormatter(CellFormatter formatter) {
         defaultFormatter = formatter == null ? new CellFormatter() {
             @Override
@@ -132,8 +132,7 @@ public class TableFormatter {
             public String format(int row, int col, Object value) {
                 return String.valueOf(value);
             }
-        } : formatter
-        ;
+        } : formatter;
     }
 
     public boolean isVisibleHeader() {
@@ -179,13 +178,10 @@ public class TableFormatter {
         List<Row> rows = rebuild();
         if (rows.size() > 0) {
             List<Cell> cells = rows.get(0).cells;
-            if (
-                    (getSeparator(Separator.FIRST_ROW_START) +
-                            getSeparator(Separator.FIRST_ROW_SEP) +
-                            getSeparator(Separator.FIRST_ROW_LINE) +
-                            getSeparator(Separator.FIRST_ROW_END)
-                    ).length() > 0
-                    ) {
+            if ((getSeparator(Separator.FIRST_ROW_START)
+                    + getSeparator(Separator.FIRST_ROW_SEP)
+                    + getSeparator(Separator.FIRST_ROW_LINE)
+                    + getSeparator(Separator.FIRST_ROW_END)).length() > 0) {
                 sb.append(getSeparator(Separator.FIRST_ROW_START));
                 for (int i = 0; i < cells.size(); i++) {
                     if (i > 0) {
@@ -201,13 +197,10 @@ public class TableFormatter {
             }
             for (int i1 = 0; i1 < rows.size(); i1++) {
                 if (i1 > 0) {
-                    if (
-                            (getSeparator(Separator.INTER_ROW_START) +
-                                    getSeparator(Separator.INTER_ROW_SEP) +
-                                    getSeparator(Separator.INTER_ROW_LINE) +
-                                    getSeparator(Separator.INTER_ROW_END)
-                            ).length() > 0
-                            ) {
+                    if ((getSeparator(Separator.INTER_ROW_START)
+                            + getSeparator(Separator.INTER_ROW_SEP)
+                            + getSeparator(Separator.INTER_ROW_LINE)
+                            + getSeparator(Separator.INTER_ROW_END)).length() > 0) {
                         sb.append(getSeparator(Separator.INTER_ROW_START));
                         for (int i = 0; i < cells.size(); i++) {
                             if (i > 0) {
@@ -222,7 +215,6 @@ public class TableFormatter {
                         sb.append("\n");
                     }
                 }
-
 
                 Row row = rows.get(i1);
                 cells = row.cells;
@@ -241,13 +233,10 @@ public class TableFormatter {
                 sb.append("\n");
             }
 
-            if (
-                    (getSeparator(Separator.LAST_ROW_START) +
-                            getSeparator(Separator.LAST_ROW_SEP) +
-                            getSeparator(Separator.LAST_ROW_LINE) +
-                            getSeparator(Separator.LAST_ROW_END)
-                    ).length() > 0
-                    ) {
+            if ((getSeparator(Separator.LAST_ROW_START)
+                    + getSeparator(Separator.LAST_ROW_SEP)
+                    + getSeparator(Separator.LAST_ROW_LINE)
+                    + getSeparator(Separator.LAST_ROW_END)).length() > 0) {
                 sb.append(getSeparator(Separator.LAST_ROW_START));
                 cells = rows.get(0).cells;
                 for (int i = 0; i < cells.size(); i++) {
@@ -280,7 +269,6 @@ public class TableFormatter {
         CellFormatter formatter;
         List<Cell> cells = new ArrayList<>();
     }
-
 
     private static class RenderedCell {
 
@@ -431,7 +419,7 @@ public class TableFormatter {
                         rendered0[i] = rendered[i];
                     }
                 } else {
-                    rendered0[i] = FormatUtils.fillString(' ',columns).toCharArray();
+                    rendered0[i] = FormatUtils.fillString(' ', columns).toCharArray();
                 }
             }
 //            for (int i = 0; i < rendered0.length; i++) {
@@ -585,7 +573,6 @@ public class TableFormatter {
                 effectiveRows.add(r2);
             }
         }
-
 
         //first pass to eval renderedText and effective positions
         Bounds b = new Bounds();
@@ -768,6 +755,7 @@ public class TableFormatter {
     }
 
     private static class Pos {
+
         int column;
         int row;
 
@@ -778,11 +766,15 @@ public class TableFormatter {
 
         @Override
         public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
             Pos pos = (Pos) o;
-            return column == pos.column &&
-                    row == pos.row;
+            return column == pos.column
+                    && row == pos.row;
         }
 
         @Override
@@ -793,10 +785,10 @@ public class TableFormatter {
 
         @Override
         public String toString() {
-            return "(" +
-                    "" + column +
-                    "," + row +
-                    ')';
+            return "("
+                    + "" + column
+                    + "," + row
+                    + ')';
         }
 
     }
@@ -945,8 +937,8 @@ public class TableFormatter {
             Interval key = new Interval(from, to);
 
             columnIntervalSize.put(key, Math.max(
-                    (columnIntervalSize.containsKey(key)?columnIntervalSize.get(key):0)
-                    , size));
+                    (columnIntervalSize.containsKey(key) ? columnIntervalSize.get(key) : 0),
+                     size));
         }
 
         public void setRowIntervalMinSize(int from, int to, int size) {
@@ -956,8 +948,8 @@ public class TableFormatter {
             }
             Interval key = new Interval(from, to);
             rowIntervalSize.put(key, Math.max(
-                    (rowIntervalSize.containsKey(key)?rowIntervalSize.get(key):0)
-                    , size));
+                    (rowIntervalSize.containsKey(key) ? rowIntervalSize.get(key) : 0),
+                     size));
         }
 
         public int evalColumnSize(int col, int colspan) {
@@ -1014,27 +1006,31 @@ public class TableFormatter {
 
     public boolean configure(CommandLine cmdLine) {
         Argument a;
-        if ((a=cmdLine.readBooleanOption("--no-header"))!=null) {
+        if ((a = cmdLine.readBooleanOption("--no-header")) != null) {
             setVisibleHeader(!a.getBooleanValue());
             return true;
-        } else if ((a=cmdLine.readBooleanOption("--header"))!=null) {
+        } else if ((a = cmdLine.readBooleanOption("--header")) != null) {
             setVisibleHeader(a.getBooleanValue());
             return true;
-        } else if ((a=cmdLine.readStringOption("--border"))!=null) {
+        } else if ((a = cmdLine.readStringOption("--border")) != null) {
             switch (a.getValue()) {
                 case "spaces": {
                     setBorder(SPACE_BORDER);
+                    break;
+                }
+                case "default": {
+                    setBorder(DEFAULT_BORDER);
                     break;
                 }
                 case "simple": {
                     setBorder(SIMPLE_BORDER);
                     break;
                 }
-                case "fancy-rows": {
+                case "rows": {
                     setBorder(FANCY_ROWS_BORDER);
                     break;
                 }
-                case "fancy-columns": {
+                case "columns": {
                     setBorder(FANCY_COLUMNS_BORDER);
                     break;
                 }
@@ -1058,6 +1054,5 @@ public class TableFormatter {
         }
         return false;
     }
-
 
 }

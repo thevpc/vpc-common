@@ -148,7 +148,7 @@ public class IntIteratorBuilder {
                         if (to != null) {
                             for (int i = 0; i < current.length; i++) {
                                 int m = to[i];
-                                if (m>=0 && current[i] >= m) {
+                                if (m>=0 && current[i] > m) {
                                     acceptThis--;
                                 }
                             }
@@ -286,7 +286,7 @@ public class IntIteratorBuilder {
                 }
                 boolean ok = false;
                 for (int i = 0; i < start.length; i++) {
-                    if (start[i] < max[i]) {
+                    if (start[i] <= max[i]) {
                         ok = true;
                     }
                 }
@@ -302,7 +302,7 @@ public class IntIteratorBuilder {
                 int depth = 0;
                 while (depth < current.length) {
                     current[depth]++;
-                    if (current[depth] >= max[depth]) {
+                    if (current[depth] > max[depth]) {
                         current[depth] = start[depth];
                         depth++;
                     } else {

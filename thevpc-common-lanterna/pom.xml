@@ -5,7 +5,7 @@
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-lanterna</artifactId>
     <name>net.thevpc.common.thevpc-common-lanterna</name>
-    <version>3.1.1</version>
+    <version>3.1.1</version><!--updated-->
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/upa/wiki</url>
 
@@ -57,9 +57,14 @@
             <artifactId>lanterna-native-integration</artifactId>
             <version>3.1.0-SNAPSHOT</version>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>net.thevpc.common</groupId>
             <artifactId>thevpc-common-utils</artifactId>
+            <version>1.23.1</version>
+        </dependency>-->
+        <dependency>
+            <groupId>net.thevpc.common</groupId>
+            <artifactId>thevpc-common-collections</artifactId>
             <version>1.23.1</version>
         </dependency>
         <dependency>

@@ -1249,7 +1249,7 @@ public class StringUtils {
      * Builds a pattern where all the string is escaped but £? will be replaced
      * by valid patterns Example :
      * <pre>
-     * StringUtils.compileSubPatterns("\"java.lang:type=Threading\".operations.dumpAllThreads[£0].threadName", "?&lt;Item&gt;[0-9]+")
+     * StringUtils.compileSubPatterns("\"java.lang:type=Threading\".operations.dumpAllThreads[£1].threadName", "?&lt;Item&gt;[0-9]+")
      * </pre>
      *
      * @param text text
