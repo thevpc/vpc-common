@@ -1,7 +1,6 @@
 package net.thevpc.common.props.impl;
 
 import net.thevpc.common.props.*;
-import net.thevpc.common.props.*;
 
 public abstract class AbstractProperty implements Property {
 

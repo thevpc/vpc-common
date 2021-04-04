@@ -5,10 +5,12 @@
  */
 package net.thevpc.common.i18n;
 
+import java.util.Locale;
+
 /**
  *
  * @author thevpc
  */
 public interface I18nBundle {
-    String getString(String name);
+    String getString(String name,Locale locale);
 }

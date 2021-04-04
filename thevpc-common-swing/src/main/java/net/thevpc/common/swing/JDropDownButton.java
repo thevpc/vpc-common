@@ -5,18 +5,16 @@
  * Description: <start><end>
  * <br>
  *
- * Copyright [2020] [thevpc]
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain a
- * copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language
+ * Copyright [2020] [thevpc] Licensed under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * <br>
- * ====================================================================
-*/
+ * <br> ====================================================================
+ */
 package net.thevpc.common.swing;
 
 import javax.accessibility.AccessibleContext;
@@ -243,7 +241,7 @@ public class JDropDownButton extends JButton {
         addMouseListener(
                 new MouseAdapter() {
 
-                    private long time;
+            private long time;
 //                    public void mouseClicked(MouseEvent e) {
 //                        long d=System.currentTimeMillis()-e.getWhen();
 //                        if((d) >= getDelay()){
@@ -255,34 +253,34 @@ public class JDropDownButton extends JButton {
 //                        }
 //                    }
 
-                    public void mousePressed(MouseEvent e) {
-                        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                            time = e.getWhen();
-                        }
-                    }
+            public void mousePressed(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    time = e.getWhen();
+                }
+            }
 
-                    public void mouseReleased(MouseEvent e) {
-                        if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
-                            long d = e.getWhen() - time;
-                            time = 0;
+            public void mouseReleased(MouseEvent e) {
+                if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 1) {
+                    long d = e.getWhen() - time;
+                    time = 0;
 //                            System.out.println("d /delay= " + d+" / "+getDelay());
-                            if ((d) > getQuickActionDelay()) {
+                    if ((d) > getQuickActionDelay()) {
 //                                System.out.println("popup ok");
-                                setPopupMenuVisible(true);
-                                MenuElement[] me = buildMenuElementArray(JDropDownButton.this);
-                                MenuSelectionManager.defaultManager().setSelectedPath(me);
-                            } else {
+                        setPopupMenuVisible(true);
+                        MenuElement[] me = buildMenuElementArray(JDropDownButton.this);
+                        MenuSelectionManager.defaultManager().setSelectedPath(me);
+                    } else {
 //                                System.out.println("quick action");
-                                ActionEvent ae = new ActionEvent(JDropDownButton.this,
-                                        ActionEvent.ACTION_PERFORMED,
-                                        getActionCommand(),
-                                        e.getWhen(),
-                                        e.getModifiers());
-                                fireQuickActionPerformed(ae);
-                            }
-                        }
+                        ActionEvent ae = new ActionEvent(JDropDownButton.this,
+                                ActionEvent.ACTION_PERFORMED,
+                                getActionCommand(),
+                                e.getWhen(),
+                                e.getModifiers());
+                        fireQuickActionPerformed(ae);
                     }
-                });
+                }
+            }
+        });
     }
 
     public void addQuickActionListener(ActionListener listener) {
@@ -317,27 +315,25 @@ public class JDropDownButton extends JButton {
         popupOrientation = orientation;
     }
 
-    public void paint(Graphics g) {
-        super.paint(g);
-        if (isPaintHandle()) {
-            Color shadow = UIManager.getColor("controlShadow");
-            Color darkShadow = UIManager.getColor("controlDkShadow");
-            Color highlight = UIManager.getColor("controlLtHighlight");
-            int direction = SOUTH;
+    public void paintHandle(Graphics g) {
+        Color shadow = UIManager.getColor("controlShadow");
+        Color darkShadow = UIManager.getColor("controlDkShadow");
+        Color highlight = UIManager.getColor("controlLtHighlight");
+        int direction = SOUTH;
 
-            Color origColor;
-            boolean isPressed, isEnabled;
-            int w, h, size;
+        Color origColor;
+        boolean isPressed, isEnabled;
+        int w, h, size;
 
-            w = getSize().width;
-            h = getSize().height;
-            origColor = g.getColor();
-            isPressed = getModel().isPressed();
-            isEnabled = isEnabled();
+        w = getSize().width;
+        h = getSize().height;
+        origColor = g.getColor();
+        isPressed = getModel().isPressed();
+        isEnabled = isEnabled();
 
-            //g.setColor(getBackground());
-            //g.fillRect(1, 1, w-2, h-2);
-            /// Draw the proper Border
+        //g.setColor(getBackground());
+        //g.fillRect(1, 1, w-2, h-2);
+        /// Draw the proper Border
 /*
          * if (isPressed) { g.setColor(shadow); g.drawRect(0, 0, w-1, h-1); }
          * else { // Using the background color set above g.drawLine(0, 0, 0,
@@ -353,69 +349,75 @@ public class JDropDownButton extends JButton {
          * w-1, h-1); g.drawLine(w-1, h-1, w-1, 0);
             }
          */
-            // If there's no room to draw arrow, bail
-            if (h < 5 || w < 5) {
-                g.setColor(origColor);
-                return;
-            }
+        // If there's no room to draw arrow, bail
+        if (h < 5 || w < 5) {
+            g.setColor(origColor);
+            return;
+        }
 
-            if (isPressed) {
-                g.translate(1, 1);
-            }
+        if (isPressed) {
+            g.translate(1, 1);
+        }
 
-            // Draw the arrow
-            size = Math.min((h - 4) / 4, (w - 4) / 4);
+        // Draw the arrow
+        size = Math.min((h - 4) / 4, (w - 4) / 4);
 //            size = Math.max(size, 2);
 
-            //paintTriangle(g, (w - size) / 2, (h - size) / 2,size, direction, isEnabled);
-            String txt = getText();
-            Icon icon = getIcon();
+        //paintTriangle(g, (w - size) / 2, (h - size) / 2,size, direction, isEnabled);
+        String txt = getText();
+        Icon icon = getIcon();
 
-            if (txt != null && (txt.length() == 0 || txt.equals(" "))) {
-                txt = null;
-            }
-            if (txt == null && icon == null) {
+        if (txt != null && (txt.length() == 0 || txt.equals(" "))) {
+            txt = null;
+        }
+        if (txt == null && icon == null) {
 //            System.out.println("a");
-                int rest = w;
-                size = Math.min(size, Math.min(rest, 5));
-                paintTriangle(g, ((w - size) / 2), ((h - size) / 2), size, direction, isEnabled);
-            } else if (txt != null && icon == null) {
-                int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth()) / 2;
+            int rest = w;
+            size = Math.min(size, Math.min(rest, 5));
+            paintTriangle(g, ((w - size) / 2), ((h - size) / 2), size, direction, isEnabled);
+        } else if (txt != null && icon == null) {
+            int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth()) / 2;
 //            System.out.println("b rest="+rest+" ; size="+size+" ==> "+Math.min(size, Math.min(rest,4)));
-                size = Math.min(size, Math.min(rest, 5));
-                if (rest < 7) {
-                    paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
-                } else {
-                    paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
-                }
-            } else if (txt == null && icon != null) {
+            size = Math.min(size, Math.min(rest, 5));
+            if (rest < 7) {
+                paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
+            } else {
+                paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
+            }
+        } else if (txt == null && icon != null) {
 //            System.out.println("c");
-                int rest = (w - icon.getIconWidth()) / 2;
-                size = Math.min(size, Math.min(rest, 5));
-                if (rest < 7) {
-                    paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
-                } else {
-                    paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
-                }
+            int rest = (w - icon.getIconWidth()) / 2;
+            size = Math.min(size, Math.min(rest, 5));
+            if (rest < 7) {
+                paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
+            } else {
+                paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
+            }
 
-            } else /*
+        } else /*
              * (txt!=null && icon!=null)
-             */ {
+         */ {
 //            System.out.println("d");
-                int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth() - icon.getIconWidth()) / 3;
-                size = Math.min(size, Math.min(rest, 5));
-                if (rest < 7) {
-                    paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
-                } else {
-                    paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
-                }
+            int rest = (w - (int) getFont().getStringBounds(txt, ((Graphics2D) g).getFontRenderContext()).getWidth() - icon.getIconWidth()) / 3;
+            size = Math.min(size, Math.min(rest, 5));
+            if (rest < 7) {
+                paintTriangle(g, (w - 5 - size), (h - 2 - size), size, direction, isEnabled);
+            } else {
+                paintTriangle(g, (w - 5 - size), ((h - size) / 2), size, direction, isEnabled);
             }
+        }
 
-            // Reset the Graphics back to it's original settings
-            if (isPressed) {
-                g.translate(-1, -1);
-            }
-            g.setColor(origColor);
+        // Reset the Graphics back to it's original settings
+        if (isPressed) {
+            g.translate(-1, -1);
+        }
+        g.setColor(origColor);
+    }
+
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (isPaintHandle()) {
+            paintHandle(g);
         }
     }
 
@@ -674,15 +676,15 @@ public class JDropDownButton extends JButton {
 
     /**
      * Sets the suggested delay before the menu's <code>PopupMenu</code> is
-     * popped up or down. Each look and feel (L&#35;F) may determine it's own policy
-     * for observing the delay property. In most cases, the delay is not
+     * popped up or down. Each look and feel (L&#35;F) may determine it's own
+     * policy for observing the delay property. In most cases, the delay is not
      * observed for top level menus or while dragging. This method is a property
      * of the look and feel code and is used to manage the idiosyncracies of the
      * various UI implementations.
      *
      * @param d the number of milliseconds to delay
-     * @throws IllegalArgumentException if <code>d</code> is less than 0
-     * popup menu visible expert: true
+     * @throws IllegalArgumentException if <code>d</code> is less than 0 popup
+     * menu visible expert: true
      */
     public void setDelay(int d) {
         if (d < 0) {
@@ -802,8 +804,8 @@ public class JDropDownButton extends JButton {
      * Removes the menu item at the specified index from this menu.
      *
      * @param pos the position of the item to be removed
-     * @throws IllegalArgumentException if the value of <code>pos</code> &lt; 0, or
-     * if <code>pos</code> is greater than the number of menu items
+     * @throws IllegalArgumentException if the value of <code>pos</code> &lt; 0,
+     * or if <code>pos</code> is greater than the number of menu items
      */
     public void remove(int pos) {
         if (pos < 0) {
@@ -881,7 +883,8 @@ public class JDropDownButton extends JButton {
      * @param s the text for the menu item to add
      * @param pos an integer specifying the position at which to add the new
      * menu item
-     * @throws IllegalArgumentException when the value of <code>pos</code> &lt; 0
+     * @throws IllegalArgumentException when the value of <code>pos</code> &lt;
+     * 0
      */
     public void insert(String s, int pos) {
         if (pos < 0) {
@@ -945,7 +948,8 @@ public class JDropDownButton extends JButton {
      *
      * @param index an integer specifying the position at which to insert the
      * menu separator
-     * @throws IllegalArgumentException if the value of <code>index</code> &lt; 0
+     * @throws IllegalArgumentException if the value of <code>index</code> &lt;
+     * 0
      */
     public void insertSeparator(int index) {
         if (index < 0) {
@@ -1348,7 +1352,7 @@ public class JDropDownButton extends JButton {
      */
     private MenuElement[] buildMenuElementArray(/*
      * -- TAHA --
-     */JDropDownButton leaf) {
+             */JDropDownButton leaf) {
         List elements = new ArrayList();
         Component current = leaf.getPopupMenu();
         JPopupMenu pop;
@@ -1399,7 +1403,6 @@ public class JDropDownButton extends JButton {
      * @see java.awt.Component#getComponentOrientation
      * @since 1.4
      */
-
     /**
      * Factory method which creates the <code>JMenuItem</code> for
      * <code>Action</code>s added to the <code>JMenu</code>. As of 1.3, this is

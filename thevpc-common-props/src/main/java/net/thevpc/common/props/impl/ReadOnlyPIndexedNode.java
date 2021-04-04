@@ -1,39 +1,39 @@
 package net.thevpc.common.props.impl;
 
-import net.thevpc.common.props.PList;
-import net.thevpc.common.props.PIndexedNode;
-import net.thevpc.common.props.WritablePIndexedNode;
 import net.thevpc.common.props.*;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import net.thevpc.common.props.WritablePValue;
+import net.thevpc.common.props.WritableIndexedNode;
+import net.thevpc.common.props.IndexedNode;
+import net.thevpc.common.props.WritableValue;
+import net.thevpc.common.props.ObservableList;
 
-public class ReadOnlyPIndexedNode<T> extends DelegateProperty implements PIndexedNode<T> {
+public class ReadOnlyPIndexedNode<T> extends DelegateProperty implements IndexedNode<T> {
 
-    public ReadOnlyPIndexedNode(PIndexedNode<T> base) {
+    public ReadOnlyPIndexedNode(IndexedNode<T> base) {
         super(base);
     }
 
     @Override
-    public void bind(WritablePValue<T> other) {
-        WritablePValueBase.helperBind(this, other);
+    public void bind(WritableValue<T> other) {
+        WritableValueBase.helperBind(this, other);
     }
 
     @Override
-    public <T2> void bindConvert(WritablePValue<T2> other, Function<T, T2> map) {
-        WritablePValueBase.helperBindConvert(this, other, map);
+    public <T2> void bindConvert(WritableValue<T2> other, Function<T, T2> map) {
+        WritableValueBase.helperBindConvert(this, other, map);
     }
 
     @Override
-    public <T2> void unbind(WritablePValue<T2> other) {
-        WritablePValueBase.helperRemoveBindListeners(listeners(), other);
+    public <T2> void unbind(WritableValue<T2> other) {
+        WritableValueBase.helperRemoveBindListeners(listeners(), other);
     }
 
     @Override
-    public PIndexedNode<T> getBase() {
-        return (PIndexedNode<T>) super.getBase();
+    public IndexedNode<T> getBase() {
+        return (IndexedNode<T>) super.getBase();
     }
 
     @Override
@@ -47,18 +47,18 @@ public class ReadOnlyPIndexedNode<T> extends DelegateProperty implements PIndexe
     }
 
     @Override
-    public List<WritablePIndexedNode<T>> findChildren(Predicate<WritablePIndexedNode<T>> filter, boolean deep) {
+    public List<WritableIndexedNode<T>> findChildren(Predicate<WritableIndexedNode<T>> filter, boolean deep) {
         return getBase().findChildren(filter, deep);
     }
 
     @Override
-    public PList<PIndexedNode<T>> children() {
-        return new ReadOnlyPList<PIndexedNode<T>>((PList) getBase().children()) {
+    public ObservableList<IndexedNode<T>> children() {
+        return new ReadOnlyList<IndexedNode<T>>((ObservableList) getBase().children()) {
             @Override
-            public PIndexedNode<T> get(int index) {
-                PIndexedNode<T> n = super.get(index);
+            public IndexedNode<T> get(int index) {
+                IndexedNode<T> n = super.get(index);
                 if (n.isWritable()) {
-                    return ((WritablePIndexedNode) n).readOnly();
+                    return ((WritableIndexedNode) n).readOnly();
                 }
                 return n;
             }
@@ -66,7 +66,7 @@ public class ReadOnlyPIndexedNode<T> extends DelegateProperty implements PIndexe
     }
 
     @Override
-    public PIndexedNode<T> readOnly() {
+    public IndexedNode<T> readOnly() {
         return this;
     }
     

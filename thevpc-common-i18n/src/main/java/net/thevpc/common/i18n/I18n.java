@@ -5,9 +5,9 @@
  */
 package net.thevpc.common.i18n;
 
+import java.util.Locale;
 import java.util.function.Function;
-import net.thevpc.common.props.WritablePList;
-import net.thevpc.common.props.WritablePValue;
+import net.thevpc.common.props.WritableValue;
 
 /**
  *
@@ -15,12 +15,14 @@ import net.thevpc.common.props.WritablePValue;
  */
 public interface I18n {
 
-    public WritablePList<I18nBundle> bundles();
+    public WritableValue<Locale> locale();
+    
+    public I18nBundleList bundles();
 
     public String getString(String name);
 
     public String getString(String name, Function<String, String> defaultValue);
 
-    WritablePValue<Function<String, String>> defaultValue();
+    WritableValue<Function<String, String>> defaultValue();
 
 }

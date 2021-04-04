@@ -7,13 +7,17 @@ package net.thevpc.common.i18n;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.thevpc.common.props.PropertyEvent;
+import net.thevpc.common.props.PropertyListener;
 import net.thevpc.common.props.Props;
-import net.thevpc.common.props.WritablePList;
-import net.thevpc.common.props.WritablePValue;
+import net.thevpc.common.props.WritableValue;
 
 /**
  *
@@ -21,22 +25,39 @@ import net.thevpc.common.props.WritablePValue;
  */
 public class DefaultI18n implements I18n {
 
-    private static final Function<String, String> DEFAULT_VALUE = (String t) -> "NotFound(" + t + ")";
-    private WritablePValue<Function<String, String>> defaultValue = (WritablePValue) Props.of("bundles").valueOf(Function.class, DEFAULT_VALUE);
+    private static Logger LOG = Logger.getLogger(DefaultI18n.class.getName());
+
+    private static final Function<String, String> DEFAULT_VALUE = (String t) -> {
+        LOG.log(Level.FINEST, "I18n String not found: {0}", t);
+        return "NotFound(" + t + ")";
+    };
+    private WritableValue<Function<String, String>> defaultValue = (WritableValue) Props.of("bundles").valueOf(Function.class, DEFAULT_VALUE);
     private final Map<String, String> cache = new HashMap<>();
     private final Set<String> notFound = new HashSet<>();
-    private final WritablePList<I18nBundle> bundles = Props.of("bundles").listOf(I18nBundle.class);
+    private final I18nBundleList bundles = new DefaultI18nBundleList("bundles");
+    private final WritableValue<Locale> locale = Props.of("locale").valueOf(Locale.class, Locale.getDefault());
 
     public DefaultI18n() {
+        locale.listeners().add(new PropertyListener() {
+            @Override
+            public void propertyUpdated(PropertyEvent event) {
+                cache.clear();
+            }
+        });
     }
 
     @Override
-    public WritablePList<I18nBundle> bundles() {
+    public WritableValue<Locale> locale() {
+        return locale;
+    }
+
+    @Override
+    public I18nBundleList bundles() {
         return bundles;
     }
 
     @Override
-    public WritablePValue<Function<String, String>> defaultValue() {
+    public WritableValue<Function<String, String>> defaultValue() {
         return defaultValue;
     }
 
@@ -52,11 +73,12 @@ public class DefaultI18n implements I18n {
             return a;
         }
         if (notFound.contains(name)) {
-            buildDefault(name, defaultValue);
+            return buildDefault(name, defaultValue);
         }
         for (I18nBundle bundle : bundles) {
             try {
-                String v = bundle.getString(name);
+                Locale locale2 = locale.get();
+                String v = bundle.getString(name, locale2 == null ? Locale.getDefault() : locale2);
                 if (v != null) {
                     cache.put(name, v);
                     return v;

@@ -7,8 +7,8 @@ package net.thevpc.common.iconset;
 
 import javax.swing.ImageIcon;
 
-import net.thevpc.common.props.PValue;
-import net.thevpc.common.props.WritablePValue;
+import net.thevpc.common.props.WritableValue;
+import net.thevpc.common.props.ObservableValue;
 
 /**
  *
@@ -16,7 +16,7 @@ import net.thevpc.common.props.WritablePValue;
  */
 public interface PIconSet {
 
-    WritablePValue<String> id();
+    WritableValue<String> id();
 
-    PValue<ImageIcon> icon(String id);
+    ObservableValue<ImageIcon> icon(String id);
 }

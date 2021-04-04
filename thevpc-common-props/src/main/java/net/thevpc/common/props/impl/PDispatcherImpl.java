@@ -6,19 +6,19 @@ import java.util.List;
 import net.thevpc.common.props.*;
 import net.thevpc.common.props.*;
 
-public class PDispatcherImpl<T> extends AbstractProperty implements WritablePDispatcher<T> {
+public class PDispatcherImpl<T> extends AbstractProperty implements WritableDispatcher<T> {
 
     private long index;
-    private PDispatcher<T> ro;
+    private ObservableDispatcher<T> ro;
 
     public PDispatcherImpl(String name, PropertyType elementType) {
         super(name, PropertyType.of(List.class, elementType));
     }
 
     @Override
-    public PDispatcher<T> readOnly() {
+    public ObservableDispatcher<T> readOnly() {
         if (ro == null) {
-            ro = new ReadOnlyPDispatcher<>(this);
+            ro = new ReadOnlyDispatcher<>(this);
         }
         return ro;
     }

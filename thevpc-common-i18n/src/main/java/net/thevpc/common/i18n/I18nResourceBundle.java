@@ -5,6 +5,9 @@
  */
 package net.thevpc.common.i18n;
 
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 /**
@@ -13,17 +16,28 @@ import java.util.ResourceBundle;
  */
 public class I18nResourceBundle implements I18nBundle {
 
-    private ResourceBundle bundle;
-
+    private Map<String,ResourceBundle> bundles=new HashMap<>();
+    private String bunldeLocation;
     public I18nResourceBundle(String bundle) {
-        this(ResourceBundle.getBundle(bundle));
+        this.bunldeLocation=bundle;
+        resolve(null);
     }
-    public I18nResourceBundle(ResourceBundle bundle) {
-        this.bundle = bundle;
+    
+    private ResourceBundle resolve(Locale locale) {
+        if(locale==null){
+            locale=Locale.getDefault();
+        }
+        String locId = locale.toString();
+        ResourceBundle b = bundles.get(locId);
+        if(b==null){
+            b=ResourceBundle.getBundle(bunldeLocation,locale);
+            bundles.put(locId, b);
+        }
+        return b;
     }
     
     @Override
-    public String getString(String name) {
-        return bundle.getString(name);
+    public String getString(String name,Locale locale) {
+        return resolve(locale).getString(name);
     }
 }

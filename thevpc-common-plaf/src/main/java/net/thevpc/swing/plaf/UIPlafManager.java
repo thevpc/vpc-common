@@ -23,15 +23,17 @@ import javax.swing.plaf.metal.OceanTheme;
  * @author thevpc
  */
 public class UIPlafManager {
+
     public static UIPlafManager INSTANCE = new UIPlafManager();
     private LinkedHashMap<String, UIPlaf> installed = new LinkedHashMap<>();
+    private List<UIPlafListener> listeners = new ArrayList<>();
     private UIPlaf current;
 
     public UIPlafManager() {
         for (UIManager.LookAndFeelInfo p : UIManager.getInstalledLookAndFeels()) {
             switch (p.getName()) {
                 case "Metal": {
-                    add(new UIPlaf("Metal","Metal", true, false, true, false) {
+                    add(new UIPlaf("Metal", "Metal", true, false, true, false) {
                         @Override
                         public void apply() throws Exception {
                             MetalLookAndFeel.setCurrentTheme(new OceanTheme());
@@ -50,7 +52,7 @@ public class UIPlafManager {
                     break;
                 }
                 case "CDE/Motif": {
-                    add(new UIPlaf("CDE_Motif","CDE/Motif", true, true, false, false) {
+                    add(new UIPlaf("CDE_Motif", "CDE/Motif", true, true, false, false) {
                         @Override
                         public void apply() throws Exception {
                             UIManager.setLookAndFeel(p.getClassName());
@@ -59,7 +61,7 @@ public class UIPlafManager {
                     break;
                 }
                 case "GTK+": {
-                    add(new UIPlaf("GTK+","GTK+", true, false, true, false) {
+                    add(new UIPlaf("GTK+", "GTK+", true, false, true, false) {
                         @Override
                         public void apply() throws Exception {
                             UIManager.setLookAndFeel(p.getClassName());
@@ -68,7 +70,7 @@ public class UIPlafManager {
                     break;
                 }
                 default: {
-                    add(new UIPlaf(p.getName(),p.getName(), true, false, true, false) {
+                    add(new UIPlaf(p.getName(), p.getName(), true, false, true, false) {
                         @Override
                         public void apply() throws Exception {
                             UIManager.setLookAndFeel(p.getClassName());
@@ -78,39 +80,32 @@ public class UIPlafManager {
             }
         }
 
-        add(new UIPlaf("FlatLight","Flat Light", false, false, true, false) {
+        add(new UIPlaf("FlatLight", "Flat Light", false, false, true, false) {
             @Override
             public void apply() throws Exception {
                 UIManager.setLookAndFeel(new FlatLightLaf());
             }
         });
-        add(new UIPlaf("FlatDark","Flat Dark",  false, true, false, false) {
+        add(new UIPlaf("FlatDark", "Flat Dark", false, true, false, false) {
             @Override
             public void apply() throws Exception {
                 UIManager.setLookAndFeel(new FlatDarkLaf());
             }
         });
-        add(new UIPlaf("FlatIntellij","Flat Intellij", false, false, true, false) {
+        add(new UIPlaf("FlatIntellij", "Flat Intellij", false, false, true, false) {
             @Override
             public void apply() throws Exception {
                 UIManager.setLookAndFeel(new FlatIntelliJLaf());
             }
         });
-        add(new UIPlaf("FlatDarcula","Flat Darcula", false, true, false, false) {
+        add(new UIPlaf("FlatDarcula", "Flat Darcula", false, true, false, false) {
             @Override
             public void apply() throws Exception {
                 UIManager.setLookAndFeel(new FlatDarculaLaf());
             }
         });
 
-        
-        for (String theme : new String[]{
-            "HighContrast",
-            "Material_Oceanic_Contrast",
-            "Material_Oceanic",
-            "Material_Palenight_Contrast",
-            "Material_Palenight",
-            "MaterialTheme",
+        for (String lightTheme : new String[]{
             "Gray",
             "GitHub_Contrast",
             "GitHub",
@@ -131,13 +126,13 @@ public class UIPlafManager {
         }) {
             boolean dark = false;
             boolean light = true;
-            boolean contrast = theme.toLowerCase().contains("contrast");
-            String name=nameFromId(theme);
-            add(new UIPlaf("Flat-" + theme,name, false, dark, light, contrast) {
+            boolean contrast = lightTheme.toLowerCase().contains("contrast");
+            String name = nameFromId(lightTheme);
+            add(new UIPlaf("Flat-" + lightTheme, name, false, dark, light, contrast) {
                 @Override
                 public void apply() throws Exception {
                     IntelliJTheme.install(ClassLoader.getSystemClassLoader().getResourceAsStream(
-                            "net/thevpc/swings/plaf/intellijthemes/" + theme + ".theme.json"
+                            "net/thevpc/swings/plaf/intellijthemes/" + lightTheme + ".theme.json"
                     )
                     );
                 }
@@ -145,6 +140,12 @@ public class UIPlafManager {
         }
 
         for (String theme : new String[]{
+            "MaterialTheme",
+            "HighContrast",
+            "Material_Oceanic_Contrast",
+            "Material_Oceanic",
+            "Material_Palenight_Contrast",
+            "Material_Palenight",
             "Monocai",
             "Monokai_Pro_Contrast",
             "Monokai_Pro",
@@ -174,8 +175,8 @@ public class UIPlafManager {
             boolean dark = true;
             boolean light = false;
             boolean contrast = theme.toLowerCase().contains("contrast");
-            String name=nameFromId(theme);
-            add(new UIPlaf("Flat-" + theme,name, false, dark, light, contrast) {
+            String name = nameFromId(theme);
+            add(new UIPlaf("Flat-" + theme, name, false, dark, light, contrast) {
                 @Override
                 public void apply() throws Exception {
                     IntelliJTheme.install(ClassLoader.getSystemClassLoader().getResourceAsStream(
@@ -187,17 +188,17 @@ public class UIPlafManager {
         }
     }
 
-    protected String nameFromId(String a){
-        StringBuilder sb=new StringBuilder();
+    protected String nameFromId(String a) {
+        StringBuilder sb = new StringBuilder();
         char[] charArray = a.toCharArray();
         for (int i = 0; i < charArray.length; i++) {
             char c = charArray[i];
-            if(c=='_'||c=='-'){
+            if (c == '_' || c == '-') {
                 sb.append(' ');
-            }else if (i>0 && i<charArray.length-1 && Character.isLowerCase(charArray[i-1]) && Character.isUpperCase(charArray[i])){
+            } else if (i > 0 && i < charArray.length - 1 && Character.isLowerCase(charArray[i - 1]) && Character.isUpperCase(charArray[i])) {
                 sb.append(' ');
                 sb.append(c);
-            }else{
+            } else {
                 sb.append(c);
             }
         }
@@ -215,8 +216,13 @@ public class UIPlafManager {
         return s;
     }
 
+    public final void addListener(UIPlafListener listener) {
+        listeners.add(listener);
+    }
+
     public final static UIPlafManager getCurrentManager() {
-        return (UIPlafManager) UIManager.get(UIPlafManager.class.getName());
+        UIPlafManager a = (UIPlafManager) UIManager.get(UIPlafManager.class.getName());
+        return a != null ? a : INSTANCE;
     }
 
     public final UIPlaf getCurrent() {
@@ -226,21 +232,24 @@ public class UIPlafManager {
     public final void apply(String name) {
         UIPlaf a = installed.get(name);
         if (a != null) {
-            current=a;
+            UIPlaf old = current;
+            current = a;
             try {
                 a.apply();
             } catch (Exception ex) {
                 throw new IllegalArgumentException(ex);
             }
-            UIManager.put(UIPlafManager.class.getName(), a);
+            UIManager.put(UIPlafManager.class.getName() + ".plaf", a);
             UIManager.put(UIPlafManager.class.getName() + ".dark", a.isDark());
             UIManager.put(UIPlafManager.class.getName() + ".contrast", a.isContrast());
             UIManager.put(UIPlafManager.class.getName() + ".system", a.isSystem());
             UIManager.put(UIPlafManager.class.getName() + ".light", a.isLight());
             UIManager.put(UIPlafManager.class.getName() + ".name", a.getName());
+            for (UIPlafListener listener : listeners) {
+                listener.plafChanged(current);
+            }
         }
     }
-
 
     public final void add(UIPlaf a) {
         installed.put(a.getId(), a);

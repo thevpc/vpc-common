@@ -1,6 +1,5 @@
 package net.thevpc.common.props.impl;
 import net.thevpc.common.props.*;
-import net.thevpc.common.props.*;
 
 public abstract class DelegateProperty<T> implements Property {
 

@@ -4,9 +4,9 @@
  */
 package net.thevpc.common.swing;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -14,7 +14,7 @@ import java.util.Arrays;
  */
 public class DefaultRecentFilesModel implements RecentFilesModel {
 
-    private ArrayList<File> files = new ArrayList<File>();
+    private ArrayList<String> files = new ArrayList<String>();
     private int max = 0;
 
     private void ensureSize() {
@@ -26,26 +26,26 @@ public class DefaultRecentFilesModel implements RecentFilesModel {
     }
 
     @Override
-    public File[] getFiles() {
-        return files.toArray(new File[files.size()]);
+    public List<String> getFiles() {
+        return files;
     }
 
     @Override
-    public void setFiles(File[] files) {
+    public void setFiles(List<String> files) {
         this.files.clear();
         if (files != null) {
-            this.files.addAll(Arrays.asList(files));
+            this.files.addAll(files);
             ensureSize();
         }
     }
 
     @Override
-    public void removeFile(File file) {
+    public void removeFile(String file) {
         this.files.remove(file);
     }
 
     @Override
-    public void addFile(File file) {
+    public void addFile(String file) {
         files.remove(file);
         files.add(0, file);
     }
@@ -57,7 +57,7 @@ public class DefaultRecentFilesModel implements RecentFilesModel {
 
     @Override
     public void setMaxRecentFiles(int maxRecentFiles) {
-        this.max=maxRecentFiles;
+        this.max = maxRecentFiles;
         ensureSize();
     }
 }

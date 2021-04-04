@@ -6,18 +6,16 @@
  *
  * <br>
  *
- * Copyright [2020] [thevpc]
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain a
- * copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language
+ * Copyright [2020] [thevpc] Licensed under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * <br>
- * ====================================================================
-*/
+ * <br> ====================================================================
+ */
 package net.thevpc.common.swing;
 
 import java.io.File;
@@ -26,73 +24,74 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 import java.util.StringTokenizer;
 
 /**
- * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * %creationtime 9 nov. 2006 11:55:40
+ * @author Taha BEN SALAH (taha.bensalah@gmail.com) %creationtime 9 nov. 2006
+ * 11:55:40
  */
 public class RecentFilesPropertiesModel implements RecentFilesModel {
-    private File file;
+
+    private String file;
     private String key;
     private boolean xml = true;
     private int maxRecentFiles = 10;
 
-    public RecentFilesPropertiesModel(File file) {
+    public RecentFilesPropertiesModel(String file) {
         this(file, "RecentFiles");
     }
 
-    public RecentFilesPropertiesModel(File file, String key) {
+    public RecentFilesPropertiesModel(String file, String key) {
         this.file = file;
         this.key = key;
-        xml = file.getName().toLowerCase().endsWith(".xml");
+        xml = new File(file).getName().toLowerCase().endsWith(".xml");
     }
 
-
-    public void removeFile(File file) {
+    public void removeFile(String file) {
         try {
-            File p = file.getCanonicalFile();
-            File[] rf = getFiles();
-            ArrayList<File> rfv = new ArrayList<File>(rf.length + 1);
-            rfv.addAll(Arrays.asList(rf));
+            String p = new File(file).getCanonicalFile().getPath();
+            List<String> rf = getFiles();
+            ArrayList<String> rfv = new ArrayList<String>(rf.size() + 1);
+            rfv.addAll(rf);
             rfv.remove(p);
             while (rfv.size() > maxRecentFiles) {
                 rfv.remove(rfv.size() - 1);
             }
-            rf = rfv.toArray(new File[rfv.size()]);
+            rf = rfv;
             setFiles(rf);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Bad file " + file.getPath());
+            throw new IllegalArgumentException("Bad file " + file);
         }
     }
 
-    public void addFile(File file) {
+    public void addFile(String file) {
         try {
-            File p = file.getCanonicalFile();
-            File[] rf = getFiles();
-            ArrayList<File> rfv = new ArrayList<File>(rf.length + 1);
-            rfv.addAll(Arrays.asList(rf));
+            String p = new File(file).getCanonicalFile().getPath();
+            List<String> rf = getFiles();
+            ArrayList<String> rfv = new ArrayList<String>(rf.size() + 1);
+            rfv.addAll(rf);
             rfv.remove(p);
             rfv.add(0, p);
             while (rfv.size() > maxRecentFiles) {
                 rfv.remove(rfv.size() - 1);
             }
-            rf = rfv.toArray(new File[rfv.size()]);
+            rf = rfv;
             setFiles(rf);
         } catch (IOException e) {
-            throw new IllegalArgumentException("Bad file " + file.getPath());
+            throw new IllegalArgumentException("Bad file " + file);
         }
     }
 
-    public void setFiles(File[] files) {
+    public void setFiles(List<String> files) {
         FileInputStream fis = null;
         FileOutputStream fos = null;
         try {
             Properties properties = new Properties();
-            if (file.exists()) {
+            if (new File(file).exists()) {
                 try {
-                    fis = new FileInputStream(file);
+                    fis = new FileInputStream(new File(file));
                     if (xml) {
                         properties.loadFromXML(fis);
                     } else {
@@ -105,18 +104,18 @@ public class RecentFilesPropertiesModel implements RecentFilesModel {
                 }
             }
             StringBuilder sb = new StringBuilder();
-            for (File file1 : files) {
+            for (String file1 : files) {
                 if (sb.length() > 0) {
                     sb.append(":");
                 }
-                sb.append(file1.getCanonicalPath());
+                sb.append(new File(file1).getCanonicalPath());
             }
             properties.put(key, sb.toString());
-            if(file.getParentFile()!=null){
-                file.getParentFile().mkdirs();
+            if (new File(file).getParentFile() != null) {
+                new File(file).getParentFile().mkdirs();
             }
             try {
-                fos = new FileOutputStream(file);
+                fos = new FileOutputStream(new File(file));
                 if (xml) {
                     properties.storeToXML(fos, "");
                 } else {
@@ -132,19 +131,19 @@ public class RecentFilesPropertiesModel implements RecentFilesModel {
         }
     }
 
-    public File[] getFiles() {
+    public List<String> getFiles() {
         FileInputStream fis = null;
         try {
             Properties properties = new Properties();
-            if (file.exists()) {
+            if (new File(file).exists()) {
                 try {
-                    fis = new FileInputStream(file);
+                    fis = new FileInputStream(new File(file));
                     if (xml) {
                         properties.loadFromXML(fis);
                     } else {
                         properties.load(fis);
                     }
-                } catch(Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                     //any exception dont worry
                 } finally {
@@ -158,16 +157,15 @@ public class RecentFilesPropertiesModel implements RecentFilesModel {
                 all = "";
             }
             StringTokenizer stringTokenizer = new StringTokenizer(all, ":");
-            ArrayList<File> all2 = new ArrayList<File>();
+            ArrayList<String> all2 = new ArrayList<String>();
             while (stringTokenizer.hasMoreTokens()) {
-                all2.add(new File(stringTokenizer.nextToken()));
+                all2.add(stringTokenizer.nextToken());
             }
-            return all2.toArray(new File[all2.size()]);
+            return all2;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
 
     public int getMaxRecentFiles() {
         return maxRecentFiles;

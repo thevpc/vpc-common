@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -21,51 +22,67 @@ import java.util.Properties;
  */
 public class _IOUtils {
 
-    public static String loadStreamAsString(URL url) throws IOException {
+    public static String loadStreamAsString(URL url) {
         InputStream is = null;
         try {
-            return new String(loadStreamAsByteArray(is = url.openStream()));
-        } finally {
-            if (is != null) {
-                is.close();
+            try {
+                return new String(loadStreamAsByteArray(is = url.openStream()));
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
             }
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
     }
 
-    public static byte[] loadStreamAsByteArray(InputStream r) throws IOException {
+    public static byte[] loadStreamAsByteArray(InputStream r) {
         ByteArrayOutputStream out = null;
         try {
-            out = new ByteArrayOutputStream();
-            copy(r, out, 8096);
-            out.flush();
-            return out.toByteArray();
-        } finally {
-            if (out != null) {
-                out.close();
+            try {
+                out = new ByteArrayOutputStream();
+                copy(r, out, 8096);
+                out.flush();
+                return out.toByteArray();
+            } finally {
+                if (out != null) {
+                    out.close();
+                }
             }
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
     }
 
-    public static void copy(InputStream in, OutputStream out, int bufferSize) throws IOException {
-        byte[] buffer = new byte[bufferSize];
-        int len;
-        while ((len = in.read(buffer)) > 0) {
-            out.write(buffer, 0, len);
-        }
-    }
-
-    public static Properties loadXMLProperties(File file) throws IOException {
-        Properties p = new Properties();
-        FileInputStream is = null;
+    public static void copy(InputStream in, OutputStream out, int bufferSize) {
         try {
-            is = new FileInputStream(file);
-            p.loadFromXML(is);
-        } finally {
-            if (is != null) {
-                is.close();
+            byte[] buffer = new byte[bufferSize];
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
             }
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
         }
-        return p;
+    }
+
+    public static Properties loadXMLProperties(File file) {
+        try {
+            Properties p = new Properties();
+            FileInputStream is = null;
+            try {
+                is = new FileInputStream(file);
+                p.loadFromXML(is);
+            } finally {
+                if (is != null) {
+                    is.close();
+                }
+            }
+            return p;
+        } catch (IOException ex) {
+            throw new UncheckedIOException(ex);
+        }
     }
 
     public static void storeXMLProperties(File file, Properties p, String comments) throws IOException {

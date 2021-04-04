@@ -26,6 +26,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Vector;
 
 public class RecentFilesMenu extends JMenu {
@@ -44,17 +45,17 @@ public class RecentFilesMenu extends JMenu {
         this.fileSelectionListener = new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 JMenuItem jmi = (JMenuItem) e.getSource();
-                File file = (File) jmi.getClientProperty("file");
+                String file = (String) jmi.getClientProperty("file");
                 processFileSelected(file);
             }
         };
     }
 
-    protected void processFileSelected(File file) {
+    protected void processFileSelected(String file) {
         addFile(file);
         firePropertyChange(SELECTED_FILE, null, file);
         if (listeners != null) {
-            FileEvent event = new FileEvent(this, file);
+            RecentFileEvent event = new RecentFileEvent(this, file);
             for (FileSelectedListener listener : listeners) {
                 listener.fileSelected(event);
             }
@@ -68,20 +69,21 @@ public class RecentFilesMenu extends JMenu {
         listeners.add(listener);
     }
 
-    public void addFile(File file) {
+    public void addFile(String file) {
         getRecentFilesModel().addFile(file);
     }
 
+    @Override
     public JPopupMenu getPopupMenu() {
         removeAll();
-        File[] children = getRecentFilesModel().getFiles();
-        if (children.length == 0) {
+        List<String> children = getRecentFilesModel().getFiles();
+        if (children.size() == 0) {
             JMenuItem menu = new JMenuItem("<EMPTY>");
             menu.setEnabled(false);
             add(menu);
         } else {
-            for (int i = 0; i < children.length; i++) {
-                JMenuItem item = createMenuItem(this, i, children[i]);
+            for (int i = 0; i < children.size(); i++) {
+                JMenuItem item = createMenuItem(this, i, children.get(i));
                 if (item != null) {
                     item.addActionListener(fileSelectionListener);
                     add(item);
@@ -91,12 +93,12 @@ public class RecentFilesMenu extends JMenu {
         return super.getPopupMenu();
     }
 
-    public JMenuItem createMenuItem(RecentFilesMenu parent, int index, File file) {
+    public JMenuItem createMenuItem(RecentFilesMenu parent, int index, String file) {
         String fileName;
         try {
-            fileName = file.getCanonicalPath();
+            fileName = new File(file).getCanonicalPath();
         } catch (IOException e) {
-            fileName = file.getPath();
+            fileName = file;
         }
         if (fileName.indexOf('.') > 0) {
             fileName = fileName.substring(0, fileName.indexOf('.'));

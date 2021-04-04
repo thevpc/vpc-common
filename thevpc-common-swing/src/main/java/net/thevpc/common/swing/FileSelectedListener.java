@@ -25,5 +25,5 @@ package net.thevpc.common.swing;
  * %creationtime 9 nov. 2006 15:26:37
  */
 public interface FileSelectedListener {
-    public void fileSelected(FileEvent event);
+    public void fileSelected(RecentFileEvent event);
 }

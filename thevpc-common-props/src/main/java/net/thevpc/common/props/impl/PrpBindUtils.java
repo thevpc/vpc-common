@@ -7,7 +7,6 @@ package net.thevpc.common.props.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.thevpc.common.props.*;
 
 /**
  *

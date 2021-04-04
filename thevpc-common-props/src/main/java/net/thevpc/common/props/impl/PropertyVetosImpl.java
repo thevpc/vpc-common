@@ -7,7 +7,6 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 import net.thevpc.common.props.*;
-import net.thevpc.common.props.*;
 
 public class PropertyVetosImpl implements PropertyVetos {
 

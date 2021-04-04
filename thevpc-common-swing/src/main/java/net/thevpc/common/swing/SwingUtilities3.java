@@ -5,18 +5,16 @@
  * Description: <start><end>
  * <br>
  *
- * Copyright [2020] [thevpc]
- * Licensed under the Apache License, Version 2.0 (the "License"); you may
- * not use this file except in compliance with the License. You may obtain a
- * copy of the License at http://www.apache.org/licenses/LICENSE-2.0
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an
- * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
- * either express or implied. See the License for the specific language
+ * Copyright [2020] [thevpc] Licensed under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
+ * or agreed to in writing, software distributed under the License is
+ * distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * <br>
- * ====================================================================
-*/
+ * <br> ====================================================================
+ */
 package net.thevpc.common.swing;
 
 import javax.swing.*;
@@ -35,8 +33,8 @@ import java.util.*;
 import java.util.List;
 
 /**
- * @author Taha BEN SALAH (taha.bensalah@gmail.com)
- * %creationtime 13 juil. 2006 22:14:21
+ * @author Taha BEN SALAH (taha.bensalah@gmail.com) %creationtime 13 juil. 2006
+ * 22:14:21
  */
 public class SwingUtilities3 {
 
@@ -217,7 +215,7 @@ public class SwingUtilities3 {
             return null;
         }
         Container parent = comp.getParent();
-        for (boolean found = false; parent != null && !found; ) {
+        for (boolean found = false; parent != null && !found;) {
             for (Class aClass : classes) {
                 if (!aClass.isInstance(parent)) {
                     continue;
@@ -364,8 +362,8 @@ public class SwingUtilities3 {
                 return name.substring(3);
             }
         }
-        int expected_modifiers =
-                (Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL);
+        int expected_modifiers
+                = (Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL);
 
         Field[] fields = KeyEvent.class.getDeclaredFields();
         for (int i = 0; i < fields.length; i++) {
@@ -490,7 +488,7 @@ public class SwingUtilities3 {
     }
 
     public static void addFileDropListener(java.awt.Component c,
-                                           final FileDropListener listener) {
+            final FileDropListener listener) {
         new FileDrop(null, c, listener);
     }
 
@@ -532,14 +530,16 @@ public class SwingUtilities3 {
     public static void tileFrames(JDesktopPane desk) {
         // How many frames do we have?
         List<JInternalFrame> allframes = new ArrayList<>(Arrays.asList(desk.getAllFrames()));
-        for (Iterator<JInternalFrame> i = allframes.iterator(); i.hasNext(); ) {
+        for (Iterator<JInternalFrame> i = allframes.iterator(); i.hasNext();) {
             JInternalFrame f = i.next();
             if (f.isIcon()) {
                 i.remove();
             }
         }
         int count = allframes.size();
-        if (count == 0) return;
+        if (count == 0) {
+            return;
+        }
 
         // Determine the necessary grid size
         int sqrt = (int) Math.sqrt(count);
@@ -580,15 +580,15 @@ public class SwingUtilities3 {
     }
 
     public static boolean isShowPopupEvent(MouseEvent e) {
-        return e.getClickCount()==1 && e.getButton() == MouseEvent.BUTTON3;
+        return e.getClickCount() == 1 && e.getButton() == MouseEvent.BUTTON3;
     }
 
-    public static void showPopup(Component invoker,Point point, JPopupMenu popup) {
-        if(popup==null){
+    public static void showPopup(Component invoker, Point point, JPopupMenu popup) {
+        if (popup == null) {
             return;
         }
         Point p = SwingUtilities3.getPreferredPopupLocation(point, popup);
-        popup.show(invoker,p.x,p.y);
+        popup.show(invoker, p.x, p.y);
 
     }
 
@@ -679,10 +679,75 @@ public class SwingUtilities3 {
 
     }
 
-    public static ImageIcon getScaledIcon(URL url,int width,int heigth){
+    public static ImageIcon getScaledIcon(URL url, int width, int heigth) {
         ImageIcon imageIcon = new ImageIcon(url); // load the image to a imageIcon
         Image image = imageIcon.getImage(); // transform it
-        Image newimg = image.getScaledInstance(width, heigth,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
+        Image newimg = image.getScaledInstance(width, heigth, java.awt.Image.SCALE_SMOOTH); // scale it the smooth way
         return new ImageIcon(newimg);
+    }
+
+    private static final String KEY_STROKE_AND_KEY = "ESCAPE";
+    private static final KeyStroke ESCAPE_KEY_STROKE = KeyStroke.getKeyStroke(KEY_STROKE_AND_KEY);
+
+    public static void addEscapeBindings(JDialog dialog) {
+        JRootPane rootPane = dialog.getRootPane();
+        rootPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(ESCAPE_KEY_STROKE, KEY_STROKE_AND_KEY);
+        rootPane.getActionMap().put(KEY_STROKE_AND_KEY, new SimpleEscapeAction());
+    }
+
+    private static ActionListener getEscapeAction(JComponent rootPane) {
+        //  Search the parent InputMap to see if a binding for the ESCAPE key
+        //  exists. This binding is added when a popup menu is made visible
+        //  (and removed when the popup menu is hidden).
+
+        InputMap im = rootPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+
+        if (im == null) {
+            return null;
+        }
+
+        im = im.getParent();
+
+        if (im == null) {
+            return null;
+        }
+
+        Object[] keys = im.keys();
+
+        if (keys == null) {
+            return null;
+        }
+
+        for (Object keyStroke : keys) {
+            if (keyStroke.equals(ESCAPE_KEY_STROKE)) {
+                Object key = im.get(ESCAPE_KEY_STROKE);
+                return rootPane.getActionMap().get(key);
+            }
+        }
+
+        return null;
+    }
+
+    private static class SimpleEscapeAction extends AbstractAction {
+        public SimpleEscapeAction() {
+            super("Escape");
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            Component component = KeyboardFocusManager.getCurrentKeyboardFocusManager().getFocusOwner();
+            JComponent rootPane = (JComponent) component;
+            if (!(rootPane instanceof JRootPane)) {
+                rootPane = (JComponent) SwingUtilities.getAncestorOfClass(JRootPane.class, component);
+            }
+            ActionListener escapeAction = getEscapeAction(rootPane);
+            if (escapeAction != null) {
+                escapeAction.actionPerformed(null);
+            } else {
+                Window window = SwingUtilities.windowForComponent(component);
+                window.dispose();
+            }
+            
+        }
     }
 }

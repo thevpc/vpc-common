@@ -5,41 +5,41 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import net.thevpc.common.props.PMap;
-import net.thevpc.common.props.PNamedNode;
-import net.thevpc.common.props.WritablePNamedNode;
-import net.thevpc.common.props.WritablePValue;
 import net.thevpc.common.props.*;
+import net.thevpc.common.props.WritableValue;
+import net.thevpc.common.props.NamedNode;
+import net.thevpc.common.props.WritableNamedNode;
+import net.thevpc.common.props.ObservableMap;
 
-public class ReadOnlyPNamedNode<T> extends DelegateProperty implements PNamedNode<T> {
+public class ReadOnlyPNamedNode<T> extends DelegateProperty implements NamedNode<T> {
 
-    public ReadOnlyPNamedNode(PNamedNode<T> base) {
+    public ReadOnlyPNamedNode(NamedNode<T> base) {
         super(base);
     }
 
     @Override
-    public void bind(WritablePValue<T> other) {
-        WritablePValueBase.helperBind(this, other);
+    public void bind(WritableValue<T> other) {
+        WritableValueBase.helperBind(this, other);
     }
 
     @Override
-    public <T2> void bindConvert(WritablePValue<T2> other, Function<T, T2> map) {
-        WritablePValueBase.helperBindConvert(this, other, map);
+    public <T2> void bindConvert(WritableValue<T2> other, Function<T, T2> map) {
+        WritableValueBase.helperBindConvert(this, other, map);
     }
 
     @Override
-    public <T2> void unbind(WritablePValue<T2> other) {
-        WritablePValueBase.helperRemoveBindListeners(listeners(), other);
+    public <T2> void unbind(WritableValue<T2> other) {
+        WritableValueBase.helperRemoveBindListeners(listeners(), other);
     }
 
     @Override
-    public PNamedNode<T> readOnly() {
+    public NamedNode<T> readOnly() {
         return this;
     }
 
     @Override
-    public PNamedNode<T> getBase() {
-        return (PNamedNode<T>) super.getBase();
+    public NamedNode<T> getBase() {
+        return (NamedNode<T>) super.getBase();
     }
 
     @Override
@@ -53,18 +53,18 @@ public class ReadOnlyPNamedNode<T> extends DelegateProperty implements PNamedNod
     }
 
     @Override
-    public Map<String, WritablePNamedNode<T>> findChildren(Predicate<WritablePNamedNode<T>> filter, boolean deep) {
+    public Map<String, WritableNamedNode<T>> findChildren(Predicate<WritableNamedNode<T>> filter, boolean deep) {
         return getBase().findChildren(filter, deep);
     }
 
     @Override
-    public PMap<String, PNamedNode<T>> children() {
-        return new ReadOnlyPMap<String, PNamedNode<T>>((PMap) getBase().children()) {
+    public ObservableMap<String, NamedNode<T>> children() {
+        return new ReadOnlyMap<String, NamedNode<T>>((ObservableMap) getBase().children()) {
             @Override
-            public PNamedNode<T> get(String index) {
-                PNamedNode<T> n = super.get(index);
+            public NamedNode<T> get(String index) {
+                NamedNode<T> n = super.get(index);
                 if (n.isWritable()) {
-                    return ((WritablePNamedNode) n).readOnly();
+                    return ((WritableNamedNode) n).readOnly();
                 }
                 return n;
             }

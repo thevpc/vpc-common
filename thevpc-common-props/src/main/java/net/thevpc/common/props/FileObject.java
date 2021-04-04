@@ -11,11 +11,11 @@ package net.thevpc.common.props;
  */
 public interface FileObject {
 
-    PValue<String> name();
+    ObservableValue<String> name();
     
-    WritablePValue<Boolean> modified();
+    WritableValue<Boolean> modified();
 
-    WritablePValue<String> filePath();
+    WritableValue<String> filePath();
 
     String defaultFileSuffix();
 

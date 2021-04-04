@@ -9,7 +9,6 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 import net.thevpc.common.props.*;
-import net.thevpc.common.props.*;
 
 public class PropertyListenersImpl implements PropertyListeners {
 

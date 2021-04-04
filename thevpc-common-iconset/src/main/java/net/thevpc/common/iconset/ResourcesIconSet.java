@@ -10,7 +10,11 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UncheckedIOException;
 import java.net.URL;
+import java.util.Properties;
 import javax.swing.ImageIcon;
 
 /**
@@ -23,8 +27,14 @@ public class ResourcesIconSet implements IconSet {
     private final int width;
     private final int height;
     private final String path;
+    private final String basePath;
     private final String type;
     private final ClassLoader classLoader;
+    private final Properties names;
+
+    public ResourcesIconSet(String id, int size, String path, ClassLoader classLoader) {
+        this(id, size, size, path, null, classLoader);
+    }
 
     public ResourcesIconSet(String id, int width, int height, String path, String type, ClassLoader classLoader) {
         this.id = id;
@@ -32,7 +42,49 @@ public class ResourcesIconSet implements IconSet {
         this.height = height;
         this.path = path;
         this.classLoader = classLoader;
-        this.type = type;
+        StringBuilder p = new StringBuilder(path.trim());
+        if (p.charAt(0) == '/') {
+            p.delete(0, 1);
+        }
+        if (p.charAt(p.length() - 1) == '/') {
+            p.delete(p.length() - 1, p.length());
+        }
+        URL namesURL = null;
+        if (classLoader == null) {
+            namesURL = ClassLoader.getSystemResource(p + "/.iconset.properties");
+        } else {
+            namesURL = classLoader.getResource(p + "/.iconset.properties");
+        }
+        names = new Properties();
+        if (namesURL != null) {
+            try (InputStreamReader r = new InputStreamReader(namesURL.openStream())) {
+                names.load(r);
+            } catch (IOException ex) {
+                throw new UncheckedIOException(ex);
+            }
+        }
+        //.base-url=/net/thevpc/more/iconsets/feather/feather-black
+        //.icon-extension=png
+        if (names.getProperty(".base-url") != null && names.getProperty(".base-url").trim().length() > 0) {
+            p.setLength(0);
+            p.append(names.getProperty(".base-url").trim());
+            if (p.charAt(0) == '/') {
+                p.delete(0, 1);
+            }
+            if (p.charAt(p.length() - 1) == '/') {
+                p.delete(p.length() - 1, p.length());
+            }
+            this.basePath = p.toString();
+        } else {
+            this.basePath = p.toString();
+        }
+        if (names.getProperty(".icon-extension") != null && names.getProperty(".icon-extension").trim().length() > 0) {
+            this.type = names.getProperty(".icon-extension").trim();
+        } else if (type != null && type.trim().length() > 0) {
+            this.type = type.trim();
+        } else {
+            this.type = "png";
+        }
     }
 
     @Override
@@ -60,25 +112,29 @@ public class ResourcesIconSet implements IconSet {
         return path;
     }
 
+    public String getBasePath() {
+        return basePath;
+    }
+
     public ClassLoader getClassLoader() {
         return classLoader;
     }
 
     @Override
     public ImageIcon getIcon(String id) {
-        String p = path;
-        if (p.startsWith("/")) {
-            p = p.substring(1);
+        if (id == null) {
+            return null;
         }
-        if (!p.endsWith("/")) {
-            p += "/";
+        String id2 = names.getProperty(id);
+        if (id2 != null) {
+            id = id2;
         }
-        p += id + "." + type;
+        StringBuilder p = new StringBuilder(basePath).append('/').append(id).append('.').append(type);
         URL u = null;
         if (classLoader == null) {
-            u = ClassLoader.getSystemResource(p);
+            u = ClassLoader.getSystemResource(p.toString());
         } else {
-            u = classLoader.getResource(p);
+            u = classLoader.getResource(p.toString());
         }
         if (u != null) {
             return getScaledImageIcon(u, width, height);

@@ -1,11 +1,11 @@
 package net.thevpc.common.props.impl;
 
-import net.thevpc.common.props.PMapEntry;
 
 import java.util.Objects;
 import net.thevpc.common.props.*;
+import net.thevpc.common.props.MapEntry;
 
-public class PMapEntryImpl<K,V> implements PMapEntry<K,V> {
+public class PMapEntryImpl<K,V> implements MapEntry<K,V> {
     private K k;
     private V v;
 

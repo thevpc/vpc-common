@@ -3,6 +3,7 @@ package net.thevpc.common.props;
 import java.util.function.Predicate;
 
 public interface PropertyListeners extends Iterable<PropertyListener>{
+    
     void add(PropertyListener listener);
 
     void remove(PropertyListener listener);

@@ -10,13 +10,13 @@ import javax.swing.ImageIcon;
 
 import net.thevpc.common.prs.util.ProgressEvent;
 import net.thevpc.common.prs.util.ProgressMonitor;
-import net.thevpc.common.swing.SimpleSplashScreen;
+import net.thevpc.common.swing.JSplashScreen;
 
 /**
  *
  * @author thevpc
  */
-public class PRSSplashScreen extends SimpleSplashScreen implements ProgressMonitor {
+public class PRSSplashScreen extends JSplashScreen implements ProgressMonitor {
 
     public PRSSplashScreen(ImageIcon image, Dimension preferredDimension) {
         super(image, preferredDimension);
