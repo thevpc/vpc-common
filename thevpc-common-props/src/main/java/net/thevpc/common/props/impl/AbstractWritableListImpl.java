@@ -287,7 +287,7 @@ public abstract class AbstractWritableListImpl<T> extends AbstractProperty imple
 
     @Override
     public String toString() {
-        return "WritablePList{"
+        return "WritableList{"
                 + "name='" + name() + '\''
                 + ", type=" + type()
                 + " value=[" + stream().map(Object::toString).collect(Collectors.joining(",")) + "]"

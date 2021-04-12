@@ -36,8 +36,11 @@ public class DefaultI18n implements I18n {
     private final Set<String> notFound = new HashSet<>();
     private final I18nBundleList bundles = new DefaultI18nBundleList("bundles");
     private final WritableValue<Locale> locale = Props.of("locale").valueOf(Locale.class, Locale.getDefault());
+    private int maxReports = 2000;
+    private String id;
 
-    public DefaultI18n() {
+    public DefaultI18n(String id) {
+        this.id=id;
         locale.listeners().add(new PropertyListener() {
             @Override
             public void propertyUpdated(PropertyEvent event) {
@@ -45,6 +48,11 @@ public class DefaultI18n implements I18n {
             }
         });
     }
+
+    public String getId() {
+        return id;
+    }
+    
 
     @Override
     public WritableValue<Locale> locale() {
@@ -87,6 +95,7 @@ public class DefaultI18n implements I18n {
 
             }
         }
+        LOG.log(Level.FINER, "i18n {0}: string not found: {1}", new Object[]{getId(), name});
         notFound.add(name);
         return buildDefault(name, defaultValue);
     }

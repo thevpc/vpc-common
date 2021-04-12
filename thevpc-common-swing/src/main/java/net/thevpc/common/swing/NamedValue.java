@@ -15,13 +15,20 @@ public class NamedValue {
     private String id;
     private String icon;
     private String name;
+    private int preferredOrder;
 
-    public NamedValue(boolean group, String id, String name, String icon) {
+    public NamedValue(boolean group, String id, String name, String icon,int preferredOrder) {
         this.group = group;
         this.id = id;
         this.icon = icon;
         this.name = name;
+        this.preferredOrder = preferredOrder;
     }
+
+    public int getPreferredOrder() {
+        return preferredOrder;
+    }
+    
 
     public String getIcon() {
         return icon;

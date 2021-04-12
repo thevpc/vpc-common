@@ -80,7 +80,7 @@ public abstract class WritableValueBase<T> extends AbstractProperty implements W
 
     @Override
     public String toString() {
-        return "WritablePValue{"
+        return "WritableValue{"
                 + "name='" + name() + '\''
                 + ", type=" + type()
                 + " value='" + value + '\''

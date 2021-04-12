@@ -1,7 +1,7 @@
 package net.thevpc.common.util.test;
 
-import net.thevpc.common.util.Chronometer;
-import net.thevpc.common.util.IntArrayList;
+import net.thevpc.common.time.Chronometer;
+import net.thevpc.common.collections.IntArrayList;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

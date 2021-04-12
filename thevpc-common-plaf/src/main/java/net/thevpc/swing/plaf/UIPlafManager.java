@@ -10,11 +10,17 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 import com.formdev.flatlaf.IntelliJTheme;
+import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.List;
+import javax.swing.UIDefaults;
 import javax.swing.UIManager;
+import javax.swing.plaf.FontUIResource;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import javax.swing.plaf.metal.OceanTheme;
 
@@ -28,8 +34,19 @@ public class UIPlafManager {
     private LinkedHashMap<String, UIPlaf> installed = new LinkedHashMap<>();
     private List<UIPlafListener> listeners = new ArrayList<>();
     private UIPlaf current;
+    private float appFontRelative = Float.NaN;
+    private float appFontAbsolute = Float.NaN;
 
     public UIPlafManager() {
+        UIManager.addPropertyChangeListener(new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ("lookAndFeel".equals(evt.getPropertyName())) {
+                    onPreparePlaf();
+                }
+            }
+        }
+        );
         for (UIManager.LookAndFeelInfo p : UIManager.getInstalledLookAndFeels()) {
             switch (p.getName()) {
                 case "Metal": {
@@ -230,7 +247,10 @@ public class UIPlafManager {
     }
 
     public final void apply(String name) {
-        UIPlaf a = installed.get(name);
+        apply(installed.get(name));
+    }
+
+    public final void apply(UIPlaf a) {
         if (a != null) {
             UIPlaf old = current;
             current = a;
@@ -251,8 +271,110 @@ public class UIPlafManager {
         }
     }
 
+    public boolean resizeRelativeFonts(float f) {
+        if (f > 0 && f < 4) {
+            this.appFontRelative = Float.NaN;
+            this.appFontAbsolute = f;
+            apply(current);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean resizeAbsoluteFonts(float f) {
+        if (f > 0 && f <= 128) {
+            this.appFontRelative = Float.NaN;
+            this.appFontAbsolute = f;
+            apply(current);
+            return true;
+        }
+        return false;
+    }
+
+    private void onPreparePlaf() {
+        if (!Float.isNaN(appFontRelative)) {
+            resizeAllUIFontsRelative(appFontRelative);
+        } else if (!Float.isNaN(appFontAbsolute)) {
+            resizeAllUIFontsAbsolute(appFontAbsolute);
+        }
+    }
+
     public final void add(UIPlaf a) {
         installed.put(a.getId(), a);
+    }
+
+    private static void resizeAllUIFontsAbsolute(float absolute) {
+        UIDefaults defaults = UIManager.getDefaults();
+        int i = 0;
+        for (Enumeration e = defaults.keys(); e.hasMoreElements(); i++) {
+            Object key = e.nextElement();
+            Object value = defaults.get(key);
+            if (value instanceof Font) {
+                Font font = (Font) value;
+                if (value instanceof FontUIResource) {
+                    defaults.put(key, font.deriveFont(absolute));
+                } else {
+                    defaults.put(key, font.deriveFont(absolute));
+                }
+            }
+        }
+    }
+
+    private static void resizeAllUIFontsRelative(float factor) {
+        UIDefaults defaults = UIManager.getDefaults();
+        int i = 0;
+        for (Enumeration e = defaults.keys(); e.hasMoreElements(); i++) {
+            Object key = e.nextElement();
+            Object value = defaults.get(key);
+            if (value instanceof Font) {
+                Font font = (Font) value;
+                if (value instanceof FontUIResource) {
+                    defaults.put(key, resizeFont(font, factor));
+                } else {
+                    defaults.put(key, resizeFont(font, factor));
+                }
+            }
+        }
+    }
+
+    private static Font resizeFont(Font f, float factor) {
+        if (factor <= 0 || factor == 1) {
+            if (f instanceof Font2) {
+                return f.deriveFont(((Font2) f).initialSize);
+            } else {
+                return f;
+            }
+        } else {
+            if (f instanceof Font2) {
+                int i = ((Font2) f).initialSize;
+                int newSize = Math.round(i * factor);
+                return new Font2(f.deriveFont((float) newSize), i);
+            } else {
+                int i = f.getSize();
+                int newSize = Math.round(i * factor);
+                return new Font2(f.deriveFont((float) newSize), i);
+            }
+        }
+    }
+
+    private static class Font2 extends Font {
+
+        int initialSize;
+
+        public Font2(String string, int i, int i1, int initialSize) {
+            super(string, i, i1);
+            this.initialSize = initialSize;
+        }
+
+        public Font2(Font font, int initialSize) {
+            super(font);
+            this.initialSize = initialSize;
+        }
+
+    }
+
+    public float getAppFontRelative() {
+        return appFontRelative;
     }
 
 }

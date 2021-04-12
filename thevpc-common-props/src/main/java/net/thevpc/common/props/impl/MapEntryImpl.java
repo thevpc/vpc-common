@@ -5,11 +5,11 @@ import java.util.Objects;
 import net.thevpc.common.props.*;
 import net.thevpc.common.props.MapEntry;
 
-public class PMapEntryImpl<K,V> implements MapEntry<K,V> {
+public class MapEntryImpl<K,V> implements MapEntry<K,V> {
     private K k;
     private V v;
 
-    public PMapEntryImpl(K k, V v) {
+    public MapEntryImpl(K k, V v) {
         this.k = k;
         this.v = v;
     }
@@ -28,7 +28,7 @@ public class PMapEntryImpl<K,V> implements MapEntry<K,V> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PMapEntryImpl<?, ?> pMapEntry = (PMapEntryImpl<?, ?>) o;
+        MapEntryImpl<?, ?> pMapEntry = (MapEntryImpl<?, ?>) o;
         return Objects.equals(k, pMapEntry.k) &&
                 Objects.equals(v, pMapEntry.v);
     }

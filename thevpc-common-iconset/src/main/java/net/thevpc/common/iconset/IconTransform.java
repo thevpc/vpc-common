@@ -5,15 +5,14 @@
  */
 package net.thevpc.common.iconset;
 
-import javax.swing.ImageIcon;
+import java.awt.Image;
 
 /**
  *
- * @author thevpc
+ * @author vpc
  */
-public interface IconSet {
+public interface IconTransform {
 
-    String getId();
-
-    ImageIcon getIcon(String id, IconSetConfig config);
+    public Image transformIcon(Image i);
+    
 }

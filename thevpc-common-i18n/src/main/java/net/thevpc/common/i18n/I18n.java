@@ -15,8 +15,10 @@ import net.thevpc.common.props.WritableValue;
  */
 public interface I18n {
 
+    String getId();
+
     public WritableValue<Locale> locale();
-    
+
     public I18nBundleList bundles();
 
     public String getString(String name);

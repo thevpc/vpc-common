@@ -44,7 +44,7 @@ public abstract class AbstractWritableLiMapImpl<K, V> extends AbstractProperty i
     @Override
     public void removeAll(Predicate<MapEntry<K, V>> a) {
         for (Map.Entry<K, V> k : new HashSet<Map.Entry<K, V>>(entrySetImpl())) {
-            MapEntry<K, V> kv = new PMapEntryImpl<K, V>(k.getKey(), k.getValue());
+            MapEntry<K, V> kv = new MapEntryImpl<K, V>(k.getKey(), k.getValue());
             if (a.test(kv)) {
                 remove(k.getKey());
             }
@@ -305,7 +305,7 @@ public abstract class AbstractWritableLiMapImpl<K, V> extends AbstractProperty i
                 @Override
                 public MapEntry<K, V> next() {
                     curr = it.next();
-                    return new PMapEntryImpl<>(curr.getKey(), curr.getValue());
+                    return new MapEntryImpl<>(curr.getKey(), curr.getValue());
                 }
 
                 @Override
@@ -377,7 +377,7 @@ public abstract class AbstractWritableLiMapImpl<K, V> extends AbstractProperty i
 
     @Override
     public String toString() {
-        return "WritablePMap{"
+        return "WritableMap{"
                 + "name='" + name() + '\''
                 + ", type=" + type()
                 + " value=[" + stream().map(Object::toString).collect(Collectors.joining(",")) + "]"

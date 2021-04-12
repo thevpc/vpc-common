@@ -47,7 +47,7 @@ public class WritableLiMapImpl<K, V> extends AbstractWritableLiMapImpl<K, V> {
 
     @Override
     public String toString() {
-        return "WritablePMap{"
+        return "WritableMap{"
                 + "name='" + name() + '\''
                 + ", type=" + type()
                 + " value='" + value + '\''

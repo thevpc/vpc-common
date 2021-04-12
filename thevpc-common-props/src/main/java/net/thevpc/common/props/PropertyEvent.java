@@ -10,15 +10,26 @@ public class PropertyEvent {
     private Object newValue;
     private String path;
     private PropertyUpdate action;
+    private String changeId;
 
     public PropertyEvent(Property property, Object index, Object oldValue, Object newValue, String path, PropertyUpdate action) {
+        this(property, index, oldValue, newValue, path, action,null);
+    }
+    
+    public PropertyEvent(Property property, Object index, Object oldValue, Object newValue, String path, PropertyUpdate action,String changeId) {
         this.property = property;
         this.index = index;
         this.oldValue = oldValue;
         this.newValue = newValue;
         this.path = path;
         this.action = action;
+        this.changeId = changeId;
     }
+
+    public String getChangeId() {
+        return changeId;
+    }
+    
 
     public PropertyUpdate getAction() {
         return action;

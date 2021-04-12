@@ -14,6 +14,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
@@ -41,9 +42,15 @@ public class JComponentList<T> extends JPanel {
 
     public JComponentList(JComponentListItem builder) {
         super(new BorderLayout());
-        componentsHolder = new JPanel(new GridBagLayout());
+        componentsHolder = new JPanel(
+        );
+        componentsHolder.setLayout(
+                                new BoxLayout(componentsHolder, BoxLayout.Y_AXIS)
+//                new GridBagLayout()
+
+        );
 //        componentsHolder.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-        this.add(componentsHolder, BorderLayout.CENTER);
+        this.add(componentsHolder, BorderLayout.PAGE_START);
         this.builder = builder;
     }
 
@@ -128,19 +135,20 @@ public class JComponentList<T> extends JPanel {
 
     private void _revalidateAll() {
         componentsHolder.removeAll();
-        GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1;
+        if (componentsHolder.getLayout() instanceof GridBagLayout) {
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.weightx = 1;
 //        c.weighty = 1;
-        c.anchor = GridBagConstraints.PAGE_START;
-        for (int i = 0; i < allComponents.size(); i++) {
-            c.gridy = i;
-            componentsHolder.add(allComponents.get(i), c.clone());
+            c.anchor = GridBagConstraints.PAGE_START;
+            for (int i = 0; i < allComponents.size(); i++) {
+                c.gridy = i;
+                componentsHolder.add(allComponents.get(i), c.clone());
 
-        }
-        c.gridheight = 1;
-        c.gridwidth = 1;
-        componentsHolder.add(Box.createVerticalGlue(), c.clone());
+            }
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            componentsHolder.add(Box.createVerticalGlue(), c.clone());
 //        c.fill = GridBagConstraints.BOTH;
 //        c.weightx = 2;
 //        c.weighty = 2;
@@ -149,6 +157,12 @@ public class JComponentList<T> extends JPanel {
 //        JComponent p = (JComponent)Box.createVerticalGlue();
 //        p.setBorder(BorderFactory.createLineBorder(Color.gray, 3));
 //        componentsHolder.add(p, c.clone());
+        } else {
+            for (int i = 0; i < allComponents.size(); i++) {
+                componentsHolder.add(allComponents.get(i));
+            }
+            componentsHolder.add(Box.createVerticalGlue());
+        }
         invalidate();
         revalidate();
     }

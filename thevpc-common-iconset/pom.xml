@@ -57,7 +57,31 @@
         <!-- ##############################
                 PRIVATE COMPILE DEPENDENCIES 
         ############################## -->
-
+        <!--        <dependency>
+            <groupId>fr.avianey.apache-xmlgraphics</groupId>
+            <artifactId>batik</artifactId>
+            <version>1.8</version>
+        </dependency>-->
+<!--        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis-ext</artifactId>
+            <version>1.3.04</version>
+        </dependency>-->
+<!--        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>2.0.2</version>
+        </dependency>-->
+        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-rasterizer</artifactId>
+            <version>1.6-1</version>
+        </dependency>
+<!--        <dependency>
+            <groupId>batik</groupId>
+            <artifactId>batik-swing</artifactId>
+            <version>1.6</version>
+        </dependency>-->
 
         <!-- ##############################
                 THIRD PARTY COMPILE DEPENDENCIES 

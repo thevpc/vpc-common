@@ -38,7 +38,7 @@ public class ReadOnlyValue<T> extends DelegateProperty<T> implements ObservableV
         return (ObservableValue<T>) super.getBase();
     }
 
-//    public static <T> ReadOnlyPValue<T> of(PValue<T> v) {
+//    public static <T> ReadOnlyPValue<T> of(ObservableValue<T> v) {
 //        if (v instanceof ReadOnlyPValue<?>) {
 //            return (ReadOnlyPValue<T>) v;
 //        }else{
