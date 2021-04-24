@@ -63,7 +63,7 @@ public class PropertyListenersImpl implements PropertyListeners {
         if (delegates == null) {
             delegates = new ArrayList<>();
         }
-        System.out.println(source + " :: addDelegate(" + withListeners + ")");
+//        System.out.println(source + " :: addDelegate(" + withListeners + ")");
         delegates.add(withListeners);
         withListeners.listeners().add(new NamedPropertyListener(this, pathNameSupplier));
     }

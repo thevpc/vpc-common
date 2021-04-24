@@ -18,6 +18,8 @@ import net.thevpc.common.props.WritableValue;
 public interface IconSets extends WritableLiMap<String,IconSet>{
     WritableValue<IconSetConfig> config();
     
+    IconSet iconSet();
+    
     WritableValue<String> id();
 
     ObservableValue<ImageIcon> icon(String id);

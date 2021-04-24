@@ -56,7 +56,7 @@ public class DefaultIconsets extends WritableLiMapAdapter<String, IconSet> imple
                     int iw = i.getIconHeight();
                     int cw=cnf.getWidth();
                     if(iw!=cw){
-                        System.out.println("problem detected");
+//                        System.out.println("problem detected");
                         i = s.getIcon(entry.getKey(), cnf);
                     }
                 }
@@ -81,11 +81,16 @@ public class DefaultIconsets extends WritableLiMapAdapter<String, IconSet> imple
     public ObservableValue<ImageIcon> icon(String id) {
         WritableValue<ImageIcon> i = icons.get(id);
         if (i == null) {
-            IconSet s = this.get(this.id.get());
+            IconSet s = iconSet();
             i = Props.of("icon-" + id).valueOf(ImageIcon.class, s == null ? null : s.getIcon(id, config.get()));
             icons.put(id, i);
         }
         return i;
+    }
+
+    @Override
+    public IconSet iconSet() {
+        return this.get(this.id.get());
     }
 
     @Override

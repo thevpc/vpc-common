@@ -7,34 +7,36 @@ package net.thevpc.common.swing;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.GradientPaint;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.swing.Icon;
 
 /**
  *
  * @author vpc
  */
-public class RectColorIcon implements Icon {
+public class RainbowIcon implements Icon {
 
-    private final Color color;
     private final int w;
     private final int h;
 
-    public RectColorIcon(Color color, int w) {
-        this(color, w, w);
+    public RainbowIcon(int w) {
+        this(w, w);
     }
 
-    public RectColorIcon(Color color, int w, int h) {
-        this.color = color;
+    public RainbowIcon(int w, int h) {
         this.w = w;
         this.h = h;
     }
 
     @Override
     public void paintIcon(Component c, Graphics g, int x, int y) {
-        g.setColor(color);
+        GradientPaint color = new GradientPaint(x, y, Color.orange, getIconWidth(), y,
+                Color.blue);
+        ((Graphics2D) g).setPaint(color);
         g.fillRect(x + 2, y + 2, getIconWidth() - 4, getIconHeight() - 4);
-        g.setColor(color.getRGB() == 0 ? Color.WHITE : color.darker());
+        g.setColor(Color.WHITE);
         g.drawRect(x + 2, y + 2, getIconWidth() - 4, getIconHeight() - 4);
     }
 

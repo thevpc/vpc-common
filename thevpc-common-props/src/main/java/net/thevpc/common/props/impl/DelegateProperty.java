@@ -15,7 +15,7 @@ public abstract class DelegateProperty<T> implements Property {
         base.vetos().add(new DelegatePropertyVeto());
     }
 
-    public Property getBase() {
+    protected Property getBase() {
         return base;
     }
 

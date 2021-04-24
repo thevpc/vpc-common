@@ -60,7 +60,7 @@ public class IconUtils {
 //            } catch (IOException ex) {
 //                throw new UncheckedIOException(ex);
 //            }
-            return new ImageIcon(SVGBatik.getImageFromSvg(u, width));
+            return new ImageIcon(SVGSalamander.getImageFromSvg(u, width));
         } else {
             return new ImageIcon(u);
         }
