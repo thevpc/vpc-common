@@ -86,16 +86,31 @@ public class TreeTransferHandler extends TransferHandler {
         // Do not allow a non-leaf node to be copied to a level
         // which is less than its source level.
         TreePath dest = dl.getPath();
-        Object target
-                = dest.getLastPathComponent();
-        TreePath path = tree.getPathForRow(selRows[0]);
-        Object firstNode
-                = (Object) path.getLastPathComponent();
-        if (treeModel.getChildCount(firstNode) > 0
-                && treeModel.getLevel(target) < treeModel.getLevel(firstNode)) {
-            return false;
+        if (dest == null) {
+//            Object target= null;
+//            TreePath path = tree.getPathForRow(selRows[0]);
+//            Object firstNode
+//                    = (Object) path.getLastPathComponent();
+//            if (treeModel.getChildCount(firstNode) > 0
+//                    && treeModel.getLevel(target) < treeModel.getLevel(firstNode)) {
+//                return false;
+//            }
+            return true;
+        } else {
+            if(selRows.length==0){
+                return true;
+            }
+            Object target
+                    = dest.getLastPathComponent();
+            TreePath path = tree.getPathForRow(selRows[0]);
+            Object firstNode
+                    = (Object) path.getLastPathComponent();
+            if (treeModel.getChildCount(firstNode) > 0
+                    && treeModel.getLevel(target) < treeModel.getLevel(firstNode)) {
+                return false;
+            }
+            return true;
         }
-        return true;
     }
 
     private boolean haveCompleteNode(JTree tree) {

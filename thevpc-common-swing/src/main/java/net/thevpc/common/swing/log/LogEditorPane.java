@@ -31,7 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.sql.SQLException;
 import net.thevpc.common.swing.SwingUtilities3;
-import net.thevpc.common.swing.TextManipSupport;
+import net.thevpc.common.swing.text.TextManipSupport;
 
 /**
  * @author Taha Ben Salah (taha.bensalah@gmail.com)

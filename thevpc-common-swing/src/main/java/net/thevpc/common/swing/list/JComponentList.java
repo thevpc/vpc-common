@@ -5,18 +5,21 @@
  */
 package net.thevpc.common.swing.list;
 
-import net.thevpc.common.swing.ObjectListModelListener;
 import java.awt.BorderLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
 /**
  *
@@ -38,20 +41,35 @@ public class JComponentList<T> extends JPanel {
             }
         }
     };
-    private JComponent componentsHolder;
+    private JComponentListLayout listLayout;
 
     public JComponentList(JComponentListItem builder) {
-        super(new BorderLayout());
-        componentsHolder = new JPanel(
-        );
-        componentsHolder.setLayout(
-                                new BoxLayout(componentsHolder, BoxLayout.Y_AXIS)
-//                new GridBagLayout()
+        this(builder, null);
+    }
 
-        );
-//        componentsHolder.setBorder(BorderFactory.createLineBorder(Color.BLUE, 3));
-        this.add(componentsHolder, BorderLayout.PAGE_START);
+    public JComponentList(JComponentListItem builder, JComponentListLayout listLayout) {
+        super(new BorderLayout());
+        setListLayout(listLayout);
         this.builder = builder;
+    }
+
+    public JComponentListLayout getListLayout() {
+        return listLayout;
+    }
+
+    public void setListLayout(JComponentListLayout listLayout) {
+        this.listLayout = listLayout == null ? new Vertical() : listLayout;
+        rebuild();
+    }
+
+    private void rebuild() {
+        removeAll();
+        this.add(listLayout.doLayout(allComponents.toArray(new JComponent[0]),
+                i -> getObject(i)
+        ), BorderLayout.PAGE_START);
+        invalidate();
+        revalidate();
+        repaint();
     }
 
     public void addListener(ObjectListModelListener listener) {
@@ -124,53 +142,114 @@ public class JComponentList<T> extends JPanel {
     }
 
     private void _onComponentAdded(JComponent c) {
-//        componentsHolder.add(c);
-        _revalidateAll();
+        rebuild();
     }
 
     private void _onComponentRemoved(JComponent c) {
-//        componentsHolder.remove(c);
-        _revalidateAll();
-    }
-
-    private void _revalidateAll() {
-        componentsHolder.removeAll();
-        if (componentsHolder.getLayout() instanceof GridBagLayout) {
-            GridBagConstraints c = new GridBagConstraints();
-            c.fill = GridBagConstraints.HORIZONTAL;
-            c.weightx = 1;
-//        c.weighty = 1;
-            c.anchor = GridBagConstraints.PAGE_START;
-            for (int i = 0; i < allComponents.size(); i++) {
-                c.gridy = i;
-                componentsHolder.add(allComponents.get(i), c.clone());
-
-            }
-            c.gridheight = 1;
-            c.gridwidth = 1;
-            componentsHolder.add(Box.createVerticalGlue(), c.clone());
-//        c.fill = GridBagConstraints.BOTH;
-//        c.weightx = 2;
-//        c.weighty = 2;
-//        c.gridheight = 5;
-//        c.gridy = allComponents.size();
-//        JComponent p = (JComponent)Box.createVerticalGlue();
-//        p.setBorder(BorderFactory.createLineBorder(Color.gray, 3));
-//        componentsHolder.add(p, c.clone());
-        } else {
-            for (int i = 0; i < allComponents.size(); i++) {
-                componentsHolder.add(allComponents.get(i));
-            }
-            componentsHolder.add(Box.createVerticalGlue());
-        }
-        invalidate();
-        revalidate();
+        rebuild();
     }
 
     public void setEditable(boolean enabled) {
         for (int i = 0; i < allComponents.size(); i++) {
             builder.setEditable(allComponents.get(i), enabled, i, allComponents.size());
         }
+    }
+
+    public static class Vertical extends Simple {
+
+        public Vertical() {
+            setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+        }
+    }
+
+    public static class Horizontal extends Simple {
+
+        public Horizontal() {
+            setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        }
+    }
+
+    public static class Grid extends Simple {
+
+        public Grid(int x, int y) {
+            setLayout(new GridLayout(
+                    x <= 0 ? y <= 0 ? 1 : 0 : x,
+                    y <= 0 ? 0 : y
+            ));
+        }
+    }
+
+    public static class GridBag extends Simple {
+
+        public GridBag(boolean vertical) {
+            if (vertical) {
+                setLayout(new GridBagLayout());
+            }
+        }
+
+        @Override
+        public JComponent doLayout(JComponent[] allComponents, Function<Integer, Object> valueMapper) {
+            GridBagConstraints c = new GridBagConstraints();
+            c.fill = GridBagConstraints.HORIZONTAL;
+            c.weightx = 1;
+            c.anchor = GridBagConstraints.PAGE_START;
+            for (int i = 0; i < allComponents.length; i++) {
+                c.gridy = i;
+                this.add(allComponents[i], c.clone());
+
+            }
+            c.gridheight = 1;
+            c.gridwidth = 1;
+            this.add(Box.createVerticalGlue(), c.clone());
+            return this;
+        }
+
+    }
+
+    public static class Simple extends JPanel implements JComponentListLayout {
+
+        @Override
+        public JComponent doLayout(JComponent[] allComponents, Function<Integer, Object> valueMapper) {
+            this.removeAll();
+            for (int i = 0; i < allComponents.length; i++) {
+                this.add(allComponents[i]);
+            }
+            this.add(Box.createVerticalGlue());
+            return this;
+        }
+
+    }
+
+    public static class Tab extends JTabbedPane implements JComponentListLayout {
+
+        private Function<Object, String> titleMapper;
+        private Function<Object, Icon> iconMapper;
+
+        @Override
+        public JComponent doLayout(JComponent[] allComponents, Function<Integer, Object> valueMapper) {
+            this.removeAll();
+            for (int i = 0; i < allComponents.length; i++) {
+                String elementTitle = "Element " + (i + 1);
+                Icon icon = null;
+                Object o = valueMapper.apply(i);
+                if (titleMapper != null) {
+                    String t = titleMapper.apply(o);
+                    if (t != null) {
+                        elementTitle = t;
+                    }
+                }
+                if (iconMapper != null) {
+                    Icon t = iconMapper.apply(o);
+                    if (t != null) {
+                        icon = t;
+                    }
+                }
+                this.addTab(elementTitle, allComponents[i]);
+                this.setIconAt(i, icon);
+            }
+            return this;
+        }
+
     }
 
 }

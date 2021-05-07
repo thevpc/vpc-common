@@ -1,5 +1,5 @@
 package net.thevpc.common.swing.win;
-import net.thevpc.common.swing.JInternalFrameHelper;
+import net.thevpc.common.swing.frame.JInternalFrameHelper;
 import net.thevpc.common.swing.SwingUtilities3;
 
 import javax.swing.*;

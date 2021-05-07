@@ -20,7 +20,7 @@
 */
 package net.thevpc.common.swing.table;
 
-import net.thevpc.common.swing.JDropDownButton;
+import net.thevpc.common.swing.button.JDropDownButton;
 
 import javax.swing.*;
 import java.awt.*;

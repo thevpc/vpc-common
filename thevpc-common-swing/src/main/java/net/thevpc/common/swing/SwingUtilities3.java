@@ -17,6 +17,11 @@
  */
 package net.thevpc.common.swing;
 
+import net.thevpc.common.swing.frame.JInternalFrameHelper;
+import net.thevpc.common.swing.table.JTableHelper;
+import net.thevpc.common.swing.table.JTableClickListener;
+import net.thevpc.common.swing.file.FileDropListener;
+import net.thevpc.common.swing.file.FileDrop;
 import javax.swing.*;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -432,16 +437,16 @@ public class SwingUtilities3 {
 
     public static JTableHelper createIndexedTable(TableModel model) {
         JTableHelper t = new JTableHelper();
-        t.table = new JTable() {
+        t.setTable(new JTable() {
             public boolean getScrollableTracksViewportWidth() {
                 return getPreferredSize().width < getParent().getWidth();
             }
-        };
-        t.table.setModel(model);
-        t.table.setAutoCreateRowSorter(true);
-        t.pane = new JScrollPane(t.table);
-        t.table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        SimpleRowHeaderRenderer r = new SimpleRowHeaderRenderer(t.table);
+        });
+        t.getTable().setModel(model);
+        t.getTable().setAutoCreateRowSorter(true);
+        t.setPane(new JScrollPane(t.getTable()));
+        t.getTable().setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        SimpleRowHeaderRenderer r = new SimpleRowHeaderRenderer(t.getTable());
         r.install();
         return t;
     }
