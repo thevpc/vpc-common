@@ -24,7 +24,7 @@ import net.thevpc.common.prs.messageset.MessageSet;
 import net.thevpc.common.prs.plugin.LocalRepository;
 import net.thevpc.common.prs.plugin.Plugin;
 import net.thevpc.common.prs.plugin.PluginDescriptor;
-import net.thevpc.common.swing.DumbGridBagLayout;
+import net.thevpc.common.swing.layout.DumbGridBagLayout;
 import net.thevpc.common.swing.SwingUtilities3;
 import net.thevpc.common.swing.prs.PRSManager;
 

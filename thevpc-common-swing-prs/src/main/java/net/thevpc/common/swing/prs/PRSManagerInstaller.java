@@ -11,7 +11,7 @@ import javax.swing.JToggleButton;
 import net.thevpc.common.swing.DefaultAction;
 import net.thevpc.common.swing.SwingComponentConfigurer;
 import net.thevpc.common.swing.SwingComponentConfigurerFactory;
-import net.thevpc.common.swing.TextManipSupport;
+import net.thevpc.common.swing.text.TextManipSupport;
 import net.thevpc.common.swing.table.JQuickSearchTextFieldSwingComponentConfigurer;
 
 /**

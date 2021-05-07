@@ -21,8 +21,8 @@
 package net.thevpc.common.swing.pluginmanager;
 
 import net.thevpc.common.prs.plugin.PluginDescriptor;
-import net.thevpc.common.swing.DumbGridBagLayout;
-import net.thevpc.common.swing.JURLTextField;
+import net.thevpc.common.swing.layout.DumbGridBagLayout;
+import net.thevpc.common.swing.file.JURLTextField;
 import net.thevpc.common.swing.dialog.MessageDialogType;
 import net.thevpc.common.swing.iswing.IJTable;
 import net.thevpc.common.swing.prs.PRSManager;

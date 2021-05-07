@@ -10,7 +10,7 @@ import javax.swing.ImageIcon;
 
 import net.thevpc.common.prs.util.ProgressEvent;
 import net.thevpc.common.prs.util.ProgressMonitor;
-import net.thevpc.common.swing.JSplashScreen;
+import net.thevpc.common.swing.splash.JSplashScreen;
 
 /**
  *

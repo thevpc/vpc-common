@@ -27,7 +27,7 @@ import java.io.File;
 import java.io.PrintStream;
 import java.sql.SQLException;
 
-import net.thevpc.common.swing.FileMessageDiscardContext;
+import net.thevpc.common.swing.file.FileMessageDiscardContext;
 
 /**
  *
