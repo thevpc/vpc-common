@@ -11,6 +11,7 @@ import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.Image;
 import java.awt.RenderingHints;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.swing.Icon;
@@ -53,22 +54,39 @@ public class IconUtils {
         return u != null && u.toString().toLowerCase().endsWith(".svg");
     }
 
-    public static ImageIcon loadImageIcon(URL u, int width, int height) {
+    public static ImageIcon loadFixedScaleImageIconSafe(URL u, int width, int height) {
+        try {
+            return loadFixedScaleImageIcon(u, width, height);
+        } catch (Exception ex) {
+            System.err.println("unable to load image " + u);
+            ex.printStackTrace();
+        }
+        return null;
+    }
+    public static ImageIcon loadFactorScaleImageIconSafe(URL u, float width, float height) {
+        try {
+            return loadFactorScaleImageIcon(u, width, height);
+        } catch (Exception ex) {
+            System.err.println("unable to load image " + u);
+            ex.printStackTrace();
+        }
+        return null;
+    }
+
+    public static ImageIcon loadFixedScaleImageIcon(URL u, int width, int height) {
         if (isSVG(u)) {
-//            try {
-//                return new ImageIcon(ImageIO.read(u));
-//            } catch (IOException ex) {
-//                throw new UncheckedIOException(ex);
-//            }
-            return new ImageIcon(SVGSalamander.getImageFromSvg(u, width));
+            return new ImageIcon(SVGSalamander.getFixedSizeSvg(u, width, height));
         } else {
-            return new ImageIcon(u);
+            return new ImageIcon(getFixedSizeImage(Toolkit.getDefaultToolkit().getImage(u), width, height));
         }
     }
 
-    public static ImageIcon getScaledImageIcon(URL srcImg, int w, int h) {
-        Image image = loadImageIcon(srcImg, w, h).getImage();
-        return new ImageIcon(getScaledImage(image, w, h));
+    public static ImageIcon loadFactorScaleImageIcon(URL u, float width, float height) {
+        if (isSVG(u)) {
+            return new ImageIcon(SVGSalamander.getFactorScaledSVG(u, width, height));
+        } else {
+            return new ImageIcon(getFactorScaledImage(Toolkit.getDefaultToolkit().getImage(u), width, height));
+        }
     }
 
     public static Image iconToImage(Icon icon) {
@@ -89,9 +107,46 @@ public class IconUtils {
         }
     }
 
-    public static Image getScaledImage(Image srcImg, int w, int h) {
+    public static Image getFactorScaledImage(Image srcImg, float w, float h) {
+        if (w <= 0 && h <= 0) {
+            return srcImg;
+        }
+        if (w <= 0 && h > 0) {
+            w = h;
+        } else if (h <= 0 && w > 0) {
+            h = w;
+        }
         int width = srcImg.getWidth(null);
         int height = srcImg.getHeight(null);
+        int width2 = (int) (width * w);
+        int height2 = (int) (height * h);
+        BufferedImage resizedImg = new BufferedImage(width2, height2, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(srcImg, 0, 0, width2, height2, null);
+        g2.dispose();
+
+        return resizedImg;
+    }
+
+    public static Image getFixedSizeImage(Image srcImg, int w, int h) {
+        if (w <= 0 && h <= 0) {
+            return srcImg;
+        }
+        if (w >= 0 && h < 0) {
+            h = w;
+        } else if (h >= 0 && w < 0) {
+            w = h;
+        }
+        int width = srcImg.getWidth(null);
+        int height = srcImg.getHeight(null);
+        if (w <= 0) {
+            w = width;
+        }
+        if (h <= 0) {
+            h = height;
+        }
         if (width == w && height == h) {
             return srcImg;
         }

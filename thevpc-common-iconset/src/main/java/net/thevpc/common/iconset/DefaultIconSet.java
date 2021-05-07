@@ -140,7 +140,7 @@ public class DefaultIconSet implements IconSet {
                 u = classLoader.getResource(p.toString());
             }
             if (u != null) {
-                ImageIcon i = IconUtils.loadImageIcon(u, 128, 128);
+                ImageIcon i = IconUtils.loadFixedScaleImageIconSafe(u, 128, 128);
                 if (initIconTransform != null) {
                     i = new ImageIcon(initIconTransform.transformIcon(i.getImage()));
                 }
@@ -176,15 +176,15 @@ public class DefaultIconSet implements IconSet {
                     if (w < 0 && h < 0) {
                         w = 128;
                         h = 128;
-                        i = IconUtils.loadImageIcon(u, w, h);
+                        i = IconUtils.loadFixedScaleImageIconSafe(u, w, h);
                     } else if (h < 0) {
-                        i = IconUtils.loadImageIcon(u, w, -1);
+                        i = IconUtils.loadFixedScaleImageIconSafe(u, w, h);
                     } else if (w == h) {
-                        i = IconUtils.loadImageIcon(u, w, -1);
+                        i = IconUtils.loadFixedScaleImageIconSafe(u, w, h);
                     } else {
-                        i = new ImageIcon(IconUtils.getScaledImage(IconUtils.loadImageIcon(u, w, -1).getImage(), w, h));
+                        i = IconUtils.loadFixedScaleImageIconSafe(u, w, h);
                     }
-                    if (initIconTransform != null) {
+                    if (initIconTransform != null && i!=null) {
                         i = new ImageIcon(initIconTransform.transformIcon(i.getImage()));
                     }
                     icon.icon = i;
@@ -208,7 +208,7 @@ public class DefaultIconSet implements IconSet {
                 if (o == null) {
                     return null;
                 }
-                Image i = IconUtils.getScaledImage(o.getImage(), size.getWidth(), size.getHeight());
+                Image i = IconUtils.getFixedSizeImage(o.getImage(), size.getWidth(), size.getHeight());
                 if (size.getTransform() != null) {
                     i = size.getTransform().transformIcon(i);
                 }
