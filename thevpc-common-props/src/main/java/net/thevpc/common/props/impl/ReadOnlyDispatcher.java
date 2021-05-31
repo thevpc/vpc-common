@@ -2,7 +2,7 @@ package net.thevpc.common.props.impl;
 
 import net.thevpc.common.props.ObservableDispatcher;
 
-public class ReadOnlyDispatcher<T> extends DelegateProperty implements ObservableDispatcher<T> {
+public class ReadOnlyDispatcher<T> extends PropertyDelegate implements ObservableDispatcher<T> {
 
     public ReadOnlyDispatcher(ObservableDispatcher<T> base) {
         super(base);

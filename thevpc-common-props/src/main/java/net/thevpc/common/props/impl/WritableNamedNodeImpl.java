@@ -11,16 +11,16 @@ public class WritableNamedNodeImpl<T> extends WritableValueBase<T> implements Wr
     private WritableMap<String, WritableNamedNode<T>> children;
 
     public WritableNamedNodeImpl(String name, PropertyType elementType) {
-        super(name, PropertyType.of(List.class, elementType), null);
+        super(name, PropertyType.of(List.class, elementType), (T) null);
         PropertyType type2 = PropertyType.of(WritableList.class,
                 PropertyType.of(WritableNamedNode.class, elementType)
         );
         this.children = Props.of(name).mapOf(PropertyType.of(String.class), type2);
-        this.children.listeners().add(new PropertyListener() {
+        this.children.onChange(new PropertyListener() {
             @Override
             public void propertyUpdated(PropertyEvent event) {
-                WritableNamedNodeImpl.this.listeners.firePropertyUpdated(
-                        PropsHelper.prefixPath(event, "/")
+                ((DefaultPropertyListeners)WritableNamedNodeImpl.this.listeners).firePropertyUpdated(
+                        PropsHelper.prefixPath(event, Path.root())
                 );
             }
         });
@@ -76,8 +76,8 @@ public class WritableNamedNodeImpl<T> extends WritableValueBase<T> implements Wr
     @Override
     public String toString() {
         return "WritableNamedNode{"
-                + "name='" + name() + '\''
-                + ", type=" + type()
+                + "name='" + fullPropertyName() + '\''
+                + ", type=" + propertyType()
                 + " value='" + get() + '\''
                 + '}';
     }

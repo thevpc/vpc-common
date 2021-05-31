@@ -77,6 +77,17 @@ public class TreeTransferHandler extends TransferHandler {
                 return false;
             }
         }
+        //drop on empty place (suppose this will go to root)
+        if(dropRow==-1 && !tree.isRootVisible()){
+            TreePath path = tree.getPathForRow(selRows[0]);
+            if(path!=null){
+                Object p = path.getLastPathComponent();
+                int is_Root_child = tree.getModel().getIndexOfChild(tree.getModel().getRoot(), p);
+                if(is_Root_child>=0){
+                    return false;
+                }
+            }
+        }
         // Do not allow MOVE-action drops if a non-leaf node is
         // selected unless all of its children are also selected.
         int action = support.getDropAction();

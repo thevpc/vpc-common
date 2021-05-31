@@ -222,6 +222,10 @@ public class UIPlafManager {
         return sb.toString();
     }
 
+    public final UIPlaf get(String id) {
+        return installed.get(id);
+    }
+
     public final List<UIPlaf> items() {
         ArrayList<UIPlaf> s = new ArrayList<>(installed.values());
         s.sort(new Comparator<UIPlaf>() {

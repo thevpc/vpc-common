@@ -30,7 +30,7 @@ import java.awt.event.MouseEvent;
  * @author Taha BEN SALAH (taha.bensalah@gmail.com) %creationtime 13 juil. 2006
  * 22:14:21
  */
-public abstract class JDropDownLabel extends JLabel {
+public class JDropDownLabel extends JLabel {
 
 //    private String configNode;
     private JPopupMenu menu;

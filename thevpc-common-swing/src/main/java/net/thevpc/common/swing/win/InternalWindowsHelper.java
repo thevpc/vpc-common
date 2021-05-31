@@ -29,6 +29,10 @@ public class InternalWindowsHelper {
         return desktop;
     }
 
+    public JInternalFrame findFrame(String id) {
+        return userWindows.get(id);
+    }
+    
     public JInternalFrame addFrame(WindowInfo fino) {
             JInternalFrame jInternalFrame = new JInternalFrame(fino.getTitle(), fino.isResizable(), fino.isClosable(), fino.isMaximizable(), fino.isIconifiable());
         if(fino.getFrameIcon()!=null) {

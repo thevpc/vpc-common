@@ -6,6 +6,8 @@
 package net.thevpc.common.swing.font;
 
 import java.awt.Font;
+import java.awt.font.TextAttribute;
+import java.util.Map;
 import java.util.StringTokenizer;
 
 /**
@@ -103,4 +105,24 @@ public class FontUtils {
         return new Font(name, style, size);
     }
 
+    public static Font deriveFont(Font _font, boolean bold, boolean italic, boolean underline, boolean strike) {
+        Font f = _font.deriveFont((bold ? Font.BOLD : 0) + (italic ? Font.ITALIC : 0));
+        Map attributes = null;
+        if (underline) {
+            if (attributes == null) {
+                attributes = f.getAttributes();
+            }
+            attributes.put(TextAttribute.UNDERLINE, TextAttribute.UNDERLINE_ON);
+        }
+        if (strike) {
+            if (attributes == null) {
+                attributes = f.getAttributes();
+            }
+            attributes.put(TextAttribute.STRIKETHROUGH, TextAttribute.STRIKETHROUGH_ON);
+        }
+        if (attributes != null) {
+            f = f.deriveFont(attributes);
+        }
+        return f;
+    }
 }

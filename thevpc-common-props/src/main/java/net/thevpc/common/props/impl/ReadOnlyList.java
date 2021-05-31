@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import net.thevpc.common.props.ObservableList;
 
-public class ReadOnlyList<T> extends DelegateProperty implements ObservableList<T> {
+public class ReadOnlyList<T> extends PropertyDelegate implements ObservableList<T> {
 
     public ReadOnlyList(ObservableList<T> base) {
         super(base);
@@ -101,4 +101,10 @@ public class ReadOnlyList<T> extends DelegateProperty implements ObservableList<
     public int findFirstIndex(Predicate<T> a, int from, int to) {
         return getBase().findFirstIndex(a, from, to);
     }
+
+    @Override
+    public T get() {
+        return getBase().get();
+    }
+
 }

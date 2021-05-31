@@ -9,7 +9,7 @@ import net.thevpc.common.props.MapEntry;
 import net.thevpc.common.props.ObservableList;
 import net.thevpc.common.props.ObservableMap;
 
-public class ReadOnlyMap<K, V> extends DelegateProperty implements ObservableMap<K, V> {
+public class ReadOnlyMap<K, V> extends PropertyDelegate implements ObservableMap<K, V> {
 
     public ReadOnlyMap(ObservableMap<K, V> base) {
         super(base);

@@ -3,10 +3,9 @@ package net.thevpc.common.props.impl;
 
 import java.util.ArrayList;
 
-import net.thevpc.common.props.PropertyType;
-import net.thevpc.common.props.WritableList;
+import net.thevpc.common.props.*;
 
-public class WritableListImpl<T> extends AbstractWritableListImpl<T> implements WritableList<T> {
+public class WritableListImpl<T> extends WritableListBase<T> {
     private java.util.List<T> value;
 
     public WritableListImpl(String name, PropertyType elementType) {
@@ -19,8 +18,9 @@ public class WritableListImpl<T> extends AbstractWritableListImpl<T> implements 
     }
 
     @Override
-    protected void addImpl(int index, T v) {
+    protected boolean addImpl(int index, T v) {
         value.add(index,v);
+        return true;
     }
 
     @Override
@@ -34,7 +34,7 @@ public class WritableListImpl<T> extends AbstractWritableListImpl<T> implements 
     }
 
     @Override
-    protected T removeImpl(int index) {
+    protected T removeAtImpl(int index) {
         return value.remove(index);
     }
 
@@ -47,4 +47,11 @@ public class WritableListImpl<T> extends AbstractWritableListImpl<T> implements 
     protected int sizeImpl() {
         return value.size();
     }
+
+
+
+//    @Override
+//    public <X> ObservableValue<X> mapAll(PropertyType toType, Function<T, X> mapper) {
+//        return new MappedValueBase<T,X>(name(), toType,this,mapper);
+//    }
 }

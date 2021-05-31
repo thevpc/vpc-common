@@ -1,18 +1,13 @@
 package net.thevpc.common.props.impl;
 
-import net.thevpc.common.props.Property;
-import net.thevpc.common.props.PropertyAdjuster;
-import net.thevpc.common.props.PropertyAdjusters;
-import net.thevpc.common.props.PropertyEvent;
+import net.thevpc.common.props.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import net.thevpc.common.props.*;
 
 public class PropertyAdjustersImpl implements PropertyAdjusters {
     protected Property source;
-    protected List<PropertyAdjuster> listeners;
+    protected List<PropertyAdjuster> adjusters;
     protected boolean readOnly;
 
     public PropertyAdjustersImpl(Property source) {
@@ -32,11 +27,11 @@ public class PropertyAdjustersImpl implements PropertyAdjusters {
             throw new IllegalArgumentException("Read ONly");
         }
         if (listener != null) {
-            if (listeners == null) {
-                listeners = new ArrayList<>();
+            if (adjusters == null) {
+                adjusters = new ArrayList<>();
             }
-            if (!listeners.contains(listener)) {
-                listeners.add(listener);
+            if (!adjusters.contains(listener)) {
+                adjusters.add(listener);
             }
         }
     }
@@ -46,27 +41,32 @@ public class PropertyAdjustersImpl implements PropertyAdjusters {
             throw new IllegalArgumentException("Read ONly");
         }
         if (listener != null) {
-            if (listeners != null) {
-                listeners.remove(listener);
+            if (adjusters != null) {
+                adjusters.remove(listener);
             }
         }
     }
 
     public PropertyAdjuster[] getAll() {
-        return listeners == null ? new PropertyAdjuster[0] : listeners.toArray(new PropertyAdjuster[0]);
+        return adjusters == null ? new PropertyAdjuster[0] : adjusters.toArray(new PropertyAdjuster[0]);
     }
 
-    public PropertyEvent firePropertyUpdated(PropertyEvent event) {
-        if (listeners != null) {
-            for (PropertyAdjuster listener : listeners) {
-                Object v2 = listener.adjustNewValue(event);
-                if (Objects.equals(event.getOldValue(), v2)) {
-                    return null;
+    public PropertyAdjusterContext firePropertyUpdated(PropertyEvent event) {
+        PropertyAdjusterContext e2 = new PropertyAdjusterContext();
+        e2.setEvent(event);
+        adjust(e2);
+        return e2;
+    }
+
+    public void adjust(PropertyAdjusterContext e2) {
+        if (adjusters != null) {
+            for (PropertyAdjuster adjuster : adjusters) {
+                adjuster.adjust(e2);
+                if(e2.isStop()){
+                    break;
                 }
-                event = new PropertyEvent(event.getProperty(), event.getIndex(), event.getOldValue(), v2, event.getPath(), event.getAction());
             }
         }
-        return event;
     }
 
 }

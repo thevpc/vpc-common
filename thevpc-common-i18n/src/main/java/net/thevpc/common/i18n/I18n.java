@@ -5,25 +5,33 @@
  */
 package net.thevpc.common.i18n;
 
-import java.util.Locale;
-import java.util.function.Function;
+import net.thevpc.common.props.Property;
+import net.thevpc.common.props.WritableList;
 import net.thevpc.common.props.WritableValue;
 
+import java.util.Locale;
+import java.util.function.Function;
+
 /**
- *
  * @author thevpc
  */
-public interface I18n {
+public interface I18n extends Property, I18nLocale {
 
-    String getId();
+    WritableValue<Locale> locale();
 
-    public WritableValue<Locale> locale();
+    WritableList<Locale> locales();
 
-    public I18nBundleList bundles();
+    I18nBundleList bundles();
 
-    public String getString(String name);
+    I18n i18n();
 
-    public String getString(String name, Function<String, String> defaultValue);
+    I18nLocale current();
+
+    I18nLocale locale(Locale locale);
+
+    String getString(String name);
+
+    String getString(String name, Function<String, String> defaultValue);
 
     WritableValue<Function<String, String>> defaultValue();
 

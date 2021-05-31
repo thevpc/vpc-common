@@ -1,10 +1,17 @@
 package net.thevpc.common.props;
 
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-public interface ObservableList<T> extends Property, Iterable<T> {
+public interface ObservableList<T> extends ObservableValue<T>, Iterable<T> {
+
+    /**
+     * convenient method to return the first element or null
+     * @return the first element or null
+     */
+    T get();
 
     T get(int index);
 
@@ -22,6 +29,10 @@ public interface ObservableList<T> extends Property, Iterable<T> {
 
     T findFirst(Predicate<T> a, int from, int to);
 
+    default int findFirstIndexOf(T a){
+        return findFirstIndex(x-> Objects.equals(x,a));
+    }
+
     int findFirstIndex(Predicate<T> a);
 
     int findFirstIndex(Predicate<T> a, int from);
@@ -34,5 +45,13 @@ public interface ObservableList<T> extends Property, Iterable<T> {
 
     default Stream<T> stream() {
         return StreamSupport.stream(spliterator(), false);
+    }
+
+    default T last() {
+        return get(size() - 1);
+    }
+
+    default T first() {
+        return get(0);
     }
 }

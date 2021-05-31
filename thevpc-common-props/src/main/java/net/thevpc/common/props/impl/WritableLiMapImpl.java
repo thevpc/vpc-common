@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 
-public class WritableLiMapImpl<K, V> extends AbstractWritableLiMapImpl<K, V> {
+public class WritableLiMapImpl<K, V> extends WritableLiMapBase<K, V> {
 
     private Map<K, V> value;
 
@@ -47,9 +47,10 @@ public class WritableLiMapImpl<K, V> extends AbstractWritableLiMapImpl<K, V> {
 
     @Override
     public String toString() {
-        return "WritableMap{"
-                + "name='" + name() + '\''
-                + ", type=" + type()
+        String p=isWritable()?"Writable":"ReadOnly";
+        return p+ "Map{"
+                + "name='" + fullPropertyName() + '\''
+                + ", type=" + propertyType()
                 + " value='" + value + '\''
                 + '}';
     }

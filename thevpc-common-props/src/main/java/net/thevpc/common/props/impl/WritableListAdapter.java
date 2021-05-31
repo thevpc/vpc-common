@@ -5,15 +5,12 @@
  */
 package net.thevpc.common.props.impl;
 
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.function.Predicate;
-import net.thevpc.common.props.ObservableList;
-import net.thevpc.common.props.PropertyListeners;
-import net.thevpc.common.props.PropertyType;
-import net.thevpc.common.props.PropertyVetos;
-import net.thevpc.common.props.UserObjects;
-import net.thevpc.common.props.WritableList;
+
+import net.thevpc.common.props.*;
 
 /**
  *
@@ -23,8 +20,8 @@ public abstract class WritableListAdapter<T> implements WritableList<T>{
     protected abstract WritableList<T> getAdaptee();
 
     @Override
-    public void removeAll() {
-        getAdaptee().removeAll();
+    public void clear() {
+        getAdaptee().clear();
     }
 
     @Override
@@ -33,13 +30,13 @@ public abstract class WritableListAdapter<T> implements WritableList<T>{
     }
 
     @Override
-    public void add(int index, T v) {
-        getAdaptee().add(index, v);
+    public boolean add(int index, T v) {
+        return getAdaptee().add(index, v);
     }
 
     @Override
-    public void add(T v) {
-        getAdaptee().add(v);
+    public boolean add(T v) {
+        return getAdaptee().add(v);
     }
 
     @Override
@@ -48,8 +45,8 @@ public abstract class WritableListAdapter<T> implements WritableList<T>{
     }
 
     @Override
-    public T remove(int index) {
-        return getAdaptee().remove(index);
+    public T removeAt(int index) {
+        return getAdaptee().removeAt(index);
     }
 
     @Override
@@ -123,13 +120,13 @@ public abstract class WritableListAdapter<T> implements WritableList<T>{
     }
 
     @Override
-    public String name() {
-        return getAdaptee().name();
+    public String propertyName() {
+        return getAdaptee().propertyName();
     }
 
     @Override
-    public PropertyType type() {
-        return getAdaptee().type();
+    public PropertyType propertyType() {
+        return getAdaptee().propertyType();
     }
 
     @Override
@@ -143,8 +140,8 @@ public abstract class WritableListAdapter<T> implements WritableList<T>{
     }
 
     @Override
-    public PropertyListeners listeners() {
-        return getAdaptee().listeners();
+    public PropertyListeners events() {
+        return getAdaptee().events();
     }
 
     @Override
@@ -155,6 +152,61 @@ public abstract class WritableListAdapter<T> implements WritableList<T>{
     @Override
     public boolean contains(T a) {
         return getAdaptee().contains(a);
+    }
+
+    @Override
+    public boolean addAll(T... extra) {
+        return getAdaptee().addAll(extra);
+    }
+    @Override
+    public boolean removeAll(T... extra) {
+        return getAdaptee().removeAll(extra);
+    }
+
+    @Override
+    public T get() {
+        return getAdaptee().get();
+    }
+
+    @Override
+    public void set(T value) {
+        getAdaptee().set(value);
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return getAdaptee().isEmpty();
+    }
+
+    @Override
+    public boolean setAll(T... extra) {
+        return getAdaptee().setAll(extra);
+    }
+
+    @Override
+    public boolean setCollection(Collection<? extends T> all) {
+        return getAdaptee().setCollection(all);
+    }
+
+    @Override
+    public boolean addCollection(Collection<? extends T> all) {
+        return getAdaptee().addCollection(all);
+    }
+
+    @Override
+    public boolean removeCollection(Collection<? extends T> all) {
+        return getAdaptee().removeCollection(all);
+    }
+    
+
+    @Override
+    public PropertyAdjusters adjusters() {
+        return getAdaptee().adjusters();
+    }
+
+    @Override
+    public String toString() {
+        return getAdaptee().toString();
     }
     
 }

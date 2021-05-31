@@ -1,6 +1,6 @@
-package net.thevpc.common.props;
-
-public interface WithListeners {
-
-    PropertyListeners listeners();
-}
+//package net.thevpc.common.props;
+//
+//public interface WithListeners {
+//
+//    PropertyListeners listeners();
+//}

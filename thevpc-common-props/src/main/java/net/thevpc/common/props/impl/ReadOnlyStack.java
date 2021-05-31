@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import net.thevpc.common.props.ObservableStack;
 
-public class ReadOnlyStack<T> extends DelegateProperty implements ObservableStack<T> {
+public class ReadOnlyStack<T> extends PropertyDelegate implements ObservableStack<T> {
 
     public ReadOnlyStack(ObservableStack<T> base) {
         super(base);

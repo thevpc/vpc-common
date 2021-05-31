@@ -64,18 +64,13 @@ public abstract class ObservableMapAdapter<K, V> implements ObservableMap<K, V> 
     }
 
     @Override
-    public PropertyVetos vetos() {
-        return getObservableMapBase().vetos();
+    public String propertyName() {
+        return getObservableMapBase().propertyName();
     }
 
     @Override
-    public String name() {
-        return getObservableMapBase().name();
-    }
-
-    @Override
-    public PropertyType type() {
-        return getObservableMapBase().type();
+    public PropertyType propertyType() {
+        return getObservableMapBase().propertyType();
     }
 
     @Override
@@ -89,8 +84,8 @@ public abstract class ObservableMapAdapter<K, V> implements ObservableMap<K, V> 
     }
 
     @Override
-    public PropertyListeners listeners() {
-        return getObservableMapBase().listeners();
+    public PropertyListeners events() {
+        return getObservableMapBase().events();
     }
 
     @Override

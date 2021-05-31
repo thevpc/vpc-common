@@ -5,9 +5,12 @@ import java.util.*;
 import java.util.function.Predicate;
 
 import net.thevpc.common.props.*;
-import net.thevpc.common.props.*;
 
-public class WritableStackImpl<T> extends AbstractProperty implements WritableStack<T> {
+/**
+ * TODO must implement correctly the events and the adjusters!!
+ * @param <T>
+ */
+public class WritableStackImpl<T> extends WritablePropertyBase implements WritableStack<T> {
 
     private Stack<T> value = new Stack<>();
     private ObservableStack<T> ro;
@@ -31,32 +34,32 @@ public class WritableStackImpl<T> extends AbstractProperty implements WritableSt
     @Override
     public void push(T v) {
         value.push(v);
-        if (v instanceof WithListeners) {
-            listeners.removeDelegate((WithListeners) v);
+        if (v instanceof Property) {
+            listeners.removeDelegate((Property) v);
         }
-        listeners.firePropertyUpdated(new PropertyEvent(
+        ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
                 this,
                 value.size(),
                 null,
                 v,
-                "/" + (value.size()),
-                PropertyUpdate.ADD
+                Path.root().append(String.valueOf(value.size())),
+                PropertyUpdate.ADD,true
         ));
     }
 
     @Override
     public T pop() {
         T p = value.pop();
-        if (p instanceof WithListeners) {
-            listeners.removeDelegate((WithListeners) p);
+        if (p instanceof Property) {
+            listeners.removeDelegate((Property) p);
         }
-        listeners.firePropertyUpdated(new PropertyEvent(
+        ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
                 this,
                 value.size(),
                 p,
                 null,
-                "/" + (value.size()),
-                PropertyUpdate.REMOVE
+                Path.root().append(String.valueOf(value.size())),
+                PropertyUpdate.REMOVE,true
         ));
         return p;
     }
@@ -78,16 +81,16 @@ public class WritableStackImpl<T> extends AbstractProperty implements WritableSt
 
     public T remove(int index) {
         T p = value.remove(index);
-        if (p instanceof WithListeners) {
-            listeners.removeDelegate((WithListeners) p);
+        if (p instanceof Property) {
+            listeners.removeDelegate((Property) p);
         }
-        listeners.firePropertyUpdated(new PropertyEvent(
+        ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
                 this,
                 index,
                 p,
                 null,
-                "/" + index,
-                PropertyUpdate.REMOVE
+                Path.root().append(String.valueOf(index)),
+                PropertyUpdate.REMOVE,true
         ));
         return p;
     }
@@ -240,8 +243,8 @@ public class WritableStackImpl<T> extends AbstractProperty implements WritableSt
     @Override
     public String toString() {
         return "WritablePStack{"
-                + "name='" + name() + '\''
-                + ", type=" + type()
+                + "name='" + fullPropertyName() + '\''
+                + ", type=" + propertyType()
                 + " value='" + value + '\''
                 + '}';
     }

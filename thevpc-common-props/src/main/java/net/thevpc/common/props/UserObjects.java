@@ -13,10 +13,10 @@ import java.util.Set;
  */
 public interface UserObjects {
 
-    Object getUserObject(String n);
+    Object get(Object n);
 
-    Set<String> names();
+    Set<Object> keySet();
 
-    void putUserObject(String n, Object value);
+    void put(Object n, Object value);
     
 }

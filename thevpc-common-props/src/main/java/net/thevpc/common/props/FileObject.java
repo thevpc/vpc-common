@@ -12,10 +12,10 @@ package net.thevpc.common.props;
 public interface FileObject {
 
     ObservableValue<String> name();
-    
-    WritableValue<Boolean> modified();
 
-    WritableValue<String> filePath();
+    WritableBoolean modified();
+
+    WritableString filePath();
 
     String defaultFileSuffix();
 

@@ -3,7 +3,7 @@ package net.thevpc.common.props;
 
 import java.util.function.Predicate;
 
-public interface WritableMap<K, V> extends ObservableMap<K, V> {
+public interface WritableMap<K, V> extends ObservableMap<K, V>,WritableProperty {
 
     void removeAll();
 

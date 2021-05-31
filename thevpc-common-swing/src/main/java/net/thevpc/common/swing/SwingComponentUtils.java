@@ -8,15 +8,10 @@ package net.thevpc.common.swing;
 import java.awt.Font;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.Enumeration;
 import javax.swing.JComponent;
 import javax.swing.JEditorPane;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.Document;
-import javax.swing.text.EditorKit;
-import javax.swing.text.JTextComponent;
-import javax.swing.text.MutableAttributeSet;
-import javax.swing.text.StyledDocument;
-import javax.swing.text.StyledEditorKit;
+import javax.swing.text.*;
 
 /**
  *
@@ -64,24 +59,28 @@ public class SwingComponentUtils {
         zoom.textZoom = z;
     }
 
+    public static void evalZoomTextOnMouseWheel(MouseWheelEvent e,JComponent p) {
+        if (e.isControlDown()) {
+            double oldZoom = getTextZoom(p);
+            double amount = Math.pow(1.1, 1);
+            if (e.getWheelRotation() < 0) {
+                //zoom in (amount)
+                setTextZoom(p, oldZoom * amount);
+            } else {
+                //zoom out (amount)
+                setTextZoom(p, oldZoom / amount);
+            }
+        } else {
+            p.getParent().dispatchEvent(e);
+        }
+    }
+
     public static void addZoomTextOnMouseWheel(JComponent p) {
         p.addMouseWheelListener(new MouseWheelListener() {
 
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
-                if (e.isControlDown()) {
-                    double oldZoom = getTextZoom(p);
-                    double amount = Math.pow(1.1, 1);
-                    if (e.getWheelRotation() < 0) {
-                        //zoom in (amount)
-                        setTextZoom(p, oldZoom * amount);
-                    } else {
-                        //zoom out (amount)
-                        setTextZoom(p, oldZoom / amount);
-                    }
-                } else {
-                    p.getParent().dispatchEvent(e);
-                }
+                evalZoomTextOnMouseWheel(e,p);
             }
         });
     }
@@ -104,14 +103,37 @@ public class SwingComponentUtils {
         int end = editor.getSelectionEnd();
         if (start != end) {
             StyledDocument doc = getStyledDocument(editor);
-            doc.setCharacterAttributes(start, end - start, attr, replace);
+            doc.setCharacterAttributes(start, end - start, copyRemoveNulls(attr), replace);
         }
         StyledEditorKit k = getStyledEditorKit(editor);
         MutableAttributeSet inputAttributes = k.getInputAttributes();
         if (replace) {
             inputAttributes.removeAttributes(inputAttributes);
         }
-        inputAttributes.addAttributes(attr);
+        Enumeration<?> n = attr.getAttributeNames();
+        while(n.hasMoreElements()) {
+            Object kk=n.nextElement();
+            Object vv = attr.getAttribute(kk);
+            if(vv!=null) {
+                inputAttributes.addAttribute(kk, vv);
+            }else{
+                inputAttributes.removeAttribute(kk);
+            }
+        }
+    }
+    private static MutableAttributeSet copyRemoveNulls(AttributeSet attr){
+        MutableAttributeSet inputAttributes = new SimpleAttributeSet();
+        Enumeration<?> n = attr.getAttributeNames();
+        while(n.hasMoreElements()) {
+            Object kk=n.nextElement();
+            Object vv = attr.getAttribute(kk);
+            if(vv!=null) {
+                inputAttributes.addAttribute(kk, vv);
+            }else{
+                inputAttributes.removeAttribute(kk);
+            }
+        }
+        return inputAttributes;
     }
 
     public static final StyledDocument getStyledDocument(JEditorPane e) {

@@ -3,7 +3,7 @@ package net.thevpc.common.props;
 
 import java.util.function.Predicate;
 
-public interface WritableStack<T> extends ObservableStack<T> {
+public interface WritableStack<T> extends ObservableStack<T>,WritableProperty {
 
     T popIf(Predicate<T> a);
 

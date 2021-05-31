@@ -66,7 +66,7 @@ public class PropertyVetosImpl implements PropertyVetos {
                 PropertyEvent event = null;
                 for (PropertyVeto listener : vetos) {
                     if (event == null) {
-                        event = new PropertyEvent(source, index, old, v, "/", action);
+                        event = new PropertyEvent(source, index, old, v, Path.root(), action,true);
                     }
                     listener.vetoableChange(event);
                 }

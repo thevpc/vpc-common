@@ -4,9 +4,8 @@ package net.thevpc.common.props.impl;
 import java.util.List;
 
 import net.thevpc.common.props.*;
-import net.thevpc.common.props.*;
 
-public class PDispatcherImpl<T> extends AbstractProperty implements WritableDispatcher<T> {
+public class PDispatcherImpl<T> extends WritablePropertyBase implements WritableDispatcher<T> {
 
     private long index;
     private ObservableDispatcher<T> ro;
@@ -25,16 +24,16 @@ public class PDispatcherImpl<T> extends AbstractProperty implements WritableDisp
 
     @Override
     public void add(T v) {
-        if (v instanceof WithListeners) {
-            listeners.addDelegate((WithListeners) v, () -> "/" + index);
+        if (v instanceof Property) {
+            listeners.addDelegate((Property) v, () -> Path.of(String.valueOf(index)));
         }
-        listeners.firePropertyUpdated(new PropertyEvent(
+        ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
                 this,
                 index,
                 null,
                 v,
-                "/" + index,
-                PropertyUpdate.ADD
+                Path.root().append(String.valueOf(index)),
+                PropertyUpdate.ADD,true
         ));
         index++;
     }
@@ -47,8 +46,8 @@ public class PDispatcherImpl<T> extends AbstractProperty implements WritableDisp
     @Override
     public String toString() {
         return "PDispatcher{"
-                + "name='" + name() + '\''
-                + ", type=" + type()
+                + "name='" + fullPropertyName() + '\''
+                + ", type=" + propertyType()
                 + '}';
     }
 

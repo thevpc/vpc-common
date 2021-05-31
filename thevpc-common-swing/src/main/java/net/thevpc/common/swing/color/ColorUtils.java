@@ -146,6 +146,9 @@ public class ColorUtils {
                 case "cyan": {
                     return Color.cyan;
                 }
+                case "darkcyan": {
+                    return Color.cyan.darker();
+                }
                 case "orange": {
                     return Color.ORANGE;
                 }

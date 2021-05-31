@@ -26,7 +26,7 @@ public class PropertyType {
         }
     }
 
-    public static PropertyType of(Class cls, PropertyType... other) {
+    public static PropertyType of(Class cls) {
         String tname = cls.getName();
         PropertyType n = simpleCache.get(tname);
         if (n != null) {
@@ -34,10 +34,27 @@ public class PropertyType {
         }
         n = new PropertyType(tname, new PropertyType[0]);
         simpleCache.put(tname, n);
-        if (other.length == 0) {
+        return n;
+    }
+    public static PropertyType of(Class cls, Class... others) {
+        PropertyType[] rr=new PropertyType[others.length];
+        for (int i = 0; i < rr.length; i++) {
+            rr[i]=PropertyType.of(others[i]);
+        }
+        return of(cls,rr);
+    }
+
+    public static PropertyType of(Class cls, PropertyType... others) {
+        String tname = cls.getName();
+        PropertyType n = simpleCache.get(tname);
+        if (n == null) {
+            n = new PropertyType(tname, new PropertyType[0]);
+            simpleCache.put(tname, n);
+        }
+        if (others.length == 0) {
             return n;
         }
-        return new PropertyType(tname, other);
+        return new PropertyType(tname, others);
     }
 
     @Override

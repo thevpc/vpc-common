@@ -45,10 +45,9 @@ public class WritableMapImpl<K, V> extends AbstractWritableMapImpl<K, V>{
 
     @Override
     public String toString() {
-        return "WritableMap{" +
-                "name='" + name() + '\'' +
-                ", type=" + type() +
-                " value='" + value + '\''+
+        String p=isWritable()?"Writable":"ReadOnly";
+        return p+ "Map("+fullPropertyName()+"){" +
+                " values='" + value + '\''+
                 '}';
     }
 

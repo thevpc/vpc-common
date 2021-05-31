@@ -5,7 +5,7 @@
 
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-i18n</artifactId>
-    <version>1.0.0</version><!--updated-->
+    <version>1.1.0</version><!--updated-->
     <name>net.thevpc.common.thevpc-common-i18n</name>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/commons</url>
@@ -76,7 +76,7 @@
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>thevpc-common-props</artifactId>
-            <version>1.0.0</version>
+            <version>1.1.0</version>
         </dependency>
     </dependencies>
 

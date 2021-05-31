@@ -3,6 +3,7 @@ package net.thevpc.common.props.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Stack;
 import java.util.function.Predicate;
 
@@ -13,19 +14,21 @@ public class WritableIndexedNodeImpl<T> extends WritableValueBase<T> implements 
     private WritableList<WritableIndexedNode<T>> children;
 
     public WritableIndexedNodeImpl(String name, PropertyType elementType) {
-        super(name, PropertyType.of(List.class, elementType), null);
+        super(name, PropertyType.of(List.class, elementType), (T) null);
         PropertyType type2 = PropertyType.of(WritableList.class,
                 PropertyType.of(WritableIndexedNode.class, elementType)
         );
         this.children = Props.of(name).listOf(type2);
-        this.children.listeners().add(new PropertyListener() {
+        this.children.userObjects().put("owner",this);
+        this.children.onChange(new PropertyListener() {
             @Override
             public void propertyUpdated(PropertyEvent event) {
-                WritableIndexedNodeImpl.this.listeners.firePropertyUpdated(
-                        PropsHelper.prefixPath(event, "/")
+                ((DefaultPropertyListeners)WritableIndexedNodeImpl.this.listeners).firePropertyUpdated(
+                        PropsHelper.prefixPath(event, Path.root())
                 );
             }
         });
+        propagateEvents(children);
     }
 
     @Override
@@ -78,10 +81,23 @@ public class WritableIndexedNodeImpl<T> extends WritableValueBase<T> implements 
     @Override
     public String toString() {
         return "WritableNode{"
-                + "name='" + name() + '\''
-                + ", type=" + type()
+                + "name='" + fullPropertyName() + '\''
+                + ", type=" + propertyType()
                 + " value='" + get() + '\''
                 + '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        WritableIndexedNodeImpl<?> that = (WritableIndexedNodeImpl<?>) o;
+        return Objects.equals(children, that.children);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), children);
+    }
 }

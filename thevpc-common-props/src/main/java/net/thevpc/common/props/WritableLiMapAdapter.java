@@ -42,4 +42,13 @@ public abstract class WritableLiMapAdapter<K, V> extends ObservableMapAdapter<K,
         return getWritableLiMapBase().values();
     }
 
+    @Override
+    public PropertyVetos vetos() {
+        return getWritableLiMapBase().vetos();
+    }
+
+    @Override
+    public PropertyAdjusters adjusters() {
+        return getWritableLiMapBase().adjusters();
+    }
 }

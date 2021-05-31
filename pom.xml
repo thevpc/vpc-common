@@ -39,7 +39,7 @@
         <module>thevpc-common-msg</module>
         <module>thevpc-common-monitor</module>
         <module>thevpc-common-i18n</module>
-        <module>thevpc-common-iconset</module>
+<!--        <module>thevpc-common-iconset</module>-->
         <module>thevpc-common-md</module>
         <module>thevpc-common-md-docusaurus</module>
         <module>thevpc-common-docusaurus</module>

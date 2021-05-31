@@ -62,7 +62,7 @@ public class TreeFilterDecorator {
     public static TreeFilterDecorator decorate(JTree tree, BiPredicate<Object, String> userObjectMatcher, final SubTreeCellRenderer subTreeCellRenderer, TreeCellTextRenderer textRenderer) {
         final TreeFilterDecorator tfd = new TreeFilterDecorator(tree, userObjectMatcher, textRenderer);
         tfd.init();
-        tree.setCellRenderer(new TreeCellRendererHighligter(new Supplier<String>() {
+        tree.setCellRenderer(new TreeCellRendererHighlighter(new Supplier<String>() {
             @Override
             public String get() {
                 return tfd.getFilterField().getText();

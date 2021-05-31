@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 import net.thevpc.common.props.*;
 
-public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty implements WritableMap<K, V> {
+public abstract class AbstractWritableMapImpl<K, V> extends WritablePropertyBase implements WritableMap<K, V> {
 
     private ObservableMap<K, V> ro;
     private WritableList<K> keySet;
@@ -59,33 +59,35 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
     public V put(K k, V v) {
         if (containsKeyImpl(k)) {
             V v0 = putImpl(k, v);
-            if (v0 instanceof WithListeners) {
-                listeners.removeDelegate((WithListeners) v0);
+            if (v0 instanceof Property) {
+                listeners.removeDelegate((Property) v0);
             }
-            if (v instanceof WithListeners) {
-                listeners.addDelegate((WithListeners) v, () -> "/" + k);
+            if (v instanceof Property) {
+                listeners.addDelegate((Property) v, () ->
+                                Path.root().append(String.valueOf(k))
+                        );
             }
 //            if(k instanceof WithListeners){
-//                listeners.addDelegate((WithListeners) k, () -> "/");
+//                events.addDelegate((WithListeners) k, () -> "/");
 //            }
-            listeners.firePropertyUpdated(new PropertyEvent(
+            ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
                     this,
                     k,
                     v0,
                     v,
-                    "/",
-                    PropertyUpdate.UPDATE
+                    Path.root(),
+                    PropertyUpdate.UPDATE,true
             ));
             return v0;
         }
         V v0 = putImpl(k, v);
-        listeners.firePropertyUpdated(new PropertyEvent(
+        ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
                 this,
                 k,
                 null,
                 v,
-                "/",
-                PropertyUpdate.ADD
+                Path.root(),
+                PropertyUpdate.ADD,true
         ));
         return null;
     }
@@ -94,16 +96,16 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
     public V remove(K k) {
         if (containsKeyImpl(k)) {
             V v0 = removeImpl(k);
-            if (v0 instanceof WithListeners) {
-                listeners.removeDelegate((WithListeners) v0);
+            if (v0 instanceof Property) {
+                listeners.removeDelegate((Property) v0);
             }
-            listeners.firePropertyUpdated(new PropertyEvent(
+            ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
                     this,
                     k,
                     v0,
                     null,
-                    "/",
-                    PropertyUpdate.REMOVE
+                    Path.root(),
+                    PropertyUpdate.REMOVE,true
             ));
             return v0;
         }
@@ -167,14 +169,14 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
         return entrySet().iterator();
     }
 
-    private class KeySetListImpl extends AbstractWritableListImpl<K> {
+    private class KeySetListImpl extends WritableListBase<K> {
 
         public KeySetListImpl(String name, PropertyType elementType) {
             super(name, elementType);
         }
 
         @Override
-        protected void addImpl(int index, K v) {
+        protected boolean addImpl(int index, K v) {
             throw new IllegalArgumentException("Unsupported");
         }
 
@@ -196,7 +198,7 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
         }
 
         @Override
-        protected K removeImpl(int index) {
+        protected K removeAtImpl(int index) {
             int index0 = 0;
             for (MapEntry<K, V> e : AbstractWritableMapImpl.this) {
                 if (index0 == index) {
@@ -227,14 +229,14 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
         }
     }
 
-    private class EntrySetListImpl extends AbstractWritableListImpl<MapEntry<K, V>> {
+    private class EntrySetListImpl extends WritableListBase<MapEntry<K, V>> {
 
         public EntrySetListImpl(String name, PropertyType elementType) {
             super(name, elementType);
         }
 
         @Override
-        protected void addImpl(int index, MapEntry<K, V> e) {
+        protected boolean addImpl(int index, MapEntry<K, V> e) {
             throw new IllegalArgumentException("Unsupported");
         }
 
@@ -256,7 +258,7 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
         }
 
         @Override
-        protected MapEntry<K, V> removeImpl(int index) {
+        protected MapEntry<K, V> removeAtImpl(int index) {
             int index0 = 0;
             for (MapEntry<K, V> e : AbstractWritableMapImpl.this) {
                 if (index0 == index) {
@@ -311,14 +313,14 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
         }
     }
 
-    private class ValueListListImpl extends AbstractWritableListImpl<V> {
+    private class ValueListListImpl extends WritableListBase<V> {
 
         public ValueListListImpl(String name, PropertyType elementType) {
             super(name, elementType);
         }
 
         @Override
-        protected void addImpl(int index, V e) {
+        protected boolean addImpl(int index, V e) {
             throw new IllegalArgumentException("Unsupported");
         }
 
@@ -340,7 +342,7 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
         }
 
         @Override
-        protected V removeImpl(int index) {
+        protected V removeAtImpl(int index) {
             int index0 = 0;
             for (MapEntry<K, V> e : AbstractWritableMapImpl.this) {
                 if (index0 == index) {
@@ -372,10 +374,9 @@ public abstract class AbstractWritableMapImpl<K, V> extends AbstractProperty imp
 
     @Override
     public String toString() {
-        return "WritableMap{"
-                + "name='" + name() + '\''
-                + ", type=" + type()
-                + " value=[" + stream().map(Object::toString).collect(Collectors.joining(",")) + "]"
+        String p=isWritable()?"Writable":"ReadOnly";
+        return p+ "Map("+fullPropertyName()+"){"
+                + " values=[" + stream().map(Object::toString).collect(Collectors.joining(",")) + "]"
                 + '}';
     }
 

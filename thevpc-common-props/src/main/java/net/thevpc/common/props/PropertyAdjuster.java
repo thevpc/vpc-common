@@ -1,5 +1,7 @@
 package net.thevpc.common.props;
 
+import net.thevpc.common.props.impl.PropertyAdjusterContext;
+
 public interface PropertyAdjuster {
-    Object adjustNewValue(PropertyEvent event);
+    void adjust(PropertyAdjusterContext context);
 }

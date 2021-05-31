@@ -2,34 +2,16 @@ package net.thevpc.common.props.impl;
 
 
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
-import net.thevpc.common.props.*;
-import net.thevpc.common.props.WritableValue;
 import net.thevpc.common.props.NamedNode;
 import net.thevpc.common.props.WritableNamedNode;
 import net.thevpc.common.props.ObservableMap;
 
-public class ReadOnlyPNamedNode<T> extends DelegateProperty implements NamedNode<T> {
+public class ReadOnlyPNamedNode<T> extends PropertyDelegate implements NamedNode<T> {
 
     public ReadOnlyPNamedNode(NamedNode<T> base) {
         super(base);
-    }
-
-    @Override
-    public void bind(WritableValue<T> other) {
-        WritableValueBase.helperBind(this, other);
-    }
-
-    @Override
-    public <T2> void bindConvert(WritableValue<T2> other, Function<T, T2> map) {
-        WritableValueBase.helperBindConvert(this, other, map);
-    }
-
-    @Override
-    public <T2> void unbind(WritableValue<T2> other) {
-        WritableValueBase.helperRemoveBindListeners(listeners(), other);
     }
 
     @Override

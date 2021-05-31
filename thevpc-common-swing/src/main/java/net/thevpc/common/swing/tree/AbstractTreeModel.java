@@ -38,8 +38,9 @@ public abstract class AbstractTreeModel implements TreeModel {
         Object aNode = (Object) path.getLastPathComponent();
         nodeChanged(aNode);
     }
+
     public void valueForPathChangedImpl(TreePath path, Object newValue) {
-        
+
     }
 
     /**
@@ -57,6 +58,11 @@ public abstract class AbstractTreeModel implements TreeModel {
         nodesWereInserted(parent, newIndexs);
     }
 
+    @Override
+    public boolean isLeaf(Object node) {
+        return getChildCount(node) == 0;
+    }
+
     protected abstract void insertNodeIntoImpl(Object parent, Object newChild, int index);
 
     protected abstract void removeNodeFromParentImpl(Object parent, int childIndex);
@@ -71,10 +77,13 @@ public abstract class AbstractTreeModel implements TreeModel {
         int[] childIndex = new int[1];
         Object[] removedArray = new Object[1];
 
-        childIndex[0] = getChildIndex(parent, node);
-        removeNodeFromParentImpl(parent, childIndex[0]);
-        removedArray[0] = node;
-        nodesWereRemoved(parent, childIndex, removedArray);
+        childIndex[0] = getIndexOfChild(parent, node);
+        int cc = childIndex[0];
+        if (cc >= 0) {
+            removeNodeFromParentImpl(parent, cc);
+            removedArray[0] = node;
+            nodesWereRemoved(parent, childIndex, removedArray);
+        }
     }
 
     public void nodeChanged(Object node) {
@@ -82,7 +91,7 @@ public abstract class AbstractTreeModel implements TreeModel {
             Object parent = getParent(node);
 
             if (parent != null) {
-                int anIndex = getChildIndex(parent,node);
+                int anIndex = getIndexOfChild(parent, node);
                 if (anIndex != -1) {
                     int[] cIndexs = new int[1];
 
@@ -126,7 +135,7 @@ public abstract class AbstractTreeModel implements TreeModel {
                     Object[] cChildren = new Object[cCount];
 
                     for (int counter = 0; counter < cCount; counter++) {
-                        cChildren[counter] = getChild(node,childIndices[counter]);
+                        cChildren[counter] = getChild(node, childIndices[counter]);
                     }
                     fireTreeNodesChanged(this, getPathToRoot(node),
                             childIndices, cChildren);
@@ -283,7 +292,11 @@ public abstract class AbstractTreeModel implements TreeModel {
                     e = new TreeModelEvent(source, path,
                             childIndices, children);
                 }
-                ((TreeModelListener) listeners[i + 1]).treeNodesRemoved(e);
+                try {
+                    ((TreeModelListener) listeners[i + 1]).treeNodesRemoved(e);
+                }catch (Exception ex){
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -314,7 +327,8 @@ public abstract class AbstractTreeModel implements TreeModel {
         return getParent(first) == next;
     }
 
-    public int getChildIndex(Object parent, Object child) {
+    @Override
+    public int getIndexOfChild(Object parent, Object child) {
         int count = getChildCount(parent);
         for (int i = 0; i < count; i++) {
             Object object = getChild(parent, i);
