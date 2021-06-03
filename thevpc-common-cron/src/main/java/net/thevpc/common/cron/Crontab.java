@@ -35,7 +35,6 @@ public class Crontab {
             @Override
             public void run() {
                 Date now = new Date();
-                System.out.println(now);
                 for (CronTask row : rows.toArray(new CronTask[0])) {
                     if (row.getCron().accept(now)) {
                         row.getTask().run();
