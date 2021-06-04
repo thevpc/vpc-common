@@ -364,12 +364,18 @@ public class JDockPane extends JPanel {
             return all2.get(0);
         }
         JSplitPane s = createSplitPane(2);
+        if (all[JDockAnchor.TOP.ordinal()] != null) {
+            s.setResizeWeight(0);
+        }else{
+            s.setResizeWeight(1);
+        }
         s.setOrientation(JSplitPane.VERTICAL_SPLIT);
         s.add(all2.get(0), JSplitPane.LEFT);
         s.add(all2.get(1), JSplitPane.RIGHT);
         if (all2.size() == 3) {
             s.setDividerLocation(0.2);
             JSplitPane s2 = createSplitPane(3);
+            s2.setResizeWeight(1);
             s2.setOrientation(JSplitPane.VERTICAL_SPLIT);
             s2.add(s, JSplitPane.LEFT);
             s2.add(all2.get(2), JSplitPane.RIGHT);
@@ -399,12 +405,18 @@ public class JDockPane extends JPanel {
             return all2.get(0);
         }
         JSplitPane s = createSplitPane(0);
+        if (all[JDockAnchor.LEFT.ordinal()] != null) {
+            s.setResizeWeight(0);
+        }else{
+            s.setResizeWeight(1);
+        }
         s.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
         s.add(all2.get(0), JSplitPane.LEFT);
         s.add(all2.get(1), JSplitPane.RIGHT);
         if (all2.size() == 3) {
             s.setDividerLocation(0.2);
             JSplitPane s2 = createSplitPane(1);
+            s2.setResizeWeight(1);
             s2.setOrientation(JSplitPane.HORIZONTAL_SPLIT);
             s2.add(s, JSplitPane.LEFT);
             s2.add(all2.get(2), JSplitPane.RIGHT);

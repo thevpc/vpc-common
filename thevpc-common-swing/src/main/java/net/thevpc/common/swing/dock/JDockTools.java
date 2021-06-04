@@ -208,7 +208,6 @@ public class JDockTools extends JPanel implements IDockTools {
             if (selected != selectedWindow
                     || BorderLayoutHelper.getCenter(pane) != selected.win) {
                 selected = selectedWindow;
-                System.out.println(anchor + ":selected " + selected.win.id);
                 pane.add(selected.win, BorderLayout.CENTER);
             }
             if (oldNoSelection) {
@@ -218,7 +217,6 @@ public class JDockTools extends JPanel implements IDockTools {
             if (selected != null) {
 //            selected.button.setSelected(false);
                 lastSelected = selected;
-                System.out.println(anchor + ":lastSelected " + lastSelected.win.id);
                 pane.remove(selected.win);
                 selected = null;
                 if (getParent() instanceof JSplitPane) {
