@@ -8,4 +8,5 @@ public enum PropertyUpdate {
     ADD,
     REMOVE,
     UPDATE,
+    REFRESH,
 }

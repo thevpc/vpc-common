@@ -35,10 +35,10 @@ public class DefaultI18n extends PropertyBase implements I18n {
 
     public DefaultI18n(String id) {
         super(id);
-        locale.onChange(()->{
-            System.out.println("locale changed "+locale.get());
-
-        });
+//        locale.onChange(()->{
+//            System.out.println("locale changed "+locale.get());
+//
+//        });
         propagateEvents(bundles);
         propagateEvents(locale);
         propagateEvents(defaultValue);

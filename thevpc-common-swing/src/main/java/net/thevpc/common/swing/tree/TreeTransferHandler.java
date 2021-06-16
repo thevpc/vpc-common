@@ -82,10 +82,10 @@ public class TreeTransferHandler extends TransferHandler {
             TreePath path = tree.getPathForRow(selRows[0]);
             if(path!=null){
                 Object p = path.getLastPathComponent();
-                int is_Root_child = tree.getModel().getIndexOfChild(tree.getModel().getRoot(), p);
-                if(is_Root_child>=0){
-                    return false;
-                }
+//                int is_Root_child = tree.getModel().getIndexOfChild(tree.getModel().getRoot(), p);
+//                if(is_Root_child>=0){
+//                    return false;
+//                }
             }
         }
         // Do not allow MOVE-action drops if a non-leaf node is

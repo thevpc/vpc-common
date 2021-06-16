@@ -5,14 +5,7 @@
  */
 package net.thevpc.common.swing.tree;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.EmptyStackException;
-import java.util.Enumeration;
-import java.util.EventListener;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.*;
 import javax.swing.event.EventListenerList;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeModelListener;
@@ -35,6 +28,11 @@ public abstract class AbstractTreeModel implements TreeModel {
      */
     @Override
     public void valueForPathChanged(TreePath path, Object newValue) {
+//        System.out.println(
+//                "valueForPathChanged:"
+//                        +"path="+ path+", "
+//                        +"newValue="+ newValue
+//        );
         Object aNode = (Object) path.getLastPathComponent();
         nodeChanged(aNode);
     }
@@ -50,12 +48,18 @@ public abstract class AbstractTreeModel implements TreeModel {
      * appropriate event.
      */
     public void insertNodeInto(Object newChild, Object parent, int index) {
+//        System.out.println(
+//                "insertNodeInto:"
+//                        +"parent="+ parent+", "
+//                        +"index="+ index+", "
+//                        +"child="+ newChild
+//        );
         insertNodeIntoImpl(parent, newChild, index);
 
-        int[] newIndexs = new int[1];
-
-        newIndexs[0] = index;
-        nodesWereInserted(parent, newIndexs);
+//        int[] newIndexs = new int[1];
+//
+//        newIndexs[0] = index;
+//        nodesWereInserted(parent, newIndexs);
     }
 
     @Override
@@ -68,6 +72,10 @@ public abstract class AbstractTreeModel implements TreeModel {
     protected abstract void removeNodeFromParentImpl(Object parent, int childIndex);
 
     public void removeNodeFromParent(Object node) {
+//        System.out.println(
+//                "removeNodeFromParent:"
+//                        +"node="+ node
+//        );
         Object parent = (Object) getParent(node);
 
         if (parent == null) {
@@ -81,12 +89,16 @@ public abstract class AbstractTreeModel implements TreeModel {
         int cc = childIndex[0];
         if (cc >= 0) {
             removeNodeFromParentImpl(parent, cc);
-            removedArray[0] = node;
-            nodesWereRemoved(parent, childIndex, removedArray);
+//            removedArray[0] = node;
+//            nodesWereRemoved(parent, childIndex, removedArray);
         }
     }
 
     public void nodeChanged(Object node) {
+//        System.out.println(
+//                "nodeChanged:"
+//                        +"node="+ node+", "
+//        );
         if (listenerList != null && node != null) {
             Object parent = getParent(node);
 
@@ -105,6 +117,11 @@ public abstract class AbstractTreeModel implements TreeModel {
     }
 
     public void nodesWereInserted(Object node, int[] childIndices) {
+//        System.out.println(
+//                "nodesWereInserted:"
+//                        +"node="+ node+", "
+//                        +"indices="+ (childIndices==null?"null":Arrays.toString(childIndices))
+//        );
         if (listenerList != null && node != null && childIndices != null
                 && childIndices.length > 0) {
             int cCount = childIndices.length;
@@ -120,6 +137,12 @@ public abstract class AbstractTreeModel implements TreeModel {
 
     public void nodesWereRemoved(Object node, int[] childIndices,
             Object[] removedChildren) {
+//        System.out.println(
+//                "nodesWereRemoved:"
+//                        +"node="+ node+", "
+//                        +"indices="+ (childIndices==null?"null":Arrays.toString(childIndices))+", "
+//                        +"children="+ (removedChildren==null?"null":Arrays.toString(removedChildren))
+//        );
         if (node != null && childIndices != null) {
             fireTreeNodesRemoved(this, getPathToRoot(node), childIndices,
                     removedChildren);
@@ -127,6 +150,11 @@ public abstract class AbstractTreeModel implements TreeModel {
     }
 
     public void nodesChanged(Object node, int[] childIndices) {
+//        System.out.println(
+//                "nodesChanged:"
+//                        +"node="+ node+", "
+//                        +"indices="+ (childIndices==null?"null":Arrays.toString(childIndices))+", "
+//        );
         if (node != null) {
             if (childIndices != null) {
                 int cCount = childIndices.length;
@@ -147,6 +175,10 @@ public abstract class AbstractTreeModel implements TreeModel {
     }
 
     public void nodeStructureChanged(Object node) {
+//        System.out.println(
+//                "nodeStructureChanged:"
+//                        +"node="+ node
+//        );
         if (node != null) {
             fireTreeStructureChanged(this, getPathToRoot(node), null, null);
         }
@@ -199,6 +231,12 @@ public abstract class AbstractTreeModel implements TreeModel {
     protected void fireTreeNodesChanged(Object source, Object[] path,
             int[] childIndices,
             Object[] children) {
+//        System.out.println(
+//                "fireTreeNodesChanged:"
+//                        +"path="+ (path==null?"null":Arrays.toString(path))+", "
+//                        +"indices="+ (childIndices==null?"null":Arrays.toString(childIndices))+", "
+//                        +"children="+ (children==null?"null":Arrays.toString(children))
+//        );
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -219,6 +257,12 @@ public abstract class AbstractTreeModel implements TreeModel {
     protected void fireTreeStructureChanged(Object source, Object[] path,
             int[] childIndices,
             Object[] children) {
+//        System.out.println(
+//                "fireTreeStructureChanged:"
+//                        +"path="+ (path==null?"null":Arrays.toString(path))+", "
+//                        +"indices="+ (childIndices==null?"null":Arrays.toString(childIndices))+", "
+//                        +"children="+ (children==null?"null":Arrays.toString(children))
+//        );
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -239,6 +283,12 @@ public abstract class AbstractTreeModel implements TreeModel {
     protected void fireTreeNodesInserted(Object source, Object[] path,
             int[] childIndices,
             Object[] children) {
+//        System.out.println(
+//                "fireTreeNodesInserted:"
+//                        +"parent="+ (path==null?"null":Arrays.toString(path))+", "
+//                        +"indices="+ (childIndices==null?"null":Arrays.toString(childIndices))+", "
+//                        +"children="+ (children==null?"null":Arrays.toString(children))
+//        );
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -257,6 +307,10 @@ public abstract class AbstractTreeModel implements TreeModel {
     }
 
     protected void fireTreeStructureChanged(Object source, TreePath path) {
+//        System.out.println(
+//                "fireTreeStructureChanged:"
+//                        +"path="+ (path==null?"null":String.valueOf(path))
+//        );
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;
@@ -280,6 +334,12 @@ public abstract class AbstractTreeModel implements TreeModel {
     protected void fireTreeNodesRemoved(Object source, Object[] path,
             int[] childIndices,
             Object[] children) {
+//        System.out.println(
+//                "fireTreeNodesRemoved:"
+//                        +"parent="+ Arrays.toString(path)+", "
+//                        +"indices="+ (childIndices==null?"null":Arrays.toString(childIndices))+", "
+//                        +"children="+ (children==null?"null":Arrays.toString(children))
+//        );
         // Guaranteed to return a non-null array
         Object[] listeners = listenerList.getListenerList();
         TreeModelEvent e = null;

@@ -44,7 +44,9 @@ public class JFontPreviewPanel extends JPanel {
     }
 
     public void setFont(Font f) {
-        font = f;
+        if(f!=null) {
+            super.setFont(f);
+        }
         repaint();
     }
 
@@ -56,6 +58,7 @@ public class JFontPreviewPanel extends JPanel {
     public void paintComponent(Graphics g) {
         Image osi = createImage(getSize().width, getSize().height);
         Graphics osg = osi.getGraphics();
+        Font font = getFont();
         osg.setFont(font);
         Rectangle2D bounds = font.getStringBounds(font.getFontName(), 0, font.getFontName().length(), new FontRenderContext(null, true, false));
         int width = (new Double(bounds.getWidth())).intValue();
@@ -72,5 +75,5 @@ public class JFontPreviewPanel extends JPanel {
         return getPreferredSize();
     }
 
-    private Font font;
+//    private Font font;
 }

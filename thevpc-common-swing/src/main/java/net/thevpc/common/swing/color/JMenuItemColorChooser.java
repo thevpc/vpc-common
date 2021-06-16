@@ -28,14 +28,14 @@ import java.awt.event.ActionListener;
  * @author Taha BEN SALAH (taha.bensalah@gmail.com) %creationtime 8 févr. 2007
  * 20:08:21
  */
-public class JButtonColorChooser extends JButton {
+public class JMenuItemColorChooser extends JMenuItem {
 
     public static final String PROPERTY_COLOR_CHANGED = "ColorChanged";
     public static final String PROPERTY_COLOR_SET = "ColorSet";
     private Color color;
     private boolean nullable;
 
-    public JButtonColorChooser(Color startupColor, boolean nullable) {
+    public JMenuItemColorChooser(Color startupColor, boolean nullable) {
         this.color = startupColor;
         this.nullable = nullable;
         setIcon(new ColorSwatch(this::isEnabled, this::getValue));
@@ -47,8 +47,7 @@ public class JButtonColorChooser extends JButton {
     }
 
     public void showDialog() {
-        Color clr = JColorChooser.showDialog(
-                JButtonColorChooser.this, null,
+        Color clr = JColorChooser.showDialog(JMenuItemColorChooser.this, null,
                 color
         );
         if (nullable || clr != null) {
