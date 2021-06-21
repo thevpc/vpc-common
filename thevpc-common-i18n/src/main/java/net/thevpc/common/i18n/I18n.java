@@ -29,8 +29,10 @@ public interface I18n extends Property, I18nLocale {
 
     I18nLocale locale(Locale locale);
 
+    @Override
     String getString(String name);
 
+    @Override
     String getString(String name, Function<String, String> defaultValue);
 
     WritableValue<Function<String, String>> defaultValue();

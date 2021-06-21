@@ -17,9 +17,15 @@ import java.util.ResourceBundle;
 public class I18nResourceBundle implements I18nBundle {
 
     private Map<String,ResourceBundle> bundles=new HashMap<>();
-    private String bunldeLocation;
+    private String bundleLocation;
     public I18nResourceBundle(String bundle) {
-        this.bunldeLocation=bundle;
+        if(bundle.indexOf('/')>=0){
+            bundle=bundle.replace('/', '.');
+            if(bundle.startsWith(".")){
+                bundle=bundle.substring(1);
+            }
+        }
+        this.bundleLocation=bundle;
         resolve(null);
     }
     
@@ -30,7 +36,7 @@ public class I18nResourceBundle implements I18nBundle {
         String locId = locale.toString();
         ResourceBundle b = bundles.get(locId);
         if(b==null){
-            b=ResourceBundle.getBundle(bunldeLocation,locale);
+            b=ResourceBundle.getBundle(bundleLocation,locale);
             bundles.put(locId, b);
         }
         return b;
