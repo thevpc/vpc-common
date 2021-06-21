@@ -14,7 +14,7 @@ public class PropertyAdjusterContext {
     private boolean ignore;
     private boolean stop;
 
-    public Object newValue() {
+    public <T> T newValue() {
         return event.newValue();
     }
 
