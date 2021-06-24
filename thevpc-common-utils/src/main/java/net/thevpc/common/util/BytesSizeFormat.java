@@ -322,13 +322,6 @@ public class BytesSizeFormat implements DoubleFormat {
         throw new IllegalArgumentException("Unsupported");
     }
 
-    private String formatLeft(Object number, int size) {
-        if (fixedLength) {
-            return _StringUtils.formatLeft(number, size);
-        } else {
-            return String.valueOf(number);
-        }
-    }
 
     private String formatNumber(Object number, int size) {
         if (fixedLength) {
