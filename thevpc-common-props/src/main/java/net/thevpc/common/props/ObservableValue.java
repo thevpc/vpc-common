@@ -72,7 +72,7 @@ public interface ObservableValue<T> extends Property, GetValueModel<T> {
     }
 
     default ObservableBoolean mapBooleanValue(Function<T, Boolean> mapper) {
-        return new MappedValueBoolean<>(propertyName(),  this, mapper);
+        return new MappedValueBoolean<>(propertyName(), this, mapper);
     }
 
     default ObservableBoolean mapEqualsValue(T compareTo) {
@@ -105,6 +105,10 @@ public interface ObservableValue<T> extends Property, GetValueModel<T> {
 
     default <X> ObservableValue<X> mapValue(PropertyType toType, Function<T, X> mapper) {
         return new MappedValueBase<T, X>(propertyName(), toType, this, mapper);
+    }
+
+    default Class<T> propertyClass() {
+        return propertyType().getTypeClass();
     }
 
 }
