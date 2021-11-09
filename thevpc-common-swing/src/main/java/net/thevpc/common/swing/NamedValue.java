@@ -7,7 +7,7 @@ package net.thevpc.common.swing;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class NamedValue {
 

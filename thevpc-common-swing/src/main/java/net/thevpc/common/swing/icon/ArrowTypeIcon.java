@@ -15,7 +15,7 @@ import net.thevpc.common.swing.ArrowsUtils;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ArrowTypeIcon implements Icon {
 

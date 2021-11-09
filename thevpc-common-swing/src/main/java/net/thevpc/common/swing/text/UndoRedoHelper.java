@@ -18,7 +18,7 @@ import javax.swing.undo.UndoManager;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class UndoRedoHelper {
 

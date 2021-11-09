@@ -12,7 +12,7 @@ import java.awt.geom.Point2D;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ArrowsUtils {
 

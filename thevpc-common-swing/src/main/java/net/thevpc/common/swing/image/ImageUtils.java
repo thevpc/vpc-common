@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ImageUtils {
 

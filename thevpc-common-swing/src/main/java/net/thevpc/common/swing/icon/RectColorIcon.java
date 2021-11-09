@@ -12,7 +12,7 @@ import javax.swing.Icon;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class RectColorIcon implements Icon {
 

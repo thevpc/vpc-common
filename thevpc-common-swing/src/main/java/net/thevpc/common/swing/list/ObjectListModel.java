@@ -7,7 +7,7 @@ package net.thevpc.common.swing.list;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface ObjectListModel {
 

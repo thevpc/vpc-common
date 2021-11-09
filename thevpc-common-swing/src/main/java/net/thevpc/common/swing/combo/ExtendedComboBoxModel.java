@@ -11,7 +11,7 @@ import net.thevpc.common.swing.NamedValue;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ExtendedComboBoxModel extends DefaultComboBoxModel<Object> {
     

@@ -9,7 +9,7 @@ import javax.swing.JComponent;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface UIPlafListener {
 

@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DateTimeLabel extends JTimerLabel {
 

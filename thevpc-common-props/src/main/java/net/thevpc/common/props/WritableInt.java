@@ -8,7 +8,7 @@ package net.thevpc.common.props;
 import net.thevpc.common.props.impl.WritableValueImpl;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public interface WritableInt extends WritableValue<Integer> {
 

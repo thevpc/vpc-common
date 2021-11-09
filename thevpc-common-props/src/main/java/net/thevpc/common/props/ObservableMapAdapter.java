@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class ObservableMapAdapter<K, V> implements ObservableMap<K, V> {
 

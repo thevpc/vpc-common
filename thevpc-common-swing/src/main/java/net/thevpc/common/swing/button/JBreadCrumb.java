@@ -18,7 +18,7 @@ import net.thevpc.common.swing.list.ObjectListModelListener;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JBreadCrumb extends JPanel {
 

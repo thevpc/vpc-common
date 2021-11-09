@@ -15,7 +15,7 @@ import javax.swing.Icon;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class PaintIcon implements Icon {
 

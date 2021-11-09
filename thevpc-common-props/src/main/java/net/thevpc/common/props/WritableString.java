@@ -9,7 +9,7 @@ import net.thevpc.common.props.impl.WritableValueImpl;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface WritableString extends WritableValue<String> {
 

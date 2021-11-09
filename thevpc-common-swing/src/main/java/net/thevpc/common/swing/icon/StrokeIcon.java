@@ -14,7 +14,7 @@ import javax.swing.Icon;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class StrokeIcon implements Icon {
 

@@ -10,7 +10,7 @@ import java.awt.Point;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface PositionAnimator {
 

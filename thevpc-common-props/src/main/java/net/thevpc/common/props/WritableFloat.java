@@ -9,7 +9,7 @@ import net.thevpc.common.props.impl.WritableValueImpl;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class WritableFloat extends WritableValueImpl<Float> {
 

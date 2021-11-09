@@ -15,7 +15,7 @@ import javax.swing.border.Border;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class RoundedBorder implements Border {
 

@@ -13,7 +13,7 @@ import javax.swing.Icon;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ColorSwatch implements Icon {
 

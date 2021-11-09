@@ -22,7 +22,7 @@ import javax.swing.tree.TreePath;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class TreeTransferHandler extends TransferHandler {
 

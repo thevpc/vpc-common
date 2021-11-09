@@ -9,7 +9,7 @@ import java.util.function.Predicate;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class WritableLiMapAdapter<K, V> extends ObservableMapAdapter<K, V> implements WritableLiMap<K, V> {
 

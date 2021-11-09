@@ -19,7 +19,7 @@ import net.thevpc.common.lanterna.PanelExt;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class NewClassTest {
     public static void main(String[] args) {

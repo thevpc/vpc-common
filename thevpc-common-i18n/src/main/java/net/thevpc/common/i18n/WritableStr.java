@@ -11,7 +11,7 @@ import net.thevpc.common.props.impl.WritableValueImpl;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class WritableStr extends WritableValueImpl<Str> {
     public WritableStr(String name) {

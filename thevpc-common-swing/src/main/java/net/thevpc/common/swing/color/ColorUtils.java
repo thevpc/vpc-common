@@ -25,7 +25,7 @@ import java.util.Random;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ColorUtils {
 

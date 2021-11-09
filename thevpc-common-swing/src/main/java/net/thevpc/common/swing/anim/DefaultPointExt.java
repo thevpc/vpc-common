@@ -9,7 +9,7 @@ import java.awt.Dimension;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultPointExt implements AnimPoint {
 

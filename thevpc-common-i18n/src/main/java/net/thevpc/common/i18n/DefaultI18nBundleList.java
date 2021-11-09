@@ -11,7 +11,7 @@ import net.thevpc.common.props.impl.WritableListAdapter;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class DefaultI18nBundleList extends WritableListAdapter<I18nBundle> implements I18nBundleList {
 

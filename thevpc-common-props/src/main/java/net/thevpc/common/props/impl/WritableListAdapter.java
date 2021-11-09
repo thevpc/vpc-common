@@ -14,7 +14,7 @@ import net.thevpc.common.props.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public abstract class WritableListAdapter<T> implements WritableList<T>{
     protected abstract WritableList<T> getAdaptee();

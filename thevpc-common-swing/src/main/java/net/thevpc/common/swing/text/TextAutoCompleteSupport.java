@@ -20,7 +20,7 @@ import javax.swing.JTextField;
  * mostly inspired from
  * http://twaver.blogspot.com/2012/07/add-function-autocompletein-jtextfield.html
  *
- * @author vpc
+ * @author thevpc
  */
 public class TextAutoCompleteSupport {
 

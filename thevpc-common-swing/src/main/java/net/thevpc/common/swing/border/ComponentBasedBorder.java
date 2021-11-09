@@ -30,7 +30,7 @@ import javax.swing.border.Border;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class ComponentBasedBorder implements Border {
 

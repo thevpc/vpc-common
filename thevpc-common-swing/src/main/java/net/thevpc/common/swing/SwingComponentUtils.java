@@ -15,7 +15,7 @@ import javax.swing.text.*;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class SwingComponentUtils {
 

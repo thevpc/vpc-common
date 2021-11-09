@@ -9,7 +9,7 @@ import net.thevpc.common.props.WritableList;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public interface I18nBundleList extends WritableList<I18nBundle>{
     void add(String resourceUrl);

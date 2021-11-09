@@ -7,7 +7,7 @@ package net.thevpc.common.swing.anim;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class Animators {
 

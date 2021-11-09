@@ -21,7 +21,7 @@ import net.thevpc.common.swing.list.ObjectListModelListener;
 
 /**
  *
- * @author vpc
+ * @author thevpc
  */
 public class JTabbedButtons extends JPanel {
 

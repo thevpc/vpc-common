@@ -12,7 +12,7 @@ import java.awt.*;
 import java.util.NoSuchElementException;
 
 /**
- * @author vpc
+ * @author thevpc
  */
 public class JTabbedContainer extends JPanel {
     private IndexedMap<String, TabInfo> components = new IndexedMap<>();
