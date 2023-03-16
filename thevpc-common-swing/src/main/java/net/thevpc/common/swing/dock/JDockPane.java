@@ -21,7 +21,9 @@ public class JDockPane extends JPanel {
         @Override
         public void onSelectionChanged(String id, JComponent component, boolean selected, JDockAnchor anchor) {
             for (JDockTools.SelectionListener listener : listeners) {
-                listener.onSelectionChanged(id, component, selected, anchor);
+                if(listener!=null) {
+                    listener.onSelectionChanged(id, component, selected, anchor);
+                }
             }
         }
     };

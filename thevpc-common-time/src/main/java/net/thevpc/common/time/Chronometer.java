@@ -113,7 +113,7 @@ public class Chronometer implements Serializable {
     }
 
     public boolean isStopped() {
-        return endDate == 0;
+        return endDate != 0;
     }
 
     public Chronometer startNow() {
@@ -140,7 +140,7 @@ public class Chronometer implements Serializable {
             long lapValue = n - lastTime;
             this.accumulated += lapValue;
             lastTime = n;
-            return new TimeDuration(lapValue);
+            return TimeDuration.ofNanos(lapValue);
         }
         return TimeDuration.ZERO;
     }
@@ -191,9 +191,9 @@ public class Chronometer implements Serializable {
         }
         if (running) {
             long curr = System.nanoTime() - lastTime;
-            return new TimeDuration(curr + accumulated);
+            return TimeDuration.ofNanos(curr + accumulated);
         }
-        return new TimeDuration(accumulated);
+        return TimeDuration.ofNanos(accumulated);
 
     }
 

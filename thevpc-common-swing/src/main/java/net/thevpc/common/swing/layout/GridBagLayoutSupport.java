@@ -376,12 +376,12 @@ public class GridBagLayoutSupport {
 
     private static class GridBagConstraintsHolderFilter implements Predicate<GridBagConstraintsHolder> {
 
-        Set<Pattern> all = new LinkedHashSet<Pattern>();
+        private Set<Pattern> all = new LinkedHashSet<Pattern>();
 
         private GridBagConstraintsHolderFilter(String... commaSeparatedNames) {
             for (String commaSeparatedName : commaSeparatedNames) {
                 if (commaSeparatedName != null && commaSeparatedName.length() > 0) {
-                    for (String s : commaSeparatedName.split("; \t")) {
+                    for (String s : commaSeparatedName.split("[; \t]")) {
                         if (s.length() > 0) {
                             all.add(Pattern.compile(s));
                         }
@@ -467,6 +467,10 @@ public class GridBagLayoutSupport {
 
         public boolean isPeekDigit() {
             return hasNext() && Character.isDigit(peek());
+        }
+
+        public boolean isPeekLetterOrDigit() {
+            return hasNext() && Character.isLetterOrDigit(peek());
         }
 
         public boolean isPeekLetter() {
@@ -571,7 +575,7 @@ public class GridBagLayoutSupport {
 
     private String readName(SReader r) {
         StringBuilder sb = new StringBuilder();
-        if (r.isPeekLetter()) {
+        if (r.isPeekLetterOrDigit()) {
             sb.append(r.next());
             while (r.hasNext()) {
                 char c = r.peek();
@@ -919,7 +923,7 @@ public class GridBagLayoutSupport {
                     break;
                 }
                 default: {
-                    if (Character.isLetter(c)) {
+                    if (Character.isLetter(c) || Character.isDigit(c)) {
                         String n2 = readName(r);
                         if (r.hasNext() && r.peek() == '(') {
                             runFunction(n2, b, readParList(r));

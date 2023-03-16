@@ -50,14 +50,38 @@ public abstract class AbstractTaskMonitor implements TaskMonitor {
 
     @Override
     public void terminate() {
+        terminate(true);
         if (!isTerminated()) {
-            if(!isStarted()){
+            if (!isStarted()) {
                 start();
             }
             terminated = true;
-            terminateImpl();
+            terminateImpl(terminated);
             for (TaskListener listener : getListeners()) {
                 listener.taskTerminated(this);
+            }
+        }
+    }
+
+    protected void terminate(boolean terminated) {
+        if(terminated) {
+            if (!isTerminated()) {
+                if (!isStarted()) {
+                    start();
+                }
+                this.terminated = true;
+                terminateImpl(terminated);
+                for (TaskListener listener : getListeners()) {
+                    listener.taskTerminated(this);
+                }
+            }
+        }else{
+            if (isTerminated()) {
+                this.terminated = false;
+                terminateImpl(false);
+                for (TaskListener listener : getListeners()) {
+                    listener.taskStarted(this);
+                }
             }
         }
     }
@@ -142,6 +166,7 @@ public abstract class AbstractTaskMonitor implements TaskMonitor {
             started = false;
             terminated = false;
             blocked = false;
+            chronometer.reset();
             resetImpl();
             for (TaskListener listener : listeners) {
                 listener.taskReset(this);
@@ -213,7 +238,7 @@ public abstract class AbstractTaskMonitor implements TaskMonitor {
 
     }
 
-    protected void terminateImpl() {
+    protected void terminateImpl(boolean terminated) {
 
     }
 
@@ -248,7 +273,7 @@ public abstract class AbstractTaskMonitor implements TaskMonitor {
 
     @Override
     public void setMessage(String message, Object... args) {
-        setMessage(message==null?EMPTY_MESSAGE:
+        setMessage(message == null ? EMPTY_MESSAGE :
                 new JFormattedMessage(Level.FINE, message, args));
     }
 
@@ -271,6 +296,15 @@ public abstract class AbstractTaskMonitor implements TaskMonitor {
         public MonChronometer(String name) {
             this.name = name;
             start();
+        }
+
+        public MonChronometer reset() {
+            this.accumulated = 0;
+            this.startDate = 0;
+            this.endDate = 0;
+            this.lastTime = 0;
+            this.running = false;
+            return this;
         }
 
         public MonChronometer copy() {
@@ -411,5 +445,6 @@ public abstract class AbstractTaskMonitor implements TaskMonitor {
 
         }
     }
+
 
 }

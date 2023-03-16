@@ -63,7 +63,11 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
             return;
         }
         if (isTerminated()) {
-            return;
+            if(progress<1){
+                terminate(false);
+            }else {
+                return;
+            }
         }
         if (isSuspended()) {
             while (isSuspended()) {
@@ -204,7 +208,7 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
             throw new IllegalArgumentException("missing incrementor");
         }
         double a = getProgress();
-        double b = incrementor.inc(getProgress());
+        double b = incrementor.inc(a);
         setProgress(a, message);
         return new ProgressMonitorTranslator(this, b - a, a);
     }
@@ -215,7 +219,9 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
         if (incrementor == null) {
             throw new IllegalArgumentException("missing incrementor");
         }
-        setProgress(incrementor.inc(getProgress()), new StringMessage(Level.FINE, message));
+        double oldProgress=getProgress();
+        double newProgress = incrementor.inc(oldProgress);
+        setProgress(newProgress, new StringMessage(Level.FINE, message));
         return this;
     }
 
@@ -225,7 +231,9 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
         if (incrementor == null) {
             throw new IllegalArgumentException("missing incrementor");
         }
-        setProgress(incrementor.inc(getProgress()), new JFormattedMessage(Level.FINE, message, args));
+        double oldProgress = getProgress();
+        double newProgress = incrementor.inc(oldProgress);
+        setProgress(newProgress, new JFormattedMessage(Level.FINE, message, args));
         return this;
     }
 
@@ -284,8 +292,10 @@ public abstract class AbstractProgressMonitor extends AbstractTaskMonitor implem
         setProgress(0, new StringMessage(Level.FINE, ""));
     }
 
-    protected void terminateImpl() {
-        setProgress(1, new StringMessage(Level.FINE, ""));
+    protected void terminateImpl(boolean terminated) {
+        if(terminated) {
+            setProgress(1, new StringMessage(Level.FINE, ""));
+        }
     }
 
     protected abstract void setProgressImpl(double progress);

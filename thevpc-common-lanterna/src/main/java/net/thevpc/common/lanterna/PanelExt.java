@@ -25,8 +25,9 @@ public class PanelExt extends Panel implements ContainerExt{
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public Panel setVisible(boolean visible) {
         this.visible = visible;
+        return this;
     }
 
     @Override

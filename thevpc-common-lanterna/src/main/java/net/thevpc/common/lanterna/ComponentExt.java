@@ -3,16 +3,12 @@ package net.thevpc.common.lanterna;
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.gui2.Component;
 
-public interface ComponentExt extends Component {
+public interface ComponentExt<T extends Component> extends Component {
     TerminalSize getMinimumSize();
-
-
-//    ComponentOrientation getComponentOrientation();
-//    void setComponentOrientation();
 
 
     boolean isVisible();
 
-    void setVisible(boolean visible);
+    T setVisible(boolean visible);
 
 }

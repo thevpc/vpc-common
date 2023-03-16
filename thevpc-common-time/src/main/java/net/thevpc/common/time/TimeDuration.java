@@ -1,203 +1,174 @@
 package net.thevpc.common.time;
 
 public class TimeDuration {
-    public static final TimeDuration ZERO = new TimeDuration(0);
-    private long nanos;
+    public static final TimeDuration ZERO = ofNanos(0);
+    private long millis;
+    private int d;
+    private int h;
+    private int mn;
+    private int s;
+    private int ms;
+    private int us;
+    private int ns;
 
-    public TimeDuration(long nanos) {
-        this.nanos = nanos;
+    public static TimeDuration ofNanos(long nanos) {
+        if (nanos < 0) {
+            throw new IllegalArgumentException("invalid nanos " + nanos);
+        }
+        long millis = nanos / 1000000;
+        int inanos = (int) (nanos % 1000);
+        int imicro = (int) ((nanos % 1000000L) / 1000);
+        int h = (int) (millis / (1000L * 60L * 60L));
+        int mn = (int) ((millis % (1000L * 60L * 60L)) / 60000L);
+        int s = (int) ((millis % 60000L) / 1000L);
+        int ms = (int) (millis % 1000L);
+        int d = h / 24;
+        h = h % 24;
+        return new TimeDuration(
+                millis, d, h, mn, s, ms, imicro, inanos
+        );
     }
 
-    public static String formatPeriodMilli(long period, DatePart precision) {
-        StringBuilder sb = new StringBuilder();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
-            if (h > 0) {
-                sb.append(_StringUtils.formatRight(h, 2)).append("h ");
-                started = true;
-            }
-            if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
-                if (mn > 0 || started) {
-                    sb.append(_StringUtils.formatRight(mn, 2)).append("mn ");
-                    started = true;
-                }
-                if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
-                    if (s > 0 || started) {
-                        sb.append(_StringUtils.formatRight(s, 2)).append("s ");
-                        //started=true;
-                    }
-                    if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
-                        sb.append(_StringUtils.formatRight(ms, 3)).append("ms");
-                    }
-                }
-            }
-        }
-        return sb.toString();
+    public static TimeDuration ofMillis(long millis) {
+        return ofMillis(millis, 0);
     }
 
-    public static String formatPeriodMilli(long period) {
-        StringBuilder sb = new StringBuilder();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        if (h > 0) {
-            sb.append(_StringUtils.formatRight(h, 2)).append("h ");
-            started = true;
+    public static TimeDuration of(int d, int h, int mn, int s, int ms, int us, int ns) {
+        if (d < 0) {
+            throw new IllegalArgumentException("invalid d " + d);
         }
-        if (mn > 0 || started) {
-            sb.append(_StringUtils.formatRight(mn, 2)).append("mn ");
-            started = true;
+        if (h < 0 || h >= 24) {
+            throw new IllegalArgumentException("invalid h " + h);
         }
-        if (s > 0 || started) {
-            sb.append(_StringUtils.formatRight(s, 2)).append("s ");
-            //started=true;
+        if (mn < 0 || mn >= 60) {
+            throw new IllegalArgumentException("invalid mn " + mn);
         }
-        sb.append(_StringUtils.formatRight(ms, 3)).append("ms");
-        return sb.toString();
+        if (s < 0 || s >= 60) {
+            throw new IllegalArgumentException("invalid s " + s);
+        }
+        if (ms < 0 || ms >= 1000) {
+            throw new IllegalArgumentException("invalid ms " + ms);
+        }
+        if (us < 0 || us >= 1000) {
+            throw new IllegalArgumentException("invalid us " + us);
+        }
+        if (ns < 0 || ns >= 1000) {
+            throw new IllegalArgumentException("invalid ms " + ns);
+        }
+        long millis = ms + 1000 * s + 1000 * 60 * mn + 1000 * 3600 * h + 1000L * 3600 * 24 * d;
+        return new TimeDuration(
+                millis, d, h, mn, s, ms, us, ns
+        );
+    }
+
+    public static TimeDuration ofMillis(long millis, int nanos) {
+        if (millis < 0) {
+            throw new IllegalArgumentException("invalid millis " + millis);
+        }
+        if (nanos < 0 || nanos > 999999) {
+            throw new IllegalArgumentException("invalid nanos " + millis);
+        }
+        int inanos = (int) (nanos % 1000);
+        int imicro = (int) ((nanos % 1000000L) / 1000);
+        int h = (int) (millis / (1000L * 60L * 60L));
+        int mn = (int) ((millis % (1000L * 60L * 60L)) / 60000L);
+        int s = (int) ((millis % 60000L) / 1000L);
+        int ms = (int) (millis % 1000L);
+        int d = h / 24;
+        h = h % 24;
+        return new TimeDuration(
+                millis, d, h, mn, s, ms, imicro, inanos
+        );
+    }
+
+    private TimeDuration(long millis, int d, int h, int mn, int s, int ms, int us, int ns) {
+        this.millis = millis;
+        this.d = d;
+        this.h = h;
+        this.mn = mn;
+        this.s = s;
+        this.ms = ms;
+        this.us = us;
+        this.ns = ns;
     }
 
     public long toNanoSeconds() {
-        return getTime();
+        return getTimeMillis();
     }
 
-    public long getTime() {
-        return nanos;
+    public long getTimeMillis() {
+        return millis;
+    }
+
+    public long getTimeNanos() {
+        return millis * 1000000 + us + 1000 + ns;
     }
 
     public String toString() {
-        return formatPeriod(getTime());
+        return format();
     }
 
-    public static String formatPeriod(long periodNanos) {
-        return formatPeriod(periodNanos, DatePart.MILLISECOND);
+    public String format() {
+        return format(DatePart.MILLISECOND);
     }
 
-    public static String formatPeriod(long periodNanos, DatePart precision) {
-        return DefaultTimePeriodFormat.of(precision).formatNanos(periodNanos);
+    public String format(DatePart precision) {
+        return DefaultTimeDurationFormat.of(precision).format(millis, ns + us * 1000);
+    }
+
+    public String formatShort() {
+        return formatShort(DatePart.MILLISECOND);
+    }
+
+    public String formatShort(DatePart precision) {
+        return ShortTimeDurationFormat.of(precision).format(millis, ns + us * 1000);
     }
 
     public String toString(DatePart precision) {
-        return formatPeriod(getTime(), precision);
-    }
-
-    public String formatPeriodNano(DatePart precision) {
-        StringBuilder sb = new StringBuilder();
-        boolean started = false;
-        int h = getHours();
-        int mn = getMinutes();
-        int s = getSeconds();
-        int ms = getMilliSeconds();
-        int us = getMicroSeconds();
-        int ns = getNanoSeconds();
-        if (precision.ordinal() >= DatePart.HOUR.ordinal()) {
-            if (h > 0) {
-                if (started) {
-                    sb.append(" ");
-                }
-                sb.append(_StringUtils.formatRight(h, 2)).append("h");
-                started = true;
-            }
-            if (precision.ordinal() >= DatePart.MINUTE.ordinal()) {
-                if (mn > 0 || started) {
-                    if (started) {
-                        sb.append(" ");
-                    }
-                    sb.append(_StringUtils.formatRight(mn, 2)).append("mn");
-                    started = true;
-                }
-                if (precision.ordinal() >= DatePart.SECOND.ordinal()) {
-                    if (s > 0 || started) {
-                        if (started) {
-                            sb.append(" ");
-                        }
-                        sb.append(_StringUtils.formatRight(s, 2)).append("s");
-                        started = true;
-                    }
-                    if (precision.ordinal() >= DatePart.MILLISECOND.ordinal()) {
-                        if (s > 0 || started) {
-                            if (started) {
-                                sb.append(" ");
-                            }
-                            sb.append(_StringUtils.formatRight(ms, 3)).append("ms");
-                            started = true;
-                        }
-                        if (precision.ordinal() >= DatePart.MICROSECOND.ordinal()) {
-                            if (s > 0 || started) {
-                                if (started) {
-                                    sb.append(" ");
-                                }
-                                sb.append(_StringUtils.formatRight(us, 3)).append("us");
-                                started = true;
-                            }
-                            if (precision.ordinal() >= DatePart.NANOSECOND.ordinal()) {
-                                if (started) {
-                                    sb.append(" ");
-                                }
-                                sb.append(_StringUtils.formatRight(ns, 3)).append("ns");
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return sb.toString();
+        return format(precision);
     }
 
     public int getHours() {
-        return (int) (toHours() % 24);
+        return h;
     }
 
     public int getMinutes() {
-        return (int) (toMinutes() % 60L);
+        return mn;
     }
 
     public int getSeconds() {
-        return (int) (toSeconds() % 60L);
+        return s;
     }
 
     public int getMilliSeconds() {
-        return (int) (toMilliSeconds() % 1000L);
+        return ms;
     }
 
     public int getMicroSeconds() {
-        return (int) (toMicroSeconds() % 1000);
+        return us;
     }
 
     public int getNanoSeconds() {
-        return (int) (getTime() % 1000);
+        return ns;
     }
 
     public long toHours() {
-        return getTime() / (60000000000L * 60);
+        return getTimeMillis() / (60000000000L * 60);
     }
 
     public long toMinutes() {
-        return getTime() / 60000000000L;
+        return getTimeMillis() / 60000000000L;
     }
 
     public long toSeconds() {
-        return getTime() / 1000000000;
+        return getTimeMillis() / 1000000000;
     }
 
     public long toMilliSeconds() {
-        return getTime() / 1000000;
+        return getTimeMillis() / 1000000;
     }
 
     public long toMicroSeconds() {
-        return getTime() / 1000;
-    }
-
-    public TimeDuration div(int a) {
-        return new TimeDuration(nanos / a);
-    }
-
-    public TimeDuration mul(int a) {
-        return new TimeDuration(nanos * a);
+        return getTimeMillis() / 1000;
     }
 }

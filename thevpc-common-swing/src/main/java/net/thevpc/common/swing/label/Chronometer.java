@@ -1,11 +1,11 @@
 /**
  * ====================================================================
- *                        vpc-commons library
- *
+ * vpc-commons library
+ * <p>
  * Description: <start><end>
  *
  * <br>
- *
+ * <p>
  * Copyright [2020] [thevpc]
  * Licensed under the Apache License, Version 2.0 (the "License"); you may
  * not use this file except in compliance with the License. You may obtain a
@@ -17,24 +17,18 @@
  * governing permissions and limitations under the License.
  * <br>
  * ====================================================================
-*/
-package net.thevpc.common.swing.util;
+ */
+package net.thevpc.common.swing.label;
 
-import java.text.DecimalFormat;
+import net.thevpc.common.swing.util.TimeDuration;
 
 /**
  * @author Taha BEN SALAH (taha.bensalah@gmail.com)
  * %creationtime 13 juil. 2006 22:14:21
  */
-public class Chronometer {
 
-    public static enum DatePart {
+class Chronometer {
 
-        h,
-        mn,
-        s,
-        ms
-    }
     private long startDate;
     private long endDate;
     private String desc;
@@ -119,7 +113,7 @@ public class Chronometer {
         }
         if (s > 0 || started) {
             sb.append(s).append(" s ");
-        //started=true;
+            //started=true;
         }
         sb.append(ms).append(" ms");
         return sb.toString();
@@ -145,7 +139,7 @@ public class Chronometer {
                 if (precision.ordinal() >= DatePart.s.ordinal()) {
                     if (s > 0 || started) {
                         sb.append(s).append(" s ");
-                    //started=true;
+                        //started=true;
                     }
                     if (precision.ordinal() >= DatePart.ms.ordinal()) {
                         sb.append(ms).append(" ms");
@@ -155,94 +149,20 @@ public class Chronometer {
         }
         return sb.toString();
     }
-    private static DecimalFormat $TF2$ = new DecimalFormat("#00");
-    private static DecimalFormat $TF3$ = new DecimalFormat("#000");
+
 
     public static String formatPeriodShort(long period, DatePart precision) {
-        StringBuffer sb = new StringBuffer();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        if (precision.ordinal() >= DatePart.h.ordinal()) {
-            if (h > 0) {
-                sb.append($TF2$.format(h));
-                started = true;
-            }
-            if (precision.ordinal() >= DatePart.mn.ordinal()) {
-                if (mn > 0 || started) {
-                    if (sb.length() > 0) {
-                        sb.append(":");
-                    }
-                    sb.append($TF2$.format(mn));
-                    started = true;
-                }
-                if (precision.ordinal() >= DatePart.s.ordinal()) {
-                    if (sb.length() > 0) {
-                        sb.append(":");
-                    }
-                    if (s > 0 || started) {
-                        sb.append($TF2$.format(s));
-                    //started=true;
-                    }
-                    if (precision.ordinal() >= DatePart.ms.ordinal()) {
-                        if (sb.length() > 0) {
-                            sb.append(":");
-                        }
-                        sb.append($TF3$.format(ms));
-                    }
-                }
-            }
-        }
-        return sb.toString();
+        return TimeDuration.ofMillis(period).formatPeriodShort(precision);
     }
 
-    public String formatPeriodFixed(DatePart min,DatePart max) {
-        return formatPeriodFixed(getTime(),min,max);
+    public String formatPeriodFixed(DatePart min, DatePart max) {
+        return TimeDuration.ofMillis(getTime()).formatPeriodFixed(min, max);
     }
 
-    public static String formatPeriodFixed(long period, DatePart min,DatePart max) {
-        StringBuffer sb = new StringBuffer();
-        boolean started = false;
-        int h = (int) (period / (1000L * 60L * 60L));
-        int mn = (int) ((period % (1000L * 60L * 60L)) / 60000L);
-        int s = (int) ((period % 60000L) / 1000L);
-        int ms = (int) (period % 1000L);
-        int mino = min.ordinal();
-        int maxo = max.ordinal();
-        if (mino >= DatePart.h.ordinal()) {
-            if (h > 0 || maxo<=DatePart.h.ordinal()) {
-                sb.append($TF2$.format(h));
-                started = true;
-            }
-            if (mino >= DatePart.mn.ordinal()) {
-                if (mn > 0 || started || maxo<=DatePart.mn.ordinal()) {
-                    if (sb.length() > 0) {
-                        sb.append(":");
-                    }
-                    sb.append($TF2$.format(mn));
-                    started = true;
-                }
-                if (mino >= DatePart.s.ordinal()) {
-                    if (s > 0 || started || maxo<=DatePart.s.ordinal()) {
-                        if (sb.length() > 0) {
-                            sb.append(":");
-                        }
-                        sb.append($TF2$.format(s));
-                    //started=true;
-                    }
-                    if (mino >= DatePart.ms.ordinal()) {
-                        if (sb.length() > 0) {
-                            sb.append(".");
-                        }
-                        sb.append($TF3$.format(ms));
-                    }
-                }
-            }
-        }
-        return sb.toString();
+    public static String formatPeriodFixed(long period, DatePart min, DatePart max) {
+        return TimeDuration.ofMillis(period).formatPeriodFixed(min, max);
     }
+
 
     @Override
     public String toString() {

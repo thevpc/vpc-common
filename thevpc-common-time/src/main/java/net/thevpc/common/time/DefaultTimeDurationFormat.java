@@ -4,27 +4,30 @@ package net.thevpc.common.time;
 /**
  * Created by vpc on 3/20/17.
  */
-public class DefaultTimePeriodFormat implements TimePeriodFormat {
+public class DefaultTimeDurationFormat implements TimeDurationFormat {
     //    private static final DecimalFormat SECONDS_FORMAT = new DecimalFormat("00.000");
     private DatePart precision;
     boolean skipZeros = false;
-    private static TimePeriodFormat[] _FORMATS=new TimePeriodFormat[DatePart.values().length];
-    static{
+    private static TimeDurationFormat[] _FORMATS = new TimeDurationFormat[DatePart.values().length];
+
+    static {
         DatePart[] values = DatePart.values();
         for (int i = 0; i < values.length; i++) {
-            _FORMATS[i]=new DefaultTimePeriodFormat(values[i]);
+            _FORMATS[i] = new DefaultTimeDurationFormat(values[i]);
         }
     }
-    public static final TimePeriodFormat DEFAULT = of(DatePart.NANOSECOND);
-    public static TimePeriodFormat of(DatePart d){
+
+    public static final TimeDurationFormat DEFAULT = of(DatePart.NANOSECOND);
+
+    public static TimeDurationFormat of(DatePart d) {
         return _FORMATS[d.ordinal()];
     }
 
-    public DefaultTimePeriodFormat() {
+    public DefaultTimeDurationFormat() {
         this(DatePart.NANOSECOND);
     }
 
-    public DefaultTimePeriodFormat(DatePart precision) {
+    public DefaultTimeDurationFormat(DatePart precision) {
         this.precision = precision;
     }
 
@@ -34,8 +37,19 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
         return formatNanos(periodMillis * 1000000L);
     }
 
+
+    public String formatNanos(long nanos) {
+        return format(nanos / 1000000, (int) (nanos % 1000000));
+    }
+
     @Override
-    public String formatNanos(long periodNano) {
+    public String format(long millis, int nanos) {
+        if (millis < 0) {
+            throw new IllegalArgumentException("invalid millis " + millis);
+        }
+        if (nanos < 0 || nanos > 999999) {
+            throw new IllegalArgumentException("invalid nanos " + millis);
+        }
         int max;
         boolean empty = true;
         switch (precision) {
@@ -71,26 +85,26 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
                 throw new IllegalArgumentException("Unsupported precision use Calendar.DATE,Calendar.HOUR, ...Calendar.MILLISECOND");
             }
         }
-        int nano = (int) (periodNano % 1000L);
-        int micro = (int) ((periodNano / 1000L) % 1000L);
-        long periodms = periodNano / 1000000;
 
-        int milliSeconds = (int) (periodms % 1000L);
+        int nano = (int) (nanos % 1000L);
+        int micro = (int) (nanos / 1000L);
 
-        double seconds = (int)((periodms /1000) % 60);
+        int milliSeconds = (int) (millis % 1000L);
 
-        int minutes = (int)((periodms /60000) % 60);
+        double seconds = (int) ((millis / 1000) % 60);
 
-        int hours = (int)((periodms /3600000) % 24);
+        int minutes = (int) ((millis / 60000) % 60);
 
-        int days = (int)((periodms /3600000 /24));
+        int hours = (int) ((millis / 3600000) % 24);
+
+        int days = (int) ((millis / 3600000 / 24));
 
         StringBuilder sb = new StringBuilder();
 
         if (max > 0) {
             if (days != 0 || (empty && max == 1)) {
-                int years=days/365;
-                if(years>=1){
+                int years = days / 365;
+                if (years >= 1) {
                     return "an eternity";
                 }
                 if (!empty) {
@@ -129,9 +143,9 @@ public class DefaultTimePeriodFormat implements TimePeriodFormat {
                 if (!empty) {
                     sb.append(' ');
                 }
-                if(max==1) {
+                if (max == 1) {
                     sb.append(_StringUtils.formatRight(seconds, 2)).append("s");
-                }else{
+                } else {
                     sb.append(_StringUtils.formatRight((int) seconds, 2)).append("s");
                 }
                 empty = false;

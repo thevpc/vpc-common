@@ -3,7 +3,6 @@ package net.thevpc.common.mon;
 import net.thevpc.common.msg.Message;
 
 public interface TaskMonitor {
-    //    ProgressMonitor getProgressMonitor();
     void start();
 
     void terminate();

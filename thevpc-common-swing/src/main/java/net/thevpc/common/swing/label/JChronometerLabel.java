@@ -18,9 +18,6 @@
  */
 package net.thevpc.common.swing.label;
 
-import net.thevpc.common.swing.label.JTimerLabel;
-import net.thevpc.common.swing.util.Chronometer;
-
 import java.text.MessageFormat;
 import java.util.Date;
 
@@ -54,7 +51,7 @@ public class JChronometerLabel extends JTimerLabel {
 
     protected void tic() {
         setText(messagePattern == null
-                ? chronometer.formatPeriodFixed(Chronometer.DatePart.ms, Chronometer.DatePart.h)
+                ? chronometer.formatPeriodFixed(DatePart.ms, DatePart.h)
                 : MessageFormat.format(messagePattern,
                         chronometer.toString(),
                         new Date(chronometer.getStartDate()),

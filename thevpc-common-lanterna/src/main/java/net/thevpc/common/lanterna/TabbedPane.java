@@ -23,7 +23,7 @@ public class TabbedPane extends PanelExt {
             comboList = new ComboBox();
             comboList.addListener(new ComboBox.Listener() {
                 @Override
-                public void onSelectionChanged(int selectedIndex, int previousSelection) {
+                public void onSelectionChanged(int selectedIndex, int previousSelection, boolean changedByUserInteraction) {
                     setSelected(selectedIndex);
                 }
             });

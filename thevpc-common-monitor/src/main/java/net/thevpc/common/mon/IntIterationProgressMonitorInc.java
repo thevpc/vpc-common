@@ -12,8 +12,11 @@ public class IntIterationProgressMonitorInc implements ProgressMonitorInc {
     }
 
     @Override
-    public double inc(double last) {
-        index++;
-        return index / max;
+    public double inc(double lastVal) {
+        int lastInt = (int) (lastVal * max);
+        double newVal=(lastInt + 1) / max;
+        int newInt = (int) (newVal * max);
+        return newVal;
     }
+
 }

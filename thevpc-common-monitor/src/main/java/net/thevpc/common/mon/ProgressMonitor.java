@@ -28,6 +28,18 @@ public interface ProgressMonitor extends TaskMonitor {
 
     ProgressMonitor translate(int index, int max);
 
+    default void complete() {
+        setProgress(1);
+    }
+
+    default void complete(String message) {
+        setProgress(1, message);
+    }
+
+    default void complete(String message, Object... args) {
+        setProgress(1, message, args);
+    }
+
     void setProgress(double i);
 
     void setProgress(int i, int max);

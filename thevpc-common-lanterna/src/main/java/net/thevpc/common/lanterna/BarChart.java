@@ -63,8 +63,9 @@ public class BarChart extends AbstractComponent<BarChart> implements ComponentEx
     }
 
     @Override
-    public void setVisible(boolean visible) {
+    public BarChart setVisible(boolean visible) {
         this.visible = visible;
+        return this;
     }
 
     public int getMinValuesCount() {
