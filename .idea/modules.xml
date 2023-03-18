@@ -5,7 +5,50 @@
       <module fileurl="file://$PROJECT_DIR$/common.iml" filepath="$PROJECT_DIR$/common.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-java-shell/java-shell.iml" filepath="$PROJECT_DIR$/vpc-common-java-shell/java-shell.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-jeep/jeep-build.iml" filepath="$PROJECT_DIR$/vpc-common-jeep/jeep-build.iml" />
-      <module fileurl="file://$PROJECT_DIR$/vpc-common-tson/tson.iml" filepath="$PROJECT_DIR$/vpc-common-tson/tson.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-classpath/thevpc-common-classpath.iml" filepath="$PROJECT_DIR$/thevpc-common-classpath/thevpc-common-classpath.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-collections/thevpc-common-collections.iml" filepath="$PROJECT_DIR$/thevpc-common-collections/thevpc-common-collections.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-commandline/thevpc-common-commandline.iml" filepath="$PROJECT_DIR$/thevpc-common-commandline/thevpc-common-commandline.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-config/thevpc-common-config.iml" filepath="$PROJECT_DIR$/thevpc-common-config/thevpc-common-config.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-cron/thevpc-common-cron.iml" filepath="$PROJECT_DIR$/thevpc-common-cron/thevpc-common-cron.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-desktop-automation/thevpc-common-desktop-automation.iml" filepath="$PROJECT_DIR$/thevpc-common-desktop-automation/thevpc-common-desktop-automation.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-diff-jar/thevpc-common-diff-jar.iml" filepath="$PROJECT_DIR$/thevpc-common-diff-jar/thevpc-common-diff-jar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-docusaurus/thevpc-common-docusaurus.iml" filepath="$PROJECT_DIR$/thevpc-common-docusaurus/thevpc-common-docusaurus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-file-template/thevpc-common-file-template.iml" filepath="$PROJECT_DIR$/thevpc-common-file-template/thevpc-common-file-template.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-fprint/thevpc-common-fprint.iml" filepath="$PROJECT_DIR$/thevpc-common-fprint/thevpc-common-fprint.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-i18n/thevpc-common-i18n.iml" filepath="$PROJECT_DIR$/thevpc-common-i18n/thevpc-common-i18n.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-iconset-default/thevpc-common-iconset-default.iml" filepath="$PROJECT_DIR$/thevpc-common-iconset-default/thevpc-common-iconset-default.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-io/thevpc-common-io.iml" filepath="$PROJECT_DIR$/thevpc-common-io/thevpc-common-io.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-io-compress/thevpc-common-io-compress.iml" filepath="$PROJECT_DIR$/thevpc-common-io-compress/thevpc-common-io-compress.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-iterators/thevpc-common-iterators.iml" filepath="$PROJECT_DIR$/thevpc-common-iterators/thevpc-common-iterators.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-lanterna/thevpc-common-lanterna.iml" filepath="$PROJECT_DIR$/thevpc-common-lanterna/thevpc-common-lanterna.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-ljson/thevpc-common-ljson.iml" filepath="$PROJECT_DIR$/thevpc-common-ljson/thevpc-common-ljson.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-log/thevpc-common-log.iml" filepath="$PROJECT_DIR$/thevpc-common-log/thevpc-common-log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-md/thevpc-common-md.iml" filepath="$PROJECT_DIR$/thevpc-common-md/thevpc-common-md.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-md-asciidoctor/thevpc-common-md-asciidoctor.iml" filepath="$PROJECT_DIR$/thevpc-common-md-asciidoctor/thevpc-common-md-asciidoctor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-md-doc/thevpc-common-md-doc.iml" filepath="$PROJECT_DIR$/thevpc-common-md-doc/thevpc-common-md-doc.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-md-docusaurus/thevpc-common-md-docusaurus.iml" filepath="$PROJECT_DIR$/thevpc-common-md-docusaurus/thevpc-common-md-docusaurus.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-md-docusaurus-to-asciidoctor/thevpc-common-md-docusaurus-to-asciidoctor.iml" filepath="$PROJECT_DIR$/thevpc-common-md-docusaurus-to-asciidoctor/thevpc-common-md-docusaurus-to-asciidoctor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-monitor/thevpc-common-monitor.iml" filepath="$PROJECT_DIR$/thevpc-common-monitor/thevpc-common-monitor.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-msg/thevpc-common-msg.iml" filepath="$PROJECT_DIR$/thevpc-common-msg/thevpc-common-msg.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-mvn/thevpc-common-mvn.iml" filepath="$PROJECT_DIR$/thevpc-common-mvn/thevpc-common-mvn.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-plaf/thevpc-common-plaf.iml" filepath="$PROJECT_DIR$/thevpc-common-plaf/thevpc-common-plaf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-props/thevpc-common-props.iml" filepath="$PROJECT_DIR$/thevpc-common-props/thevpc-common-props.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-prs/thevpc-common-prs.iml" filepath="$PROJECT_DIR$/thevpc-common-prs/thevpc-common-prs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-sql/thevpc-common-sql.iml" filepath="$PROJECT_DIR$/thevpc-common-sql/thevpc-common-sql.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-ssh/thevpc-common-ssh.iml" filepath="$PROJECT_DIR$/thevpc-common-ssh/thevpc-common-ssh.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-strings/thevpc-common-strings.iml" filepath="$PROJECT_DIR$/thevpc-common-strings/thevpc-common-strings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-swing/thevpc-common-swing.iml" filepath="$PROJECT_DIR$/thevpc-common-swing/thevpc-common-swing.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-swing-prs/thevpc-common-swing-prs.iml" filepath="$PROJECT_DIR$/thevpc-common-swing-prs/thevpc-common-swing-prs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-text-source/thevpc-common-text-source.iml" filepath="$PROJECT_DIR$/thevpc-common-text-source/thevpc-common-text-source.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-text-source-log/thevpc-common-text-source-log.iml" filepath="$PROJECT_DIR$/thevpc-common-text-source-log/thevpc-common-text-source-log.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-time/thevpc-common-time.iml" filepath="$PROJECT_DIR$/thevpc-common-time/thevpc-common-time.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-utils/thevpc-common-utils.iml" filepath="$PROJECT_DIR$/thevpc-common-utils/thevpc-common-utils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-vfs/thevpc-common-vfs.iml" filepath="$PROJECT_DIR$/thevpc-common-vfs/thevpc-common-vfs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-web-jsf/thevpc-common-web-jsf.iml" filepath="$PROJECT_DIR$/thevpc-common-web-jsf/thevpc-common-web-jsf.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-web-xml/thevpc-common-web-xml.iml" filepath="$PROJECT_DIR$/thevpc-common-web-xml/thevpc-common-web-xml.iml" />
+      <module fileurl="file://$PROJECT_DIR$/thevpc-common-xfile/thevpc-common-xfile.iml" filepath="$PROJECT_DIR$/thevpc-common-xfile/thevpc-common-xfile.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../tson/tson/tson.iml" filepath="$PROJECT_DIR$/../tson/tson/tson.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../tson/tson-builder.iml" filepath="$PROJECT_DIR$/../tson/tson-builder.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-vfs/vfs.iml" filepath="$PROJECT_DIR$/vpc-common-vfs/vfs.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-app/vpc-common-app.iml" filepath="$PROJECT_DIR$/vpc-common-app/vpc-common-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/vpc-common-app-swing/vpc-common-app-swing.iml" filepath="$PROJECT_DIR$/vpc-common-app-swing/vpc-common-app-swing.iml" />

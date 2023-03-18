@@ -1,52 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="CheckStyle-IDEA-Module" serialisationVersion="2">
+    <option name="activeLocationsIds" />
+  </component>
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-classpath/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-collections/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-commandline/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-config/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-cron/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-desktop-automation/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-diff-jar/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-docusaurus/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-file-template/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-fprint/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-i18n/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-iconset-default/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-io/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-io-compress/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-iterators/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-lanterna/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-ljson/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-log/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-md/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-md-asciidoctor/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-md-doc/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-md-docusaurus/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-md-docusaurus-to-asciidoctor/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-monitor/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-msg/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-mvn/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-plaf/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-props/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-prs/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-sql/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-ssh/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-strings/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-swing/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-swing-prs/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-text-source/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-text-source-log/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-time/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-utils/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-vfs/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-web-jsf/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-web-xml/target" />
-      <excludeFolder url="file://$MODULE_DIR$/thevpc-common-xfile/target" />
-      <excludeFolder url="file://$MODULE_DIR$/lsp" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
