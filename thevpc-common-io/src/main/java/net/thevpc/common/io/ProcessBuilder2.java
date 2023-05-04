@@ -465,7 +465,7 @@ public class ProcessBuilder2 {
         return base.redirectErrorStream();
     }
 
-    public ProcessBuilder2 setRedirectErrorStream() {
+    public ProcessBuilder2 redirectErrorStream() {
         return setRedirectErrorStream(true);
     }
 

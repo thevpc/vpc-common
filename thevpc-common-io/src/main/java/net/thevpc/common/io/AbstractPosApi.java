@@ -21,7 +21,7 @@ public abstract class AbstractPosApi implements PosApi {
         ProcessBuilder2 b = new ProcessBuilder2()
                 .addCommand(cmd)
                 .addCommand("-l" + (mainArgs ? "m" : "") + (vmArgs ? "v" : ""))
-                .setRedirectErrorStream(true)
+                .redirectErrorStream()
                 .grabOutputString();
         b.waitFor();
         List<JpsResult> r = new ArrayList<>();
