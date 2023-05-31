@@ -25,35 +25,41 @@ class URLClassNameIterableIterator implements Iterator<String> {
 
     public boolean hasNext() {
         while (urlIndex < outer.urls.length) {
-            URL jarURL = outer.urls[urlIndex];
-            if (classPathResources == null) {
-                if (outer.configFilter==null || outer.configFilter.acceptLibrary(jarURL)) {
-                    URLClassIterable.log.log(Level.FINE, "configuration from  url : {0}", jarURL);
-                    classPathResources = new ClassPathRoot(jarURL).iterator();
-                } else {
-                    urlIndex++;
-                    URLClassIterable.log.log(Level.FINE, "ignoring  configuration from url : {0}", jarURL);
-                    continue;
-                }
-            }
-            if (classPathResources.hasNext()) {
-                String c = null;
-                try {
-                    ClassPathResource cr = classPathResources.next();
-                    c = outer.configureClassURL(jarURL, cr.getPath());
-                } catch (ClassNotFoundException ex) {
-                    URLClassIterable.log.log(Level.SEVERE, null, ex);
-                }
-                if (c != null) {
-                    nextType = c;
-                    return true;
-                }
-            } else {
-                classPathResources = null;
+            URL url = outer.urls[urlIndex].url;
+            if(outer.urls[urlIndex].cpr==null){
+                URLClassIterable.log.log(Level.FINE, "ignoring  configuration from url : {0}", url);
                 urlIndex++;
+            }else {
+                if (classPathResources == null) {
+                    if (outer.configFilter == null || outer.configFilter.acceptLibrary(url)) {
+                        URLClassIterable.log.log(Level.FINE, "configuration from  url : {0}", url);
+                        classPathResources = outer.urls[urlIndex].cpr.get();
+                    } else {
+                        urlIndex++;
+                        URLClassIterable.log.log(Level.FINE, "ignoring  configuration from url : {0}", url);
+                        continue;
+                    }
+                }
+                if (classPathResources.hasNext()) {
+                    String c = null;
+                    try {
+                        ClassPathResource cr = classPathResources.next();
+                        c = outer.configureClassURL(url, cr.getPath());
+                    } catch (ClassNotFoundException ex) {
+                        URLClassIterable.log.log(Level.SEVERE, null, ex);
+                    }
+                    if (c != null) {
+                        nextType = c;
+                        return true;
+                    }
+                } else {
+                    classPathResources = null;
+                    urlIndex++;
+                }
             }
         }
         classPathResources = null;
+        outer.close();
         return false;
     }
 

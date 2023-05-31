@@ -7,6 +7,7 @@ package net.thevpc.common.classpath;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
 import java.util.Iterator;
 import java.util.jar.JarInputStream;
 import java.util.zip.ZipEntry;
