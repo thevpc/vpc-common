@@ -2,6 +2,7 @@ package net.thevpc.common.props.impl;
 
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -53,6 +54,24 @@ public abstract class AbstractWritableMapImpl<K, V> extends WritablePropertyBase
                 remove(k.getKey());
             }
         }
+    }
+
+    @Override
+    public V computeIfAbsent(K k, Function<? super K, ? extends V> vf) {
+        if (containsKeyImpl(k)) {
+            return getImpl(k);
+        }
+        V v=vf.apply(k);
+        putImpl(k, v);
+        ((DefaultPropertyListeners)listeners).firePropertyUpdated(new PropertyEvent(
+                this,
+                k,
+                null,
+                v,
+                Path.root(),
+                PropertyUpdate.ADD,true
+        ));
+        return null;
     }
 
     @Override

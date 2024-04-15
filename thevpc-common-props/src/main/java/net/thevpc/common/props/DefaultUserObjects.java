@@ -6,12 +6,12 @@
 package net.thevpc.common.props;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
- *
  * @author thevpc
  */
-public class DefaultUserObjects implements UserObjects{
+public class DefaultUserObjects implements UserObjects {
 
     private Map<Object, Object> userObjects;
 
@@ -24,11 +24,19 @@ public class DefaultUserObjects implements UserObjects{
     }
 
     @Override
-    public Object get(Object n) {
+    public <V> V get(Object n) {
         if (n != null && userObjects != null) {
-            return userObjects.get(n);
+            return (V) userObjects.get(n);
         }
         return null;
+    }
+
+    @Override
+    public <K, V> V computeIfAbsent(K k, Function<? super K, ? extends V> value) {
+        if (userObjects == null) {
+            userObjects = new LinkedHashMap<>();
+        }
+        return (V) userObjects.computeIfAbsent(k, (Function) value);
     }
 
     @Override

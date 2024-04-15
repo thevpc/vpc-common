@@ -53,6 +53,7 @@
         <module name="thevpc-common-desktop-automation" />
         <module name="vpc-common-classpath" />
         <module name="thevpc-common-time" />
+        <module name="thevpc-common-CmdLine" />
         <module name="thevpc-common-web-xml" />
         <module name="vpc-common-strings" />
         <module name="thevpc-common-sql" />
@@ -93,53 +94,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="common" target="1.5" />
       <module name="java-shell" target="1.7" />
       <module name="jeep-build" target="1.5" />
-      <module name="thevpc-common-classpath" target="1.8" />
-      <module name="thevpc-common-collections" target="1.8" />
       <module name="thevpc-common-commandline" target="1.8" />
-      <module name="thevpc-common-config" target="1.8" />
-      <module name="thevpc-common-cron" target="1.8" />
-      <module name="thevpc-common-desktop-automation" target="1.8" />
-      <module name="thevpc-common-diff-jar" target="1.8" />
-      <module name="thevpc-common-docusaurus" target="1.8" />
-      <module name="thevpc-common-file-template" target="1.8" />
-      <module name="thevpc-common-fprint" target="1.8" />
-      <module name="thevpc-common-i18n" target="1.8" />
-      <module name="thevpc-common-iconset-default" target="1.8" />
-      <module name="thevpc-common-io" target="1.8" />
-      <module name="thevpc-common-io-compress" target="1.8" />
-      <module name="thevpc-common-iterators" target="1.8" />
-      <module name="thevpc-common-lanterna" target="1.8" />
-      <module name="thevpc-common-ljson" target="1.8" />
-      <module name="thevpc-common-log" target="1.8" />
-      <module name="thevpc-common-md" target="1.8" />
-      <module name="thevpc-common-md-asciidoctor" target="1.8" />
-      <module name="thevpc-common-md-doc" target="1.8" />
-      <module name="thevpc-common-md-docusaurus" target="1.8" />
-      <module name="thevpc-common-md-docusaurus-to-asciidoctor" target="1.8" />
-      <module name="thevpc-common-monitor" target="1.8" />
-      <module name="thevpc-common-msg" target="1.8" />
-      <module name="thevpc-common-mvn" target="1.8" />
-      <module name="thevpc-common-plaf" target="1.8" />
-      <module name="thevpc-common-props" target="1.8" />
-      <module name="thevpc-common-prs" target="1.8" />
-      <module name="thevpc-common-sql" target="1.8" />
-      <module name="thevpc-common-ssh" target="1.8" />
-      <module name="thevpc-common-strings" target="1.8" />
-      <module name="thevpc-common-swing" target="1.8" />
-      <module name="thevpc-common-swing-prs" target="1.8" />
-      <module name="thevpc-common-text-source" target="1.8" />
-      <module name="thevpc-common-text-source-log" target="1.8" />
-      <module name="thevpc-common-time" target="1.8" />
-      <module name="thevpc-common-utils" target="1.8" />
-      <module name="thevpc-common-vfs" target="1.8" />
-      <module name="thevpc-common-web-jsf" target="1.8" />
-      <module name="thevpc-common-web-xml" target="1.8" />
-      <module name="thevpc-common-xfile" target="1.8" />
-      <module name="tson" target="1.8" />
-      <module name="tson-builder" target="1.5" />
       <module name="vfs" target="1.8" />
       <module name="vpc-common-app" target="1.8" />
       <module name="vpc-common-app-swing" target="1.8" />

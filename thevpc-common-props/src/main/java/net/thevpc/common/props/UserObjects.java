@@ -6,6 +6,7 @@
 package net.thevpc.common.props;
 
 import java.util.Set;
+import java.util.function.Function;
 
 /**
  *
@@ -13,10 +14,12 @@ import java.util.Set;
  */
 public interface UserObjects {
 
-    Object get(Object n);
+    <V> V get(Object n);
 
     Set<Object> keySet();
 
     void put(Object n, Object value);
+
+    <K, V> V computeIfAbsent(K k, Function<? super K, ? extends V> value);
     
 }
