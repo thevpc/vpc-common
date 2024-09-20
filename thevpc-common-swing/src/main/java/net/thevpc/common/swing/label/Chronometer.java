@@ -27,7 +27,7 @@ import net.thevpc.common.swing.util.TimeDuration;
  * %creationtime 13 juil. 2006 22:14:21
  */
 
-class Chronometer {
+public class Chronometer {
 
     private long startDate;
     private long endDate;

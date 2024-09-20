@@ -51,6 +51,9 @@ public class JSplashScreen extends JWindow {
         private String text;
         private PositionAnimator animator;
 
+        public Message(Type type, String text) {
+            this(type, text, null);
+        }
         public Message(Type type, String text, PositionAnimator animator) {
             if (text == null) {
                 text = "";
