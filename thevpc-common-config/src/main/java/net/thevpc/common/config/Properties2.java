@@ -26,13 +26,13 @@ public class Properties2 extends LinkedHashMap {
     }
 
     /**
-     * Calls the <tt>Hashtable</tt> method <code>put</code>. Provided for
-     * parallelism with the <tt>getProperty</tt> method. Enforces use of
+     * Calls the <strong>Hashtable</strong> method <code>put</code>. Provided for
+     * parallelism with the <strong>getProperty</strong> method. Enforces use of
      * strings for property keys and values. The value returned is the
-     * result of the <tt>Hashtable</tt> call to <code>put</code>.
+     * result of the <strong>Hashtable</strong> call to <code>put</code>.
      *
      * @param key   the key to be placed into this property list.
-     * @param value the value corresponding to <tt>key</tt>.
+     * @param value the value corresponding to <strong>key</strong>.
      * @return the previous value of the specified key in this property
      *         list, or <code>null</code> if it did not have one.
      * @see #getProperty
@@ -529,7 +529,7 @@ public class Properties2 extends LinkedHashMap {
      * @param out    an output stream.
      * @param header a description of the property list.
      * @throws IOException          if writing this property list to the specified
-     *                              output stream throws an <tt>IOException</tt>.
+     *                              output stream throws an <strong>IOException</strong>.
      * @throws ClassCastException   if this <code>Properties</code> object
      *                              contains any keys or values that are not <code>Strings</code>.
      * @throws NullPointerException if <code>out</code> is null.

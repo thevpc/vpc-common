@@ -6,12 +6,12 @@ import java.io.*;
 
 /**
  * This class makes it easy to drag and drop files from the operating
- * system to a Java program. Any <tt>java.awt.Component</tt> can be
- * dropped onto, but only <tt>javax.swing.JComponent</tt>s will indicate
+ * system to a Java program. Any <strong>java.awt.Component</strong> can be
+ * dropped onto, but only <strong>javax.swing.JComponent</strong>s will indicate
  * the drop event with a changed border.
  * <p>
- * To use this class, construct a new <tt>FileDrop</tt> by passing
- * it the target component and a <tt>Listener</tt> to receive notification
+ * To use this class, construct a new <strong>FileDrop</strong> by passing
+ * it the target component and a <strong>Listener</strong> to receive notification
  * when file(s) have been dropped. Here is an example:
  * <p>
  * <code>
@@ -26,11 +26,11 @@ import java.io.*;
  * </code>
  * <p>
  * You can specify the border that will appear when files are being dragged by
- * calling the constructor with a <tt>javax.swing.border.Border</tt>. Only
- * <tt>JComponent</tt>s will show any indication with a border.
+ * calling the constructor with a <strong>javax.swing.border.Border</strong>. Only
+ * <strong>JComponent</strong>s will show any indication with a border.
  * <p>
- * You can turn on some debugging features by passing a <tt>PrintStream</tt>
- * object (such as <tt>System.out</tt>) into the full constructor. A <tt>null</tt>
+ * You can turn on some debugging features by passing a <strong>PrintStream</strong>
+ * object (such as <strong>System.out</strong>) into the full constructor. A <strong>null</strong>
  * value will result in no extra debugging information being output.
  * <p>
  * <p>
@@ -63,7 +63,7 @@ public class FileDrop {
      * the top level container will change borders.
      *
      * @param c        Component on which files will be dropped.
-     * @param listener Listens for <tt>filesDropped</tt>.
+     * @param listener Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -79,12 +79,12 @@ public class FileDrop {
 
     /**
      * Constructor with a default border and the option to recursively set drop targets.
-     * If your component is a <tt>java.awt.Container</tt>, then each of its children
+     * If your component is a <strong>java.awt.Container</strong>, then each of its children
      * components will also listen for drops, though only the parent will change borders.
      *
      * @param c         Component on which files will be dropped.
      * @param recursive Recursively set children as drop targets.
-     * @param listener  Listens for <tt>filesDropped</tt>.
+     * @param listener  Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -102,14 +102,14 @@ public class FileDrop {
     /**
      * Constructor with a default border and debugging optionally turned on.
      * With Debugging turned on, more status messages will be displayed to
-     * <tt>out</tt>. A common way to use this constructor is with
-     * <tt>System.out</tt> or <tt>System.err</tt>. A <tt>null</tt> value for
-     * the parameter <tt>out</tt> will result in no debugging output.
+     * <strong>out</strong>. A common way to use this constructor is with
+     * <strong>System.out</strong> or <strong>System.err</strong>. A <strong>null</strong> value for
+     * the parameter <strong>out</strong> will result in no debugging output.
      *
      * @param out      PrintStream to record debugging info or null for no debugging.
      * @param out
      * @param c        Component on which files will be dropped.
-     * @param listener Listens for <tt>filesDropped</tt>.
+     * @param listener Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -127,18 +127,18 @@ public class FileDrop {
     /**
      * Constructor with a default border, debugging optionally turned on
      * and the option to recursively set drop targets.
-     * If your component is a <tt>java.awt.Container</tt>, then each of its children
+     * If your component is a <strong>java.awt.Container</strong>, then each of its children
      * components will also listen for drops, though only the parent will change borders.
      * With Debugging turned on, more status messages will be displayed to
-     * <tt>out</tt>. A common way to use this constructor is with
-     * <tt>System.out</tt> or <tt>System.err</tt>. A <tt>null</tt> value for
-     * the parameter <tt>out</tt> will result in no debugging output.
+     * <strong>out</strong>. A common way to use this constructor is with
+     * <strong>System.out</strong> or <strong>System.err</strong>. A <strong>null</strong> value for
+     * the parameter <strong>out</strong> will result in no debugging output.
      *
      * @param out       PrintStream to record debugging info or null for no debugging.
      * @param out
      * @param c         Component on which files will be dropped.
      * @param recursive Recursively set children as drop targets.
-     * @param listener  Listens for <tt>filesDropped</tt>.
+     * @param listener  Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -158,8 +158,8 @@ public class FileDrop {
      * Constructor with a specified border
      *
      * @param c          Component on which files will be dropped.
-     * @param dragBorder Border to use on <tt>JComponent</tt> when dragging occurs.
-     * @param listener   Listens for <tt>filesDropped</tt>.
+     * @param dragBorder Border to use on <strong>JComponent</strong> when dragging occurs.
+     * @param listener   Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -177,13 +177,13 @@ public class FileDrop {
 
     /**
      * Constructor with a specified border and the option to recursively set drop targets.
-     * If your component is a <tt>java.awt.Container</tt>, then each of its children
+     * If your component is a <strong>java.awt.Container</strong>, then each of its children
      * components will also listen for drops, though only the parent will change borders.
      *
      * @param c          Component on which files will be dropped.
-     * @param dragBorder Border to use on <tt>JComponent</tt> when dragging occurs.
+     * @param dragBorder Border to use on <strong>JComponent</strong> when dragging occurs.
      * @param recursive  Recursively set children as drop targets.
-     * @param listener   Listens for <tt>filesDropped</tt>.
+     * @param listener   Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -203,14 +203,14 @@ public class FileDrop {
     /**
      * Constructor with a specified border and debugging optionally turned on.
      * With Debugging turned on, more status messages will be displayed to
-     * <tt>out</tt>. A common way to use this constructor is with
-     * <tt>System.out</tt> or <tt>System.err</tt>. A <tt>null</tt> value for
-     * the parameter <tt>out</tt> will result in no debugging output.
+     * <strong>out</strong>. A common way to use this constructor is with
+     * <strong>System.out</strong> or <strong>System.err</strong>. A <strong>null</strong> value for
+     * the parameter <strong>out</strong> will result in no debugging output.
      *
      * @param out        PrintStream to record debugging info or null for no debugging.
      * @param c          Component on which files will be dropped.
-     * @param dragBorder Border to use on <tt>JComponent</tt> when dragging occurs.
-     * @param listener   Listens for <tt>filesDropped</tt>.
+     * @param dragBorder Border to use on <strong>JComponent</strong> when dragging occurs.
+     * @param listener   Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -230,15 +230,15 @@ public class FileDrop {
     /**
      * Full constructor with a specified border and debugging optionally turned on.
      * With Debugging turned on, more status messages will be displayed to
-     * <tt>out</tt>. A common way to use this constructor is with
-     * <tt>System.out</tt> or <tt>System.err</tt>. A <tt>null</tt> value for
-     * the parameter <tt>out</tt> will result in no debugging output.
+     * <strong>out</strong>. A common way to use this constructor is with
+     * <strong>System.out</strong> or <strong>System.err</strong>. A <strong>null</strong> value for
+     * the parameter <strong>out</strong> will result in no debugging output.
      *
      * @param out        PrintStream to record debugging info or null for no debugging.
      * @param c          Component on which files will be dropped.
-     * @param dragBorder Border to use on <tt>JComponent</tt> when dragging occurs.
+     * @param dragBorder Border to use on <strong>JComponent</strong> when dragging occurs.
      * @param recursive  Recursively set children as drop targets.
-     * @param listener   Listens for <tt>filesDropped</tt>.
+     * @param listener   Listens for <strong>filesDropped</strong>.
      * @since 1.0
      */
     public FileDrop(
@@ -519,7 +519,7 @@ public class FileDrop {
 
 
     /**
-     * Outputs <tt>message</tt> to <tt>out</tt> if it's not null.
+     * Outputs <strong>message</strong> to <strong>out</strong> if it's not null.
      */
     private static void log(java.io.PrintStream out, String message) {   // Log message if requested
         if (out != null)
@@ -610,8 +610,8 @@ public class FileDrop {
      * <p>
      * The {@link java.awt.datatransfer.DataFlavor} associated with
      * {@link TransferableObject} has the representation class
-     * <tt>net.iharder.dnd.TransferableObject.class</tt> and MIME type
-     * <tt>application/x-net.iharder.dnd.TransferableObject</tt>.
+     * <strong>net.iharder.dnd.TransferableObject.class</strong> and MIME type
+     * <strong>application/x-net.iharder.dnd.TransferableObject</strong>.
      * This data flavor is accessible via the static
      * {@link #DATA_FLAVOR} property.
      * <p>
@@ -625,7 +625,7 @@ public class FileDrop {
     public static class TransferableObject implements java.awt.datatransfer.Transferable {
         /**
          * The MIME type for {@link #DATA_FLAVOR} is
-         * <tt>application/x-net.iharder.dnd.TransferableObject</tt>.
+         * <strong>application/x-net.iharder.dnd.TransferableObject</strong>.
          *
          * @since 1.1
          */
@@ -635,9 +635,9 @@ public class FileDrop {
         /**
          * The default {@link java.awt.datatransfer.DataFlavor} for
          * {@link TransferableObject} has the representation class
-         * <tt>net.iharder.dnd.TransferableObject.class</tt>
+         * <strong>net.iharder.dnd.TransferableObject.class</strong>
          * and the MIME type
-         * <tt>application/x-net.iharder.dnd.TransferableObject</tt>.
+         * <strong>application/x-net.iharder.dnd.TransferableObject</strong>.
          *
          * @since 1.1
          */
@@ -656,7 +656,7 @@ public class FileDrop {
          * Along with the {@link #DATA_FLAVOR} associated with this class,
          * this creates a custom data flavor with a representation class
          * determined from <code>data.getClass()</code> and the MIME type
-         * <tt>application/x-net.iharder.dnd.TransferableObject</tt>.
+         * <strong>application/x-net.iharder.dnd.TransferableObject</strong>.
          *
          * @param data The data to transfer
          * @since 1.1
@@ -688,7 +688,7 @@ public class FileDrop {
          * Along with the {@link #DATA_FLAVOR} associated with this class,
          * this creates a custom data flavor with a representation class <var>dataClass</var>
          * and the MIME type
-         * <tt>application/x-net.iharder.dnd.TransferableObject</tt>.
+         * <strong>application/x-net.iharder.dnd.TransferableObject</strong>.
          *
          * @param dataClass The {@link java.lang.Class} to use in the custom data flavor
          * @param fetcher   The {@link Fetcher} that will return the data object
@@ -702,7 +702,7 @@ public class FileDrop {
 
         /**
          * Returns the custom {@link java.awt.datatransfer.DataFlavor} associated
-         * with the encapsulated object or <tt>null</tt> if the {@link Fetcher}
+         * with the encapsulated object or <strong>null</strong> if the {@link Fetcher}
          * constructor was used without passing a {@link java.lang.Class}.
          *
          * @return The custom data flavor for the encapsulated object
@@ -767,7 +767,7 @@ public class FileDrop {
 
 
         /**
-         * Returns <tt>true</tt> if <var>flavor</var> is one of the supported
+         * Returns <strong>true</strong> if <var>flavor</var> is one of the supported
          * flavors. Flavors are supported using the <code>equals(...)</code> method.
          *
          * @param flavor The data flavor to check

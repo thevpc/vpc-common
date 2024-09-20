@@ -310,7 +310,7 @@ public class Utils {
      * necessary) so the copy has the specified length. For all indices that are
      * valid in both the original array and the copy, the two arrays will
      * contain identical values. For any indices that are valid in the copy but
-     * not the original, the copy will contain <tt>0</tt>. Such indices will
+     * not the original, the copy will contain <strong>0</strong>. Such indices will
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
@@ -318,8 +318,8 @@ public class Utils {
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
-     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws NegativeArraySizeException if <strong>newLength</strong> is negative
+     * @throws NullPointerException if <strong>original</strong> is null
      * @since 1.6
      */
     public static int[] copyOf(int[] original, int newLength) {
@@ -334,7 +334,7 @@ public class Utils {
      * necessary) so the copy has the specified length. For all indices that are
      * valid in both the original array and the copy, the two arrays will
      * contain identical values. For any indices that are valid in the copy but
-     * not the original, the copy will contain <tt>0L</tt>. Such indices will
+     * not the original, the copy will contain <strong>0L</strong>. Such indices will
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
@@ -342,8 +342,8 @@ public class Utils {
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
-     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws NegativeArraySizeException if <strong>newLength</strong> is negative
+     * @throws NullPointerException if <strong>original</strong> is null
      * @since 1.6
      */
     public static long[] copyOf(long[] original, int newLength) {
@@ -358,7 +358,7 @@ public class Utils {
      * (if necessary) so the copy has the specified length. For all indices that
      * are valid in both the original array and the copy, the two arrays will
      * contain identical values. For any indices that are valid in the copy but
-     * not the original, the copy will contain <tt>'\\u000'</tt>. Such indices
+     * not the original, the copy will contain <strong>'\\u000'</strong>. Such indices
      * will exist if and only if the specified length is greater than that of
      * the original array.
      *
@@ -366,8 +366,8 @@ public class Utils {
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with null
      * characters to obtain the specified length
-     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws NegativeArraySizeException if <strong>newLength</strong> is negative
+     * @throws NullPointerException if <strong>original</strong> is null
      * @since 1.6
      */
     public static char[] copyOf(char[] original, int newLength) {
@@ -382,7 +382,7 @@ public class Utils {
      * necessary) so the copy has the specified length. For all indices that are
      * valid in both the original array and the copy, the two arrays will
      * contain identical values. For any indices that are valid in the copy but
-     * not the original, the copy will contain <tt>0f</tt>. Such indices will
+     * not the original, the copy will contain <strong>0f</strong>. Such indices will
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
@@ -390,8 +390,8 @@ public class Utils {
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
-     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws NegativeArraySizeException if <strong>newLength</strong> is negative
+     * @throws NullPointerException if <strong>original</strong> is null
      * @since 1.6
      */
     public static float[] copyOf(float[] original, int newLength) {
@@ -406,7 +406,7 @@ public class Utils {
      * necessary) so the copy has the specified length. For all indices that are
      * valid in both the original array and the copy, the two arrays will
      * contain identical values. For any indices that are valid in the copy but
-     * not the original, the copy will contain <tt>0d</tt>. Such indices will
+     * not the original, the copy will contain <strong>0d</strong>. Such indices will
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
@@ -414,8 +414,8 @@ public class Utils {
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with zeros to
      * obtain the specified length
-     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws NegativeArraySizeException if <strong>newLength</strong> is negative
+     * @throws NullPointerException if <strong>original</strong> is null
      * @since 1.6
      */
     public static double[] copyOf(double[] original, int newLength) {
@@ -426,11 +426,11 @@ public class Utils {
     }
 
     /**
-     * Copies the specified array, truncating or padding with <tt>false</tt> (if
+     * Copies the specified array, truncating or padding with <strong>false</strong> (if
      * necessary) so the copy has the specified length. For all indices that are
      * valid in both the original array and the copy, the two arrays will
      * contain identical values. For any indices that are valid in the copy but
-     * not the original, the copy will contain <tt>false</tt>. Such indices will
+     * not the original, the copy will contain <strong>false</strong>. Such indices will
      * exist if and only if the specified length is greater than that of the
      * original array.
      *
@@ -438,8 +438,8 @@ public class Utils {
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with false
      * elements to obtain the specified length
-     * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
-     * @throws NullPointerException if <tt>original</tt> is null
+     * @throws NegativeArraySizeException if <strong>newLength</strong> is negative
+     * @throws NullPointerException if <strong>original</strong> is null
      * @since 1.6
      */
     public static boolean[] copyOf(boolean[] original, int newLength) {

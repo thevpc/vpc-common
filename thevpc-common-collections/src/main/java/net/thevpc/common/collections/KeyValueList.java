@@ -15,15 +15,15 @@ public interface KeyValueList<K,V> extends List<V>, Collection2{
     public boolean containsKey(Object key);
 
     /**
-     * Returns <tt>true</tt> if this map maps one or more keys to the
-     * specified value.  More formally, returns <tt>true</tt> if and only if
-     * this map contains at least one mapping to a value <tt>v</tt> such that
-     * <tt>(value==null ? v==null : value.equals(v))</tt>.  This operation
+     * Returns <strong>true</strong> if this map maps one or more keys to the
+     * specified value.  More formally, returns <strong>true</strong> if and only if
+     * this map contains at least one mapping to a value <strong>v</strong> such that
+     * <strong>(value==null ? v==null : value.equals(v))</strong>.  This operation
      * will probably require time linear in the map size for most
-     * implementations of the <tt>Map</tt> interface.
+     * implementations of the <strong>Map</strong> interface.
      *
      * @param value value whose presence in this map is to be tested
-     * @return <tt>true</tt> if this map maps one or more keys to the
+     * @return <strong>true</strong> if this map maps one or more keys to the
      *         specified value
      * @throws ClassCastException if the value is of an inappropriate type for
      *         this map
@@ -42,13 +42,13 @@ public interface KeyValueList<K,V> extends List<V>, Collection2{
     public V getByValue(V value);
 
     /**
-     * Returns <tt>true</tt> if this list contains the specified element.
-     * More formally, returns <tt>true</tt> if and only if this list contains
-     * at least one element <tt>e</tt> such that
-     * <tt>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</tt>.
+     * Returns <strong>true</strong> if this list contains the specified element.
+     * More formally, returns <strong>true</strong> if and only if this list contains
+     * at least one element <strong>e</strong> such that
+     * <strong>(o==null&nbsp;?&nbsp;e==null&nbsp;:&nbsp;o.equals(e))</strong>.
      *
      * @param value element whose presence in this list is to be tested
-     * @return <tt>true</tt> if this list contains the specified element
+     * @return <strong>true</strong> if this list contains the specified element
      * @throws ClassCastException if the type of the specified element
      *         is incompatible with this list
      * (<a href="Collection.html#optional-restrictions">optional</a>)

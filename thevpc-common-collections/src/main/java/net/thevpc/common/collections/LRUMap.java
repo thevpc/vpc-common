@@ -19,7 +19,7 @@ public class LRUMap<A, B> extends LinkedHashMap<A, B> {
     }
 
     /**
-     * Returns <tt>true</tt> if this <code>LruCache</code> has more entries than the maximum specified when it was
+     * Returns <strong>true</strong> if this <code>LruCache</code> has more entries than the maximum specified when it was
      * created.
      * <p>
      * <p>
@@ -30,7 +30,7 @@ public class LRUMap<A, B> extends LinkedHashMap<A, B> {
      *
      * @param eldest the <code>Entry</code> in question; this implementation doesn't care what it is, since the
      *               implementation is only dependent on the size of the cache
-     * @return <tt>true</tt> if the oldest
+     * @return <strong>true</strong> if the oldest
      * @see java.util.LinkedHashMap#removeEldestEntry(Map.Entry)
      */
     @Override
