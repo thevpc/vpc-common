@@ -91,6 +91,9 @@ public class DiffCommandZip extends AbstractDiffCommand {
         if (item instanceof ZipSourceFile) {
             try {
                 ZipFile zipFile = ((ZipSourceFile) item).getZfile();
+                if(zipFile==null){
+                    throw new IllegalArgumentException("invalid Zip file : "+item);
+                }
                 Enumeration e = zipFile.entries();
                 Predicate<String> pathFilter = diffEvalContext.getPathFilter();
                 while (e.hasMoreElements()) {
@@ -178,6 +181,11 @@ public class DiffCommandZip extends AbstractDiffCommand {
             if (zfile != null) {
                 zfile.close();
             }
+        }
+
+        @Override
+        public String toString() {
+            return String.valueOf(file);
         }
     }
 }

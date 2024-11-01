@@ -11,8 +11,10 @@ public class TestJars {
     public void test() {
         File f1 = new File(System.getProperty("user.home"), "test" + File.separator + "test-jar1.jar");
         File f2 = new File(System.getProperty("user.home"), "test" + File.separator + "test-jar2.jar");
-        DiffResult result = Diff.of(f1, f2).verbose().eval();
-        System.out.println(result);
+        if(f1.isFile() && f2.isFile()) {
+            DiffResult result = Diff.of(f1, f2).verbose().eval();
+            System.out.println(result);
+        }
 
     }
 }

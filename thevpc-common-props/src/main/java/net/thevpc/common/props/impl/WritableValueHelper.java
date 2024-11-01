@@ -132,7 +132,7 @@ public class WritableValueHelper {
     public static Property getChildProperty(Property parent, Path relativePath) {
         Path split = relativePath;
         Property a = parent;
-        while (!split.isEmpty()) {
+        while (a!=null && !split.isEmpty()) {
             String nn = split.first();
             split = split.skipFirst();
             a = getChildProperty(a, nn);
