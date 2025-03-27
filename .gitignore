@@ -7,7 +7,7 @@
 /thevpc-common-app-swingx/target/
 /thevpc-common-app/target/
 /thevpc-common-classpath/target/
-/thevpc-common-CmdLine/target/
+/thevpc-common-cmdLine/target/
 /thevpc-common-config/target/
 /thevpc-common-cron/target/
 /thevpc-common-desktop-automation/target/
@@ -84,7 +84,7 @@
 /thevpc-common-plaf/target/
 /thevpc-common-swing/target/
 /thevpc-common-commandline/target/
-/thevpc-common-commandline/thevpc-common-CmdLine.iml
+/thevpc-common-commandline/thevpc-common-cmdLine.iml
 /.idea/
 /.idea/
 /thevpc-common-time/thevpc-common-time.iml
