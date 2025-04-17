@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-desktop-automation</artifactId>
@@ -28,21 +27,9 @@
         </repository>
     </distributionManagement>    
     <dependencies>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.java.dev.jna</groupId>
-            <artifactId>jna-platform</artifactId>
-            <version>4.1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>net.thevpc.common</groupId>
-            <artifactId>thevpc-common-strings</artifactId>
-            <version>1.2.19</version>
-        </dependency>
+        <dependency><groupId>net.java.dev.jna</groupId><artifactId>jna</artifactId><version>4.1.0</version></dependency>
+        <dependency><groupId>net.java.dev.jna</groupId><artifactId>jna-platform</artifactId><version>4.1.0</version></dependency>
+        <dependency><groupId>net.thevpc.common</groupId><artifactId>thevpc-common-strings</artifactId><version>1.2.19</version></dependency>
     </dependencies>
     <build>
         <plugins>
@@ -142,9 +129,6 @@
     </build>
 
     <repositories>
-        <repository>
-            <id>vpc-public-maven</id>
-            <url>https://raw.github.com/thevpc/vpc-public-maven/master</url>
-        </repository>
+        <repository><id>vpc-public-maven</id><url>https://raw.github.com/thevpc/vpc-public-maven/master</url></repository>
     </repositories>
 </project>
