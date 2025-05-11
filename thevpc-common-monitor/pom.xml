@@ -5,7 +5,7 @@
     <artifactId>thevpc-common-monitor</artifactId>
     <version>1.22.7</version><!--updated-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-monitor</name>
+    <name>Thevpc Commons :: monitor</name>
     <url>https://github.com/thevpc/commons</url>
     <description>Progress Monitor library</description>
     <scm>

@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-mvn</artifactId>
     <version>1.1.2</version><!-- version updated-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-mvn</name>
+    <name>Thevpc Commons :: mvn</name>
     <url>https://github.com/thevpc/upa/wiki</url>
     <description>
         Maven Pom manipulation Library

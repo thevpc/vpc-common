@@ -6,7 +6,7 @@
     <version>1.1.0</version>
     <packaging>jar</packaging>
 
-    <name>net.thevpc.common.thevpc-common-i18n</name>
+    <name>Thevpc Commons :: i18n</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>I18n Java Library</description>
     <properties>

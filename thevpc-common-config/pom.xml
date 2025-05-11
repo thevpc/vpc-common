@@ -5,7 +5,7 @@
     <artifactId>thevpc-common-config</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-config</name>
+    <name>Thevpc Commons :: config</name>
 
     <url>http://maven.apache.org</url>
     <properties>

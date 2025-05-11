@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-xfile</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-xfile</name>
+    <name>Thevpc Commons :: xfile</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         Multi File System Library

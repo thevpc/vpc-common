@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-web-xml</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-web-xml</name>
+    <name>Thevpc Commons :: web-xml</name>
     <url>https://github.com/thevpc/upa/wiki</url>
 
     <organization>

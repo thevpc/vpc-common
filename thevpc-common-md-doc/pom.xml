@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-md-doc</artifactId><!--version-updated-->
     <version>1.2.0</version><!--obsolete-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-md-doc</name>
+    <name>Thevpc Commons :: md-doc</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         Javadoc distiller to Markdown Library

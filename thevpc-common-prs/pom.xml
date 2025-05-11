@@ -4,7 +4,7 @@
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-prs</artifactId>
     <version>2.2.1</version><!--updated-->
-    <name>net.thevpc.common.thevpc-common-prs</name>
+    <name>Thevpc Commons :: prs</name>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/commons</url>
    <organization>

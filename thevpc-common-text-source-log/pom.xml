@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-text-source-log</artifactId>
     <version>1.3.0</version>
     <packaging>jar</packaging>
-    <name>Log Support for common-text</name>
+    <name>Thevpc Commons :: text-source-log</name>
     <url>https://github.com/thevpc/vpc-commons</url>
     <description>Log Support for common-text</description>
 

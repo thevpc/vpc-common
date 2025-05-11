@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-md-asciidoctor</artifactId>
     <version>1.2.0</version><!--version-updated--><!--obsolete-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-md-asciidoctor</name>
+    <name>Thevpc Commons :: md-asciidoctor</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         AsciiDoctor parser and templating support Library

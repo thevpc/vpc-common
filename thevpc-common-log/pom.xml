@@ -5,7 +5,7 @@
     <artifactId>thevpc-common-log</artifactId>
     <version>1.0.1</version><!--updated-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-log</name>
+    <name>Thevpc Commons :: log</name>
 
     <url>http://maven.apache.org</url>
     <properties>

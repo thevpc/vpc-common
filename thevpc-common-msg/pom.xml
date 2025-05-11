@@ -5,7 +5,7 @@
     <artifactId>thevpc-common-msg</artifactId>
     <version>1.1.0</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-msg</name>
+    <name>Thevpc Commons :: msg</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>Message Format Java Library</description>
     <properties>

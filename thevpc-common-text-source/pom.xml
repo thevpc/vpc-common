@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-text-source</artifactId>
     <version>1.3.0</version>
     <packaging>jar</packaging>
-    <name>Library for representing Source Text Files</name>
+    <name>Thevpc Commons :: text-source</name>
     <url>https://github.com/thevpc/vpc-commons</url>
     <description>Library for representing Source Text Files, used in Java Enhanced Expression Parser (JEEP)
     </description>

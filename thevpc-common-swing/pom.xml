@@ -5,7 +5,7 @@
     <artifactId>thevpc-common-swing</artifactId>
     <version>2.5.0</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-swing</name>
+    <name>Thevpc Commons :: swing</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>Swing Components Java Library</description>
     <properties>

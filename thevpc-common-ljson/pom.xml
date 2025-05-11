@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-ljson</artifactId>
     <version>1.0.1</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-ljson</name>
+    <name>Thevpc Commons :: ljson</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         Lenient Json Parser

@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-lanterna</artifactId>
-    <name>net.thevpc.common.thevpc-common-lanterna</name>
+    <name>Thevpc Commons :: lanterna</name>
     <version>3.1.1</version><!--updated-->
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/upa/wiki</url>

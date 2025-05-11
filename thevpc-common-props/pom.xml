@@ -5,7 +5,7 @@
     <artifactId>thevpc-common-props</artifactId>
     <version>1.2.0</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-props</name>
+    <name>Thevpc Commons :: props</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>Writable Properties Java Library</description>
     <properties>

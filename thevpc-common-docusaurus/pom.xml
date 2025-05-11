@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-docusaurus</artifactId><!--version-updated-->
     <version>1.1.0</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-docusaurus</name>
+    <name>Thevpc Commons :: docusaurus</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         Docusaurus folder (Project) parser

@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-sql</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-sql</name>
+    <name>Thevpc Commons :: sql</name>
     <url>https://github.com/thevpc/upa/wiki</url>
 
     <organization>

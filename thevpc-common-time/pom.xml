@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-time</artifactId>
     <version>1.23.1</version><!--updated-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-time</name>
+    <name>Thevpc Commons :: time</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         Common Utils Library

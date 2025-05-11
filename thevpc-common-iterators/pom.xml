@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-iterators</artifactId>
     <version>1.23.2</version><!--version updated-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-iterators</name>
+    <name>Thevpc Commons :: iterators</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         Common Collections Library

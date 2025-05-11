@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-classpath</artifactId>
-    <name>Library for parsing classes from Classloader</name>
+    <name>Common ClassPath Library</name>
     <description>Library for parsing classes from Classloader</description>
     <version>1.3.3</version>
     <packaging>jar</packaging>

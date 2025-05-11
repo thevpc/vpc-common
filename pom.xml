@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-builder</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <name>net.thevpc.common</name>
+    <name>Thevpc Commons :: All Builder</name>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

@@ -4,7 +4,7 @@
     <artifactId>thevpc-common-collections</artifactId>
     <version>1.23.1</version><!--updated-->
     <packaging>jar</packaging>
-    <name>net.thevpc.common.thevpc-common-collections</name>
+    <name>Thevpc Commons :: collections</name>
     <url>https://github.com/thevpc/vpc-common</url>
     <description>
         Common Collections Library
