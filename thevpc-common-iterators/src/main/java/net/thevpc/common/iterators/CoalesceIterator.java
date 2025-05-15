@@ -76,7 +76,7 @@ public class CoalesceIterator<T> implements Iterator<T> {
 
     @Override
     public String toString() {
-        return "CoalesceIterator(" +
+        return "Coalesce(" +
                 children +
                 ')';
     }
