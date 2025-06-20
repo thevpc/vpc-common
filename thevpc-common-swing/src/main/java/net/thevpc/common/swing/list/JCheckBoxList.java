@@ -1,11 +1,11 @@
 /**
  * ====================================================================
- *                        vpc-swingext library
- *
+ * vpc-swingext library
+ * <p>
  * Description: <start><end>
  *
  * <br>
- *
+ * <p>
  * Copyright [2020] [thevpc] Licensed under the Apache License, Version 2.0 (the
  * "License"); you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -25,6 +25,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 import javax.swing.*;
 
 /**
@@ -67,7 +68,7 @@ public class JCheckBoxList extends JPanel {
 
     }
 
-//    public JCheckBox addItem(String name){
+    //    public JCheckBox addItem(String name){
 //        return addItem(name,name);
 //    }
 //
@@ -98,12 +99,16 @@ public class JCheckBoxList extends JPanel {
 
     public Object getSelectedElementAt(int index) {
         JCheckBox z = getItemCheckbox(index);
-        if(z.isSelected()){
+        if (z.isSelected()) {
             return z.getClientProperty("value");
         }
         return null;
     }
-    
+
+    public List<Object> getSelectedElements() {
+        return list.stream().filter(x -> x.isSelected()).map(x->x.getClientProperty("value")).collect(Collectors.toList());
+    }
+
     public Object getElementAt(int index) {
         return getItemCheckbox(index).getClientProperty("value");
     }

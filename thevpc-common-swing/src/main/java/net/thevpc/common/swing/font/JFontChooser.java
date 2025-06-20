@@ -92,7 +92,7 @@ public class JFontChooser extends JComponent
         fontStyles.addListSelectionListener(this);
         String[] sizes = new String[69];
         for (int i = 3; i < 72; i++) {
-            sizes[i - 3] = ((i + 1)).toString();
+            sizes[i - 3] = ((i + 1))+"";
         }
 
         fontSizes = new JList(sizes);
