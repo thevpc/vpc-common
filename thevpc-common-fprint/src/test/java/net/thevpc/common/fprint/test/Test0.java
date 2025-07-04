@@ -7,7 +7,6 @@ import net.thevpc.common.fprint.FormattedPrintStream;
 
 public class Test0 {
     public static void main(String[] args) {
-//        AnsiMain.main(args);
         try {
             AnsiPrintStreamSupport.installStdErr(AnsiPrintStreamSupport.Type.INHERIT);
 

@@ -10,7 +10,6 @@ import static org.fusesource.jansi.Ansi.ansi;
 
 public class Test2 {
     public static void main(String[] args) {
-//        AnsiMain.main(args);
         try {
             AnsiPrintStreamSupport.installStdErr(AnsiPrintStreamSupport.Type.INHERIT);
 
