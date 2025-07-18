@@ -3,7 +3,7 @@
 
     <groupId>net.thevpc.common</groupId>
     <artifactId>thevpc-common-swing-prs</artifactId>
-    <version>2.4.0</version>
+    <version>2.5.0</version>
     <name>Thevpc Commons :: swing-prs</name>
     <packaging>jar</packaging>
     <url>https://github.com/thevpc/commons</url>
@@ -50,7 +50,7 @@
                 PRIVATE COMPILE DEPENDENCIES 
         ############################## -->
         <dependency><groupId>net.thevpc.common</groupId><artifactId>thevpc-common-prs</artifactId><version>2.2.1</version></dependency>
-        <dependency><groupId>net.thevpc.common</groupId><artifactId>thevpc-common-swing</artifactId><version>2.4.0</version></dependency>
+        <dependency><groupId>net.thevpc.common</groupId><artifactId>thevpc-common-swing</artifactId><version>2.5.0</version></dependency>
 
 
         <!-- ##############################
