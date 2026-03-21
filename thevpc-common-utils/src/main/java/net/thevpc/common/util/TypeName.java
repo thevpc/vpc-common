@@ -51,7 +51,11 @@ public final class TypeName<C> implements Serializable {
         try {
             return Class.forName(typeName, true, cl == null ? Thread.currentThread().getContextClassLoader() : cl);
         } catch (ClassNotFoundException e) {
-            throw new IllegalArgumentException(e);
+            try {
+                return Class.forName(typeName);
+            } catch (ClassNotFoundException e2) {
+                throw new IllegalArgumentException(e);
+            }
         }
     }
 
